@@ -1,9 +1,12 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const PrimaryBtn = ({ onPress, title }) => {
+const PrimaryBtn = ({ onPress, title, disabled }) => {
+  const buttonContainerStyle = disabled
+    ? styles.disableAppButtonContainer
+    : styles.appButtonContainer
   return (
-    <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
+    <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
       <View
         style={{
           flexDirection: 'row',
@@ -23,6 +26,17 @@ const styles = StyleSheet.create({
     marginTop: 120,
     elevation: 8,
     backgroundColor: '#263238',
+    borderRadius: 25,
+    height: 75,
+    width: 310,
+    alignItems: 'between',
+    justifyContent: 'center',
+    paddingHorizontal: 20
+  },
+  disableAppButtonContainer: {
+    marginTop: 120,
+    elevation: 8,
+    backgroundColor: '#AFACAC',
     borderRadius: 25,
     height: 75,
     width: 310,

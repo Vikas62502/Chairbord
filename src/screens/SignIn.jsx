@@ -12,6 +12,8 @@ import {
 import InputText from '../components/common/InputText'
 import SecondaryButton from '../components/common/SecondaryButton'
 import DividerWithText from '../components/common/DividerWithText'
+import PrimaryBtn from '../components/common/PrimaryBtn'
+import { useNavigation } from '@react-navigation/native'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
@@ -19,11 +21,10 @@ const SignIn = () => {
   const handleLinkPress = (url) => {
     Linking.openURL(url)
   }
+  const navigation = useNavigation()
   return (
     <SafeAreaView style={{ position: 'relative' }}>
-      <View style={styles.overlay}>
-        {/* <Text style={styles.overlayText}>Sign In</Text> */}
-      </View>
+      <View style={styles.overlay}></View>
       <View style={styles.overlayTextContainer}>
         <Text style={styles.overlayText}>Sign In</Text>
       </View>
@@ -78,13 +79,33 @@ const SignIn = () => {
       </View>
 
       <View style={styles.container}>
-        <InputText placeholder={'Phone Number or email'} secure={false} />
-        <InputText placeholder={'Password'} secure={true} />
+        {active === 'password' ? (
+          <>
+            <InputText placeholder={'Phone Number or email'} secure={false} />
+            <InputText placeholder={'Password'} secure={true} />
 
-        <Text style={styles.text}>Forgot your Password?</Text>
-        <View style={{ alignItems: 'center' }}>
-          <SecondaryButton title={'Login'} disable={true} />
-        </View>
+            <Text style={styles.text}>Forgot your Password?</Text>
+            <View style={{ alignItems: 'center' }}>
+              <SecondaryButton title={'Login'} disable={true} />
+            </View>
+          </>
+        ) : (
+          <View>
+            <InputText placeholder={'Phone Number'} secure={false} />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 25
+              }}
+            >
+              <SecondaryButton
+                title={'Get OTP'}
+                onPress={() => navigation.navigate('OTP')}
+              />
+            </View>
+          </View>
+        )}
         <DividerWithText />
 
         <Text style={{ color: '#263238', textAlign: 'center' }}>
@@ -124,7 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(38, 50, 56, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '25%',
+    height: 204,
     borderBottomEndRadius: 40,
     borderBottomStartRadius: 40
   },

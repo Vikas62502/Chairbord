@@ -1,7 +1,10 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 const SecondaryButton = ({ onPress, title, showArrow, disable }) => {
+  const navigation = useNavigation()
+
   const buttonContainerStyle = disable
     ? styles.disabledButtonContainer
     : styles.appButtonContainer

@@ -7,6 +7,8 @@ import HistoricalData from "./src/components/HistoricalData";
 import SmsAlert from "./src/components/SmsAlert";
 import SaveFuelAndTime from "./src/components/SaveFuelAndTime";
 import SignIn from "./src/screens/SignIn";
+import OTP from "./src/screens/opt/OTP";
+import Register from "./src/screens/register/Register";
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
@@ -24,6 +26,8 @@ function App(): React.JSX.Element {
         <Stack.Screen name="SmsAlert" component={SmsAlert} />
         <Stack.Screen name="SaveFuelAndTime" component={SaveFuelAndTime} />
         <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="OTP" component={OTP} />
+        <Stack.Screen name="register" component={Register} />
       </Stack.Navigator>
     </NavigationContainer >
   );
