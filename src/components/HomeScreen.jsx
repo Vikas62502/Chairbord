@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Image,
   SafeAreaView,
@@ -10,6 +10,13 @@ import { useNavigation } from '@react-navigation/native'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
+
+  // automatic navigation to FastTagAndGPS screen after 1 second
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('FastTagAndGPS')
+    }, 1000)
+  }, [navigation])
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={() => navigation.navigate('FastTagAndGPS')}>

@@ -12,12 +12,10 @@ import {
 import InputText from '../components/common/InputText'
 import SecondaryButton from '../components/common/SecondaryButton'
 import DividerWithText from '../components/common/DividerWithText'
-import PrimaryBtn from '../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
-  console.log(active)
   const handleLinkPress = (url) => {
     Linking.openURL(url)
   }
