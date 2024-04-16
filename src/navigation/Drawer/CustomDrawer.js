@@ -1,5 +1,36 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native'
+
+const profileData = [
+    {
+        title: "Alex",
+        icon: require('../../assets/DrawerNavigation/avatar.png'),
+        screen: "userProfile",
+    }
+]
+
+const ProfileDraweritem = ({ title, icons, navigateTo }) => {
+    const navigation = useNavigation();
+    return (
+        <TouchableOpacity onPress={() => navigation.navigate("screen1")}>
+            <View style={{ backgroundColor: "#4C6470", paddingHorizontal: "5%" }}>
+                <Image source={require("../../assets/DrawerNavigation/borderBottom.png")} alt='borderBottom' />
+                <View style={styles.drawerItemStyle}>
+                    <Image source={icons} alt='profileLogo' />
+                    <View style={{ width: "70%" }}>
+                        <Text style={{ fontSize: 20, fontWeight: 700, color: "#FFFFFF", lineHeight: 24, }}>
+                            {title}
+                        </Text>
+                    </View>
+                </View>
+                <Image source={require("../../assets/DrawerNavigation/borderBottom.png")} alt='borderBottom' />
+            </View>
+        </TouchableOpacity>
+    )
+}
+
 const data = [
     {
         title: 'Dashboard',
@@ -54,16 +85,66 @@ const data = [
     {
         title: 'Logout',
         icon: require('../../assets/DrawerNavigation/logout.png'),
-        screen: 'logout'
+        screen: 'logoutModal'
     },
 ]
 
-const CustomDrawer = () => {
+const CustomDrawerItems = ({ title, icons, navigateTo }) => {
+    const navigation = useNavigation();
     return (
-        <View>
-            <Text>CustomDrawer</Text>
+        <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
+            <View>
+                <View style={styles.drawerItemStyle}>
+                    <Image source={icons} alt={`${title}`} />
+                    <View style={{ width: "70%" }}>
+                        <Text style={{ fontSize: 20, fontWeight: 500, color: "#FFFFFF", lineHeight: 24, }}>
+                            {title}
+                        </Text>
+                    </View>
+                </View>
+                <Image source={require("../../assets/DrawerNavigation/borderBottom.png")} alt='borderBottom' />
+            </View>
+        </TouchableOpacity>
+    )
+}
+
+const CustomDrawer = () => {
+    const navigation = useNavigation();
+    return (
+        <View style={styles.DrawerStyles}>
+            <DrawerContentScrollView>
+                <View>
+                    <ProfileDraweritem title={profileData[0].title} icons={profileData[0].icon} />
+                </View>
+
+                {data.map((element, index) => {
+                    return (
+                        <CustomDrawerItems
+                            key={index}
+                            title={element.title}
+                            icons={element.icon}
+                            navigateTo={element.screen}
+                        />
+                    )
+                })}
+            </DrawerContentScrollView>
         </View>
     )
 }
+
+
+const styles = StyleSheet.create({
+    DrawerStyles: {
+        backgroundColor: "#2F414A",
+        flex: 1,
+    },
+    drawerItemStyle: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: "7%",
+        gap: 20,
+    },
+})
 
 export default CustomDrawer

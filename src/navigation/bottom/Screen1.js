@@ -4,7 +4,7 @@ import React from 'react'
 const Screen1 = () => {
   return (
     <View>
-      <Text>Screen1</Text>
+      <Text style={{ color: "red" }}>Screen1</Text>
     </View>
   )
 }
