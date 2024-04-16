@@ -25,9 +25,7 @@ const Register = () => {
                 alignItems: 'center'
               }}
             >
-              <TouchableOpacity
-                onPress={() => navigation.navigate('dashboard')}
-              >
+              <TouchableOpacity onPress={() => navigation.navigate('drawer')}>
                 <Image source={require('../../assets/backArrowButton.png')} />
               </TouchableOpacity>
               <Text style={styles.overlayText}>Register</Text>

@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
+import DescriptionInputField from '../../components/common/DescriptionInputField'
+import DocumentUploadField from '../../components/common/UploadField'
 
 const ContactUs = () => {
   const requestTypeDropdownData = [
@@ -44,6 +46,9 @@ const ContactUs = () => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
+
+      <DescriptionInputField />
+      <DocumentUploadField />
     </View>
   )
 }
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: '#151E26'
-  },
+  }
 })
 
 export default ContactUs

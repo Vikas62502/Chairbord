@@ -1,16 +1,14 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { SafeAreaView, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import BottomNavigator from '../../navigation/bottom/BottomNavigator'
 
 const Dashboard = () => {
   const navigation = useNavigation()
   return (
-    <Text
-      style={{ flex: 1, color: 'red' }}
-      onPress={() => navigation.openDrawer()}
-    >
-      Dashboard
-    </Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <BottomNavigator />
+    </SafeAreaView>
   )
 }
 

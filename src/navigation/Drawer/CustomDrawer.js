@@ -35,7 +35,7 @@ const data = [
     {
         title: 'Dashboard',
         icon: require('../../assets/DrawerNavigation/dashboard.png'),
-        screen: 'Dashboard'
+        screen: 'dashboard'
     },
     {
         title: 'Wallet',

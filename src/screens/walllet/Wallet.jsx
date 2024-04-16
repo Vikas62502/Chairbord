@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Screen2 = () => {
+const Wallet = () => {
   return (
     <View>
-      <Text style={{ color: "red" }}>Screen2</Text>
+      <Text>Wallet</Text>
     </View>
   )
 }
 
-export default Screen2
+export default Wallet

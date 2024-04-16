@@ -1,8 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react'
 import Main from '../../screens/Main';
-import Screen1 from '../bottom/Screen1';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
 import {
     useNavigation,
     DrawerActions,
@@ -12,23 +10,20 @@ import LogoutModal from '../../screens/logout/LogoutModal';
 import ContactUs from '../../screens/contactUs/ContactUs';
 import DrawerHeader from '../../components/DrawerHeader';
 import OverlayHeader from '../../components/OverlayHeader';
+import Dashboard from '../../screens/dashboard/Dashboard';
 
 const DrawerNavigation = ({ }) => {
     const Drawer = createDrawerNavigator();
     const navigation = useNavigation()
     return (
         <Drawer.Navigator
+            initialRouteName='dashboard'
             drawerContent={props => <CustomDrawer {...props} />}
         >
             <Drawer.Screen
                 name="Main"
                 component={Main}
                 options={{ header: () => <DrawerHeader /> }}
-            />
-            <Drawer.Screen
-                name="screen1"
-                component={Screen1}
-                options={{ headerShown: true }}
             />
             <Drawer.Screen
                 name="logoutModal"
@@ -39,6 +34,11 @@ const DrawerNavigation = ({ }) => {
                 name="contactUs"
                 component={ContactUs}
                 options={{ header: () => <OverlayHeader title={'Contact us'} navigateTo={'dashboard'} /> }}
+            />
+            <Drawer.Screen
+                name="dashboard"
+                component={Dashboard}
+                options={{ header: () => <DrawerHeader /> }}
             />
         </Drawer.Navigator>
     )

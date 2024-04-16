@@ -8,13 +8,12 @@ import SaveFuelAndTime from '../../components/SaveFuelAndTime';
 import SignIn from '../../screens/SignIn';
 import OTP from '../../screens/opt/OTP';
 import Register from '../../screens/register/Register';
-import Dashboard from '../../screens/dashboard/Dashboard';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainDrawer from '../Drawer/MainDrawer';
 const StackNavigation = () => {
     const Stack = createNativeStackNavigator();
     return (
-        <Stack.Navigator initialRouteName="Home" screenOptions={{
+        <Stack.Navigator initialRouteName="dashboard" screenOptions={{
             headerShown: false
         }}>
             <Stack.Screen name="Home" component={HomeScreen} />
@@ -25,39 +24,7 @@ const StackNavigation = () => {
             <Stack.Screen name="SignIn" component={SignIn} />
             <Stack.Screen name="OTP" component={OTP} />
             <Stack.Screen name="register" component={Register} />
-            {/* <Stack.Screen name="dashboard" component={Dashboard} options={{
-                headerShown: true,
-                headerStyle: {
-                    backgroundColor: "#263238",
-                },
-                headerBackVisible: false,
-                headerTitleAlign: "center",
-                headerTitle: () => (
-                    <View>
-                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 15, minHeight: 100 }}>
-                            <Image source={require("../../assets/avatar.png")} />
-                            <Text style={{
-                                fontWeight: "700",
-                                fontSize: 16,
-                                lineHeight: 18,
-                                color: "#FFFFFF",
-                                textAlign: "center",
-                            }}>Alex</Text>
-                        </TouchableOpacity>
-                    </View>
-                ),
-                headerRight: () => (
-                    <TouchableOpacity>
-                        <Image source={require("../../assets/notificationBell.png")} />
-                    </TouchableOpacity>
-                ),
-                headerLeft: () => (
-                    <TouchableOpacity onPress={() => console.log("called")}>
-                        <Image source={require("../../assets/DrawerTripleLine.png")} />
-                    </TouchableOpacity>
-                )
-            }} /> */}
-            <Stack.Screen name="dashboard" component={MainDrawer} />
+            <Stack.Screen name="drawer" component={MainDrawer} />
         </Stack.Navigator>
     )
 }
