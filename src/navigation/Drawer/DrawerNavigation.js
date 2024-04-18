@@ -11,6 +11,7 @@ import ContactUs from '../../screens/contactUs/ContactUs';
 import DrawerHeader from '../../components/DrawerHeader';
 import OverlayHeader from '../../components/OverlayHeader';
 import Dashboard from '../../screens/dashboard/Dashboard';
+import Wallet from '../../screens/walllet/Wallet';
 
 const DrawerNavigation = ({ }) => {
     const Drawer = createDrawerNavigator();
@@ -39,6 +40,11 @@ const DrawerNavigation = ({ }) => {
                 name="dashboard"
                 component={Dashboard}
                 options={{ header: () => <DrawerHeader /> }}
+            />
+            <Drawer.Screen
+                name="wallet"
+                component={Wallet}
+                options={{ header: () => <OverlayHeader title={"Wallet"} /> }}
             />
         </Drawer.Navigator>
     )

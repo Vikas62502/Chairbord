@@ -3,6 +3,7 @@ import {
   Button,
   Image,
   Linking,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -82,9 +83,20 @@ const SignIn = () => {
             <InputText placeholder={'Phone Number or email'} secure={false} />
             <InputText placeholder={'Password'} secure={true} />
 
-            <Text style={styles.text}>Forgot your Password?</Text>
+            <Pressable>
+              <Text
+                style={styles.text}
+                onPress={() => navigation.navigate('forgetYourPassword')}
+              >
+                Forgot your Password?
+              </Text>
+            </Pressable>
             <View style={{ alignItems: 'center' }}>
-              <SecondaryButton title={'Login'} disable={true} />
+              <SecondaryButton
+                title={'Login'}
+                disable={true}
+                onPress={() => navigation.navigate('drawer')}
+              />
             </View>
           </>
         ) : (
@@ -110,7 +122,10 @@ const SignIn = () => {
           Dont't have an account?
         </Text>
         <View style={{ alignItems: 'center' }}>
-          <SecondaryButton title={'Sign Up'} />
+          <SecondaryButton
+            title={'Sign Up'}
+            onPress={() => navigation.navigate('register')}
+          />
         </View>
         <View style={styles.termsContainer}>
           <Text style={styles.termsText}>

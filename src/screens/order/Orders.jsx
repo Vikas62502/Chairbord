@@ -4,7 +4,7 @@ import React from 'react'
 const Orders = () => {
   return (
     <View>
-      <Text>Orders</Text>
+      <Text style={{ color: 'red' }}>Orders</Text>
     </View>
   )
 }

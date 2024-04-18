@@ -1,25 +1,32 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 
-const OverlayHeader = ({ title, navigateTo }) => {
+const OverlayHeader = ({ title, navigateTo, showBackButton = true }) => {
+  const navigation = useNavigation()
   return (
-    <>
+    <View>
       <View style={styles.overlayContainer}>
         <View style={styles.overlay}></View>
         <View style={styles.overlayTextContainer}>
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
-              <Image source={require('../assets/backArrowButton.png')} />
-            </TouchableOpacity>
+          {showBackButton && (
+            <View>
+              <TouchableOpacity onPress={navigateTo} style={styles.backArrow}>
+                <Image source={require('../assets/backArrowButton.png')} />
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={{ marginLeft: '-15%', zIndex: 10 }}>
             <Text style={styles.overlayText}>{title}</Text>
-            <View></View>
           </View>
+          <View></View>
         </View>
       </View>
       <View style={styles.chairBordLogo}>
         <Image source={require('../assets/chairBordLogoWithoutName.png')} />
       </View>
-    </>
+    </View>
   )
 }
 
@@ -34,7 +41,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(38, 50, 56, 0.7)',
+    backgroundColor: 'rgba(38, 50, 56, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomEndRadius: 40,
@@ -44,21 +51,24 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 24,
     lineHeight: 29,
-    zIndex: 1,
-    color: 'white',
-    left: '109%',
-    bottom: '50%',
+    color: 'white'
   },
   overlayTextContainer: {
-    position: 'absolute',
-    zIndex: 2,
-    top: '40%',
-    paddingHorizontal: 10
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    zIndex: 1
+  },
+  backArrow: {
+    marginRight: 20
   },
   chairBordLogo: {
     position: 'absolute',
     left: '33%',
-    top: '10%'
+    top: '10%',
+    zIndex: 0
   }
 })
 

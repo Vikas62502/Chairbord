@@ -14,21 +14,19 @@ const HistoricalData = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('SmsAlert')}>
-        <View>
-          <Image
-            source={require('../assets/homeScreen/historicalData.png')}
-            style={styles.image}
-          />
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.heading}>Historical data</Text>
-          <Text style={styles.font}>
-            You can access location history and detailed log by logging into the
-            GPS portal.
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <Image
+          source={require('../assets/homeScreen/historicalData.png')}
+          style={styles.image}
+        />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.heading}>Historical data</Text>
+        <Text style={styles.font}>
+          You can access location history and detailed log by logging into the
+          GPS portal.
+        </Text>
+      </View>
 
       <PrimaryBtn
         onPress={() => navigation.navigate('SmsAlert')}

@@ -5,7 +5,7 @@ const InputText = ({
   value,
   placeholder,
   onChangeText,
-  secure,
+  secure = false,
   inputStyle
 }) => {
   return (

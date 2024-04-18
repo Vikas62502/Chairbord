@@ -14,20 +14,18 @@ const FastTagAndGps = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('HistoricalData')}>
-        <View>
-          <Image
-            source={require('../assets/homeScreen/fasttagAndGPS.png')}
-            style={styles.image}
-          />
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.heading}>FASTAG and GPS</Text>
-          <Text style={styles.font}>
-            The easiest way of monitor and dispatch your vehicle
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <Image
+          source={require('../assets/homeScreen/fasttagAndGPS.png')}
+          style={styles.image}
+        />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.heading}>FASTAG and GPS</Text>
+        <Text style={styles.font}>
+          The easiest way of monitor and dispatch your vehicle
+        </Text>
+      </View>
 
       <PrimaryBtn
         onPress={() => navigation.navigate('HistoricalData')}

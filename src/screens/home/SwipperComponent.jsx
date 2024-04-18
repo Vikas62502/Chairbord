@@ -41,13 +41,14 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: width * 0.5,
-    textAlign: 'center'
+    textAlign: 'center',
+    // color: 'red'
   },
   paginationDot: {
-    width: 10, // Adjust dot width as needed
-    height: 10, // Adjust dot height as needed
-    borderRadius: 5, // Make dots circular
-    marginHorizontal: 5 // Add space between dots
+    width: 10, 
+    height: 10, 
+    borderRadius: 5,
+    marginHorizontal: 5
   }
 })
 

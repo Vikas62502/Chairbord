@@ -2,22 +2,23 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-const SecondaryButton = ({ onPress, title, showArrow, disable }) => {
+const SecondaryButton = ({
+  onPress,
+  title,
+  showArrow,
+  disable,
+  width = 330
+}) => {
   const navigation = useNavigation()
 
   const buttonContainerStyle = disable
-    ? styles.disabledButtonContainer
-    : styles.appButtonContainer
-
+    ? [styles.disabledButtonContainer, { width }]
+    : [styles.appButtonContainer, { width }]
   showArrow = false
+
   return (
     <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center'
-        }}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text style={styles.appButtonText}>{title}</Text>
         {showArrow && <Image source={require('../../assets/rightArrow.png')} />}
       </View>
@@ -31,7 +32,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#263238',
     borderRadius: 25,
     height: 68,
-    width: 330,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#AFACAC',
     borderRadius: 25,
     height: 68,
-    width: 330,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20

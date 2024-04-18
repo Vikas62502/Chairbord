@@ -14,20 +14,18 @@ const SmsAlert = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('SaveFuelAndTime')}>
-        <View>
-          <Image
-            source={require('../assets/homeScreen/smsAlert.png')}
-            style={styles.image}
-          />
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.heading}>SMS alert</Text>
-          <Text style={styles.font}>
-            Stay updated with SMS alerts notifying all the events.
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <Image
+          source={require('../assets/homeScreen/smsAlert.png')}
+          style={styles.image}
+        />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.heading}>SMS alert</Text>
+        <Text style={styles.font}>
+          Stay updated with SMS alerts notifying all the events.
+        </Text>
+      </View>
 
       <PrimaryBtn
         onPress={() => navigation.navigate('SaveFuelAndTime')}

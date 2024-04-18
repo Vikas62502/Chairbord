@@ -14,21 +14,19 @@ const SaveFuelAndTime = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <View>
-          <Image
-            source={require('../assets/homeScreen/saveFuelAndTime.png')}
-            style={styles.image}
-          />
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.heading}>Save fuel & time</Text>
-          <Text style={styles.font}>
-            Real-Time location and Status of vehicles allows effective trip
-            planning.
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <Image
+          source={require('../assets/homeScreen/saveFuelAndTime.png')}
+          style={styles.image}
+        />
+      </View>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.heading}>Save fuel & time</Text>
+        <Text style={styles.font}>
+          Real-Time location and Status of vehicles allows effective trip
+          planning.
+        </Text>
+      </View>
 
       <PrimaryBtn
         onPress={() => navigation.navigate('SignIn')}
