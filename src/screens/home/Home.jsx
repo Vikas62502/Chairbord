@@ -9,10 +9,15 @@ import {
 import dashboardCardData from './dashboardCardData'
 import React, { useState } from 'react'
 import SwipperComponent from './SwipperComponent'
+import { useNavigation } from '@react-navigation/native'
 
-const DashboardCards = ({ title, subTitle, icon }) => {
+const DashboardCards = ({ title, subTitle, icon, router }) => {
+  const navigation = useNavigation()
   return (
-    <View style={styles.dashboardCard}>
+    <Pressable
+      style={styles.dashboardCard}
+      onPress={() => navigation.navigate(router)}
+    >
       <View style={{ position: 'relative' }}>
         <View style={{ alignItems: 'center', width: '80%' }}>
           <Text style={styles.dashbordCardText}>{title}</Text>
@@ -35,7 +40,7 @@ const DashboardCards = ({ title, subTitle, icon }) => {
           />
         </View>
       </View>
-    </View>
+    </Pressable>
   )
 }
 
@@ -65,6 +70,7 @@ const Home = () => {
                 title={data.title}
                 subTitle={data.subTitle}
                 icon={data.icon}
+                router={data.router}
               />
             </View>
           ))}

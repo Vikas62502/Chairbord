@@ -12,6 +12,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainDrawer from '../Drawer/MainDrawer';
 import ForgetYourPassword from '../../screens/ForgetYouPassword/ForgetYourPassword';
 import OverlayHeader from '../../components/OverlayHeader';
+import CustomerRegistration from '../../screens/home/customerRegistration/CustomerRegistration';
+import PrivacyPolicy from '../../screens/privacyPolicy/PrivacyPolicy';
+import TermsAndCondition from '../../screens/termsAndCondition/TermsAndCondition';
 const StackNavigation = () => {
     const Stack = createNativeStackNavigator();
     return (
@@ -32,9 +35,6 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="SignIn" component={SignIn} options={{
-                // header: () => (
-                //     <OverlayHeader title={"Sign In"} />
-                // )
                 headerShown: false
             }} />
             <Stack.Screen name="OTP" component={OTP} options={{
@@ -47,6 +47,15 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="drawer" component={MainDrawer} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="customerRegistration" component={CustomerRegistration} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="privacyPolicy" component={PrivacyPolicy} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="termsAndCondition" component={TermsAndCondition} options={{
                 headerShown: false
             }} />
         </Stack.Navigator>

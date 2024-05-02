@@ -50,7 +50,7 @@ const ForgetYourPassword = () => {
     </SafeAreaView>
   )
 }
-
+ 
 const styles = StyleSheet.create({
   overlayContainer: {
     position: 'relative',

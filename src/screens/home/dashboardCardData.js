@@ -2,32 +2,38 @@ const dashboardCardData = [
     {
         title: 'Customer',
         subTitle: 'Onboard',
-        icon: require('../../assets/dashboard/customerOnBoard.png')
+        icon: require('../../assets/dashboard/customerOnBoard.png'),
+        router: "customerRegistration"
     },
     {
         title: 'Tag',
         subTitle: 'Replacement',
-        icon: require('../../assets/dashboard/tagReplacement.png')
+        icon: require('../../assets/dashboard/tagReplacement.png'),
+        router: "tagReplacement"
     },
     {
         title: 'NPCI Tag',
         subTitle: 'Status',
-        icon: require('../../assets/dashboard/NPCItag.png')
+        icon: require('../../assets/dashboard/NPCItag.png'),
+        router: "NpciTag"
     },
     {
         title: 'Tag',
         subTitle: 'Registration',
-        icon: require('../../assets/dashboard/tagRegistration.png')
+        icon: require('../../assets/dashboard/tagRegistration.png'),
+        router: "tagRegistration"
     },
     {
         title: 'Customer',
         subTitle: 'Info',
-        icon: require('../../assets/dashboard/customerInfo.png')
+        icon: require('../../assets/dashboard/customerInfo.png'),
+        router: "customerInfo"
     },
     {
         title: 'Recharge',
         subTitle: 'FASTag',
-        icon: require('../../assets/dashboard/rechargeFasttag.png')
+        icon: require('../../assets/dashboard/rechargeFasttag.png'),
+        router: "rechargeFastTag"
     }
 ]
 

@@ -20,7 +20,7 @@ const Accordion = ({ title, content }) => {
   }
 
   return (
-    <View style={{ marginVertical: 10 }}>
+    <View style={{ marginVertical: 10, backgroundColor: 'red' }}>
       <TouchableOpacity onPress={toggleAccordion}>
         <View
           style={{
@@ -28,7 +28,7 @@ const Accordion = ({ title, content }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: 10,
-            backgroundColor: 'lightgray'
+            backgroundColor: 'red'
           }}
         >
           <Text>{title}</Text>
@@ -36,8 +36,12 @@ const Accordion = ({ title, content }) => {
         </View>
       </TouchableOpacity>
       <Animated.View style={{ height: animatedHeight, overflow: 'hidden' }}>
-        <View onLayout={setContentLayout}>{isOpen && content}</View>
+        <View onLayout={setContentLayout} style={{ backgroundColor: 'red' }}>
+          <Text style={{ color: 'red' }}>{isOpen && content}</Text>
+        </View>
       </Animated.View>
     </View>
   )
 }
+
+export default Accordion
