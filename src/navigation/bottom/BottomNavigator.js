@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, View, StyleSheet } from 'react-native';
 import Inventory from '../../screens/inventory/Inventory';
-import Orders from '../../screens/order/Orders';
+import Orders from '../../screens/order/Order';
 import Home from '../../screens/home/Home';
 import Wallet from '../../screens/walllet/Wallet';
 import Profile from '../../screens/profile/Profile';

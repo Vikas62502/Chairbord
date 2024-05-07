@@ -12,6 +12,9 @@ import DrawerHeader from '../../components/DrawerHeader';
 import OverlayHeader from '../../components/OverlayHeader';
 import Dashboard from '../../screens/dashboard/Dashboard';
 import Wallet from '../../screens/walllet/Wallet';
+import Request from '../../screens/requests/Request';
+import IssuanceTracker from '../../screens/IssuanceTracker/IssuanceTracker';
+import Order from '../../screens/order/Order';
 
 const DrawerNavigation = ({ }) => {
     const Drawer = createDrawerNavigator();
@@ -45,6 +48,21 @@ const DrawerNavigation = ({ }) => {
                 name="wallet"
                 component={Wallet}
                 options={{ header: () => <OverlayHeader title={"Wallet"} /> }}
+            />
+            <Drawer.Screen
+                name="requests"
+                component={Request}
+                options={{ header: () => <OverlayHeader title={"Requests"} navigateTo={() => navigation.navigate('dashboard')} /> }}
+            />
+            <Drawer.Screen
+                name="issuenceTracker"
+                component={IssuanceTracker}
+                options={{ header: () => <OverlayHeader title={"Issuance Tracker"} navigateTo={() => navigation.navigate('dashboard')} /> }}
+            />
+            <Drawer.Screen
+                name="orders"
+                component={Order}
+                options={{ header: () => <OverlayHeader title={"Order"} navigateTo={() => navigation.navigate('dashboard')} /> }}
             />
         </Drawer.Navigator>
     )

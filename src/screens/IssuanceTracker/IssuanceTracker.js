@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Orders = () => {
+const IssuanceTracker = () => {
   return (
     <View>
-      <Text style={{ color: 'red' }}>Orders</Text>
+      <Text>IssuanceTracker</Text>
     </View>
   )
 }
 
-export default Orders
+export default IssuanceTracker
