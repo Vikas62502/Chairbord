@@ -5,6 +5,7 @@ import {
   Linking,
   Pressable,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,167 +15,156 @@ import InputText from '../components/common/InputText'
 import SecondaryButton from '../components/common/SecondaryButton'
 import DividerWithText from '../components/common/DividerWithText'
 import { useNavigation } from '@react-navigation/native'
+import OverlayHeader from '../components/OverlayHeader'
+import VerifyOTP from './opt/VerifyOTP'
+import OtpInputText from './opt/OtpInputText'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
+  const [showOtpField, setShowOtpField] = useState(false)
   const handleLinkPress = (url) => {
     Linking.openURL(url)
   }
   const navigation = useNavigation()
   return (
-    <SafeAreaView style={{ position: 'relative' }}>
-      <View style={styles.overlay}></View>
-      <View style={styles.overlayTextContainer}>
-        <Text style={styles.overlayText}>Sign In</Text>
-      </View>
-      <View style={{ alignItems: 'center', paddingVertical: '5%' }}>
-        <Image source={require('../assets/chairBordLogoWithoutName.png')} />
-      </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader
+        title={'Sign in'}
+        showBackButton={true}
+        navigateTo={() => navigation.goBack()}
+      />
 
-      <View style={{ alignItems: 'center' }}>
-        <Text style={styles.heading}>Welcome</Text>
-        <Text style={styles.content}>
-          please enter your account details here
-        </Text>
-      </View>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[
-              styles.tabSection,
-              active === 'password' && styles.activeState
-            ]}
-            onPress={() => setActive('password')}
-          >
-            <Text
-              style={[
-                styles.tabContent,
-                active === 'password' && styles.activeContent
-              ]}
-            >
-              Password
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.verticalDivider} />
-          <TouchableOpacity
-            onPress={() => setActive('otp')}
-            style={[styles.tabSection, active === 'otp' && styles.activeState]}
-          >
-            <Text
-              style={[
-                styles.tabContent,
-                active === 'otp' && styles.activeContent
-              ]}
-            >
-              OTP
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        {active === 'password' ? (
-          <>
-            <InputText placeholder={'Phone Number or email'} secure={false} />
-            <InputText placeholder={'Password'} secure={true} />
-
-            <Pressable>
-              <Text
-                style={styles.text}
-                onPress={() => navigation.navigate('forgetYourPassword')}
-              >
-                Forgot your Password?
-              </Text>
-            </Pressable>
-            <View style={{ alignItems: 'center' }}>
-              <SecondaryButton
-                title={'Login'}
-                disable={true}
-                onPress={() => navigation.navigate('drawer')}
-              />
-            </View>
-          </>
-        ) : (
-          <View>
-            <InputText placeholder={'Phone Number'} secure={false} />
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 25
-              }}
-            >
-              <SecondaryButton
-                title={'Get OTP'}
-                onPress={() => navigation.navigate('OTP')}
-              />
-            </View>
-          </View>
-        )}
-        <DividerWithText />
-
-        <Text style={{ color: '#263238', textAlign: 'center' }}>
-          Dont't have an account?
-        </Text>
+      <ScrollView>
         <View style={{ alignItems: 'center' }}>
-          <SecondaryButton
-            title={'Sign Up'}
-            onPress={() => navigation.navigate('register')}
-          />
-        </View>
-        <View style={styles.termsContainer}>
-          <Text style={styles.termsText}>
-            By signing up you accept the {'\n'}
-            <TouchableOpacity
-              onPress={() => handleLinkPress('https://example.com/terms')}
-            >
-              <Text style={styles.link}>Terms of Service</Text>
-            </TouchableOpacity>{' '}
-            <Text style={styles.termsText}>and</Text>
-            <TouchableOpacity
-              onPress={() => handleLinkPress('https://example.com/privacy')}
-            >
-              <Text style={styles.link}> Privacy policy</Text>
-            </TouchableOpacity>
+          <Text style={styles.heading}>Welcome</Text>
+          <Text style={styles.content}>
+            please enter your account details here
           </Text>
         </View>
-      </View>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[
+                styles.tabSection,
+                active === 'password' && styles.activeState
+              ]}
+              onPress={() => setActive('password')}
+            >
+              <Text
+                style={[
+                  styles.tabContent,
+                  active === 'password' && styles.activeContent
+                ]}
+              >
+                Password
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.verticalDivider} />
+            <TouchableOpacity
+              onPress={() => setActive('otp')}
+              style={[
+                styles.tabSection,
+                active === 'otp' && styles.activeState
+              ]}
+            >
+              <Text
+                style={[
+                  styles.tabContent,
+                  active === 'otp' && styles.activeContent
+                ]}
+              >
+                OTP
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.container}>
+          {active === 'password' ? (
+            <>
+              <InputText placeholder={'Phone Number or email'} secure={false} />
+              <InputText placeholder={'Password'} secure={true} />
+
+              <Pressable>
+                <Text
+                  style={styles.text}
+                  onPress={() => navigation.navigate('forgetYourPassword')}
+                >
+                  Forgot your Password?
+                </Text>
+              </Pressable>
+              <View style={{ alignItems: 'center' }}>
+                <SecondaryButton
+                  title={'Login'}
+                  disable={true}
+                  onPress={() => navigation.navigate('drawer')}
+                />
+              </View>
+            </>
+          ) : (
+            <View>
+              <InputText placeholder={'Phone Number'} secure={false} />
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 25
+                }}
+              >
+                <SecondaryButton
+                  title={'Get OTP'}
+                  onPress={() => setShowOtpField(true)}
+                />
+              </View>
+
+              {showOtpField && <VerifyOTP />}
+            </View>
+          )}
+          {!showOtpField && (
+            <View>
+              <DividerWithText />
+
+              <Text style={{ color: '#263238', textAlign: 'center' }}>
+                Dont't have an account?
+              </Text>
+              <View style={{ alignItems: 'center' }}>
+                <SecondaryButton
+                  title={'Sign Up'}
+                  onPress={() => navigation.navigate('register')}
+                />
+              </View>
+              <View style={styles.termsContainer}>
+                <Text style={styles.termsText}>
+                  By signing up you accept the {'\n'}
+                  <TouchableOpacity
+                    onPress={() => handleLinkPress('https://example.com/terms')}
+                  >
+                    <Text style={styles.link}>Terms of Service</Text>
+                  </TouchableOpacity>{' '}
+                  <Text style={styles.termsText}>and</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleLinkPress('https://example.com/privacy')
+                    }
+                  >
+                    <Text style={styles.link}> Privacy policy</Text>
+                  </TouchableOpacity>
+                </Text>
+              </View>
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(38, 50, 56, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 204,
-    borderBottomEndRadius: 40,
-    borderBottomStartRadius: 40
-  },
-  overlayText: {
-    fontWeight: '700',
-    fontSize: 24,
-    lineHeight: 29,
-    zIndex: 1,
-    color: 'white'
-  },
-  overlayTextContainer: {
-    position: 'relative',
-    zIndex: 2,
-    top: '12%',
-    left: '40%'
-  },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',

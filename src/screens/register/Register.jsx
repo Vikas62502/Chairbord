@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Image,
   SafeAreaView,
@@ -10,43 +10,32 @@ import {
 import InputText from '../../components/common/InputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
+import OverlayHeader from '../../components/OverlayHeader'
+import VerifyOTP from '../opt/VerifyOTP'
 const Register = () => {
+  const [showOtpField, setShowOtpField] = useState(false)
   const navigation = useNavigation()
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader
+        title={'Register'}
+        showBackButton={true}
+        navigateTo={() => navigation.goBack()}
+      />
       <View>
-        <View style={{ position: 'relative' }}>
-          <View style={styles.overlay}></View>
-          <View style={styles.overlayTextContainer}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.navigate('drawer')}>
-                <Image source={require('../../assets/backArrowButton.png')} />
-              </TouchableOpacity>
-              <Text style={styles.overlayText}>Register</Text>
-              <View></View>
-            </View>
-          </View>
-        </View>
-        <View style={{ alignItems: 'center', paddingVertical: '5%' }}>
-          <Image
-            source={require('../../assets/chairBordLogoWithoutName.png')}
-          />
-        </View>
-
-        <View style={{ marginTop: '5%' }}>
-          <InputText placeholder={'Enter full name'} />
-          <InputText placeholder={'Enter email id'} />
-          <InputText placeholder={'Enter mobile number'} />
+        <InputText placeholder={'Enter full name'} />
+        <InputText placeholder={'Enter email id'} />
+        <InputText placeholder={'Enter mobile number'} />
+        {showOtpField ? (
+          <VerifyOTP />
+        ) : (
           <View style={styles.getOtpButton}>
-            <SecondaryButton title={'Get OTP'} />
+            <SecondaryButton
+              title={'Get OTP'}
+              onPress={() => setShowOtpField(true)}
+            />
           </View>
-        </View>
+        )}
       </View>
     </SafeAreaView>
   )
@@ -56,32 +45,6 @@ const styles = StyleSheet.create({
   getOtpButton: {
     marginTop: '10%',
     alignItems: 'center'
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(38, 50, 56, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 204,
-    borderBottomEndRadius: 40,
-    borderBottomStartRadius: 40
-  },
-  overlayText: {
-    fontWeight: '700',
-    fontSize: 24,
-    lineHeight: 29,
-    zIndex: 1,
-    color: 'white'
-  },
-  overlayTextContainer: {
-    position: 'relative',
-    zIndex: 2,
-    top: '250%',
-    paddingHorizontal: 10
   }
 })
 

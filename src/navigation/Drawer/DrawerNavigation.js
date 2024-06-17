@@ -15,6 +15,7 @@ import Wallet from '../../screens/walllet/Wallet';
 import Request from '../../screens/requests/Request';
 import IssuanceTracker from '../../screens/IssuanceTracker/IssuanceTracker';
 import Order from '../../screens/order/Order';
+import OrderSummary from '../../screens/order/OrderSummary';
 
 const DrawerNavigation = ({ }) => {
     const Drawer = createDrawerNavigator();
@@ -63,6 +64,11 @@ const DrawerNavigation = ({ }) => {
                 name="orders"
                 component={Order}
                 options={{ header: () => <OverlayHeader title={"Order"} navigateTo={() => navigation.navigate('dashboard')} /> }}
+            />
+            <Drawer.Screen
+                name="orderSummary"
+                component={OrderSummary}
+                options={{ header: () => <OverlayHeader title={"Order Summary"} navigateTo={() => navigation.navigate('dashboard')} /> }}
             />
         </Drawer.Navigator>
     )

@@ -9,7 +9,7 @@ const InputText = ({
   inputStyle
 }) => {
   return (
-    <View style={{ marginTop: 20, alignItems: 'center' }}>
+    <View style={{ marginTop: '5%', alignItems: 'center' }}>
       <TextInput
         style={[styles.textInput, inputStyle]}
         value={value}
@@ -29,10 +29,9 @@ const styles = StyleSheet.create({
     borderColor: '#263238',
     borderWidth: 2,
     color: '#000000',
-    width: '75%',
+    width: '80%',
     fontSize: 16,
     borderRadius: 20,
-    marginHorizontal: '3%',
     height: 60,
     paddingHorizontal: 15,
     backgroundColor: '#F3F3F3'

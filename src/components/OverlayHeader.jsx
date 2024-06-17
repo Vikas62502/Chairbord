@@ -1,36 +1,51 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
+import LinearGradient from 'react-native-linear-gradient'
 
 const OverlayHeader = ({ title, navigateTo, showBackButton = true }) => {
   const navigation = useNavigation()
   return (
-    <View>
-      <View style={styles.overlayContainer}>
-        <View style={styles.overlay}></View>
-        <View style={styles.overlayTextContainer}>
-          {showBackButton && (
-            <View>
-              <TouchableOpacity onPress={navigateTo} style={styles.backArrow}>
-                <Image source={require('../assets/backArrowButton.png')} />
-              </TouchableOpacity>
+    <View style={styles.container}>
+      <LinearGradient colors={['#02546D', '#142D40']} style={styles.gradient}>
+        <View style={styles.overlayContainer}>
+          <View style={styles.overlay}></View>
+          <View style={styles.overlayTextContainer}>
+            {showBackButton && (
+              <View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(navigateTo)}
+                  style={styles.backArrow}
+                >
+                  <Image source={require('../assets/backArrowButton.png')} />
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={{ marginLeft: '-15%', zIndex: 10 }}>
+              <Text style={styles.overlayText}>{title}</Text>
             </View>
-          )}
-
-          <View style={{ marginLeft: '-15%', zIndex: 10 }}>
-            <Text style={styles.overlayText}>{title}</Text>
+            <View></View>
           </View>
-          <View></View>
         </View>
-      </View>
-      <View style={styles.chairBordLogo}>
-        <Image source={require('../assets/chairBordLogoWithoutName.png')} />
-      </View>
+        <View style={styles.chairBordLogo}>
+          <Image source={require('../assets/chairBordLogoWithoutName.png')} />
+        </View>
+      </LinearGradient>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+    borderBottomEndRadius: 40,
+    borderBottomStartRadius: 40,
+    marginBottom: '10%'
+  },
+  gradient: {
+    borderBottomEndRadius: 40,
+    borderBottomStartRadius: 40
+  },
   overlayContainer: {
     position: 'relative',
     height: 172
@@ -41,7 +56,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(38, 50, 56, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomEndRadius: 40,

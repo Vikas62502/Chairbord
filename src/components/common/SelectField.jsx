@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '10%'
+    paddingHorizontal: '10%',
+    // backgroundColor: '#F3F3F3'
   },
   dropdownButtonTxtStyle: {
     flex: 1,
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
   dropdownButtonIconStyle: {
     fontSize: 28,
-    marginRight: 8
+    marginRight: 8,
   },
   dropdownMenuStyle: {
     backgroundColor: '#E9ECEF',

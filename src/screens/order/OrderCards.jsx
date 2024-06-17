@@ -3,9 +3,9 @@ import React from 'react'
 import VerticalDivider from '../../components/common/VerticalDivider'
 import Status from '../../components/common/Status'
 
-const OrderCards = ({ data }) => {
+const OrderCards = ({ data, key }) => {
   return (
-    <View style={styles.cardContainer}>
+    <View style={styles.cardContainer} key={key}>
       <View>
         <View
           style={{

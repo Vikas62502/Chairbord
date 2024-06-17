@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
-    color: '#263238',
+    color: '#03536D',
     fontWeight: '600',
     fontFamily: 'inter',
     textAlign: 'center'

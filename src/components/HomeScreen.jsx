@@ -3,10 +3,12 @@ import {
   Image,
   SafeAreaView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import LinearGradient from 'react-native-linear-gradient'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
@@ -18,27 +20,53 @@ const HomeScreen = () => {
     }, 1000)
   }, [navigation])
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('FastTagAndGPS')}>
-        <View>
-          <Image
-            source={require('../assets/chairBoardLogo.png')}
-            style={styles.image}
-          />
-        </View>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <LinearGradient
+      colors={['#02546D', '#142D40']}
+      style={styles.linearGradient}
+    >
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('FastTagAndGPS')}>
+          <View>
+            <Image
+              source={require('../assets/chairbordlogo.png')}
+              style={styles.image}
+            />
+            <Image
+              source={require('../assets/chairbordTagLine.png')}
+              style={{ marginTop: '10%' }}
+            />
+            <Text style={styles.taglineText}>
+              WORKING WITH 1K+ WORKERS PAST 4 YEARS
+            </Text>
+            <Image
+              source={require('../assets/groupAvatar.png')}
+              style={{ alignSelf: 'center' }}
+            />
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  linearGradient: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%'
+    alignItems: 'center'
+  },
+  container: {
+    padding: '20%'
   },
   image: {
     alignSelf: 'center'
+  },
+  taglineText: {
+    color: '#FFFFFF',
+    fontWeight: "700",
+    fontSize: 15,
+    textAlign: 'center',
+    marginVertical: '10%'
   }
 })
 

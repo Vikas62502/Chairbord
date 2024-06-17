@@ -1,27 +1,31 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import LinearGradient from 'react-native-linear-gradient'
 
-const SecondaryButton = ({
-  onPress,
-  title,
-  showArrow,
-  disable,
-  width = 330
-}) => {
-  const navigation = useNavigation()
+const SecondaryButton = ({ onPress, title, disabled }) => {
+  const buttonContainerStyle = disabled
+    ? styles.disableAppButtonContainer
+    : styles.appButtonContainer
 
-  const buttonContainerStyle = disable
-    ? [styles.disabledButtonContainer, { width }]
-    : [styles.appButtonContainer, { width }]
-  showArrow = false
+  const gradientColors = disabled
+    ? ['#AFACAC', '#AFACAC']
+    : ['#02546D', '#142D40']
 
   return (
     <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={styles.appButtonText}>{title}</Text>
-        {showArrow && <Image source={require('../../assets/rightArrow.png')} />}
-      </View>
+      <LinearGradient colors={gradientColors} style={styles.linearGradient}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
+          <Text style={styles.appButtonText}>{title}</Text>
+        </View>
+      </LinearGradient>
     </TouchableOpacity>
   )
 }
@@ -29,31 +33,38 @@ const SecondaryButton = ({
 const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
-    backgroundColor: '#263238',
     borderRadius: 25,
     height: 68,
+    width: 340,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
-  disabledButtonContainer: {
+  disableAppButtonContainer: {
+    marginTop: 120,
     elevation: 8,
-    backgroundColor: '#AFACAC',
     borderRadius: 25,
-    height: 68,
+    height: 75,
+    width: 310,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    overflow: 'hidden' // Ensure the gradient follows the button's shape
+  },
+  linearGradient: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: '10%'
   },
   appButtonText: {
     fontSize: 20,
-    lineHeight: 24,
     color: '#fff',
     fontWeight: '700',
     alignSelf: 'center',
-    fontFamily: 'inter',
-    textAlign: 'center',
-    width: '100%'
+    fontFamily: 'inter'
   }
 })
 
