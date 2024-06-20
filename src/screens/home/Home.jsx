@@ -10,6 +10,7 @@ import dashboardCardData from './dashboardCardData'
 import React, { useState } from 'react'
 import SwipperComponent from './SwipperComponent'
 import { useNavigation } from '@react-navigation/native'
+import LinearGradient from 'react-native-linear-gradient'
 
 const DashboardCards = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
@@ -63,29 +64,18 @@ const Home = () => {
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
       <View style={{ flexDirection: 'row' }}>
-        <View>
-          {dashboardCardData.slice(0, 3).map((data, index) => (
-            <View key={index}>
-              <DashboardCards
-                title={data.title}
-                subTitle={data.subTitle}
-                icon={data.icon}
-                router={data.router}
-              />
-            </View>
-          ))}
-        </View>
-        <View>
-          {dashboardCardData.slice(3, 6).map((data, index) => (
-            <View key={index}>
-              <DashboardCards
-                title={data.title}
-                subTitle={data.subTitle}
-                icon={data.icon}
-              />
-            </View>
-          ))}
-        </View>
+        <DashboardCards
+          title={'BAJAJ'}
+          subTitle={'Issuance'}
+          icon={require('../../assets/dashboard/customerOnBoard.png')}
+          router={'customerRegistration'}
+        />
+        <DashboardCards
+          title={'Tag'}
+          subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'tagReplacement'}
+        />
       </View>
       <View style={{ alignItems: 'center', marginTop: '1%' }}>
         <View style={styles.divider}></View>
@@ -109,16 +99,20 @@ const Home = () => {
             style={styles.timeFields}
             onPress={() => setActiveTime(data)}
           >
-            <View>
-              <Text
-                style={[
-                  styles.timeText,
-                  activeTime === data && styles.activeTimeText
-                ]}
+            {activeTime === data ? (
+              <LinearGradient
+                colors={['#02546D', '#142D40']}
+                style={styles.gradient}
               >
-                {data}
-              </Text>
-            </View>
+                <Text style={[styles.timeText, styles.activeTimeText]}>
+                  {data}
+                </Text>
+              </LinearGradient>
+            ) : (
+              <View>
+                <Text style={styles.timeText}>{data}</Text>
+              </View>
+            )}
           </Pressable>
         ))}
       </View>
@@ -155,6 +149,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center'
   },
+  gradient: {
+    borderRadius: 25
+  },
   timeText: {
     color: '#000000',
     fontSize: 16,
@@ -164,7 +161,6 @@ const styles = StyleSheet.create({
   },
   activeTimeText: {
     color: 'white',
-    backgroundColor: '#263238',
     paddingHorizontal: '15%',
     borderRadius: 25,
     fontFamily: 'Proxima Nova'

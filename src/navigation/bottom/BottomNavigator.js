@@ -13,6 +13,7 @@ import ordersIcon from '../../assets/tabNavigation/orders.png';
 import homeIcon from '../../assets/tabNavigation/home.png';
 import walletIcon from '../../assets/tabNavigation/wallet.png';
 import profileIcon from '../../assets/tabNavigation/profile.png';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Bottom = createBottomTabNavigator();
 const BottomNavigator = () => {
@@ -21,9 +22,9 @@ const BottomNavigator = () => {
       initialRouteName='home'
       screenOptions={{
         tabBarStyle: {
-          height: 83
+          height: 83,
         },
-        tabBarShowLabel: false
+        tabBarShowLabel: false,
       }}
     >
       <Bottom.Screen
@@ -83,11 +84,18 @@ const BottomNavigator = () => {
 const TabIcon = ({ icon, focused }) => {
   return (
     <View style={styles.tabIconContainer}>
-      {focused && <View style={styles.focusIndicator} />}
-      <Image
-        source={icon}
-        style={[styles.tabIcon, { tintColor: focused ? 'white' : 'black' }]}
-      />
+      {focused ? (
+        <LinearGradient
+          colors={['#02546D', '#142D40']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientOverlay}
+        >
+          <Image source={icon} style={[styles.tabIcon, styles.focusedIcon]} />
+        </LinearGradient>
+      ) : (
+        <Image source={icon} style={styles.tabIcon} />
+      )}
     </View>
   );
 };
@@ -95,16 +103,23 @@ const TabIcon = ({ icon, focused }) => {
 const styles = StyleSheet.create({
   tabIconContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
   },
-  focusIndicator: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
-    borderRadius: 50,
-    backgroundColor: 'black',
-    bottom: -15,
+  gradientOverlay: {
+    padding: 15, // Add padding around the icon
+    borderRadius: 50, // Adjust the border radius if needed
+    alignItems: 'center', // Center the icon within the gradient
+    justifyContent: 'center',
+  },
+  tabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: 'black', // Default color for unfocused icons
+  },
+  focusedIcon: {
+    tintColor: 'white', // Make the tint color white for focused icons
   },
 });
-
 
 export default BottomNavigator;

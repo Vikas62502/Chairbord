@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { useNavigation, DrawerActions } from '@react-navigation/native'
 import React from 'react'
+import LinearGradient from 'react-native-linear-gradient'
 
 const DrawerHeader = () => {
   const navigation = useNavigation()
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#02546D', '#142D40']} style={styles.container}>
       <View>
         <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -27,7 +28,7 @@ const DrawerHeader = () => {
           <Image source={require('../assets/notificationBell.png')} />
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   )
 }
 
