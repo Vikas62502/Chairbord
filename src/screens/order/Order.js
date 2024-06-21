@@ -85,7 +85,7 @@ const Order = () => {
 
         <View style={{ marginTop: "4%" }}>
           {orderCardData.map((data, index) => (
-            <Pressable onPress={() => setDataShowModal(true)}>
+            <Pressable onPress={() => setDataShowModal(true)} key={index}>
               <OrderCards
                 key={index}
                 data={data}
