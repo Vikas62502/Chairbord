@@ -1,54 +1,110 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView
+} from 'react-native'
 import React, { useState } from 'react'
-import InputText from '../../components/common/InputText'
+import TagOfInput from '../../components/common/TagOfInput'
+import CustomInputText from '../../components/common/CustomInputText'
+import UploadDoc from '../../components/common/UploadDoc'
+import SecondaryButton from '../../components/common/SecondaryButton'
+import Step2 from './Step2'
+import LinearButton from '../../components/common/LinearButton'
 
 const Profile = () => {
-  const [active, setActive] = useState('password')
+  const [step, setStep] = useState(1)
   return (
-    <View style={{ flex: 1, padding: '5%' }}>
+    <SafeAreaView style={{ flex: 1, padding: '5%' }}>
       <View
         style={{
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: '5%'
         }}
       >
         <View style={styles.tabContainer}>
           <TouchableOpacity
-            style={[
-              styles.tabSection,
-              active === 'password' && styles.activeState
-            ]}
-            onPress={() => setActive('password')}
+            style={[styles.tabSection, step === 1 && styles.activeState]}
+            onPress={() => setStep(1)}
           >
             <Text
-              style={[
-                styles.tabContent,
-                active === 'password' && styles.activeContent
-              ]}
+              style={[styles.tabContent, step === 1 && styles.activeContent]}
             >
               Step 1
             </Text>
           </TouchableOpacity>
           <View style={styles.verticalDivider} />
           <TouchableOpacity
-            onPress={() => setActive('otp')}
-            style={[styles.tabSection, active === 'otp' && styles.activeState]}
+            onPress={() => setStep(2)}
+            style={[styles.tabSection, step === 2 && styles.activeState]}
           >
             <Text
-              style={[
-                styles.tabContent,
-                active === 'otp' && styles.activeContent
-              ]}
+              style={[styles.tabContent, step === 2 && styles.activeContent]}
             >
               Step 2
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-      <Text>Personal Information</Text>
+      <View>
+        {step === 1 ? (
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <TagOfInput text="Personal Information" />
 
-      <InputText placeholder="First Name" value="" onChangeText={() => {}} />
-    </View>
+            <CustomInputText
+              placeholder="Enter Father’s Name"
+              value=""
+              onChangeText={() => {}}
+            />
+            <View style={{ marginVertical: '5%' }}>
+              <CustomInputText
+                placeholder="Enter Mother’s Name"
+                value=""
+                onChangeText={() => {}}
+              />
+            </View>
+
+            <TagOfInput text="ID Proof" />
+            {/* <View style={{ marginTop: '5%' }}> */}
+            <CustomInputText
+              placeholder="Enter PAN card number"
+              value=""
+              onChangeText={() => {}}
+            />
+
+            <View style={{ marginTop: '5%' }}>
+              <TagOfInput text="PAN card photo" />
+            </View>
+            <UploadDoc text="Upload PAN card photo" />
+
+            <View style={{ marginTop: '5%' }}>
+              <TagOfInput text="POS Proof" />
+            </View>
+
+            <CustomInputText
+              placeholder="Enter POS number"
+              value=""
+              onChangeText={() => {}}
+            />
+
+            <View style={{ marginVertical: '5%' }}></View>
+            <UploadDoc text="Upload POS proof photo here" />
+
+            <View
+              style={{ alignSelf: 'center', marginTop: '5%', width: '100%' }}
+            >
+              <LinearButton title={'Submit'} onPress={() => setStep(2)} />
+            </View>
+          </ScrollView>
+        ) : (
+          <Step2 />
+        )}
+      </View>
+      {/* </ScrollView> */}
+    </SafeAreaView>
   )
 }
 
@@ -84,6 +140,10 @@ const styles = StyleSheet.create({
   tabContent: {
     alignSelf: 'center',
     color: '#807C7C'
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 300
   }
 })
 

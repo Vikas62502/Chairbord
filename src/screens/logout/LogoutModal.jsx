@@ -10,23 +10,23 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 
-const LogoutModal = () => {
-  const [modalVisible, setModalVisible] = useState(true)
+const LogoutModal = (props) => {
+  // const [modalVisible, setModalVisible] = useState(true)
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={true}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.')
-          setModalVisible(!modalVisible)
+          // setModalVisible(false)
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TouchableOpacity
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => props.navigation.navigate('dashboard')}
               style={{ alignSelf: 'flex-end', paddingBottom: '5%' }}
             >
               <View>
@@ -49,13 +49,13 @@ const LogoutModal = () => {
             >
               <Pressable
                 style={[styles.cancelButton]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => props.navigation.navigate('dashboard')}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </Pressable>
               <Pressable
                 style={[styles.logoutButton]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => props.navigation.navigate('dashboard')}
               >
                 <Text style={styles.logoutText}>Logout</Text>
               </Pressable>
@@ -63,12 +63,12 @@ const LogoutModal = () => {
           </View>
         </View>
       </Modal>
-      <Pressable
+      {/* <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}
       >
         <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   )
 }

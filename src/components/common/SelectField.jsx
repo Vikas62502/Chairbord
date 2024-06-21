@@ -1,14 +1,25 @@
-import { View, Text, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
+import React, { useRef, useState } from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
 
-const SelectField = ({ dataToRender, title }) => {
+const SelectField = ({ dataToRender, title, selectedValue }) => {
+  const dropdownRef = useRef(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const toggleDropdown = () => {
+    if (dropdownOpen) {
+      dropdownRef.current.closeDropdown()
+    } else {
+      dropdownRef.current.openDropdown()
+    }
+    setDropdownOpen(!dropdownOpen)
+  }
   return (
     <View style={styles.dropdownStyle}>
       <SelectDropdown
+        ref={dropdownRef}
         data={dataToRender}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index)
+          selectedValue(selectedItem, index)
         }}
         renderButton={(selectedItem, isOpened) => {
           return (
@@ -35,9 +46,9 @@ const SelectField = ({ dataToRender, title }) => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
-      <View>
+      <Pressable onPress={toggleDropdown}>
         <Image source={require('../../assets/arrowBottom.png')} />
-      </View>
+      </Pressable>
     </View>
   )
 }
@@ -57,8 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '10%',
-    // backgroundColor: '#F3F3F3'
+    paddingHorizontal: '10%'
   },
   dropdownButtonTxtStyle: {
     flex: 1,
@@ -71,7 +81,7 @@ const styles = StyleSheet.create({
   },
   dropdownButtonIconStyle: {
     fontSize: 28,
-    marginRight: 8,
+    marginRight: 8
   },
   dropdownMenuStyle: {
     backgroundColor: '#E9ECEF',

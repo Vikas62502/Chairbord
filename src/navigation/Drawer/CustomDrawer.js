@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native'
+import React, { useState } from 'react'
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native'
+import LinearGradient from 'react-native-linear-gradient';
+import LogoutModal from '../../screens/logout/LogoutModal';
 
 const profileData = [
     {
@@ -89,6 +91,14 @@ const data = [
     },
 ]
 
+const logoutData =
+{
+    title: 'Logout',
+    icon: require('../../assets/DrawerNavigation/logout.png'),
+    screen: 'logoutModal'
+}
+
+
 const CustomDrawerItems = ({ title, icons, navigateTo }) => {
     const navigation = useNavigation();
     return (
@@ -110,8 +120,9 @@ const CustomDrawerItems = ({ title, icons, navigateTo }) => {
 
 const CustomDrawer = () => {
     const navigation = useNavigation();
+    const [logoutModal, setLogoutModal] = useState(false);
     return (
-        <View style={styles.DrawerStyles}>
+        <LinearGradient colors={['#02546D', '#142D40']} style={styles.DrawerStyles}>
             <DrawerContentScrollView>
                 <View>
                     <ProfileDraweritem title={profileData[0].title} icons={profileData[0].icon} />
@@ -127,8 +138,18 @@ const CustomDrawer = () => {
                         />
                     )
                 })}
+                {/* <Pressable onPress={() => setModalVisible(true)}
+                >
+                    <CustomDrawerItems
+                        key={logoutData.title}
+                        title={logoutData.title}
+                        icons={logoutData.icon}
+                        navigateTo={logoutData.screen}
+                    />
+                </Pressable> */}
             </DrawerContentScrollView>
-        </View>
+            {/* <LogoutModal modalVisible={logoutModal} setModalVisible={setLogoutModal} /> */}
+        </LinearGradient>
     )
 }
 
