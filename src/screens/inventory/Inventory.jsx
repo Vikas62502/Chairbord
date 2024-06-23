@@ -1,15 +1,18 @@
 import { View, Text, ScrollView, Pressable, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
 import OrderCards from '../order/OrderCards'
 import InventoryCards from './InventoryCards'
 import inventoryCardData from './InventoryCardData'
+import LinearGradient from 'react-native-linear-gradient'
+import InventoryFilterModal from './InventoryFilterModal'
 
 const Inventory = () => {
+  const [showInventoryModal, setShowInventoryModal] = useState(false)
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: '5%' }}>
-        <SearchBar />
+        <SearchBar setShowInventoryModal={setShowInventoryModal} />
 
         <View>
           <View
@@ -19,23 +22,28 @@ const Inventory = () => {
               <Text style={styles.titleText}>Inventory</Text>
             </View>
             <Pressable
-              style={styles.excelButton}
-              // onPress={() => setCreateOrderModal(true)}
+            // style={styles.excelButton}
+            // onPress={() => setCreateOrderModal(true)}
             >
-              <Text
-                style={{
-                  fontWeight: '500',
-                  fontSize: 14,
-                  lineHeight: 19,
-                  color: '#FFFFFF'
-                }}
+              <LinearGradient
+                colors={['#02546D', '#142D40']}
+                style={styles.excelButton}
               >
-                Excel
-              </Text>
-              <Image
-                source={require('../../assets/addIcon.png')}
-                style={{ marginLeft: '5%' }}
-              />
+                <Text
+                  style={{
+                    fontWeight: '500',
+                    fontSize: 14,
+                    lineHeight: 19,
+                    color: '#FFFFFF'
+                  }}
+                >
+                  Excel
+                </Text>
+                <Image
+                  source={require('../../assets/addIcon.png')}
+                  style={{ marginLeft: '5%' }}
+                />
+              </LinearGradient>
             </Pressable>
           </View>
         </View>
@@ -45,7 +53,7 @@ const Inventory = () => {
               //  onPress={() => setDataShowModal(true)}
               key={index}
             >
-              <InventoryCards key={index} data={data} />
+              <InventoryCards data={data} />
             </Pressable>
           ))}
           {/* {orderCardData.map((data, index) => (
@@ -54,8 +62,13 @@ const Inventory = () => {
             </Pressable>
           ))} */}
         </View>
-        <Text style={{ color: 'red' }}>Inventory</Text>
       </View>
+
+      {/* Filter modal */}
+      <InventoryFilterModal
+        visible={showInventoryModal}
+        onClose={() => setShowInventoryModal(false)}
+      />
     </ScrollView>
   )
 }
@@ -73,10 +86,9 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#263238',
     color: 'white',
-    paddingVertical: '3%',
-    paddingHorizontal: '5%',
+    paddingVertical: '10%',
+    paddingHorizontal: '7%',
     borderRadius: 12
   }
 }

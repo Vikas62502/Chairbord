@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Image,
   TextInput,
   Pressable,
@@ -8,7 +7,7 @@ import {
 } from 'react-native'
 import React from 'react'
 
-const SearchBar = () => {
+const SearchBar = ({ setShowInventoryModal }) => {
   return (
     <>
       <View style={styles.searchAndfilter}>
@@ -26,7 +25,7 @@ const SearchBar = () => {
           />
         </View>
         <Pressable
-          onPress={() => setShowFilterModal(true)}
+          onPress={() => setShowInventoryModal(true)}
           style={styles.filterLogo}
         >
           <Image source={require('../../assets/screens/wallet/filter.png')} />
