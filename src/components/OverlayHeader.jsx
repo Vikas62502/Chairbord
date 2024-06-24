@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderBottomEndRadius: 40,
     borderBottomStartRadius: 40,
-    marginBottom: '10%'
+    // marginBottom: '10%'
   },
   gradient: {
     borderBottomEndRadius: 40,
