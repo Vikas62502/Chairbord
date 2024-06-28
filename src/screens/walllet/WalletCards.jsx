@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 const WalletCards = ({
   amountValue,
@@ -11,9 +12,22 @@ const WalletCards = ({
   ID,
   RefNo
 }) => {
+  const navigation = useNavigation()
   const amountColor = amountValue >= 0 ? '#25B73C' : '#FF0000'
   return (
-    <View style={styles.cardContainer}>
+    <Pressable
+      style={styles.cardContainer}
+      onPress={() =>
+        navigation.navigate('walletDetails', {
+          title: title,
+          description: description,
+          date: date,
+          time: time,
+          ID: ID,
+          RefNo: RefNo
+        })
+      }
+    >
       <View style={styles.HeadingAndPriceSection}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
@@ -72,7 +86,7 @@ const WalletCards = ({
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

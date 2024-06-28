@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { View, TextInput, StyleSheet } from 'react-native'
 
-const OtpInputText = () => {
-  const [otp, setOtp] = useState(['', '', '', ''])
+const OtpInputText = ({ otp, setOtp }) => {
   const inputRefs = useRef([])
 
   const handleOtpChange = (index, value) => {
@@ -49,8 +48,8 @@ const styles = StyleSheet.create({
     width: '80%'
   },
   input: {
-    height: 60,
-    width: 70,
+    height: 55,
+    width: 50,
     borderWidth: 1,
     borderRadius: 20,
     textAlign: 'center',

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+  Alert,
   Button,
   Image,
   Linking,
@@ -18,14 +19,57 @@ import { useNavigation } from '@react-navigation/native'
 import OverlayHeader from '../components/OverlayHeader'
 import VerifyOTP from './opt/VerifyOTP'
 import OtpInputText from './opt/OtpInputText'
+import Loader from '../components/ui/Loader'
+import { REACT_APP_BASE_URL } from '../utils/globalConfig'
+import axios from 'axios'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
   const [showOtpField, setShowOtpField] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+
   const handleLinkPress = (url) => {
     Linking.openURL(url)
   }
   const navigation = useNavigation()
+
+  const loginApi = async () => {
+    let bodyContent = JSON.stringify({
+      email: formData.email,
+      password: formData.password
+    })
+
+    let reqOptions = {
+      url: `${REACT_APP_BASE_URL}/login/agent`,
+      method: 'POST',
+      data: bodyContent
+    }
+
+    try {
+      let response = await axios.request(reqOptions)
+      console.log(response, 'response with login')
+      navigation.navigate('drawer')
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      navigation?.navigate('drawer')
+      Alert.alert(
+        'Something went wrong'[
+          {
+            text: 'OK',
+            onPress: () => navigation?.navigate('drawer'),
+            style: 'cancel'
+          }
+        ]
+      )
+      console.log(error, 'error')
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader
@@ -33,7 +77,7 @@ const SignIn = () => {
         showBackButton={true}
         navigateTo={() => navigation.goBack()}
       />
-
+      {loading && <Loader />}
       <ScrollView>
         <View style={{ alignItems: 'center' }}>
           <Text style={styles.heading}>Welcome</Text>
@@ -87,8 +131,20 @@ const SignIn = () => {
         <View style={styles.container}>
           {active === 'password' ? (
             <>
-              <InputText placeholder={'Phone Number or email'} secure={false} />
-              <InputText placeholder={'Password'} secure={true} />
+              <InputText
+                placeholder={'Phone Number or email'}
+                secure={false}
+                onChangeText={(email) =>
+                  setFormData({ ...formData, email: email })
+                }
+              />
+              <InputText
+                placeholder={'Password'}
+                secure={true}
+                onChangeText={(pass) =>
+                  setFormData({ ...formData, password: pass })
+                }
+              />
 
               <Pressable>
                 <Text
@@ -102,7 +158,8 @@ const SignIn = () => {
                 <SecondaryButton
                   title={'Login'}
                   disable={true}
-                  onPress={() => navigation.navigate('drawer')}
+                  // onPress={() => navigation.navigate('drawer')}
+                  onPress={() => loginApi()}
                 />
               </View>
             </>
