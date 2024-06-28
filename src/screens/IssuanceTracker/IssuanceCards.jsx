@@ -3,9 +3,10 @@ import React from 'react'
 import VerticalDivider from '../../components/common/VerticalDivider'
 
 const IssuanceCards = ({ data }) => {
+  // commision icons
   const pendingCommisionIcon = require('../../assets/commision/commissionPending.png')
   const commisionDeniedIcon = require('../../assets/commision/commissionDenied.png')
-  const commisionReceivedIcon = require('../../assets/commision/pendingCommision.png')
+  const commisionApprovedIcon = require('../../assets/commision/commsionApprove.png')
   const commisionPartaillyPaidIcon = require('../../assets/commision/partialCommission.png')
   return (
     <View style={styles.container}>
@@ -122,7 +123,15 @@ const IssuanceCards = ({ data }) => {
       >
         <Image source={require('../../assets/eyeIcon.png')} />
         <Image
-          source={require('../../assets/commision/commissionPending.png')}
+          source={
+            data.status === 'denied'
+              ? commisionDeniedIcon
+              : data.status === 'pending'
+              ? pendingCommisionIcon
+              : data.status === 'success'
+              ? commisionApprovedIcon
+              : commisionPartaillyPaidIcon
+          }
         />
         <Image source={require('../../assets/dangerPalm.png')} />
       </View>

@@ -2,21 +2,21 @@ import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 
-const ExcelButton = () => {
+const ExcelButton = ({ title, onpressOperation }) => {
   return (
     <>
       <Pressable
-      // style={styles.excelButton}
-      // onPress={() => setCreateOrderModal(true)}
+        // style={styles.excelButton}
+        onPress={() => onpressOperation()}
       >
         <LinearGradient
           colors={['#02546D', '#142D40']}
           style={styles.excelButton}
         >
-          <Text style={styles.excelButtonText}>Excel</Text>
+          <Text style={styles.excelButtonText}>{title}</Text>
           <Image
             source={require('../../assets/addIcon.png')}
-            style={{ marginLeft: '5%' }}
+            // style={{ marginLeft: '5%' }}
           />
         </LinearGradient>
       </Pressable>
@@ -30,15 +30,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     color: 'white',
-    paddingVertical: '10%',
-    paddingHorizontal: '7%',
-    borderRadius: 12
+    borderRadius: 12,
+    paddingHorizontal: '3%'
   },
   excelButtonText: {
     fontWeight: '500',
-    fontSize: 14,
-    lineHeight: 19,
-    color: '#FFFFFF'
+    fontSize: 12,
+    lineHeight: 14,
+    color: '#FFFFFF',
+    paddingVertical: '3%'
   }
 })
 

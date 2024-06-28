@@ -15,6 +15,8 @@ import OverlayHeader from '../../components/OverlayHeader';
 import CustomerRegistration from '../../screens/home/customerRegistration/CustomerRegistration';
 import PrivacyPolicy from '../../screens/privacyPolicy/PrivacyPolicy';
 import TermsAndCondition from '../../screens/termsAndCondition/TermsAndCondition';
+import WalletDetails from '../../screens/walllet/WalletDetails';
+import TopupWallet from '../../screens/walllet/TopupWallet';
 const StackNavigation = () => {
     const Stack = createNativeStackNavigator();
     return (
@@ -41,6 +43,12 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="register" component={Register} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="walletDetails" component={WalletDetails} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="topupWallet" component={TopupWallet} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="forgetYourPassword" component={ForgetYourPassword} options={{
