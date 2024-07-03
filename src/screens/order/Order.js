@@ -42,7 +42,7 @@ const orderCardData = [
   },
 ]
 
-const Order = () => {
+const Order = (props) => {
   const [searchText, setSearchText] = useState('')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [createOrderModal, setCreateOrderModal] = useState(false);
@@ -85,9 +85,8 @@ const Order = () => {
 
         <View style={{ marginTop: "4%" }}>
           {orderCardData.map((data, index) => (
-            <Pressable onPress={() => setDataShowModal(true)} key={index}>
+            <Pressable onPress={() => props.navigation.navigate("orderDescription")} key={index}>
               <OrderCards
-                key={index}
                 data={data}
               />
             </Pressable>

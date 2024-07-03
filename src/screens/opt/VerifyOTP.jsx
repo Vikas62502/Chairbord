@@ -7,7 +7,10 @@ import { REACT_APP_BASE_URL } from '../../utils/globalConfig'
 import axios from 'axios'
 
 const VerifyOTP = ({ setShowGeneratePassword, data }) => {
-  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  let fourStringArray = ['', '', '', '']
+  let sixStringArray = ['', '', '', '', '', '']
+
+  const [otp, setOtp] = useState(sixStringArray)
   console.log(otp, 'otp')
   const [loading, setLoading] = useState(false)
 

@@ -1,9 +1,18 @@
-import { View, Text, ScrollView, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Pressable
+} from 'react-native'
+import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
 
 const WalletDetails = (props) => {
+  const [showTransactionDetails, setShowTransactionDetails] = useState(false)
+
   const downArrowIcon = require('../../assets/screens/wallet/downArrow.png')
 
   const data = [
@@ -22,6 +31,26 @@ const WalletDetails = (props) => {
     {
       icon: require('../../assets/screens/wallet/shareIcon.png'),
       title: 'Share Receipt'
+    }
+  ]
+
+  const transactionDetailsData = [
+    {
+      title: 'Transaction ID',
+      value: 'T267757854995645955673456885',
+      description: '16-03-2024'
+    },
+    {
+      title: 'Credited to',
+      value: 'XXXXXXXX7843',
+      description: 'ID: 09624565',
+      amount: '₹855'
+    },
+    {
+      title: 'Action For',
+      value: 'Tag Activation',
+      description: 'VRN : RK14UH2373',
+      amount: '₹855'
     }
   ]
 
@@ -70,7 +99,8 @@ const WalletDetails = (props) => {
 
             <HorizontalDivider />
 
-            <View
+            <Pressable
+              onPress={() => setShowTransactionDetails(!showTransactionDetails)}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -86,7 +116,55 @@ const WalletDetails = (props) => {
                 <Text style={styles.headingText}>Transfer Details</Text>
               </View>
               <Image source={downArrowIcon} />
-            </View>
+            </Pressable>
+
+            {showTransactionDetails && (
+              <>
+                {transactionDetailsData.map((data, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginVertical: '3%'
+                    }}
+                  >
+                    <View>
+                      <Text style={[styles.smallText, { color: '#929292' }]}>
+                        {data.title}
+                      </Text>
+                      <Text style={[styles.smallText, { color: '#000000' }]}>
+                        {data.value}
+                      </Text>
+                      <Text style={[styles.smallText, { color: '#929292' }]}>
+                        {data.description}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.subAccountNoText,
+                          { marginBottom: '5%' }
+                        ]}
+                      >
+                        {data.amount || ''}
+                      </Text>
+                      <Image
+                        source={require('../../assets/screens/copyIcon.png')}
+                      />
+                    </View>
+                  </View>
+                ))}
+              </>
+            )}
 
             <HorizontalDivider />
 
@@ -180,6 +258,10 @@ const styles = StyleSheet.create({
     maxWidth: 50,
     textAlign: 'center',
     marginTop: '10%'
+  },
+  smallText: {
+    fontSize: 10,
+    fontWeight: '500'
   }
 })
 

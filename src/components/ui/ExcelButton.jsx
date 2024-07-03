@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     color: 'white',
     borderRadius: 12,
-    paddingHorizontal: '3%'
+    paddingHorizontal: '5%'
   },
   excelButtonText: {
     fontWeight: '500',

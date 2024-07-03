@@ -9,14 +9,14 @@ const profileData = [
     {
         title: "Alex",
         icon: require('../../assets/DrawerNavigation/avatar.png'),
-        screen: "userProfile",
+        screen: "profileAndMasterInfo",
     }
 ]
 
 const ProfileDraweritem = ({ title, icons, navigateTo }) => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity onPress={() => navigation.navigate("screen1")}>
+        <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
             <View style={{ backgroundColor: "#4C6470", paddingHorizontal: "5%" }}>
                 <Image source={require("../../assets/DrawerNavigation/borderBottom.png")} alt='borderBottom' />
                 <View style={styles.drawerItemStyle}>
@@ -125,7 +125,7 @@ const CustomDrawer = () => {
         <LinearGradient colors={['#02546D', '#142D40']} style={styles.DrawerStyles}>
             <DrawerContentScrollView>
                 <View>
-                    <ProfileDraweritem title={profileData[0].title} icons={profileData[0].icon} />
+                    <ProfileDraweritem title={profileData[0].title} icons={profileData[0].icon} navigateTo={profileData[0].screen} />
                 </View>
 
                 {data.map((element, index) => {

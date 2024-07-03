@@ -12,6 +12,8 @@ const Status = ({ status }) => {
         return <ConfirmStatus />
       case 'acknowledge':
         return <AcknowledgeStatus />
+      case 'new':
+        return <NewStatus />
       default:
         return <Text style={styles.defaultText}>Unknown Status</Text>
     }
@@ -48,6 +50,14 @@ const AcknowledgeStatus = () => {
   return (
     <View style={styles.acknowledgeContainer}>
       <Text style={styles.acknowledgeText}>Acknowledge</Text>
+    </View>
+  )
+}
+
+const NewStatus = () => {
+  return (
+    <View style={styles.confirmContainer}>
+      <Text style={[styles.confirmText, { textAlign: 'center' }]}>New</Text>
     </View>
   )
 }
