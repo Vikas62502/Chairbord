@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const IssuanceTracker = () => {
+const OrderFaildModal = () => {
   return (
     <View>
-      <Text>IssuanceTracker</Text>
+      <Text>OrderFaildModal</Text>
     </View>
   )
 }
 
-export default IssuanceTracker
+export default OrderFaildModal

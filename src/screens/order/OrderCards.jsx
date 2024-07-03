@@ -44,7 +44,7 @@ const OrderCards = ({ data, key }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 16,
-    marginBottom: 15,
+     rginBottom: 15,
     elevation: 2,
     shadowColor: '#00000040',
     backgroundColor: '#FFFFFF',

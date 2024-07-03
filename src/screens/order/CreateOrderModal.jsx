@@ -99,7 +99,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('orderSummary')}
+              onPress={() => navigation.navigate('orderDetails')}
               style={[styles.button, styles.applyButton]}
             >
               <Text style={[styles.buttonText, styles.applyButtonText]}>

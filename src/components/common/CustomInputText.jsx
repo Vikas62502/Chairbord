@@ -6,7 +6,9 @@ const CustomInputText = ({
   placeholder,
   onChangeText,
   secure = false,
-  inputStyle
+  inputStyle,
+  keyboardType = 'default',
+  isEditable
 }) => {
   return (
     <View style={{ alignItems: 'center' }}>
@@ -17,6 +19,8 @@ const CustomInputText = ({
         placeholderTextColor={'#263238'}
         onChangeText={onChangeText}
         secureTextEntry={secure}
+        keyboardType={keyboardType}
+        editable={isEditable}
       />
     </View>
   )
@@ -25,14 +29,14 @@ const CustomInputText = ({
 const styles = StyleSheet.create({
   textInput: {
     borderColor: '#263238',
-    borderWidth: 2,
+    borderWidth: 0.5,
     color: '#000000',
     width: '100%',
     fontSize: 16,
     borderRadius: 20,
     height: 60,
-    paddingHorizontal: 15,
-    backgroundColor: '#F3F3F3'
+    paddingHorizontal: 15
+    // backgroundColor: '#F3F3F3'
   }
 })
 

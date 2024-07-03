@@ -28,7 +28,8 @@ const FastTagAndGps = () => {
       </View>
 
       <PrimaryBtn
-        onPress={() => navigation.navigate('HistoricalData')}
+        // onPress={() => navigation.navigate('HistoricalData')}
+        onPress={() => navigation.navigate('order')}
         title={'Next'}
       />
     </SafeAreaView>

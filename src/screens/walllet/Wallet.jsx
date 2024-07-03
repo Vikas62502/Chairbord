@@ -5,7 +5,7 @@ import WalletCards from './WalletCards'
 import walletCardData from './WalletCardData'
 import FilterTags from './FilterTags'
 
-const Wallet = () => {
+const Wallet = (props) => {
   const [searchText, setSearchText] = useState('')
   const [activeTag, setActiveTag] = useState('All')
   const [showFilterModal, setShowFilterModal] = useState(false)
@@ -19,22 +19,18 @@ const Wallet = () => {
           <Text style={styles.amountText}>₹1,055</Text>
 
           <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
-            <View>
+            <Pressable onPress={() => props.navigation.navigate('topupWallet')}>
               <Image
                 source={require('../../assets/screens/wallet/topUp.png')}
               />
               <Text style={styles.tagText}>Top up</Text>
-            </View>
+            </Pressable>
 
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Image
-                source={require('../../assets/screens/wallet/withdraw.png')}
-              />
-              <Text style={styles.tagText}>Withdraw</Text>
-            </View>
             <View>
-              <Image source={require('../../assets/screens/wallet/more.png')} />
-              <Text style={styles.tagText}>More</Text>
+              <Image
+                source={require('../../assets/screens/wallet/dowload.png')}
+              />
+              <Text style={styles.tagText}>Statement</Text>
             </View>
           </View>
         </View>
@@ -121,12 +117,11 @@ const styles = StyleSheet.create({
   balanceCard: {
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#00000040',
     width: '100%',
     height: 178,
     backgroundColor: '#FFFFFF',
-    borderRadius: 25
+    borderRadius: 25,
+    elevation: 2
   },
   balanceText: {
     fontWeight: '500',

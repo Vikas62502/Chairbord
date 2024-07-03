@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TextInput, Pressable } from 
 import React, { useState } from 'react'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
+import ExcelButton from '../../components/ui/ExcelButton'
 
 const orderCardData = [
   {
@@ -41,7 +42,7 @@ const orderCardData = [
   },
 ]
 
-const Order = () => {
+const Order = (props) => {
   const [searchText, setSearchText] = useState('')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [createOrderModal, setCreateOrderModal] = useState(false);
@@ -72,22 +73,20 @@ const Order = () => {
         <View style={styles.divider}></View>
 
         <View >
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <View >
               <Text style={styles.titleText}>Order history</Text>
             </View>
-            <Pressable style={styles.excelButton} onPress={() => setCreateOrderModal(true)}>
-              <Text style={{ fontWeight: "500", fontSize: 14, lineHeight: 19, color: "#FFFFFF" }}>Create order</Text>
-              <Image source={require("../../assets/addIcon.png")} style={{ marginLeft: "5%" }} />
-            </Pressable>
+            <ExcelButton title={"Create order"} onpressOperation={() => setCreateOrderModal(true)} />
+            <ExcelButton title={"Create return"} />
+
           </View>
         </View>
 
         <View style={{ marginTop: "4%" }}>
           {orderCardData.map((data, index) => (
-            <Pressable onPress={() => setDataShowModal(true)} key={index}>
+            <Pressable onPress={() => props.navigation.navigate("orderDescription")} key={index}>
               <OrderCards
-                key={index}
                 data={data}
               />
             </Pressable>

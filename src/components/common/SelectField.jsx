@@ -46,7 +46,7 @@ const SelectField = ({ dataToRender, title, selectedValue }) => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
-      <Pressable onPress={toggleDropdown}>
+      <Pressable onPress={toggleDropdown} style={{ marginRight: '5%' }}>
         <Image source={require('../../assets/arrowBottom.png')} />
       </Pressable>
     </View>
