@@ -18,10 +18,8 @@ import DividerWithText from '../components/common/DividerWithText'
 import { useNavigation } from '@react-navigation/native'
 import OverlayHeader from '../components/OverlayHeader'
 import VerifyOTP from './opt/VerifyOTP'
-import OtpInputText from './opt/OtpInputText'
 import Loader from '../components/ui/Loader'
-import { REACT_APP_BASE_URL } from '../utils/globalConfig'
-import axios from 'axios'
+import { client } from '../client/Axios'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
@@ -31,6 +29,8 @@ const SignIn = () => {
     email: '',
     password: ''
   })
+
+  console.log(formData, 'formData')
 
   const handleLinkPress = (url) => {
     Linking.openURL(url)
@@ -43,19 +43,11 @@ const SignIn = () => {
       password: formData.password
     })
 
-    let reqOptions = {
-      url: `${REACT_APP_BASE_URL}/login/agent`,
-      method: 'POST',
-      data: bodyContent
-    }
-
     try {
-      let response = await axios.request(reqOptions)
+      let response = await client.post('/login/agent', bodyContent)
       console.log(response, 'response with login')
       navigation.navigate('drawer')
-      setLoading(false)
     } catch (error) {
-      setLoading(false)
       navigation?.navigate('drawer')
       Alert.alert(
         'Something went wrong'[
@@ -67,6 +59,8 @@ const SignIn = () => {
         ]
       )
       console.log(error, 'error')
+    } finally {
+      setLoading(false)
     }
   }
 

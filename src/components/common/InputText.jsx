@@ -6,7 +6,9 @@ const InputText = ({
   placeholder,
   onChangeText,
   secure = false,
-  inputStyle
+  inputStyle,
+  id,
+  maxLength
 }) => {
   return (
     <View style={{ marginTop: '5%', alignItems: 'center' }}>
@@ -17,6 +19,8 @@ const InputText = ({
         placeholderTextColor={'#263238'}
         onChangeText={onChangeText}
         secureTextEntry={secure}
+        id={id}
+        maxLength={maxLength}
       />
     </View>
   )

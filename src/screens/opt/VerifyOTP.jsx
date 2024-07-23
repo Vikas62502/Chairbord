@@ -3,48 +3,34 @@ import React, { useState } from 'react'
 import OtpInputText from './OtpInputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import Loader from '../../components/ui/Loader'
-import { REACT_APP_BASE_URL } from '../../utils/globalConfig'
-import axios from 'axios'
+import { client } from '../../client/Axios'
+import { useNavigation } from '@react-navigation/native'
 
-const VerifyOTP = ({ setShowGeneratePassword, data }) => {
-  let fourStringArray = ['', '', '', '']
+const VerifyOTP = ({ setShowGeneratePassword, data, setShowOtpField }) => {
+  const navigation = useNavigation()
   let sixStringArray = ['', '', '', '', '', '']
 
   const [otp, setOtp] = useState(sixStringArray)
-  console.log(otp, 'otp')
   const [loading, setLoading] = useState(false)
 
   const verifyOtpApi = async () => {
     setLoading(true)
 
-    let headerList = {
-      Accept: '*/*',
-      'Content-type': 'application/json'
-    }
-
     let bodyContent = JSON.stringify({
       ...data,
       otp: otp.join('')
     })
-    console.log(bodyContent, 'bodyContent')
-
-    let reqOptions = {
-      url: `${REACT_APP_BASE_URL}/register/agent-otp`,
-      method: 'POST',
-      headers: headerList,
-      data: bodyContent
-    }
-    console.log(reqOptions, 'verify otp logs')
 
     try {
-      let response = await axios.request(reqOptions)
-      console.log(response, 'response')
+      let response = await client.post('/register/agent-otp', bodyContent)
+      navigation.navigate('SignIn')
       console.log(response.data, 'data')
-      setLoading(false)
     } catch (error) {
-      setLoading(false)
       Alert.alert('Something went wrong')
       console.log(error, 'error')
+      setShowOtpField(false)
+    } finally {
+      setLoading(false)
     }
   }
 

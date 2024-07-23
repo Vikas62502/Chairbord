@@ -1,22 +1,13 @@
-import React, { useState } from 'react'
-import {
-  Alert,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, SafeAreaView, StyleSheet, View } from 'react-native'
 import InputText from '../../components/common/InputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import OverlayHeader from '../../components/OverlayHeader'
 import VerifyOTP from '../opt/VerifyOTP'
-import axios from 'axios'
 import Loader from '../../components/ui/Loader'
-import { REACT_APP_BASE_URL } from '../../utils/globalConfig'
-import { registerAgent } from '../../services/AuthServices'
+import { client } from '../../client/Axios'
+
 const Register = () => {
   const [showOtpField, setShowOtpField] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -26,39 +17,31 @@ const Register = () => {
     mobile_number: ''
   })
 
+  const formDataHandler = (key, value) => {
+    setFormData({ ...formData, [key]: value })
+  }
+
   const sendOtpRequest = async () => {
     setLoading(true)
 
-    let headerList = {
-      Accept: '*/*',
-      'Content-type': 'application/json'
-    }
-
     let bodyContent = JSON.stringify({
-      email_id: formData.email,
-      input_password: formData.fullName,
-      mobile_number: formData.mobile
+      email_id: formData.email_id,
+      input_password: formData.input_password,
+      mobile_number: formData.mobile_number
     })
 
-    let reqOptions = {
-      url: `${REACT_APP_BASE_URL}/register/agent`,
-      method: 'POST',
-      headers: headerList,
-      data: bodyContent
-    }
-    console.log(reqOptions, 'reqOptions')
-
     try {
-      let response = await axios.request(reqOptions)
+      let response = await client.post('/register/agent', bodyContent)
       console.log(response, 'response with register')
-      setLoading(false)
       setShowOtpField(true)
     } catch (error) {
-      setLoading(false)
       Alert.alert('Something went wrong')
       console.log(error, 'error')
+    } finally {
+      setLoading(false)
     }
   }
+
   const navigation = useNavigation()
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -70,33 +53,25 @@ const Register = () => {
       {loading && <Loader />}
       <View>
         <InputText
+          id={'email_id'}
           placeholder={'Enter email id'}
-          onChangeText={(email) =>
-            setFormData({ ...formData, email_id: email })
-          }
+          onChangeText={(value) => formDataHandler('email_id', value)}
         />
         <InputText
+          id={'mobile_number'}
           placeholder={'Enter mobile number'}
-          onChangeText={(mobileNo) =>
-            setFormData({ ...formData, mobile_number: mobileNo })
-          }
+          onChangeText={(value) => formDataHandler('mobile_number', value)}
+          maxLength={10}
         />
         <InputText
           placeholder={'Enter password'}
-          onChangeText={(text) => {
-            setFormData({ ...formData, input_password: text })
-          }}
+          onChangeText={(value) => formDataHandler('input_password', value)}
         />
         {showOtpField ? (
-          <VerifyOTP data={formData} />
+          <VerifyOTP data={formData} setShowOtpField={setShowOtpField} />
         ) : (
           <View style={styles.getOtpButton}>
-            <SecondaryButton
-              title={'Get OTP'}
-              onPress={() => {
-                sendOtpRequest()
-              }}
-            />
+            <SecondaryButton title={'Get OTP'} onPress={sendOtpRequest} />
           </View>
         )}
       </View>
