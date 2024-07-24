@@ -25,11 +25,11 @@ const DrawerNavigation = ({ }) => {
             initialRouteName='dashboard'
             drawerContent={props => <CustomDrawer {...props} />}
         >
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="Main"
                 component={Main}
                 options={{ header: () => <DrawerHeader /> }}
-            />
+            /> */}
             <Drawer.Screen
                 name="logoutModal"
                 component={LogoutModal}

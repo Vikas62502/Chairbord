@@ -5,13 +5,23 @@ import SecondaryButton from '../../components/common/SecondaryButton'
 import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
 import { useNavigation } from '@react-navigation/native'
+import InputText from '../../components/common/InputText'
 
-const VerifyOTP = ({ setShowGeneratePassword, data, setShowOtpField }) => {
+const VerifyOTP = ({ data, setShowOtpField }) => {
   const navigation = useNavigation()
   let sixStringArray = ['', '', '', '', '', '']
 
+  const [showGeneratePassword, setShowGeneratePassword] = useState(false)
+  const [formData, setFormData] = useState({
+    password: ''
+  })
   const [otp, setOtp] = useState(sixStringArray)
   const [loading, setLoading] = useState(false)
+  const [userId, setUserId] = useState()
+
+  const formDataHandler = (key, value) => {
+    setFormData({ ...formData, [key]: value })
+  }
 
   const verifyOtpApi = async () => {
     setLoading(true)
@@ -23,12 +33,34 @@ const VerifyOTP = ({ setShowGeneratePassword, data, setShowOtpField }) => {
 
     try {
       let response = await client.post('/register/agent-otp', bodyContent)
-      navigation.navigate('SignIn')
-      console.log(response.data, 'data')
+      setShowGeneratePassword(true)
+      setUserId(response?.data?.newUserId)
     } catch (error) {
       Alert.alert('Something went wrong')
       console.log(error, 'error')
       setShowOtpField(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const generatePassword = async () => {
+    setLoading(true)
+
+    let bodyContent = JSON.stringify({
+      userId: userId,
+      input_password: formData.password
+    })
+
+    try {
+      let response = await client.post(
+        '/register/agent-otp-password',
+        bodyContent
+      )
+      navigation.navigate('SignIn')
+    } catch (error) {
+      Alert.alert('Something went wrong')
+      console.log(error, 'error')
     } finally {
       setLoading(false)
     }
@@ -47,15 +79,36 @@ const VerifyOTP = ({ setShowGeneratePassword, data, setShowOtpField }) => {
         <OtpInputText otp={otp} setOtp={setOtp} />
       </View>
 
-      <View style={{ alignItems: 'center', marginTop: '10%' }}>
-        <SecondaryButton
-          title={'Verify OTP'}
-          onPress={() => {
-            verifyOtpApi()
-            // setShowGeneratePassword(true)
-          }}
-        />
-      </View>
+      {showGeneratePassword && (
+        <>
+          <View style={{ marginTop: '5%' }}>
+            <InputText
+              id={'password'}
+              placeholder={'Enter password'}
+              onChangeText={(value) => formDataHandler('password', value)}
+            />
+          </View>
+          <View style={{ alignItems: 'center', marginTop: '10%' }}>
+            <SecondaryButton
+              title={'Verify Password'}
+              onPress={() => {
+                generatePassword()
+              }}
+            />
+          </View>
+        </>
+      )}
+
+      {!showGeneratePassword && (
+        <View style={{ alignItems: 'center', marginTop: '10%' }}>
+          <SecondaryButton
+            title={'Verify OTP'}
+            onPress={() => {
+              verifyOtpApi()
+            }}
+          />
+        </View>
+      )}
 
       <View style={{ alignSelf: 'center', marginTop: '5%' }}>
         <Text style={styles.otpDescription}>

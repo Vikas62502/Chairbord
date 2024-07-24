@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import {
   Alert,
-  Button,
-  Image,
   Linking,
   Pressable,
   SafeAreaView,
@@ -20,6 +18,7 @@ import OverlayHeader from '../components/OverlayHeader'
 import VerifyOTP from './opt/VerifyOTP'
 import Loader from '../components/ui/Loader'
 import { client } from '../client/Axios'
+import { setCache } from '../helper/Storage'
 
 const SignIn = () => {
   const [active, setActive] = useState('password')
@@ -30,14 +29,13 @@ const SignIn = () => {
     password: ''
   })
 
-  console.log(formData, 'formData')
-
   const handleLinkPress = (url) => {
     Linking.openURL(url)
   }
   const navigation = useNavigation()
 
   const loginApi = async () => {
+    setLoading(true)
     let bodyContent = JSON.stringify({
       email: formData.email,
       password: formData.password
@@ -45,10 +43,12 @@ const SignIn = () => {
 
     try {
       let response = await client.post('/login/agent', bodyContent)
-      console.log(response, 'response with login')
+      console.log(response?.data?.token, 'token')
+      setCache('userData', response?.data)
+      setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      navigation?.navigate('drawer')
+      navigation.navigate('drawer')
       Alert.alert(
         'Something went wrong'[
           {

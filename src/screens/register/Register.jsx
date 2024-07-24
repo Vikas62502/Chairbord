@@ -26,7 +26,6 @@ const Register = () => {
 
     let bodyContent = JSON.stringify({
       email_id: formData.email_id,
-      input_password: formData.input_password,
       mobile_number: formData.mobile_number
     })
 
@@ -42,6 +41,24 @@ const Register = () => {
     }
   }
 
+  const getHomeApi = async () => {
+    setLoading(true)
+
+    try {
+      let response = await client.get('/home')
+      console.log(response.data, 'response with home')
+    } catch (error) {
+      Alert.alert('Something went wrong')
+      console.log(error, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getHomeApi()
+  }, [])
+
   const navigation = useNavigation()
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -56,16 +73,14 @@ const Register = () => {
           id={'email_id'}
           placeholder={'Enter email id'}
           onChangeText={(value) => formDataHandler('email_id', value)}
+          editable={!showOtpField}
         />
         <InputText
           id={'mobile_number'}
           placeholder={'Enter mobile number'}
           onChangeText={(value) => formDataHandler('mobile_number', value)}
           maxLength={10}
-        />
-        <InputText
-          placeholder={'Enter password'}
-          onChangeText={(value) => formDataHandler('input_password', value)}
+          editable={!showOtpField}
         />
         {showOtpField ? (
           <VerifyOTP data={formData} setShowOtpField={setShowOtpField} />

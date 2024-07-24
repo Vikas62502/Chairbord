@@ -8,7 +8,8 @@ const InputText = ({
   secure = false,
   inputStyle,
   id,
-  maxLength
+  maxLength,
+  editable = true
 }) => {
   return (
     <View style={{ marginTop: '5%', alignItems: 'center' }}>
@@ -21,6 +22,7 @@ const InputText = ({
         secureTextEntry={secure}
         id={id}
         maxLength={maxLength}
+        editable={editable}
       />
     </View>
   )

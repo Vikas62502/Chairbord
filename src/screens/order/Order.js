@@ -46,6 +46,7 @@ const Order = (props) => {
   const [searchText, setSearchText] = useState('')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [createOrderModal, setCreateOrderModal] = useState(false);
+  console.log(createOrderModal, "order")
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: "5%" }}>
@@ -77,7 +78,7 @@ const Order = (props) => {
             <View >
               <Text style={styles.titleText}>Order history</Text>
             </View>
-            <ExcelButton title={"Create order"} onpressOperation={() => setCreateOrderModal(true)} />
+            <ExcelButton title={"Create order"} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
             <ExcelButton title={"Create return"} />
 
           </View>
@@ -114,7 +115,7 @@ const Order = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   titleText: {
     color: "#000000",

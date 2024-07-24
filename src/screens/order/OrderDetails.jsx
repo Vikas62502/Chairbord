@@ -89,7 +89,7 @@ const OrderDetails = () => {
         />
       </View>
 
-      <OrderSuccessModal />
+      <OrderSuccessModal visible={isOrderSuccess} onClose={setIsOrderSuccess} />
       <OrderFaildModal />
     </SafeAreaView>
   )

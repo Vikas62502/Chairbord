@@ -7,7 +7,7 @@ const ExcelButton = ({ title, onpressOperation }) => {
     <>
       <Pressable
         // style={styles.excelButton}
-        onPress={() => onpressOperation()}
+        onPress={onpressOperation}
       >
         <LinearGradient
           colors={['#02546D', '#142D40']}
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     color: 'white',
     borderRadius: 12,
-    paddingHorizontal: '5%'
+    paddingHorizontal: '3%'
   },
   excelButtonText: {
     fontWeight: '500',
