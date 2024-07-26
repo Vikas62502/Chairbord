@@ -47,12 +47,12 @@ const ForgetYourPassword = () => {
     setLoading(true)
 
     try {
-      let response = await client.post('/forget/pass-reset', {
+      await client.post('/forget/pass-reset', {
         email: formData.email,
         otp: otp.join(''),
-        newPassword: newPassword
+        newPassword: formData.newPassword
       })
-      console.log(response, 'response')
+      navigation.navigate('SignIn')
       setShowOtpField(true)
     } catch (error) {
       console.log(error, 'error')
@@ -92,7 +92,7 @@ const ForgetYourPassword = () => {
                 <InputText
                   placeholder={'Enter new password'}
                   onChangeText={(value) =>
-                    formDataHandler('newPasswrord', value)
+                    formDataHandler('newPassword', value)
                   }
                 />
                 <InputText
