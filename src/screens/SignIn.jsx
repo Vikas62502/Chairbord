@@ -43,12 +43,10 @@ const SignIn = () => {
 
     try {
       let response = await client.post('/login/agent', bodyContent)
-      console.log(response?.data?.token, 'token')
-      setCache('userData', response?.data)
-      setCache('token', response?.data?.token)
+      await setCache('userData', response?.data)
+      await setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      navigation.navigate('drawer')
       Alert.alert(
         'Something went wrong'[
           {

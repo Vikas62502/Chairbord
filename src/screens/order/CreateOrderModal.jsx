@@ -15,11 +15,22 @@ import { useNavigation } from '@react-navigation/native'
 
 const CreateOrderModal = ({ visible, onClose, onApply }) => {
   const navigation = useNavigation()
+  const [orderBodyData, setOrderBodyData] = React.useState({
+    bankName: '',
+    vehicleClass: '',
+    tagCost: '',
+    quantity: '',
+    amount: ''
+  })
+
+  const formDataHandler = (key, value) => {
+    setOrderBodyData({ ...orderBodyData, [key]: value })
+  }
   const bankNameData = [
-    { title: 'SBI' },
-    { title: 'Bajaj' },
-    { title: 'PNB' },
-    { title: 'KOTAK' }
+    { title: 'Bajaj', id: 1 },
+    { title: 'SBI', id: 2 },
+    { title: 'PNB', id: 3 },
+    { title: 'KOTAK', id: 4 }
   ]
 
   const vehicleClassData = [
@@ -99,7 +110,14 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('orderDetails')}
+              onPress={() =>
+                navigation.navigate('orderDetails', {
+                  orderBodyData: {
+                    bankName: 'Bajaj',
+                    vehicleClass: '2 Wheeler'
+                  }
+                })
+              }
               style={[styles.button, styles.applyButton]}
             >
               <Text style={[styles.buttonText, styles.applyButtonText]}>

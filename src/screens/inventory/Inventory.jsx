@@ -1,14 +1,44 @@
 import { View, Text, ScrollView, Pressable, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
-import OrderCards from '../order/OrderCards'
 import InventoryCards from './InventoryCards'
-import inventoryCardData from './InventoryCardData'
 import LinearGradient from 'react-native-linear-gradient'
 import InventoryFilterModal from './InventoryFilterModal'
+import { client } from '../../client/Axios'
+import { getCache } from '../../helper/Storage'
 
 const Inventory = () => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
+  const [inventoryCardData, setInventoryCardData] = useState([])
+  const [userData, setUserData] = useState()
+  console.log(inventoryCardData, 'inventoryCardData')
+
+  const getUserData = async () => {
+    let userData = await getCache('userData')
+    setUserData(userData)
+  }
+
+  const getInventory = async (userId) => {
+    try {
+      const response = await client.get(`/inventory/fastag/agent/${userId}`)
+      console.log(response?.data?.data, 'res')
+      setInventoryCardData(response?.data?.data)
+      console.log(response, 'response')
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
+  useEffect(() => {
+    if (userData) {
+      getInventory(userData?.user?.id)
+    }
+  }, [userData])
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: '5%' }}>
@@ -48,14 +78,15 @@ const Inventory = () => {
           </View>
         </View>
         <View style={{ marginTop: '4%' }}>
-          {inventoryCardData.map((data, index) => (
-            <Pressable
-              //  onPress={() => setDataShowModal(true)}
-              key={index}
-            >
-              <InventoryCards data={data} />
-            </Pressable>
-          ))}
+          {inventoryCardData &&
+            inventoryCardData?.map((data, index) => (
+              <Pressable
+                //  onPress={() => setDataShowModal(true)}
+                key={index}
+              >
+                <InventoryCards data={data} />
+              </Pressable>
+            ))}
           {/* {orderCardData.map((data, index) => (
             <Pressable onPress={() => setDataShowModal(true)} key={index}>
               <OrderCards key={index} data={data} />
