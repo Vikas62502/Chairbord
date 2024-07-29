@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Image,
   SafeAreaView,
@@ -12,6 +12,8 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
 
 const OTP = () => {
+  let sixStringArray = ['', '', '', '', '', '']
+  const [otp, setOtp] = useState(sixStringArray)
   const navigation = useNavigation()
   return (
     <SafeAreaView>
@@ -27,8 +29,8 @@ const OTP = () => {
             <Text style={{ color: '#000000' }}>+91817862320</Text>
           </Text>
 
-          <View style={{ flexDirection: 'row' }}>
-            <OtpInputText />
+          <View style={{ flexDirection: 'row', marginVertical: '5%' }}>
+            <OtpInputText otp={otp} setOtp={setOtp} />
           </View>
 
           <Text style={styles.otpDescription}>
@@ -38,7 +40,7 @@ const OTP = () => {
           <PrimaryBtn
             title={'Verify'}
             disabled={true}
-            onPress={() => navigation.navigate('register')}
+            onPress={() => navigation.navigate('customerRegistration')}
           />
         </View>
       </View>

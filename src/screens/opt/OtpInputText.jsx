@@ -11,7 +11,7 @@ const OtpInputText = ({ otp, setOtp }) => {
 
     // Focus next input field if available
     if (value !== '' && index < otp.length - 1) {
-      inputRefs.current[index + 1].focus()
+      inputRefs?.current[index + 1].focus()
     }
   }
 
@@ -24,7 +24,7 @@ const OtpInputText = ({ otp, setOtp }) => {
 
   return (
     <View style={styles.container}>
-      {otp.map((value, index) => (
+      {otp?.map((value, index) => (
         <TextInput
           key={index}
           style={styles.input}

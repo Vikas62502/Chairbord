@@ -63,7 +63,7 @@ const Home = () => {
         <Image source={require('../../assets/dashboard/registerTag.png')} />
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         <DashboardCards
           title={'BAJAJ'}
           subTitle={'Issuance'}
@@ -75,6 +75,12 @@ const Home = () => {
           subTitle={'Replacement'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'tagReplacement'}
+        />
+        <DashboardCards
+          title={'Tag'}
+          subTitle={'Registration'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'mobileVerification'}
         />
       </View>
       <View style={{ alignItems: 'center', marginTop: '1%' }}>

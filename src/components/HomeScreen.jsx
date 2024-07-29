@@ -9,16 +9,26 @@ import {
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
+import { getCache } from '../helper/Storage'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
+  const checkLogin = async () => {
+    const token = await getCache('token')
+    console.log('token', token)
+    if (token) {
+      navigation.navigate('drawer')
+    } else {
+      setTimeout(() => {
+        navigation.navigate('FastTagAndGPS')
+      }, 1000)
+    }
+  }
 
-  // automatic navigation to FastTagAndGPS screen after 1 second
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('FastTagAndGPS')
-    }, 1000)
-  }, [navigation])
+    checkLogin()
+  }, [])
+
   return (
     <LinearGradient
       colors={['#02546D', '#142D40']}
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
   },
   taglineText: {
     color: '#FFFFFF',
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 15,
     textAlign: 'center',
     marginVertical: '10%'

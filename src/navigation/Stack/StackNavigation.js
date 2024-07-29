@@ -10,7 +10,6 @@ import Register from '../../screens/register/Register';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainDrawer from '../Drawer/MainDrawer';
 import ForgetYourPassword from '../../screens/ForgetYouPassword/ForgetYourPassword';
-import CustomerRegistration from '../../screens/home/customerRegistration/CustomerRegistration';
 import PrivacyPolicy from '../../screens/privacyPolicy/PrivacyPolicy';
 import TermsAndCondition from '../../screens/termsAndCondition/TermsAndCondition';
 import WalletDetails from '../../screens/walllet/WalletDetails';
@@ -20,6 +19,10 @@ import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo';
 import Order from '../../screens/order/Order';
 import Acknowledgement from '../../screens/order/acknowledgement/Acknowledgement';
 import OrderDetails from '../../screens/order/OrderDetails';
+import Mobileverification from '../../screens/mobileVerfication/Mobileverification';
+import CustomerRegistration from '../../screens/customerRegistration/CustomerRegistration';
+import ImageCollection from '../../screens/tagRegistration/ImageCollection';
+import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -57,9 +60,10 @@ const StackNavigation = () => {
             <Stack.Screen name="topupWallet" component={TopupWallet} options={{
                 headerShown: false
             }} />
-            {/* <Stack.Screen name="tagRegistration" component={TagRegistration} options={{
+            <Stack.Screen name="tagRegistration" component={TagRegistration} options={{
                 headerShown: false
             }} />
+            {/* 
             <Stack.Screen name="tagReplacement" component={TagReplacement} options={{
                 headerShown: false
             }} /> */}
@@ -93,6 +97,12 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="orderDetails" component={OrderDetails} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="mobileVerification" component={Mobileverification} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="imageGallary" component={ImageCollection} options={{
                 headerShown: false
             }} />
         </Stack.Navigator>
