@@ -82,6 +82,12 @@ const Home = () => {
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'mobileVerification'}
         />
+        <DashboardCards
+          title={'Tag'}
+          subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'tagReplacement'}
+        />
       </View>
       <View style={{ alignItems: 'center', marginTop: '1%' }}>
         <View style={styles.divider}></View>

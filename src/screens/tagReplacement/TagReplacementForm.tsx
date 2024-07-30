@@ -10,16 +10,13 @@ import {
   ActivityIndicator
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import OverlayHeader from '../../component/OverlayHeader'
-import CustomerDetailsCard from '../../component/CustomerDetailsCard'
-import SelectField from '../../component/common/SelectField'
-import InputText from '../../component/common/InputText'
-import SecondaryButton from '../../component/common/SecondaryButton'
-import SuccessModal from '../../component/SuccessModal'
-import { tagReplacementApiRequest } from '../../services/AuthService'
 import { getCache } from '../../helper/Storage'
-
-
+import OverlayHeader from '../../components/OverlayHeader'
+import CustomerDetailsCard from '../../components/CustomerDetailsCard'
+import InputText from '../../components/common/InputText'
+import SelectField from '../../components/common/SelectField'
+import SecondaryButton from '../../components/common/SecondaryButton'
+import SuccessModal from '../../components/SuccessModal'
 
 const replacementReason = [
   {
@@ -45,7 +42,22 @@ const replacementReason = [
 ]
 
 const TagReplacementForm = (props: any) => {
-  const { validateOtpResp } = props?.route?.params
+  // Dummy data to replace dynamic data
+  const validateOtpResp = {
+    custDetails: {
+      name: 'John Doe',
+      mobileNo: '1234567890',
+      walletId: 'wallet123'
+    },
+    vrnDetails: {
+      vehicleNo: 'ABC1234',
+      chassisNo: 'CHASSIS1234',
+      engineNo: 'ENGINE1234',
+      isCommercial: false,
+      vehicleType: 'Sedan',
+      repTagCost: '500'
+    }
+  }
 
   const mobileNo = validateOtpResp.custDetails.mobileNo
   const walletId = validateOtpResp.custDetails.walletId
@@ -56,80 +68,57 @@ const TagReplacementForm = (props: any) => {
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
   const [tagSerialNumber, setTagSerialNumber] = useState('')
-  const [sessionId, setSessionId] = React.useState('')
+  const [sessionId, setSessionId] = React.useState('dummySessionId')
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const customerTagReplacement = async () => {
-    setLoading(true)
-    const response = await tagReplacementApiRequest(
-      sessionId,
-      mobileNo,
-      walletId,
-      vehicleNo,
-      chassisNo,
-      debitAmt,
-      `608268-001-${tagSerialNumber}`,
-      reasonOfReplacement,
-      '',
-      '',
-      '',
-      '',
-      ''
-    )
-    setLoading(false)
-    if (response.success) {
-      setModalShow(true)
-      setModelIsSuccess(true)
-    } else {
-      setModalShow(true)
-      setModelIsSuccess(false)
-    }
-  }
   const customerDetailsData = [
     {
       title: 'Name',
-      value: `:  ${validateOtpResp?.custDetails?.name}`
+      value: `:  ${validateOtpResp.custDetails.name}`
     },
     {
       title: 'Mobile Number',
-      value: `:  ${validateOtpResp?.custDetails?.mobileNo}`
+      value: `:  ${validateOtpResp.custDetails.mobileNo}`
     }
   ]
 
   const existingTagDetailData = [
     {
       title: 'Chassis No.',
-      value: `:  ${validateOtpResp?.vrnDetails?.chassisNo}`
+      value: `:  ${validateOtpResp.vrnDetails.chassisNo}`
     },
     {
       title: 'Engine No.',
-      value: `:  ${validateOtpResp?.vrnDetails?.engineNo}`
+      value: `:  ${validateOtpResp.vrnDetails.engineNo}`
     },
     {
       title: 'Commercial Status',
-      value: `:  ${validateOtpResp?.vrnDetails?.isCommercial}`
+      value: `:  ${validateOtpResp.vrnDetails.isCommercial}`
     },
     {
       title: 'Vehicle Type',
-      value: `:  ${validateOtpResp?.vrnDetails?.vehicleType}`
+      value: `:  ${validateOtpResp.vrnDetails.vehicleType}`
     }
   ]
+
   const getSessionId = async () => {
     const session = await getCache('session')
     setSessionId(session)
   }
+
   useEffect(() => {
     getSessionId()
   }, [sessionId])
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <OverlayHeader
           title={'Tag Replacement'}
           showBackButton={true}
-          navigateTo={() => navigation.goBack()}
+          navigateTo={() => props.navigation.goBack()}
         />
 
         <View style={styles.container}>
@@ -148,14 +137,12 @@ const TagReplacementForm = (props: any) => {
             <InputText placeholder={''} value={vehicleNo} editable={false} />
           </View>
 
-
           <CustomerDetailsCard
             customerDetailsData={existingTagDetailData}
             title="Existing tag details"
           />
           <Text style={styles.subDescription}>
-            Only Tag Serial number will be update, all other details will remian
-            same
+            Only Tag Serial number will be updated, all other details will remain the same
           </Text>
 
           <Text style={styles.label}>Tag serial number</Text>
@@ -236,7 +223,7 @@ const TagReplacementForm = (props: any) => {
             <View style={{ width: '50%' }}>
               <SecondaryButton
                 title={'Submit'}
-                onPress={() => customerTagReplacement()}
+              // onPress={() => customerTagReplacement()}
               />
             </View>
           </View>

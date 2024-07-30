@@ -1,16 +1,17 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { colorData, npciVehicleClassIDData } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, manufacturerData, fuelData, modelsData, typesData } from './staticData'
 import pickImage from '../../helper/pickImage'
 import OverlayHeader from '../../components/OverlayHeader'
-import InputText from '../../components/common/InputText'
-import SelectField from '../../components/common/SelectField'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
 import { useNavigation } from '@react-navigation/native'
 import { horizontalScale, verticalScale } from '../../helper/Metrics'
+import CustomInputText from '../../components/common/CustomInputText'
+import SelectField from '../../components/common/SelectField'
 
 const TagRegistration = (props: any) => {
+    const [isYes, setIsYes] = React.useState(false)
     // Dummy data for testing
     const custDetails = {
         name: "John Doe",
@@ -108,6 +109,18 @@ const TagRegistration = (props: any) => {
             title: "Security deposit",
             value: `: ₹${vrnDetails?.securityDeposit}`
         },
+        {
+            title: "Wallet balance",
+            value: `: ₹${vrnDetails?.rechargeAmount}`
+        },
+        {
+            title: "First time load balance",
+            value: `: ₹${vrnDetails?.rechargeAmount}`
+        },
+        {
+            title: "Total cost",
+            value: `: ₹${vrnDetails?.rechargeAmount}`
+        }
     ]
 
     const customerDetailsData = [
@@ -147,42 +160,58 @@ const TagRegistration = (props: any) => {
                 </View>
 
                 <Text style={styles.label}>Vehicle Details</Text>
-                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || props?.route?.params?.vehicleNo} editable={!vrnDetails?.vehicleNo}
+                <CustomInputText placeholder={"Enter vehicle number"}
                     onChangeText={(text: string) => setVehicleNumber(text)}
                 />
-                {vrnDetails?.vehicleManuf === undefined ?
-                    <>
-                        <View style={{ marginTop: "5%" }}>
-                            <SelectField
-                                dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={(value) => setVehicleManufacturer(value.title)} />
-                        </View>
-                        <View style={{ marginTop: "5%" }}>
-                            <SelectField
-                                dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} />
-                        </View>
-                        <View style={{ marginTop: "5%" }}>
-                            <SelectField
-                                dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} />
-                        </View>
-                    </> : <View>
-                        <InputText placeholder={""} value={vrnDetails?.vehicleManuf}
-                            editable={!vrnDetails?.vehicleManuf}
-                        />
-                        <InputText placeholder={""} value={vrnDetails?.model}
-                            editable={!vrnDetails?.model}
-                        />
-                        <InputText placeholder={""} value={vrnDetails?.vehicleColour}
-                            editable={!vrnDetails?.vehicleColour}
-                        />
-                    </View>}
-                <View style={{ marginTop: "5%" }}>
+                {/* {vrnDetails?.vehicleManuf === undefined ? */}
+                <>
+                    <View style={{ marginTop: "5%" }}>
+                        <SelectField
+                            dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={(value) => setVehicleManufacturer(value.title)} />
+                    </View>
+                    <View style={{ marginTop: "5%" }}>
+                        <SelectField
+                            dataToRender={modelsData} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} />
+                    </View>
+                    <View style={{ marginTop: "5%" }}>
+                        <SelectField
+                            dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} />
+                    </View>
+                    <View style={{ marginTop: "5%" }}>
+                        <SelectField
+                            dataToRender={typesData} title={'Select Type'} selectedValue={setColorData} />
+                    </View>
+                    <View style={{ marginTop: "5%" }}>
+                        <SelectField
+                            dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setColorData} />
+                    </View>
+                </>
+                {/* : */}
+                {/* <View>
+                    <CustomInputText placeholder={""} value={vehicleManufacturer || vrnDetails?.vehicleManuf}
+                        editable={!vrnDetails?.vehicleManuf}
+                        onChangeText={(text: string) => setVehicleManufacturer(text)}
+                    />
+                    <CustomInputText placeholder={""} value={vehicleModelValue || vrnDetails?.model}
+                        editable={!vrnDetails?.model}
+                        onChangeText={(text: string) => setVehicleModelValue(text)}
+                    />
+                    <CustomInputText placeholder={""} value={vehicleColor || vrnDetails?.vehicleColour}
+                        editable={!vrnDetails?.vehicleColour}
+                        onChangeText={(text: string) => setVehicleColor(text)}
+                    />
+                </View> */}
+                {/* } */}
+                {/* <View style={{ marginTop: "5%" }}>
                     <SelectField
                         dataToRender={npciVehicleClassIDData} title={'Select Vehicle Class'} selectedValue={setNpciIdDataDropdown} />
-                </View>
-                <InputText placeholder={"Enter vehicle type"} value={vrnDetails?.type}
-                    editable={!vrnDetails?.type}
-                    onChangeText={(text: string) => setVehicleType(text)}
-                />
+                </View> */}
+                {/* <View style={{ marginTop: "5%" }}>
+                    <CustomInputText placeholder={"Enter vehicle type"} value={vehicleType || vrnDetails?.type}
+                        editable={!vrnDetails?.type}
+                        onChangeText={(text: string) => setVehicleType(text)}
+                    />
+                </View> */}
                 <Text style={styles.label}>Tag serial number</Text>
                 <View
                     style={{
@@ -193,58 +222,40 @@ const TagRegistration = (props: any) => {
                     }}
                 >
                     <View style={{ flex: 1 }}>
-                        <InputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} editable={false} />
+                        <CustomInputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} editable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <InputText placeholder={''} value='001' onChangeText={(text: string) => setTagSerialNumber2(text)} editable={false} />
+                        <CustomInputText placeholder={''} value='001' onChangeText={(text: string) => setTagSerialNumber2(text)} editable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <InputText placeholder={'xxxxxx'} onChangeText={(text: string) => setTagSerialNumber3(text)} />
+                        <CustomInputText placeholder={'0084568'} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} />
                     </View>
                 </View>
 
-                <Text style={styles.label}>RC copy photo</Text>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <TouchableOpacity onPress={() => setImageData('front')}>
-                        {documentFront ? (
-                            <Image
-                                source={{ uri: documentFront }}
-                                style={{ width: 150, height: 150, marginTop: 10 }}
-                            />
-                        ) : (
-                            <View style={styles.imagePlaceholder}>
-                                <Text style={styles.imagePlaceholderText}>Front</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => setImageData('back')}>
-                        {documentBack ? (
-                            <Image
-                                source={{ uri: documentBack }}
-                                style={{ width: 150, height: 150, marginTop: 10 }}
-                            />
-                        ) : (
-                            <View style={styles.imagePlaceholder}>
-                                <Text style={styles.imagePlaceholderText}>Back</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
+                <View style={{ marginTop: "5%" }}>
+                    <SelectField
+                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.title)} />
                 </View>
-
-                <Text style={styles.label}>Vehicle photo</Text>
-                <TouchableOpacity onPress={() => setImageData('vehicle')}>
-                    {vehicleImage ? (
-                        <Image
-                            source={{ uri: vehicleImage }}
-                            style={{ width: 150, height: 150, marginTop: 10 }}
-                        />
-                    ) : (
-                        <View style={styles.imagePlaceholder}>
-                            <Text style={styles.imagePlaceholderText}>Vehicle</Text>
-                        </View>
-                    )}
-                </TouchableOpacity>
+                <Text style={styles.label}>Enter Expiry Date</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <TextInput
+                        placeholder='DD-MM-YYYY'
+                        placeholderTextColor='#263238'
+                        style={styles.dateInput}
+                        value={''}
+                        // onChangeText={(text) => handleDateChange(text, 'expiryDate')}
+                        keyboardType='numeric'
+                        maxLength={10}
+                    />
+                </View>
+                <View style={{ marginVertical: "5%" }}>
+                    <SelectField
+                        dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleIscommercial(value.title)} />
+                </View>
+                <View style={{ marginBottom: "5%" }}>
+                    <SelectField
+                        dataToRender={commercialOptions} title={'Select national permit'} selectedValue={(value) => setVehicleIscommercial(value.title)} />
+                </View>
 
                 <View style={styles.dataDetailContainer}>
                     {customerData && customerData.map((data, index) => (
@@ -254,11 +265,10 @@ const TagRegistration = (props: any) => {
                         </View>
                     ))}
                 </View>
-                <InputText placeholder={"Enter recharge amount"} value={rechargeAmount}
-                    onChangeText={(text: string) => setRechargeAmount(text)}
-                />
 
-                <View style={{ marginTop: 20 }}>
+
+
+                <View style={{ marginTop: 20, alignItems: "center", justifyContent: "center" }}>
                     <SecondaryButton
                         title={"Submit"}
                         onPress={() => { console.log("Submit pressed") }}
@@ -283,7 +293,7 @@ const TagRegistration = (props: any) => {
 
 const styles = StyleSheet.create({
     container: {
-        // padding: "5%"
+        padding: "5%"
     },
     loaderContainer: {
         ...StyleSheet.absoluteFillObject,
@@ -319,6 +329,18 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 14,
         lineHeight: 16
+    },
+    dateInput: {
+        borderColor: '#263238',
+        borderWidth: 1,
+        color: '#000000',
+        width: '100%',
+        fontSize: 16,
+        borderRadius: 20,
+        height: 60,
+        paddingHorizontal: '5%',
+        backgroundColor: '#F3F3F3',
+        textAlign: 'center'
     },
     customerDetailsTitleText: {
         color: "grey",
@@ -356,7 +378,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19
     },
+    imagePlaceholder: {
+        width: 150,
+        height: 150,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e0e0e0',
+        borderRadius: 10,
+    },
+    imagePlaceholderText: {
+        color: '#7f7f7f',
+    },
 })
-
-
 export default TagRegistration;

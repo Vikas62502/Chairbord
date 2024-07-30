@@ -23,6 +23,8 @@ import Mobileverification from '../../screens/mobileVerfication/Mobileverificati
 import CustomerRegistration from '../../screens/customerRegistration/CustomerRegistration';
 import ImageCollection from '../../screens/tagRegistration/ImageCollection';
 import TagRegistration from '../../screens/tagRegistration/TagRegistration';
+import TagReplacement from '../../screens/tagReplacement/TagReplacement';
+import TagReplacementForm from '../../screens/tagReplacement/TagReplacementForm';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -63,10 +65,12 @@ const StackNavigation = () => {
             <Stack.Screen name="tagRegistration" component={TagRegistration} options={{
                 headerShown: false
             }} />
-            {/* 
             <Stack.Screen name="tagReplacement" component={TagReplacement} options={{
                 headerShown: false
-            }} /> */}
+            }} />
+            <Stack.Screen name="tagReplacementForm" component={TagReplacementForm} options={{
+                headerShown: false
+            }} />
             <Stack.Screen name="orderDescription" component={OrderSummary} options={{
                 headerShown: false
             }} />

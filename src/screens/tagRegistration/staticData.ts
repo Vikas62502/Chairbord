@@ -74,3 +74,39 @@ export const npciVehicleClassIDData = [
         value: "20"
     },
 ]
+
+export const commercialOptions = [
+    { id: 1, title: "Yes" },
+    { id: 2, title: "No" }
+];
+
+export const manufacturerData = [
+    { id: 1, title: "Toyota" },
+    { id: 2, title: "Honda" },
+    { id: 3, title: "Ford" },
+    { id: 4, title: "Chevrolet" },
+    { id: 5, title: "BMW" },
+];
+
+export const modelsData = [
+    { id: 1, title: "Camry" },
+    { id: 2, title: "Accord" },
+    { id: 3, title: "Mustang" },
+    { id: 4, title: "Impala" },
+    { id: 5, title: "3 Series" },
+];
+
+export const typesData = [
+    { id: 1, title: "Sedan" },
+    { id: 2, title: "SUV" },
+    { id: 3, title: "Truck" },
+    { id: 4, title: "Coupe" },
+    { id: 5, title: "Convertible" },
+];
+
+export const fuelData = [
+    { id: 1, title: "Gasoline" },
+    { id: 2, title: "Diesel" },
+    { id: 3, title: "Electric" },
+    { id: 4, title: "Hybrid" },
+];
