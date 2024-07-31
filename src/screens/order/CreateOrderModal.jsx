@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-  TextInput
 } from 'react-native'
 import React from 'react'
 import InputText from '../../components/common/InputText'
@@ -22,9 +21,13 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
     quantity: '',
     amount: ''
   })
+  console.log(orderBodyData)
 
   const formDataHandler = (key, value) => {
     setOrderBodyData({ ...orderBodyData, [key]: value })
+  }
+  const setBank = (selectedItem, index) => {
+    formDataHandler('bankName', selectedItem.id)
   }
   const bankNameData = [
     { title: 'Bajaj', id: 1 },
@@ -66,11 +69,18 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
               </Pressable>
             </View>
           </View>
-          <SelectField dataToRender={bankNameData} title={'Select bank name'} />
+          <SelectField
+            dataToRender={bankNameData}
+            title={'Select bank name'}
+            selectedValue={setBank}
+          />
           <View style={{ marginTop: '5%' }}>
             <SelectField
               dataToRender={vehicleClassData}
               title={'Select vehicle'}
+              selectedValue={(selectedItem, index) => {
+                formDataHandler('vehicleClass', selectedItem.title)
+              }}
             />
           </View>
           <InputText
@@ -93,6 +103,9 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 inputStyle={{
                   width: '100%'
                 }}
+                onChangeText={(value) => {
+                  formDataHandler('quantity', value)
+                }}
               />
             </View>
             <View style={{ width: '45%' }}>
@@ -100,6 +113,9 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 placeholder={'Enter amount'}
                 inputStyle={{
                   width: '100%'
+                }}
+                onChangeText={(value) => {
+                  formDataHandler('amount', value)
                 }}
               />
             </View>

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
+import CreateReturnModal from '../return/CreateReturnModal'
 
 const orderCardData = [
   {
@@ -46,6 +47,7 @@ const Order = (props) => {
   const [searchText, setSearchText] = useState('')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [createOrderModal, setCreateOrderModal] = useState(false);
+  const [createReturnModal, setCreateReturnModal] = useState(false);
   console.log(createOrderModal, "order")
   return (
     <ScrollView style={styles.container}>
@@ -79,7 +81,7 @@ const Order = (props) => {
               <Text style={styles.titleText}>Order history</Text>
             </View>
             <ExcelButton title={"Create order"} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
-            <ExcelButton title={"Create return"} />
+            <ExcelButton title={"Create return"} onpressOperation={() => setCreateReturnModal(!createReturnModal)} />
 
           </View>
         </View>
@@ -106,6 +108,11 @@ const Order = (props) => {
       <CreateOrderModal
         visible={createOrderModal}
         onClose={() => setCreateOrderModal(false)}
+      />
+
+      <CreateReturnModal
+        visible={createReturnModal}
+        onClose={() => setCreateReturnModal(false)}
       />
 
 

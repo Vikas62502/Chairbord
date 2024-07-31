@@ -3,52 +3,86 @@ import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import InputText from '../../components/common/InputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
+import { client } from '../../client/Axios'
+import { getCache } from '../../helper/Storage'
 
 
 const Mobileverification = (props: any) => {
+  const [loading, setLoading] = useState(false)
+  const [userData, setUserData] = useState<any>()
   const [VerificationFormData, setVerificationFormData] = useState({
     mobile: '',
     vehicleNo: '',
     engineNo: ''
   })
-  const [loading, setLoading] = useState(false)
 
   const formHandler = (key: string, value: string) => {
     setVerificationFormData({ ...VerificationFormData, [key]: value })
   }
 
+  const getHomeApi = async () => {
+    setLoading(true)
+
+    try {
+      let response = await client.get('/home')
+      console.log(response.data, 'response with home')
+    } catch (error) {
+      Alert.alert('Something went wrong')
+      console.log(error, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getHomeApi()
+  }, [])
+
   console.log(VerificationFormData, "VerificationFormData")
 
   const sendOTP = async () => {
-    props.navigation.navigate("OTP")
-    // setLoading(true)
-    // const request: CustomerOTPRequest = {
-    //   mobileNo: mobile,
-    //   vehicleNo: vehicleNo?.toUpperCase(),
-    //   reqType: 'REG',
-    //   chassisNo: '',
-    //   resend: '0',
-    //   udf1: '',
-    //   udf2: '',
-    //   udf3: '',
-    //   udf4: '',
-    //   udf5: '',
-    // }
-    // const response: ApiData<SendOtpResponse> = await sendCustomerOTP(request)
-    // console.log(response, "verify otp")
-    // setLoading(false)
-    // if (response.success && response.data?.validateCustResp.sessionId) {
-    //   await setCache('session', response.data?.validateCustResp.sessionId)
-    //   props.navigation.navigate('OTP', {
-    //     session: response.data?.validateCustResp.sessionId,
-    //     mobile: mobile,
-    //     vehicleNo: vehicleNo,
-    //     to: "TagRegistration"
-    //   })
-    // } else {
-    //   Alert.alert(response.error ?? '')
-    // }
+    // props.navigation.navigate("OTP")
+    setLoading(true)
+    try {
+      let res = await client.post('/bajaj/sendOtp', {
+        requestId: '',
+        channel: '',
+        agentId: userData?.user?.id,
+        vehicleNo: VerificationFormData.vehicleNo,
+        chassisNo: '',
+        engineNo: VerificationFormData.engineNo,
+        mobileNo: VerificationFormData.mobile,
+        reqType: '',
+        resend: 0,
+        isChassis: 0,
+        udf1: '',
+        udf2: '',
+        udf3: '',
+        udf4: '',
+        udf5: '',
+      })
+
+      console.log(res, "res")
+      props.navigation.navigate("OTP", {
+        otpData: res.data,
+      })
+    } catch (error) {
+      console.log(error, "error")
+    } finally {
+      setLoading(false)
+    }
   }
+
+
+
+  const getUserData = async () => {
+    let userData = await getCache('userData')
+    setUserData(userData)
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

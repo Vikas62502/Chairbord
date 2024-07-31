@@ -5,16 +5,15 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  TextInput,
   Alert,
   ActivityIndicator
 } from 'react-native';
 import { getCache } from '../../helper/Storage';
-import { useNavigation } from '@react-navigation/native';
 import OverlayHeader from '../../components/OverlayHeader';
 import InputText from '../../components/common/InputText';
 import SelectField from '../../components/common/SelectField';
 import PrimaryBtn from '../../components/common/PrimaryBtn';
+import CustomInputText from '../../components/common/CustomInputText';
 
 const CustomerRegistration = (props: any) => {
   const [customerFirstName, setCustomerFirstName] = useState('');
@@ -85,15 +84,15 @@ const CustomerRegistration = (props: any) => {
         )}
         <View style={styles.mobileInputField}>
           <View>
-            <TextInput
+            <CustomInputText
               style={styles.countryCodeInput}
               placeholder={'+91'}
               placeholderTextColor={'#000'}
               maxLength={3}
             />
           </View>
-          <View style={{ flex: 8, marginBottom: '5%' }}>
-            <InputText
+          <View style={{ flex: 8 }}>
+            <CustomInputText
               placeholder={'Enter mobile number'}
               value={mobile}
               onChangeText={(txt: string) => setMobile(txt)}
@@ -101,52 +100,58 @@ const CustomerRegistration = (props: any) => {
             />
           </View>
         </View>
-        <InputText
-          placeholder={'First Name'}
-          value={customerFirstName}
-          onChangeText={(txt: string) => setCustomerFirstName(txt?.toUpperCase())}
-          secure={false}
-        />
-        <InputText
-          placeholder={'Surname'}
-          value={customerLastName}
-          onChangeText={(txt: string) => setCustomerLastName(txt?.toUpperCase())}
-          secure={false}
-        />
-
-        <>
-          <Text style={styles.label}>Enter date of birth</Text>
-          <View >
-            <InputText
-              placeholder='DD-MM-YYYY'
-              placeholderTextColor='#263238'
-              style={styles.dateInput}
-              value={dateOfBirth}
-              onChangeText={(text) => handleDateChange(text, 'dateOfBirth')}
-              keyboardType='numeric'
-              maxLength={10}
+        <View style={{ padding: "5%" }}>
+          <View style={{ marginBottom: "5%" }}>
+            <CustomInputText
+              placeholder={'First Name'}
+              value={customerFirstName}
+              onChangeText={(txt: string) => setCustomerFirstName(txt?.toUpperCase())}
+              secure={false}
             />
           </View>
-        </>
+          <CustomInputText
+            placeholder={'Surname'}
+            value={customerLastName}
+            onChangeText={(txt: string) => setCustomerLastName(txt?.toUpperCase())}
+            secure={false}
+          />
+
+          <>
+            <Text style={styles.label}>Enter date of birth</Text>
+            <View >
+              <CustomInputText
+                placeholder='DD-MM-YYYY'
+                placeholderTextColor='#263238'
+                style={styles.dateInput}
+                value={dateOfBirth}
+                onChangeText={(text) => handleDateChange(text, 'dateOfBirth')}
+                keyboardType='numeric'
+                maxLength={10}
+              />
+            </View>
+          </>
+        </View>
 
         <Text style={styles.label}>Document type</Text>
         <View style={{ paddingHorizontal: "5%" }}>
           <SelectField dataToRender={requestTypeDropdownData} title={"Select request type"} selectedValue={(data: any) => setDocumentDetails(data.docType)} />
         </View>
-        <InputText
-          placeholder={'Enter document number'}
-          value={documentType.docNo}
-          onChangeText={(text: string) => setDocumentType(prevState => ({
-            ...prevState,
-            docNo: text?.toUpperCase()
-          }))}
-          secure={false}
-        />
+        <View style={{ padding: "5%" }}>
+          <CustomInputText
+            placeholder={'Enter document number'}
+            value={documentType.docNo}
+            onChangeText={(text: string) => setDocumentType(prevState => ({
+              ...prevState,
+              docNo: text?.toUpperCase()
+            }))}
+            secure={false}
+          />
+        </View>
         {documentType.docType === 2 || documentType.docType === 4 ? (
           <>
             <Text style={styles.label}>Enter Expiry Date</Text>
             <View style={{ alignItems: 'center' }}>
-              <TextInput
+              <CustomInputText
                 placeholder='DD-MM-YYYY'
                 placeholderTextColor='#263238'
                 style={styles.dateInput}

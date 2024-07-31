@@ -10,10 +10,34 @@ import {
 import OtpInputText from './OtpInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
+import { client } from '../../client/Axios'
 
-const OTP = () => {
+const OTP = ({ otpData }) => {
+  console.log(otpData, 'data')
+  const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
+
+  const verifyOtp = async () => {
+    setLoading(true)
+    try {
+      const response = await client.post('/bajaj/validateOtp', {
+        otp: otp.join(''),
+        requestId: '',
+        sessionId: '',
+        channel: '',
+        agentId: ''
+      })
+      console.log(response)
+      navigation.navigate('customerRegistration', {
+        otpData: response?.data
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
   const navigation = useNavigation()
   return (
     <SafeAreaView>
@@ -21,6 +45,11 @@ const OTP = () => {
         <View style={styles.primaryImageContainer}>
           <Image source={require('../../assets/otpVerification.png')} />
         </View>
+        {loading && (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
 
         <View style={styles.textContainer}>
           <Text style={styles.OtpVerificationText}>OTP Verification</Text>
@@ -40,7 +69,7 @@ const OTP = () => {
           <PrimaryBtn
             title={'Verify'}
             disabled={true}
-            onPress={() => navigation.navigate('customerRegistration')}
+            onPress={() => verifyOtp()}
           />
         </View>
       </View>
