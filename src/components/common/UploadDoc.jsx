@@ -1,8 +1,14 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
+import pickImage from '../../helper/pickImage'
 
-const UploadDoc = ({ text }) => {
+const UploadDoc = ({ text, setUploadFile }) => {
+  const pickImageFile = async () => {
+    const file = await pickImage()
+    setUploadFile(file)
+  }
+
   return (
     <LinearGradient
       colors={['#02546D', '#142D40']}
@@ -10,7 +16,7 @@ const UploadDoc = ({ text }) => {
       end={{ x: 1.0, y: 1.0 }}
       style={styles.gradient}
     >
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={pickImageFile}>
         <View style={styles.content}>
           <Image source={require('../../assets/uploadLogo.png')} />
           <Text style={styles.text}>{text}</Text>

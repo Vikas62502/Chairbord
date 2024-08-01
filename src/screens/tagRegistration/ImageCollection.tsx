@@ -3,9 +3,7 @@ import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import UploadDoc from '../../components/common/UploadDoc'
-import SecondaryButton from '../../components/common/SecondaryButton'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
-import LinearButton from '../../components/common/LinearButton'
 
 const ImageCollection = (props: any) => {
   const [loading, setLoading] = useState(false)

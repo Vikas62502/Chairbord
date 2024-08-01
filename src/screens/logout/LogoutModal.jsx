@@ -8,10 +8,14 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const LogoutModal = (props) => {
-  // const [modalVisible, setModalVisible] = useState(true)
+  const handleClearCache = async () => {
+    await AsyncStorage.clear()
+    props.navigation.navigate('SignIn')
+  }
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -55,7 +59,7 @@ const LogoutModal = (props) => {
               </Pressable>
               <Pressable
                 style={[styles.logoutButton]}
-                onPress={() => props.navigation.navigate('dashboard')}
+                onPress={handleClearCache}
               >
                 <Text style={styles.logoutText}>Logout</Text>
               </Pressable>
@@ -63,12 +67,6 @@ const LogoutModal = (props) => {
           </View>
         </View>
       </Modal>
-      {/* <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable> */}
     </View>
   )
 }

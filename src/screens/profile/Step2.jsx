@@ -6,7 +6,12 @@ import UploadDoc from '../../components/common/UploadDoc'
 import SelectField from '../../components/common/SelectField'
 import LinearButton from '../../components/common/LinearButton'
 
-const Step2 = () => {
+const Step2 = ({
+  setFormData,
+  formData,
+  formDataHandler,
+  handleFileUpload
+}) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TagOfInput text="Address Detail" />
@@ -18,8 +23,8 @@ const Step2 = () => {
       <View style={{ marginVertical: '5%' }}>
         <CustomInputText
           placeholder="Enter address"
-          value=""
-          onChangeText={() => {}}
+          value={formData.address}
+          onChangeText={(value) => formDataHandler('address', value)}
         />
       </View>
       <View
@@ -31,23 +36,23 @@ const Step2 = () => {
         <View style={{ width: '48%' }}>
           <CustomInputText
             placeholder="Pincode"
-            value=""
-            onChangeText={() => {}}
+            value={formData.pincode}
+            onChangeText={(value) => formDataHandler('pincode', value)}
           />
         </View>
         <View style={{ width: '48%' }}>
           <CustomInputText
             placeholder="City"
-            value=""
-            onChangeText={() => {}}
+            value={formData.city}
+            onChangeText={(value) => formDataHandler('city', value)}
           />
         </View>
       </View>
       <View style={{ marginVertical: '5%' }}>
         <CustomInputText
           placeholder="Enter state"
-          value=""
-          onChangeText={() => {}}
+          value={formData.state}
+          onChangeText={(value) => formDataHandler('state', value)}
         />
       </View>
       <TagOfInput text="Document type" />
@@ -63,8 +68,8 @@ const Step2 = () => {
       <View style={{ marginTop: '5%' }}>
         <CustomInputText
           placeholder="Enter document number"
-          value=""
-          onChangeText={() => {}}
+          value={formData.document_number}
+          onChangeText={(value) => formDataHandler('document_number', value)}
         />
       </View>
 
@@ -79,11 +84,17 @@ const Step2 = () => {
           justifyContent: 'space-between'
         }}
       >
-        <View style={{ height: '500%', width: '45%' }}>
-          <UploadDoc text="Upload ID (front)" />
+        <View style={{ height: 150, width: '45%' }}>
+          <UploadDoc
+            text="Upload ID (front)"
+            setUploadFile={(file) => handleFileUpload('upload_id_front', file)}
+          />
         </View>
-        <View style={{ height: '500%', width: '45%' }}>
-          <UploadDoc text="Upload ID proof photo (back)" />
+        <View style={{ height: 150, width: '45%' }}>
+          <UploadDoc
+            text="Upload ID proof photo (back)"
+            setUploadFile={(file) => handleFileUpload('upload_id_back', file)}
+          />
         </View>
       </View>
 

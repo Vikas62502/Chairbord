@@ -26,7 +26,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    phoneNumber: ''
   })
 
   const handleLinkPress = (url) => {
@@ -52,6 +53,34 @@ const SignIn = () => {
           {
             text: 'OK',
             onPress: () => navigation?.navigate('drawer'),
+            style: 'cancel'
+          }
+        ]
+      )
+      console.log(error, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getOtpByPhoneNumber = async () => {
+    setLoading(true)
+    let bodyContent = JSON.stringify({
+      phoneNumber: formData.phoneNumber
+    })
+
+    try {
+      let response = await client.post('/login/agent-mobile', bodyContent)
+      setShowOtpField(true)
+      await setCache('userData', response?.data)
+      await setCache('token', response?.data?.token)
+      navigation.navigate('drawer')
+    } catch (error) {
+      Alert.alert(
+        'Something went wrong'[
+          {
+            text: 'OK',
+            onPress: () => navigation?.navigate('singIn'),
             style: 'cancel'
           }
         ]
@@ -157,7 +186,13 @@ const SignIn = () => {
             </>
           ) : (
             <View>
-              <InputText placeholder={'Phone Number'} secure={false} />
+              <InputText
+                placeholder={'Phone Number'}
+                secure={false}
+                onChangeText={(value) =>
+                  setFormData({ ...formData, phoneNumber: value })
+                }
+              />
               <View
                 style={{
                   justifyContent: 'center',
@@ -167,7 +202,7 @@ const SignIn = () => {
               >
                 <SecondaryButton
                   title={'Get OTP'}
-                  onPress={() => setShowOtpField(true)}
+                  onPress={() => getOtpByPhoneNumber()}
                 />
               </View>
 
