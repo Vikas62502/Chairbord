@@ -4,7 +4,7 @@ import OverlayHeader from '../../components/OverlayHeader'
 import InputText from '../../components/common/InputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
-import { getCache } from '../../helper/Storage'
+import { getCache, setCache } from '../../helper/Storage'
 
 
 const Mobileverification = (props: any) => {
@@ -44,28 +44,32 @@ const Mobileverification = (props: any) => {
     // props.navigation.navigate("OTP")
     setLoading(true)
     try {
-      let res = await client.post('/bajaj/sendOtp', {
-        requestId: '',
-        channel: '',
-        agentId: userData?.user?.id,
-        vehicleNo: VerificationFormData.vehicleNo,
-        chassisNo: '',
-        engineNo: VerificationFormData.engineNo,
-        mobileNo: VerificationFormData.mobile,
-        reqType: '',
-        resend: 0,
-        isChassis: 0,
-        udf1: '',
-        udf2: '',
-        udf3: '',
-        udf4: '',
-        udf5: '',
-      })
+      props.navigation.navigate("customerRegistration")
+      // let res = await client.post('/bajaj/sendOtp', {
+      //   requestId: '',
+      //   channel: '',
+      //   agentId: userData?.user?.id,
+      //   vehicleNo: VerificationFormData.vehicleNo,
+      //   chassisNo: '',
+      //   engineNo: VerificationFormData.engineNo,
+      //   mobileNo: VerificationFormData.mobile,
+      //   reqType: '',
+      //   resend: 0,
+      //   isChassis: 0,
+      //   udf1: '',
+      //   udf2: '',
+      //   udf3: '',
+      //   udf4: '',
+      //   udf5: '',
+      // })
 
-      console.log(res, "res")
-      props.navigation.navigate("OTP", {
-        otpData: res.data,
-      })
+      // await setCache('session', res?.data?.validateCustResp?.sessionId)
+
+      // console.log(res, "res")
+      // props.navigation.navigate("OTP", {
+      //   otpData: res.data,
+      //   sessionId: res?.data?.validateCustResp?.sessionId
+      // })
     } catch (error) {
       console.log(error, "error")
     } finally {

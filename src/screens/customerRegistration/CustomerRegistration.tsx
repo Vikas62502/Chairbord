@@ -67,6 +67,30 @@ const CustomerRegistration = (props: any) => {
   }, [sessionId]);
 
   const cusRegApi = async () => {
+    let customDocwithExpry = {
+
+    }
+    let requestBodyData = {
+      sessionId: sessionId,
+      custDetails: {
+        name: customerFirstName,
+        lastName: customerLastName,
+        mobileNo: mobile,
+        dob: dateOfBirth,
+        doc: [
+          {
+            ...documentType
+          }
+        ],
+        udf1: "Sample UDF1",
+        udf2: "Sample UDF2",
+        udf3: "Sample UDF3",
+        udf4: "Sample UDF4",
+        udf5: "Sample UDF5"
+
+      }
+
+    }
     props.navigation.navigate('imageGallary')
   };
 

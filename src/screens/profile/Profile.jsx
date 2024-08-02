@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
+  Pressable,
+  Image
 } from 'react-native'
 import React, { useState } from 'react'
 import TagOfInput from '../../components/common/TagOfInput'
@@ -12,6 +14,7 @@ import CustomInputText from '../../components/common/CustomInputText'
 import UploadDoc from '../../components/common/UploadDoc'
 import Step2 from './Step2'
 import LinearButton from '../../components/common/LinearButton'
+import { client } from '../../client/Axios'
 
 const Profile = () => {
   const [step, setStep] = useState(1)
@@ -41,7 +44,7 @@ const Profile = () => {
     profile_pic: null,
     pos_proof_photo: null
   })
-  console.log(files, 'formData')
+  console.log(formData, 'formData')
 
   const formDataHandler = (key, value) => {
     setFormData({ ...formData, [key]: value })
@@ -51,7 +54,26 @@ const Profile = () => {
   }
 
   const registerCompleteData = async () => {
-    // api call to save data
+    const form = new FormData()
+
+    for (const key in formData) {
+      form.append(key, formData[key])
+    }
+
+    for (const key in files) {
+      form.append(key, files[key])
+    }
+
+    try {
+      // const response = await axios.post(
+      //   `${"http://localhost:3000/api/vi/"}/register//agent-complete`,
+      //   form
+      // )
+      const response = await client.post('/register/agent-complete', form)
+      console.log('response:', response)
+    } catch (error) {
+      console.error('Error creating agent:', error)
+    }
   }
   return (
     <SafeAreaView style={{ flex: 1, padding: '5%' }}>
@@ -116,7 +138,7 @@ const Profile = () => {
               placeholder="Enter PAN card number"
               value={formData.pan_card_number}
               onChangeText={(value) =>
-                formDataHandler('pan_card_number', value)
+                formDataHandler('pan_card_number', value?.toUpperCase())
               }
             />
 
@@ -124,10 +146,23 @@ const Profile = () => {
               <TagOfInput text="PAN card photo" />
             </View>
             <View style={{ height: 150, width: '100%' }}>
-              <UploadDoc
-                text="Upload PAN card photo"
-                setUploadFile={setFiles}
-              />
+              {files.pan_card_photo ? (
+                <Pressable
+                  onPress={() => setFiles({ ...files, pan_card_photo: null })}
+                >
+                  <Image
+                    source={{ uri: files.pan_card_photo }}
+                    style={{ height: 150, width: '100%' }}
+                  />
+                </Pressable>
+              ) : (
+                <UploadDoc
+                  text="Upload PAN card photo here"
+                  setUploadFile={(file) =>
+                    handleFileUpload('pan_card_photo', file)
+                  }
+                />
+              )}
             </View>
 
             <View style={{ marginTop: '5%' }}>
@@ -142,17 +177,28 @@ const Profile = () => {
 
             <View style={{ marginVertical: '5%' }}></View>
             <View style={{ height: 150, width: '100%' }}>
-              <UploadDoc
-                text="Upload POS proof photo here"
-                setUploadFile={(file) =>
-                  handleFileUpload('pos_proof_photo', file)
-                }
-              />
+              {files.pos_proof_photo ? (
+                <Pressable
+                  onPress={() => setFiles({ ...files, pos_proof_photo: null })}
+                >
+                  <Image
+                    source={{ uri: files.pos_proof_photo }}
+                    style={{ height: 150, width: '100%' }}
+                  />
+                </Pressable>
+              ) : (
+                <UploadDoc
+                  text="Upload POS proof photo here"
+                  setUploadFile={(file) =>
+                    handleFileUpload('pos_proof_photo', file)
+                  }
+                />
+              )}
             </View>
             <View
               style={{ alignSelf: 'center', marginTop: '5%', width: '100%' }}
             >
-              <LinearButton title={'Submit'} onPress={() => setStep(2)} />
+              <LinearButton title={'Step 2'} onPress={() => setStep(2)} />
             </View>
           </ScrollView>
         ) : (
@@ -161,10 +207,11 @@ const Profile = () => {
             handleFileUpload={handleFileUpload}
             setFormData={setFormData}
             formData={formData}
+            files={files}
+            setFiles={setFiles}
           />
         )}
       </View>
-      {/* </ScrollView> */}
     </SafeAreaView>
   )
 }

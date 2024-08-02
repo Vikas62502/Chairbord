@@ -1,4 +1,11 @@
-import { View, ScrollView, StyleSheet, Text } from 'react-native'
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Pressable,
+  Image
+} from 'react-native'
 import React from 'react'
 import TagOfInput from '../../components/common/TagOfInput'
 import CustomInputText from '../../components/common/CustomInputText'
@@ -7,24 +14,27 @@ import SelectField from '../../components/common/SelectField'
 import LinearButton from '../../components/common/LinearButton'
 
 const Step2 = ({
-  setFormData,
   formData,
   formDataHandler,
-  handleFileUpload
+  handleFileUpload,
+  files,
+  setFormData,
+  setFiles
 }) => {
+  console.log(formData, 'formData')
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TagOfInput text="Address Detail" />
       <CustomInputText
         placeholder="Enter address"
-        value=""
-        onChangeText={() => {}}
+        value={formData.address}
+        onChangeText={(value) => formDataHandler('address', value)}
       />
       <View style={{ marginVertical: '5%' }}>
         <CustomInputText
-          placeholder="Enter address"
-          value={formData.address}
-          onChangeText={(value) => formDataHandler('address', value)}
+          placeholder="Enter address line 2"
+          value={formData.address2}
+          onChangeText={(value) => formDataHandler('address2', value)}
         />
       </View>
       <View
@@ -64,12 +74,15 @@ const Step2 = ({
           { title: 'Passport', id: 3 }
         ]}
         title="Select document type"
+        selectedValue={(value) => {
+          formDataHandler('id_proof_document_type', value?.id)
+        }}
       />
       <View style={{ marginTop: '5%' }}>
         <CustomInputText
           placeholder="Enter document number"
           value={formData.document_number}
-          onChangeText={(value) => formDataHandler('document_number', value)}
+          onChangeText={(value) => formDataHandler('id_proof_document_number', value)}
         />
       </View>
 
@@ -85,16 +98,42 @@ const Step2 = ({
         }}
       >
         <View style={{ height: 150, width: '45%' }}>
-          <UploadDoc
-            text="Upload ID (front)"
-            setUploadFile={(file) => handleFileUpload('upload_id_front', file)}
-          />
+          {files.id_proof_front_photo ? (
+            <Pressable
+              onPress={() => setFiles({ ...files, id_proof_front_photo: null })}
+            >
+              <Image
+                source={{ uri: files.id_proof_front_photo }}
+                style={{ height: 150, width: '100%' }}
+              />
+            </Pressable>
+          ) : (
+            <UploadDoc
+              text="Upload ID proof photo (front)"
+              setUploadFile={(file) =>
+                handleFileUpload('id_proof_front_photo', file)
+              }
+            />
+          )}
         </View>
         <View style={{ height: 150, width: '45%' }}>
-          <UploadDoc
-            text="Upload ID proof photo (back)"
-            setUploadFile={(file) => handleFileUpload('upload_id_back', file)}
-          />
+          {files.id_proof_back_photo ? (
+            <Pressable
+              onPress={() => setFiles({ ...files, id_proof_back_photo: null })}
+            >
+              <Image
+                source={{ uri: files.id_proof_back_photo }}
+                style={{ height: 150, width: '100%' }}
+              />
+            </Pressable>
+          ) : (
+            <UploadDoc
+              text="Upload ID proof photo (back)"
+              setUploadFile={(file) =>
+                handleFileUpload('id_proof_back_photo', file)
+              }
+            />
+          )}
         </View>
       </View>
 

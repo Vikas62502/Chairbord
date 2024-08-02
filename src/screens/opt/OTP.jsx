@@ -23,15 +23,19 @@ const OTP = ({ otpData }) => {
     try {
       const response = await client.post('/bajaj/validateOtp', {
         otp: otp.join(''),
-        requestId: '',
-        sessionId: '',
-        channel: '',
-        agentId: ''
+        sessionId: ''
       })
       console.log(response)
-      navigation.navigate('customerRegistration', {
-        otpData: response?.data
-      })
+
+      if (
+        response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
+      ) {
+        navigation.navigate('imageGallary')
+      } else {
+        navigation.navigate('customerRegistration', {
+          otpData: response?.data
+        })
+      }
     } catch (error) {
       console.log(error)
     } finally {
