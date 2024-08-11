@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {
   Alert,
+  KeyboardAvoidingView,
   Linking,
   Pressable,
   SafeAreaView,
@@ -8,7 +9,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Platform
 } from 'react-native'
 import InputText from '../components/common/InputText'
 import SecondaryButton from '../components/common/SecondaryButton'
@@ -48,15 +50,13 @@ const SignIn = () => {
       await setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      Alert.alert(
-        'Something went wrong'[
-          {
-            text: 'OK',
-            onPress: () => navigation?.navigate('drawer'),
-            style: 'cancel'
-          }
-        ]
-      )
+      Alert.alert('Something went wrong', 'Please try again later', [
+        {
+          text: 'OK',
+          onPress: () => navigation?.navigate('drawer'),
+          style: 'cancel'
+        }
+      ])
       console.log(error, 'error')
     } finally {
       setLoading(false)
@@ -76,15 +76,13 @@ const SignIn = () => {
       await setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      Alert.alert(
-        'Something went wrong'[
-          {
-            text: 'OK',
-            onPress: () => navigation?.navigate('singIn'),
-            style: 'cancel'
-          }
-        ]
-      )
+      Alert.alert('Something went wrong', 'Please try again later', [
+        {
+          text: 'OK',
+          onPress: () => navigation?.navigate('signIn'),
+          style: 'cancel'
+        }
+      ])
       console.log(error, 'error')
     } finally {
       setLoading(false)
@@ -99,151 +97,161 @@ const SignIn = () => {
         navigateTo={() => navigation.goBack()}
       />
       {loading && <Loader />}
-      <ScrollView>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.heading}>Welcome</Text>
-          <Text style={styles.content}>
-            please enter your account details here
-          </Text>
-        </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.tabContainer}>
-            <TouchableOpacity
-              style={[
-                styles.tabSection,
-                active === 'password' && styles.activeState
-              ]}
-              onPress={() => setActive('password')}
-            >
-              <Text
-                style={[
-                  styles.tabContent,
-                  active === 'password' && styles.activeContent
-                ]}
-              >
-                Password
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.verticalDivider} />
-            <TouchableOpacity
-              onPress={() => setActive('otp')}
-              style={[
-                styles.tabSection,
-                active === 'otp' && styles.activeState
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tabContent,
-                  active === 'otp' && styles.activeContent
-                ]}
-              >
-                OTP
-              </Text>
-            </TouchableOpacity>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.heading}>Welcome</Text>
+            <Text style={styles.content}>
+              please enter your account details here
+            </Text>
           </View>
-        </View>
-
-        <View style={styles.container}>
-          {active === 'password' ? (
-            <>
-              <InputText
-                placeholder={'Phone Number or email'}
-                secure={false}
-                onChangeText={(email) =>
-                  setFormData({ ...formData, email: email })
-                }
-              />
-              <InputText
-                placeholder={'Password'}
-                secure={true}
-                onChangeText={(pass) =>
-                  setFormData({ ...formData, password: pass })
-                }
-              />
-
-              <Pressable>
-                <Text
-                  style={styles.text}
-                  onPress={() => navigation.navigate('forgetYourPassword')}
-                >
-                  Forgot your Password?
-                </Text>
-              </Pressable>
-              <View style={{ alignItems: 'center' }}>
-                <SecondaryButton
-                  title={'Login'}
-                  disable={true}
-                  // onPress={() => navigation.navigate('drawer')}
-                  onPress={() => loginApi()}
-                />
-              </View>
-            </>
-          ) : (
-            <View>
-              <InputText
-                placeholder={'Phone Number'}
-                secure={false}
-                onChangeText={(value) =>
-                  setFormData({ ...formData, phoneNumber: value })
-                }
-              />
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 25
-                }}
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.tabSection,
+                  active === 'password' && styles.activeState
+                ]}
+                onPress={() => setActive('password')}
               >
-                <SecondaryButton
-                  title={'Get OTP'}
-                  onPress={() => getOtpByPhoneNumber()}
-                />
-              </View>
-
-              {showOtpField && <VerifyOTP />}
-            </View>
-          )}
-          {!showOtpField && (
-            <View>
-              <DividerWithText />
-
-              <Text style={{ color: '#263238', textAlign: 'center' }}>
-                Dont't have an account?
-              </Text>
-              <View style={{ alignItems: 'center' }}>
-                <SecondaryButton
-                  title={'Sign Up'}
-                  onPress={() => navigation.navigate('register')}
-                />
-              </View>
-              <View style={styles.termsContainer}>
-                <Text style={styles.termsText}>
-                  By signing up you accept the {'\n'}
-                  <TouchableOpacity
-                    onPress={() => handleLinkPress('https://example.com/terms')}
-                  >
-                    <Text style={styles.link}>Terms of Service</Text>
-                  </TouchableOpacity>{' '}
-                  <Text style={styles.termsText}>and</Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      handleLinkPress('https://example.com/privacy')
-                    }
-                  >
-                    <Text style={styles.link}> Privacy policy</Text>
-                  </TouchableOpacity>
+                <Text
+                  style={[
+                    styles.tabContent,
+                    active === 'password' && styles.activeContent
+                  ]}
+                >
+                  Password
                 </Text>
-              </View>
+              </TouchableOpacity>
+              <View style={styles.verticalDivider} />
+              <TouchableOpacity
+                onPress={() => setActive('otp')}
+                style={[
+                  styles.tabSection,
+                  active === 'otp' && styles.activeState
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.tabContent,
+                    active === 'otp' && styles.activeContent
+                  ]}
+                >
+                  OTP
+                </Text>
+              </TouchableOpacity>
             </View>
-          )}
-        </View>
-      </ScrollView>
+          </View>
+
+          <View style={styles.container}>
+            {active === 'password' ? (
+              <>
+                <InputText
+                  placeholder={'Phone Number or email'}
+                  secure={false}
+                  onChangeText={(email) =>
+                    setFormData({ ...formData, email: email.toLowerCase() })
+                  }
+                />
+                <InputText
+                  placeholder={'Password'}
+                  secure={true}
+                  onChangeText={(pass) =>
+                    setFormData({ ...formData, password: pass })
+                  }
+                />
+
+                <Pressable>
+                  <Text
+                    style={styles.text}
+                    onPress={() => navigation.navigate('forgetYourPassword')}
+                  >
+                    Forgot your Password?
+                  </Text>
+                </Pressable>
+                <View style={{ alignItems: 'center' }}>
+                  <SecondaryButton
+                    title={'Login'}
+                    disable={true}
+                    onPress={() => loginApi()}
+                  />
+                </View>
+              </>
+            ) : (
+              <View>
+                <InputText
+                  placeholder={'Phone Number'}
+                  secure={false}
+                  onChangeText={(value) =>
+                    setFormData({ ...formData, phoneNumber: value })
+                  }
+                />
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 25
+                  }}
+                >
+                  <SecondaryButton
+                    title={'Get OTP'}
+                    onPress={() => getOtpByPhoneNumber()}
+                  />
+                </View>
+
+                {showOtpField && <VerifyOTP />}
+              </View>
+            )}
+            {!showOtpField && (
+              <View>
+                <DividerWithText />
+
+                <Text style={{ color: '#263238', textAlign: 'center' }}>
+                  Dont't have an account?
+                </Text>
+                <View style={{ alignItems: 'center' }}>
+                  <SecondaryButton
+                    title={'Sign Up'}
+                    onPress={() => navigation.navigate('register')}
+                  />
+                </View>
+                <View style={styles.termsContainer}>
+                  <Text style={styles.termsText}>
+                    By signing up you accept the {'\n'}
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleLinkPress('https://example.com/terms')
+                      }
+                    >
+                      <Text style={styles.link}>Terms of Service</Text>
+                    </TouchableOpacity>{' '}
+                    <Text style={styles.termsText}>and</Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleLinkPress('https://example.com/privacy')
+                      }
+                    >
+                      <Text style={styles.link}> Privacy policy</Text>
+                    </TouchableOpacity>
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -315,4 +323,5 @@ const styles = StyleSheet.create({
     fontSize: 11
   }
 })
+
 export default SignIn

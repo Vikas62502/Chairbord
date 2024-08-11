@@ -6,17 +6,114 @@ import {
   Pressable,
   Image
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
-import InputText from '../../components/common/InputText'
 import CustomInputText from '../../components/common/CustomInputText'
 import LinearButton from '../../components/common/LinearButton'
+import Loader from '../../components/ui/Loader'
+import { client } from '../../client/Axios'
+import {
+  CFDropCheckoutPayment,
+  CFEnvironment,
+  CFPaymentComponentBuilder,
+  CFPaymentModes,
+  CFSession,
+  CFThemeBuilder
+} from 'cashfree-pg-api-contract'
+import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
 
 const TopupWallet = () => {
+  const [topupAmount, setTopupAmount] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const [order, setOrder] = useState({
+    payment_session_id: '',
+    order_id: '',
+    order_expiry_time: 'order_expiry_time'
+  })
+
+  const createOrderCashfree = async () => {
+    const response = await client.post('/cashfree-payment/create-order', {
+      amount: topupAmount
+    })
+    setOrder({
+      payment_session_id: response.data.payment_session_id,
+      order_id: response.data.order_id,
+      order_expiry_time: response.data.order_expiry_time
+    })
+  }
+
+  const topUpApi = async () => {
+    await createOrderCashfree()
+  }
+
+  const getSession = () => {
+    return new CFSession(
+      order.payment_session_id, // sessionId
+      order.order_id, // orderId
+      CFEnvironment.SANDBOX
+    )
+  }
+
+  const _startCheckout = async () => {
+    try {
+      const session = getSession()
+      const paymentModes = new CFPaymentComponentBuilder()
+        .add(CFPaymentModes.CARD)
+        .add(CFPaymentModes.UPI)
+        .add(CFPaymentModes.NB)
+        .add(CFPaymentModes.WALLET)
+        .add(CFPaymentModes.PAY_LATER)
+        .build()
+      const theme = new CFThemeBuilder()
+        .setNavigationBarBackgroundColor('#94ee95')
+        .setNavigationBarTextColor('#FFFFFF')
+        .setButtonBackgroundColor('#FFC107')
+        .setButtonTextColor('#FFFFFF')
+        .setPrimaryTextColor('#212121')
+        .setSecondaryTextColor('#757575')
+        .build()
+      const dropPayment = new CFDropCheckoutPayment(
+        session,
+        paymentModes,
+        theme
+      )
+      console.log(JSON.stringify(dropPayment))
+      CFPaymentGatewayService.doPayment(dropPayment)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const startCheckout = async () => {
+    await _startCheckout()
+  }
+
+  const topupBalanceBackend = async () => {
+    try {
+      await client.post(`/wallet/agent/own-wallet/transactions`, {
+        amount: topupAmount,
+        reason: 'Cashfree Credit'
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    if (order.payment_session_id && order.order_id) {
+      startCheckout()
+      console.log('Order state has been updated:', order)
+    }
+
+    topupBalanceBackend()
+  }, [order])
+
+
+
   return (
     <>
       <OverlayHeader title={'Wallet'} navigateTo={'drawer'} />
+      {loading && <Loader />}
       <ScrollView style={styles.container}>
         <View style={{ padding: '5%' }}>
           <View style={styles.balanceCard}>
@@ -35,6 +132,8 @@ const TopupWallet = () => {
             <CustomInputText
               placeholder={'Enter amount'}
               keyboardType={'numeric'}
+              value={topupAmount}
+              onChangeText={(text) => setTopupAmount(text)}
             />
 
             <Text
@@ -49,11 +148,16 @@ const TopupWallet = () => {
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: '8%' }}>
               {[500, 1000, 1500, 2000].map((amount, index) => (
                 <Pressable
+                  onPress={() => {
+                    setTopupAmount(amount)
+                    console.log(amount)
+                  }}
                   key={index}
                   style={{
                     borderWidth: 1,
                     borderColor: '#02546D',
-                    borderRadius: 5
+                    borderRadius: 5,
+                    backgroundColor: 'white'
                   }}
                 >
                   <Text style={styles.recommendText}>₹{amount}</Text>
@@ -63,7 +167,7 @@ const TopupWallet = () => {
 
             <LinearButton
               title={'PROCEED TO TOPUP'}
-              onPress={() => {}}
+              onPress={() => topUpApi()}
               style={{ marginTop: '5%' }}
             />
 

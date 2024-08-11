@@ -11,19 +11,18 @@ const Inventory = () => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
   const [userData, setUserData] = useState()
-  console.log(inventoryCardData, 'inventoryCardData')
 
   const getUserData = async () => {
     let userData = await getCache('userData')
-    setUserData(userData)
+    setUserData(userData, 'userData')
   }
 
   const getInventory = async (userId) => {
     try {
       const response = await client.get(`/inventory/fastag/agent/${userId}`)
-      console.log(response?.data?.data, 'res')
+      // console.log(response?.data?.data, 'res')
       setInventoryCardData(response?.data?.data)
-      console.log(response, 'response')
+      // console.log(response, 'response')
     } catch (error) {
       console.log(error, 'error')
     }

@@ -38,38 +38,32 @@ const Mobileverification = (props: any) => {
     getHomeApi()
   }, [])
 
-  console.log(VerificationFormData, "VerificationFormData")
-
   const sendOTP = async () => {
-    // props.navigation.navigate("OTP")
     setLoading(true)
     try {
-      props.navigation.navigate("customerRegistration")
-      // let res = await client.post('/bajaj/sendOtp', {
-      //   requestId: '',
-      //   channel: '',
-      //   agentId: userData?.user?.id,
-      //   vehicleNo: VerificationFormData.vehicleNo,
-      //   chassisNo: '',
-      //   engineNo: VerificationFormData.engineNo,
-      //   mobileNo: VerificationFormData.mobile,
-      //   reqType: '',
-      //   resend: 0,
-      //   isChassis: 0,
-      //   udf1: '',
-      //   udf2: '',
-      //   udf3: '',
-      //   udf4: '',
-      //   udf5: '',
-      // })
+      let res = await client.post('/bajaj/sendOtp', {
+        requestId: '',
+        channel: '',
+        agentId: userData?.user?.id,
+        vehicleNo: VerificationFormData.vehicleNo,
+        chassisNo: '',
+        engineNo: VerificationFormData.engineNo,
+        mobileNo: VerificationFormData.mobile,
+        reqType: 'REG',
+        resend: 0,
+        isChassis: 0,
+        udf1: '',
+        udf2: '',
+        udf3: '',
+        udf4: '',
+        udf5: '',
+      })
 
-      // await setCache('session', res?.data?.validateCustResp?.sessionId)
-
-      // console.log(res, "res")
-      // props.navigation.navigate("OTP", {
-      //   otpData: res.data,
-      //   sessionId: res?.data?.validateCustResp?.sessionId
-      // })
+      await setCache('session', res?.data?.validateCustResp?.sessionId)
+      props.navigation.navigate("OTP", {
+        otpData: res.data,
+        sessionId: res?.data?.validateCustResp?.sessionId
+      })
     } catch (error) {
       console.log(error, "error")
     } finally {

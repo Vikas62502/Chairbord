@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -11,9 +12,9 @@ import OtpInputText from './OtpInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
 import { client } from '../../client/Axios'
+import { getCache } from '../../helper/Storage'
 
-const OTP = ({ otpData }) => {
-  console.log(otpData, 'data')
+const OTP = (props) => {
   const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
@@ -23,7 +24,7 @@ const OTP = ({ otpData }) => {
     try {
       const response = await client.post('/bajaj/validateOtp', {
         otp: otp.join(''),
-        sessionId: ''
+        sessionId: await getCache('session')
       })
       console.log(response)
 
@@ -72,7 +73,7 @@ const OTP = ({ otpData }) => {
           </Text>
           <PrimaryBtn
             title={'Verify'}
-            disabled={true}
+            disabled={loading}
             onPress={() => verifyOtp()}
           />
         </View>

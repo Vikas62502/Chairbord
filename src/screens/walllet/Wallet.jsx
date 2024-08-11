@@ -1,22 +1,41 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import WalletCards from './WalletCards'
 import walletCardData from './WalletCardData'
 import FilterTags from './FilterTags'
+import { client } from '../../client/Axios'
+import getDate from '../../utils/getDate'
 
 const Wallet = (props) => {
   const [searchText, setSearchText] = useState('')
   const [activeTag, setActiveTag] = useState('All')
   const [showFilterModal, setShowFilterModal] = useState(false)
+  const [walletDetails, setWalletDetails] = useState([])
+  console.log(walletDetails?.transactions, 'transactions')
 
   const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw']
+
+  const getWalletDetails = async () => {
+    try {
+      const response = await client.get(`/wallet/transactions/agent-get`)
+      setWalletDetails(response.data)
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+
+  useEffect(() => {
+    getWalletDetails() 
+  }, [])
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: '5%' }}>
         <View style={styles.balanceCard}>
           <Text style={styles.balanceText}>Balance</Text>
-          <Text style={styles.amountText}>₹1,055</Text>
+          <Text style={styles.amountText}>
+            {walletDetails?.agent?.balance || 0}
+          </Text>
 
           <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
             <Pressable onPress={() => props.navigation.navigate('topupWallet')}>
@@ -84,6 +103,21 @@ const Wallet = (props) => {
           ))}
         </ScrollView>
 
+        <View>
+          {walletDetails?.transactions?.map((data, index) => (
+            <WalletCards
+              key={index}
+              logo={data.logo}
+              title={data.reason}
+              description={data.description}
+              amountValue={data.amount}
+              ID={data.ID}
+              RefNo={data.RefNo}
+              date={data.updatedAt}
+              time={data.updatedAt}
+            />
+          ))}
+        </View>
         <View>
           {walletCardData.map((data, index) => (
             <WalletCards

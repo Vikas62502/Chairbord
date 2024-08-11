@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Image, TextInput, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
@@ -48,7 +48,30 @@ const Order = (props) => {
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [createOrderModal, setCreateOrderModal] = useState(false);
   const [createReturnModal, setCreateReturnModal] = useState(false);
-  console.log(createOrderModal, "order")
+  const [userData, setUserData] = useState()
+  console.log(userData, 'userData')
+
+
+  const getUserData = async () => {
+    let userData = await getCache('userData')
+    setUserData(userData)
+  }
+
+
+  const getAllFastagByAgent = async () => {
+    try {
+      const response = await client.get(`/inventory/fastag/agent/${userData?.user?.id}`)
+      setInventoryCardData(response?.data?.data)
+    } catch (error) {
+      console.log(error, 'error')
+    }
+  }
+
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: "5%" }}>

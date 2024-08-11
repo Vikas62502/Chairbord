@@ -5,17 +5,18 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Alert,
   ActivityIndicator
 } from 'react-native';
 import { getCache } from '../../helper/Storage';
 import OverlayHeader from '../../components/OverlayHeader';
-import InputText from '../../components/common/InputText';
 import SelectField from '../../components/common/SelectField';
 import PrimaryBtn from '../../components/common/PrimaryBtn';
 import CustomInputText from '../../components/common/CustomInputText';
+import { client } from '../../client/Axios';
 
 const CustomerRegistration = (props: any) => {
+  const { otpData } = props.route.params;
+  console.log(otpData?.validateOtpResp?.custDetails?.mobileNo, 'otpData');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const CustomerRegistration = (props: any) => {
   const [documentType, setDocumentType] = useState({
     docType: 1,
     docNo: '',
+    expiryDate: ''
   });
 
   const handleDateChange = (text: string, field: string) => {
@@ -67,9 +69,7 @@ const CustomerRegistration = (props: any) => {
   }, [sessionId]);
 
   const cusRegApi = async () => {
-    let customDocwithExpry = {
-
-    }
+    setLoading(true);
     let requestBodyData = {
       sessionId: sessionId,
       custDetails: {
@@ -87,11 +87,19 @@ const CustomerRegistration = (props: any) => {
         udf3: "Sample UDF3",
         udf4: "Sample UDF4",
         udf5: "Sample UDF5"
-
       }
-
     }
-    props.navigation.navigate('imageGallary')
+
+    console.log(requestBodyData, 'requestBodyData');
+    try {
+      const res = await client.post('/bajaj/createWallet', requestBodyData);
+      console.log(res, 'res');
+      props.navigation.navigate('imageGallary')
+    } catch (error) {
+      console.log(error, 'error')
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -113,14 +121,16 @@ const CustomerRegistration = (props: any) => {
               placeholder={'+91'}
               placeholderTextColor={'#000'}
               maxLength={3}
+              isEditable={false}
             />
           </View>
           <View style={{ flex: 8 }}>
             <CustomInputText
               placeholder={'Enter mobile number'}
-              value={mobile}
+              value={otpData?.validateOtpResp?.custDetails?.mobileNo}
               onChangeText={(txt: string) => setMobile(txt)}
               secure={false}
+              isEditable={false}
             />
           </View>
         </View>
