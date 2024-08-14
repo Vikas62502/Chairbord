@@ -62,7 +62,8 @@ const Mobileverification = (props: any) => {
       await setCache('session', res?.data?.validateCustResp?.sessionId)
       props.navigation.navigate("OTP", {
         otpData: res.data,
-        sessionId: res?.data?.validateCustResp?.sessionId
+        sessionId: res?.data?.validateCustResp?.sessionId,
+        VerificationFormData: VerificationFormData,
       })
     } catch (error) {
       console.log(error, "error")

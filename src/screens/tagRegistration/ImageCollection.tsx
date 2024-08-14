@@ -7,34 +7,47 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
+  const { sessionId } = props?.route?.params;
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
-  console.log(imageGallaryData, "res")
+
 
   const handleImageSelected = async (key: string, base64Image: string) => {
-    let bodyData = JSON.stringify({
-      regDetails: {
-        "sessionId": "dcdb76851bfc45258c616c9ebcdde57c"
-      },
-      documentDetails: {
-        "imageType": key,
-        "image": base64Image
-      },
-      customerId: 6,
-      vehicleId: "RJ14UH0250"
-    })
-    // let res = await client.post("/bajaj/uploadImages", {
-    //   bodyData
-    // })
-    setImageGallaryData((prevState: any) => ({
-      ...prevState,
-      [key]: {
-        imageType: key,
-        image: base64Image
-      }
-    }));
+    setLoading(true)
+    try {
+      const bodyData = JSON.stringify({
+        regDetails: {
+          "sessionId": sessionId
+        },
+        documentDetails: {
+          "imageType": key,
+          "image": base64Image
+        },
+        customerId: 6,
+        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || "RJ45CM9948",
+      })
+
+      const res = await client.post("/bajaj/uploadImages",
+        bodyData
+      )
+      setImageGallaryData((prevState: any) => ({
+        ...prevState,
+        [key]: {
+          imageType: key,
+          image: base64Image
+        }
+      }));
+    } catch (error) {
+      console.log(error, "error");
+    } finally {
+      setLoading(false)
+    }
   };
 
+
+  const allImagesSet = imageGallaryData?.RCFRONT && imageGallaryData?.RCBACK &&
+    imageGallaryData?.VEHICLEFRONT && imageGallaryData?.VEHICLESIDE &&
+    imageGallaryData?.TAGAFFIX;
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader
@@ -113,8 +126,12 @@ const ImageCollection = (props: any) => {
         <View style={{ alignItems: "center", paddingBottom: "5%" }}>
           <PrimaryBtn
             title={'Next'}
-            onPress={() => props.navigation.navigate('tagRegistration')}
-            disabled={undefined}
+            onPress={() => props.navigation.navigate('tagRegistration', {
+              sessionId: sessionId,
+              imageGallaryData: imageGallaryData,
+              response: props?.route?.params?.response
+            })}
+            disabled={!allImagesSet}
           />
         </View>
       </ScrollView>

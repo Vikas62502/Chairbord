@@ -184,7 +184,7 @@ const CustomerRegistration = (props: any) => {
         {documentType.docType === 2 || documentType.docType === 4 ? (
           <>
             <Text style={styles.label}>Enter Expiry Date</Text>
-            <View style={{ alignItems: 'center' }}>
+            <View>
               <CustomInputText
                 placeholder='DD-MM-YYYY'
                 placeholderTextColor='#263238'

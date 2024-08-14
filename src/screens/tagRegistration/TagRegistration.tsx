@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
 import { colorData, npciVehicleClassIDData, commercialOptions, manufacturerData, fuelData, modelsData, typesData } from './staticData'
 import pickImage from '../../helper/pickImage'
@@ -9,27 +9,15 @@ import { useNavigation } from '@react-navigation/native'
 import { horizontalScale, verticalScale } from '../../helper/Metrics'
 import CustomInputText from '../../components/common/CustomInputText'
 import SelectField from '../../components/common/SelectField'
+import { client } from '../../client/Axios'
 
 const TagRegistration = (props: any) => {
+    console.log(props.route.params?.response, "props")
+    console.log(props.route.params?.sessionId, "sessionId")
+    const { custDetails } = props.route.params?.response;
+    const { vrnDetails } = props.route.params?.response;
     const [isYes, setIsYes] = React.useState(false)
-    // Dummy data for testing
-    const custDetails = {
-        name: "John Doe",
-        mobileNo: "1234567890",
-        walletId: "wallet123"
-    };
-
-    const vrnDetails = {
-        vehicleNo: "ABC1234",
-        vehicleManuf: "Toyota",
-        model: "Camry",
-        vehicleColour: "Red",
-        type: "Sedan",
-        isCommercial: false,
-        rechargeAmount: "500",
-        tagCost: "200",
-        securityDeposit: "100"
-    };
+    console.log(vrnDetails, "vrnDetails")
 
     const [modalVisible, setModalVisible] = React.useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = React.useState<null | boolean>(null)
@@ -133,6 +121,65 @@ const TagRegistration = (props: any) => {
             value: `: ${custDetails?.mobileNo}`
         },
     ]
+
+    const registerFastagApi = async () => {
+        setLoading(true)
+        try {
+            const bodyData = JSON.stringify({
+                "regDetails": {
+                    "sessionId": "51b5aa1fbda2485fabf199163041925b"
+                },
+                "agentId": 18,
+                "masterId": "",
+                "vrnDetails": {
+                    "vrn": "RJ14UH0250",
+                    "chassis": "MA1TA2WGXH2E45298",
+                    "engine": "WGH4E11340",
+                    "vehicleManuf": "MAHINDRA & MAHINDRA LIMITED",
+                    "model": "MAHINDRA SCORPIO S10 IH 2WD",
+                    "vehicleColour": "DESAT SILVER",
+                    "type": "LMV",
+                    "status": "Active",
+                    "npciStatus": "Active",
+                    "isCommercial": false,
+                    "tagVehicleClassID": "4",
+                    "npciVehicleClassID": "4",
+                    "vehicleType": "Motor Car",
+                    "rechargeAmount": 99.0,
+                    "securityDeposit": 1.0,
+                    "tagCost": 100.0,
+                    "debitAmt": 200.0,
+                    "vehicleDescriptor": "PETROL",
+                    "isNationalPermit": "2",
+                    "permitExpiryDate": "",
+                    "stateOfRegistration": "RJ"
+                },
+                "custDetails": {
+                    "name": "Vikas Yadav",
+                    "mobileNo": "8178624530",
+                    "walletId": ""
+                },
+                "fasTagDetails": {
+                    "serialNo": "608268-001-0022167",
+                    "tid": "",
+                    "udf1": "",
+                    "udf2": "",
+                    "udf3": "",
+                    "udf4": "",
+                    "udf5": ""
+                }
+            })
+
+            const res = await client.post("bajaj/registerFastag",
+                bodyData
+            )
+            successResponse()
+        } catch (error) {
+            failureResponse()
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
         setSessionId('dummySessionId');

@@ -15,6 +15,7 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 
 const OTP = (props) => {
+  const userData = props.route.params?.VerificationFormData
   const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
@@ -26,15 +27,20 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: await getCache('session')
       })
-      console.log(response)
+      console.log(response, 'validate otp response')
 
       if (
         response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
       ) {
-        navigation.navigate('imageGallary')
+        navigation.navigate('imageGallary', {
+          sessionId: await getCache('session'),
+          response: response?.data?.validateOtpResp
+        })
       } else {
         navigation.navigate('customerRegistration', {
-          otpData: response?.data
+          otpData: response?.data,
+          sessionId: await getCache('session'),
+          response: response?.data?.validateOtpResp
         })
       }
     } catch (error) {
@@ -60,7 +66,7 @@ const OTP = (props) => {
           <Text style={styles.OtpVerificationText}>OTP Verification</Text>
           <Text style={styles.otpDescription}>
             Enter the OTP sent to{' '}
-            <Text style={{ color: '#000000' }}>+91817862320</Text>
+            <Text style={{ color: '#000000' }}>{`+91${userData.mobile}`}</Text>
           </Text>
 
           <View style={{ flexDirection: 'row', marginVertical: '5%' }}>
