@@ -7,7 +7,8 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
-  const { sessionId } = props?.route?.params;
+  const { sessionId, customerId } = props?.route?.params;
+  console.log(sessionId, customerId, 'sessionId, customerId');
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -23,13 +24,14 @@ const ImageCollection = (props: any) => {
           "imageType": key,
           "image": base64Image
         },
-        customerId: 6,
+        customerId: customerId,
         vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || "RJ45CM9948",
       })
 
       const res = await client.post("/bajaj/uploadImages",
         bodyData
       )
+      console.log(res, "res");
       setImageGallaryData((prevState: any) => ({
         ...prevState,
         [key]: {
@@ -129,7 +131,7 @@ const ImageCollection = (props: any) => {
             onPress={() => props.navigation.navigate('tagRegistration', {
               sessionId: sessionId,
               imageGallaryData: imageGallaryData,
-              response: props?.route?.params?.response
+              response: props?.route?.params?.response,
             })}
             disabled={!allImagesSet}
           />

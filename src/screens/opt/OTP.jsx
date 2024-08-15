@@ -27,20 +27,21 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: await getCache('session')
       })
-      console.log(response, 'validate otp response')
 
       if (
         response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
       ) {
         navigation.navigate('imageGallary', {
           sessionId: await getCache('session'),
-          response: response?.data?.validateOtpResp
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId
         })
       } else {
         navigation.navigate('customerRegistration', {
           otpData: response?.data,
           sessionId: await getCache('session'),
-          response: response?.data?.validateOtpResp
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId
         })
       }
     } catch (error) {

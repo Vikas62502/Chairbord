@@ -15,14 +15,12 @@ import CustomInputText from '../../components/common/CustomInputText';
 import { client } from '../../client/Axios';
 
 const CustomerRegistration = (props: any) => {
-  const { otpData } = props.route.params;
-  console.log(otpData?.validateOtpResp?.custDetails?.mobileNo, 'otpData');
+  const { otpData, response, customerId } = props.route.params;
+  console.log(otpData, response, customerId, 'response');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
-  const [validateOtpResp] = useState(props.route.params);
-  const [mobile, setMobile] = useState(validateOtpResp?.custDetails?.mobileNo);
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [documentType, setDocumentType] = useState({
@@ -69,12 +67,13 @@ const CustomerRegistration = (props: any) => {
   }, [sessionId]);
 
   const cusRegApi = async () => {
+    const mobile = response?.custDetails.mobileNo;
     setLoading(true);
-    let requestBodyData = {
+    const requestBodyData = {
       sessionId: sessionId,
       custDetails: {
         name: customerFirstName,
-        lastName: customerLastName,
+        lastName: customerLastName || 'NA',
         mobileNo: mobile,
         dob: dateOfBirth,
         doc: [
@@ -90,11 +89,16 @@ const CustomerRegistration = (props: any) => {
       }
     }
 
-    console.log(requestBodyData, 'requestBodyData');
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
       console.log(res, 'res');
-      props.navigation.navigate('imageGallary')
+      props.navigation.navigate('imageGallary',
+        {
+          sessionId: await getCache('session'),
+          response: response,
+          customerId: customerId
+        }
+      )
     } catch (error) {
       console.log(error, 'error')
     } finally {
