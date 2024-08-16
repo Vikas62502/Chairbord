@@ -1,7 +1,6 @@
 import { View, Text, ScrollView, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colorData, npciVehicleClassIDData, commercialOptions, manufacturerData, fuelData, modelsData, typesData } from './staticData'
-import pickImage from '../../helper/pickImage'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -14,11 +13,12 @@ import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 
 const TagRegistration = (props: any) => {
-    console.log(props.route.params?.response, "props")
-    console.log(props.route.params?.sessionId, "sessionId")
+    // console.log(props.route.params?.response, "props")
+    // console.log(props.route.params?.sessionId, "sessionId")
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
     const [isYes, setIsYes] = React.useState(false)
-    console.log(vrnDetails, "vrnDetails")
+    const [chassisNo, setChasisNo] = React.useState<any>("")
+    console.log(vrnDetails, "vrnDetails");
 
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
@@ -110,13 +110,13 @@ const TagRegistration = (props: any) => {
         try {
             const bodyData = JSON.stringify({
                 "regDetails": {
-                    "sessionId": sessionId
+                    "sessionId": props.route.params?.sessionId
                 },
                 "agentId": Number(userData?.user?.id),
                 "masterId": "",
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || "",
-                    "chassis": vrnDetails?.chassisNo || "",
+                    "chassis": chassisNo,
                     "engine": vrnDetails?.engineNo || "",
                     "vehicleManuf": vrnDetails?.vehicleManuf || "",
                     "model": vrnDetails?.model || "",
@@ -152,7 +152,6 @@ const TagRegistration = (props: any) => {
                     "udf5": ""
                 }
             })
-
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
             )
@@ -219,6 +218,11 @@ const TagRegistration = (props: any) => {
                 <CustomInputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo}
                     onChangeText={(text: string) => setVehicleNumber(text)} isEditable={false}
                 />
+                <View style={{ marginTop: "5%" }}>
+                    <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
+                        onChangeText={(text: string) => setChasisNo(text?.toUpperCase())}
+                    />
+                </View>
 
                 {vrnDetails ? (
                     <>
@@ -404,7 +408,6 @@ const TagRegistration = (props: any) => {
                         title={"Submit"}
                         onPress={() => {
                             registerFastagApi()
-                            console.log("Submit pressed")
                         }}
                     />
                 </View>
