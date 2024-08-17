@@ -14,6 +14,7 @@ import SelectField from '../../components/common/SelectField'
 import LinearButton from '../../components/common/LinearButton'
 
 const Step2 = ({
+  registerCompleteData,
   formData,
   formDataHandler,
   handleFileUpload,
@@ -82,7 +83,9 @@ const Step2 = ({
         <CustomInputText
           placeholder="Enter document number"
           value={formData.document_number}
-          onChangeText={(value) => formDataHandler('id_proof_document_number', value)}
+          onChangeText={(value) =>
+            formDataHandler('id_proof_document_number', value)
+          }
         />
       </View>
 
@@ -163,7 +166,7 @@ const Step2 = ({
       </View>
 
       <View style={{ alignSelf: 'center', marginTop: '5%', width: '100%' }}>
-        <LinearButton title={'Submit'} onPress={() => setStep(2)} />
+        <LinearButton title={'Submit'} onPress={() => registerCompleteData()} />
       </View>
     </ScrollView>
   )

@@ -18,6 +18,7 @@ const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
     const [isYes, setIsYes] = React.useState(false)
     const [chassisNo, setChasisNo] = React.useState<any>("")
+    
     console.log(vrnDetails, "vrnDetails");
 
     const [userData, setUserData] = useState<any>()

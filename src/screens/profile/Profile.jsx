@@ -8,20 +8,23 @@ import {
   Pressable,
   Image
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TagOfInput from '../../components/common/TagOfInput'
 import CustomInputText from '../../components/common/CustomInputText'
 import UploadDoc from '../../components/common/UploadDoc'
 import Step2 from './Step2'
 import LinearButton from '../../components/common/LinearButton'
 import { client } from '../../client/Axios'
+import { getCache } from '../../helper/Storage'
 
 const Profile = () => {
   const [step, setStep] = useState(1)
+  const [userData, setUserData] = useState({})
   const [formData, setFormData] = useState({
+    agentId: userData?.user?.id,
     name: '',
-    email_id: '',
-    mobile_number: '',
+    email_id: userData?.user?.email_id,
+    mobile_number: userData?.user?.mobile_number,
     father_name: '',
     mother_name: '',
     contact_person_name: '',
@@ -44,7 +47,7 @@ const Profile = () => {
     profile_pic: null,
     pos_proof_photo: null
   })
-  console.log(formData, 'formData')
+  // console.log(files, 'files')
 
   const formDataHandler = (key, value) => {
     setFormData({ ...formData, [key]: value })
@@ -69,12 +72,21 @@ const Profile = () => {
       //   `${"http://localhost:3000/api/vi/"}/register//agent-complete`,
       //   form
       // )
-      const response = await client.post('/register/agent-complete', form)
+      const response = await client.put('/register/agent-update', form)
       console.log('response:', response)
     } catch (error) {
       console.error('Error creating agent:', error)
     }
   }
+
+  const getUserdata = async () => {
+    const data = await getCache('userData')
+    setUserData(data)
+  }
+
+  useEffect(() => {
+    getUserdata()
+  }, [])
   return (
     <SafeAreaView style={{ flex: 1, padding: '5%' }}>
       <View
@@ -195,6 +207,29 @@ const Profile = () => {
                 />
               )}
             </View>
+
+            <View style={{ marginTop: '5%' }}>
+              <TagOfInput text="Upload profile pic" />
+            </View>
+            <View style={{ height: 150, width: '100%' }}>
+              {files.profile_pic ? (
+                <Pressable
+                  onPress={() => setFiles({ ...files, profile_pic: null })}
+                >
+                  <Image
+                    source={{ uri: files.profile_pic }}
+                    style={{ height: 150, width: '100%' }}
+                  />
+                </Pressable>
+              ) : (
+                <UploadDoc
+                  text="Upload profile picture"
+                  setUploadFile={(file) =>
+                    handleFileUpload('profile_pic', file)
+                  }
+                />
+              )}
+            </View>
             <View
               style={{ alignSelf: 'center', marginTop: '5%', width: '100%' }}
             >
@@ -209,6 +244,7 @@ const Profile = () => {
             formData={formData}
             files={files}
             setFiles={setFiles}
+            registerCompleteData={registerCompleteData}
           />
         )}
       </View>
