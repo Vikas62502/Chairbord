@@ -7,7 +7,7 @@ import SuccessModal from '../../components/SuccessModal'
 import { useNavigation } from '@react-navigation/native'
 import { horizontalScale, verticalScale } from '../../helper/Metrics'
 import CustomInputText from '../../components/common/CustomInputText'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldBig'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
@@ -197,7 +197,7 @@ const TagRegistration = (props: any) => {
 
     return (
         <ScrollView style={{ flex: 1 }}>
-            <OverlayHeader title={"Tag Registration"} navigateTo={() => navigation.goBack()} />
+            <OverlayHeader title={"Tag Registration"} />
             <View style={styles.container}>
                 {loading && (
                     <View style={styles.loaderContainer}>

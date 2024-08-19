@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import InventoryFilterModal from './InventoryFilterModal'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
+import ExcelButton from '../../components/ui/ExcelButton'
 
 const Inventory = () => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
@@ -45,35 +46,12 @@ const Inventory = () => {
 
         <View>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}
           >
             <View>
               <Text style={styles.titleText}>Inventory</Text>
             </View>
-            <Pressable
-            // style={styles.excelButton}
-            // onPress={() => setCreateOrderModal(true)}
-            >
-              <LinearGradient
-                colors={['#02546D', '#142D40']}
-                style={styles.excelButton}
-              >
-                <Text
-                  style={{
-                    fontWeight: '500',
-                    fontSize: 14,
-                    lineHeight: 19,
-                    color: '#FFFFFF'
-                  }}
-                >
-                  Excel
-                </Text>
-                <Image
-                  source={require('../../assets/addIcon.png')}
-                  style={{ marginLeft: '5%' }}
-                />
-              </LinearGradient>
-            </Pressable>
+            <ExcelButton title={"Excel"} style={{justifyContent:'center', padding:10}} />
           </View>
         </View>
         <View style={{ marginTop: '4%' }}>

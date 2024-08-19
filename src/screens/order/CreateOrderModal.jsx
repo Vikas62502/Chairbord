@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import React from 'react'
 import InputText from '../../components/common/InputText'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldBig'
 import { useNavigation } from '@react-navigation/native'
 
 const CreateOrderModal = ({ visible, onClose, onApply }) => {

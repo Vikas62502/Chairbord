@@ -33,16 +33,20 @@ const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   child: {
     width,
+    alignItems:'center',
     justifyContent: 'center'
   },
   text: {
-    fontSize: width * 0.5,
+    fontSize: width * 0.2,
     textAlign: 'center',
-    // color: 'red'
+    justifyContent:'center',
+    color: 'black'
   },
   paginationDot: {
     width: 10, 

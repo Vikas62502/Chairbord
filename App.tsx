@@ -8,7 +8,6 @@ function App({ }): React.JSX.Element {
   return (
     <NavigationContainer>
       <StackNavigation />
-      {/* isjxbgijxbgjixbijgbxijgb */}
     </NavigationContainer >
   );
 }

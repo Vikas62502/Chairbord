@@ -10,11 +10,8 @@ const UploadDoc = ({ text, setUploadFile }) => {
   }
 
   return (
-    <LinearGradient
-      colors={['#02546D', '#142D40']}
-      start={{ x: 0.0, y: 1.0 }}
-      end={{ x: 1.0, y: 1.0 }}
-      style={styles.gradient}
+    <View
+      style={styles.container}
     >
       <TouchableOpacity style={styles.buttonContainer} onPress={pickImageFile}>
         <View style={styles.content}>
@@ -22,16 +19,20 @@ const UploadDoc = ({ text, setUploadFile }) => {
           <Text style={styles.text}>{text}</Text>
         </View>
       </TouchableOpacity>
-    </LinearGradient>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  gradient: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20
+    borderRadius: 20,
+    borderBlockColor: 'black',
+    height:100,
+    width:'auto',
+    borderWidth:1
   },
   buttonContainer: {
     flex: 1,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: '400',
-    color: '#02546D',
+    color: 'black',
     textAlign: 'center'
   }
 })

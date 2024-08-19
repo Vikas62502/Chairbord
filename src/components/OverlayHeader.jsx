@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 
-const OverlayHeader = ({ title, navigateTo, showBackButton = true }) => {
+const OverlayHeader = ({ title, navigateTo='dashboard', showBackButton = true }) => {
   const navigation = useNavigation()
   return (
     <View style={styles.container}>

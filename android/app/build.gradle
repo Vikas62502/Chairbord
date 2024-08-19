@@ -87,14 +87,14 @@ android {
             if (project.hasProperty('my-release-key.keystore')) {
                 storeFile file('my-release-key.keystore')
                 storePassword 'chairbord'
-                keyAlias 'my-key-alias'
+                keyAlias 'your_key_alias'
                 keyPassword 'chairbord'
             }
         }
         debug {
             storeFile file('my-release-key.keystore')
             storePassword 'chairbord'
-            keyAlias 'my-key-alias'
+            keyAlias 'your_key_alias'
             keyPassword 'chairbord'
         }
     }

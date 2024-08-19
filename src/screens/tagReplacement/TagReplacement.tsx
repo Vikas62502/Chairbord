@@ -5,7 +5,7 @@ import { setCache } from '../../helper/Storage'
 import OverlayHeader from '../../components/OverlayHeader'
 import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldBig'
 
 const TagReplacement = (props: any) => {
     const navigation = useNavigation()
@@ -75,7 +75,7 @@ const TagReplacement = (props: any) => {
     ]
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <OverlayHeader title={"Tag Replacement"} showBackButton={true} navigateTo={() => navigation.goBack()} />
+            <OverlayHeader title={"Tag Replacement"} />
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
 
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
         color: "#000000",
-        marginTop: "5%",
-        marginBottom: "3%"
+        marginBottom: "4%"
+
     },
     errorText: {
         padding: "2%",

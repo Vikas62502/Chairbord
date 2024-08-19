@@ -29,16 +29,16 @@ const DashboardCards = ({ title, subTitle, icon, router }) => {
             position: 'absolute',
             right: -10,
             top: -11,
-            backgroundColor: '#4C6470',
-            height: 61,
+            backgroundColor: '#02546D',
+            height: 60,
             borderRadius: 20,
             width: 50
           }}
         >
           <Image
-            style={{ alignItems: 'center', left: 10, top: 11 }}
+            style={{ alignItems: 'center',justifyContent:'center', left: 10, top: 11 }}
             source={icon}
-          />
+            />
         </View>
       </View>
     </Pressable>
@@ -49,6 +49,7 @@ const Home = () => {
   const [activeTime, setActiveTime] = useState('Today')
   return (
     <ScrollView style={styles.container}>
+      
       <View style={{ height: '20%', width: '100%', marginBottom: '10%' }}>
         <SwipperComponent />
       </View>
@@ -64,22 +65,23 @@ const Home = () => {
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-        <DashboardCards
+        
+      <DashboardCards
           title={'BAJAJ'}
           subTitle={'Issuance'}
           icon={require('../../assets/dashboard/customerOnBoard.png')}
-          router={'customerRegistration'}
+          router={'bajajissuance'} 
         />
         <DashboardCards
-          title={'Tag'}
-          subTitle={'Replacement'}
+          title={'SBI'}
+          subTitle={'Issuance'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
-          router={'tagReplacement'}
+          router={'sbiissuance'}
         />
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}
-          icon={require('../../assets/dashboard/tagReplacement.png')}
+          icon={require('../../assets/dashboard/tagRegistration.png')}
           router={'mobileVerification'}
         />
         <DashboardCards
@@ -98,14 +100,14 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderRadius: 25,
+          borderRadius: 50,
           backgroundColor: 'white',
           marginTop: '5%',
           marginHorizontal: 10,
-          padding: 3
+          padding: 4
         }}
       >
-        {['Today', 'This Week', 'This Month'].map((data, index) => (
+        {['Today', 'Week', 'Month'].map((data, index) => (
           <Pressable
             key={index}
             style={styles.timeFields}
@@ -134,23 +136,23 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
-    backgroundColor: 'light-blue'
+    padding: 10,
+    backgroundColor: 'light-blue',
   },
   dashboardCard: {
     borderWidth: 1,
     borderColor: '#000000',
     width: 180,
-    height: 61,
+    height: 60,
     borderRadius: 20,
-    margin: 10,
+  margin: 5,
     padding: 10
   },
   dashbordCardText: {
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 19,
-    color: '#4C6470'
+    color: 'black'
   },
   divider: {
     width: '60%',
@@ -169,14 +171,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontWeight: '600',
-    padding: 15
+    margin: 15,
   },
   activeTimeText: {
     color: 'white',
     paddingHorizontal: '15%',
-    borderRadius: 25,
+    borderRadius: 50,
     fontFamily: 'Proxima Nova'
   }
 })
+
 
 export default Home

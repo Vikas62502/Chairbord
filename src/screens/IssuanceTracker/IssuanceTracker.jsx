@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
-import SelectField from '../../components/common/SelectField'
+import SelectFieldSmall from '../../components/common/SelectFieldSmall'
 import { IssuanceTrackerData, bankName } from './IssuanceTrackerData'
 import ExcelButton from '../../components/ui/ExcelButton'
 import IssuanceCards from './IssuanceCards'
@@ -20,10 +20,10 @@ const IssuanceTracker = () => {
             alignItems: 'center'
           }}
         >
-          <View style={{ width: '60%' }}>
-            <SelectField title={'Select Bank'} dataToRender={bankName} />
+          <View style={{ width: '65%' ,marginEnd: "5%" }}>
+            <SelectFieldSmall title={'Select Bank'} dataToRender={bankName} />
           </View>
-          <ExcelButton />
+          <ExcelButton title={"Excel"} style={{justifyContent:'center', padding:10}} />
         </View>
 
         <View style={{ marginTop: '5%' }}>

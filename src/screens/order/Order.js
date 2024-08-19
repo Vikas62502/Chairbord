@@ -4,6 +4,7 @@ import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
 import CreateReturnModal from '../return/CreateReturnModal'
+import CreateButton from '../../components/ui/CreateButton'
 
 const orderCardData = [
   {
@@ -103,8 +104,8 @@ const Order = (props) => {
             <View >
               <Text style={styles.titleText}>Order history</Text>
             </View>
-            <ExcelButton title={"Create order"} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
-            <ExcelButton title={"Create return"} onpressOperation={() => setCreateReturnModal(!createReturnModal)} />
+            <CreateButton title={"Create order"} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
+            <CreateButton title={"Create return"} onpressOperation={() => setCreateReturnModal(!createReturnModal)} />
 
           </View>
         </View>

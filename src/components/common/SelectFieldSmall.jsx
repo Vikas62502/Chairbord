@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import React, { useRef, useState } from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
 
-const SelectField = ({ dataToRender, title, selectedValue }) => {
+const SelectFieldSmall = ({ dataToRender, title, selectedValue }) => {
   const dropdownRef = useRef(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggleDropdown = () => {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   dropdownButtonStyle: {
     width: '90%',
-    height: 50,
+    height: 40,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SelectField
+export default SelectFieldSmall

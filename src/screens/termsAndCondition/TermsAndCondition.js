@@ -79,7 +79,7 @@ const TermsAndCondition = () => {
     const navigation = useNavigation()
     return (
         <SafeAreaView style={styles.container}>
-            <OverlayHeader title={"Terms & Conditions"} navigateTo={() => navigation.goBack()} />
+            <OverlayHeader title={"Terms & Conditions"}  />
             <ScrollView style={{ padding: "5%", marginBottom: "10%" }}>
                 {termsAndConditionData.map((data, index) => (
                     <Accordions title={data.title} content={data.content} key={index} />
