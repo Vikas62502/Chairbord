@@ -53,11 +53,9 @@ const SignIn = () => {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
           text: 'OK',
-          onPress: () => navigation?.navigate('drawer'),
           style: 'cancel'
         }
       ])
-      console.log(error, 'error')
     } finally {
       setLoading(false)
     }
@@ -79,7 +77,7 @@ const SignIn = () => {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
           text: 'OK',
-          onPress: () => navigation?.navigate('signIn'),
+          onPress: () => navigation?.navigate('SignIn'),
           style: 'cancel'
         }
       ])

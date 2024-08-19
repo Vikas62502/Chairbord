@@ -8,7 +8,6 @@ import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
   const { sessionId, customerId } = props?.route?.params;
-  console.log(sessionId, customerId, 'sessionId, customerId');
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 

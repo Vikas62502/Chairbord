@@ -12,6 +12,7 @@ import CustomInputText from '../../components/common/CustomInputText'
 import UploadDoc from '../../components/common/UploadDoc'
 import SelectField from '../../components/common/SelectField'
 import LinearButton from '../../components/common/LinearButton'
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const Step2 = ({
   registerCompleteData,
@@ -19,10 +20,29 @@ const Step2 = ({
   formDataHandler,
   handleFileUpload,
   files,
-  setFormData,
   setFiles
 }) => {
-  console.log(formData, 'formData')
+  const pickImage = (key) => {
+    const options = {
+      mediaType: 'photo',
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {
+          uri: response.assets[0].uri,
+          name: response.assets[0].fileName,
+          type: response.assets[0].type,
+        };
+        handleFileUpload(key, source);
+      }
+    });
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TagOfInput text="Address Detail" />
@@ -82,7 +102,7 @@ const Step2 = ({
       <View style={{ marginTop: '5%' }}>
         <CustomInputText
           placeholder="Enter document number"
-          value={formData.document_number}
+          value={formData.id_proof_document_number}
           onChangeText={(value) =>
             formDataHandler('id_proof_document_number', value)
           }
@@ -106,16 +126,14 @@ const Step2 = ({
               onPress={() => setFiles({ ...files, id_proof_front_photo: null })}
             >
               <Image
-                source={{ uri: files.id_proof_front_photo }}
+                source={{ uri: files.id_proof_front_photo.uri }}
                 style={{ height: 150, width: '100%' }}
               />
             </Pressable>
           ) : (
             <UploadDoc
               text="Upload ID proof photo (front)"
-              setUploadFile={(file) =>
-                handleFileUpload('id_proof_front_photo', file)
-              }
+              setUploadFile={() => pickImage('id_proof_front_photo')}
             />
           )}
         </View>
@@ -125,16 +143,14 @@ const Step2 = ({
               onPress={() => setFiles({ ...files, id_proof_back_photo: null })}
             >
               <Image
-                source={{ uri: files.id_proof_back_photo }}
+                source={{ uri: files.id_proof_back_photo.uri }}
                 style={{ height: 150, width: '100%' }}
               />
             </Pressable>
           ) : (
             <UploadDoc
               text="Upload ID proof photo (back)"
-              setUploadFile={(file) =>
-                handleFileUpload('id_proof_back_photo', file)
-              }
+              setUploadFile={() => pickImage('id_proof_back_photo')}
             />
           )}
         </View>

@@ -6,7 +6,9 @@ import {
   ScrollView,
   SafeAreaView,
   Pressable,
-  Image
+  Image,
+  ActivityIndicator,
+  Alert
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import TagOfInput from '../../components/common/TagOfInput'
@@ -16,15 +18,17 @@ import Step2 from './Step2'
 import LinearButton from '../../components/common/LinearButton'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
+import { launchImageLibrary } from 'react-native-image-picker'
 
-const Profile = () => {
+const Profile = (props) => {
   const [step, setStep] = useState(1)
   const [userData, setUserData] = useState({})
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    agentId: userData?.user?.id,
+    agentId: userData?.id,
     name: '',
-    email_id: userData?.user?.email_id,
-    mobile_number: userData?.user?.mobile_number,
+    email_id: userData?.email_id || '',
+    mobile_number: userData?.mobile_number || '',
     father_name: '',
     mother_name: '',
     contact_person_name: '',
@@ -39,6 +43,8 @@ const Profile = () => {
     id_proof_document_type: '',
     id_proof_document_number: '',
     pos_number: ''
+    // address_document_type :"",
+    // address_document_number :"",
   })
   const [files, setFiles] = useState({
     pan_card_photo: null,
@@ -47,16 +53,38 @@ const Profile = () => {
     profile_pic: null,
     pos_proof_photo: null
   })
-  // console.log(files, 'files')
 
   const formDataHandler = (key, value) => {
     setFormData({ ...formData, [key]: value })
   }
+
   const handleFileUpload = (key, file) => {
     setFiles({ ...files, [key]: file })
   }
 
+  const pickImage = (key) => {
+    const options = {
+      mediaType: 'photo'
+    }
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker')
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error)
+      } else {
+        const source = {
+          uri: response.assets[0].uri,
+          name: response.assets[0].fileName,
+          type: response.assets[0].type
+        }
+        handleFileUpload(key, source)
+      }
+    })
+  }
+
   const registerCompleteData = async () => {
+    setLoading(true)
     const form = new FormData()
 
     for (const key in formData) {
@@ -64,29 +92,51 @@ const Profile = () => {
     }
 
     for (const key in files) {
-      form.append(key, files[key])
+      if (files[key]) {
+        form.append(key, {
+          uri: files[key].uri,
+          name: files[key].name,
+          type: files[key].type
+        })
+      }
     }
 
     try {
-      // const response = await axios.post(
-      //   `${"http://localhost:3000/api/vi/"}/register//agent-complete`,
-      //   form
-      // )
-      const response = await client.put('/register/agent-update', form)
+      const response = await client.post('/register/agent-complete', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      Alert.alert('Success', 'Profile updated successfully', [
+        { text: 'OK', onPress: () => props.navigation?.navigate('Home') }
+      ])
       console.log('response:', response)
     } catch (error) {
+      Alert.alert('Error', 'Error creating agent', [{ text: 'OK' }])
       console.error('Error creating agent:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
   const getUserdata = async () => {
     const data = await getCache('userData')
-    setUserData(data)
+    setUserData(data?.user)
   }
 
   useEffect(() => {
+    setFormData((formData) => ({
+      ...formData,
+      agentId: userData?.id,
+      email_id: userData?.email_id,
+      mobile_number: userData?.mobile_number
+    }))
+  }, [userData])
+
+  useEffect(() => {
     getUserdata()
-  }, [])
+  }, [userData?.user?.id])
+
   return (
     <SafeAreaView style={{ flex: 1, padding: '5%' }}>
       <View
@@ -96,6 +146,11 @@ const Profile = () => {
           marginBottom: '5%'
         }}
       >
+        {loading && (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <View style={styles.tabContainer}>
           <TouchableOpacity
             style={[styles.tabSection, step === 1 && styles.activeState]}
@@ -145,7 +200,6 @@ const Profile = () => {
             </View>
 
             <TagOfInput text="ID Proof" />
-            {/* <View style={{ marginTop: '5%' }}> */}
             <CustomInputText
               placeholder="Enter PAN card number"
               value={formData.pan_card_number}
@@ -163,16 +217,14 @@ const Profile = () => {
                   onPress={() => setFiles({ ...files, pan_card_photo: null })}
                 >
                   <Image
-                    source={{ uri: files.pan_card_photo }}
+                    source={{ uri: files.pan_card_photo.uri }}
                     style={{ height: 150, width: '100%' }}
                   />
                 </Pressable>
               ) : (
                 <UploadDoc
                   text="Upload PAN card photo here"
-                  setUploadFile={(file) =>
-                    handleFileUpload('pan_card_photo', file)
-                  }
+                  setUploadFile={() => pickImage('pan_card_photo')}
                 />
               )}
             </View>
@@ -194,16 +246,14 @@ const Profile = () => {
                   onPress={() => setFiles({ ...files, pos_proof_photo: null })}
                 >
                   <Image
-                    source={{ uri: files.pos_proof_photo }}
+                    source={{ uri: files.pos_proof_photo.uri }}
                     style={{ height: 150, width: '100%' }}
                   />
                 </Pressable>
               ) : (
                 <UploadDoc
                   text="Upload POS proof photo here"
-                  setUploadFile={(file) =>
-                    handleFileUpload('pos_proof_photo', file)
-                  }
+                  setUploadFile={() => pickImage('pos_proof_photo')}
                 />
               )}
             </View>
@@ -217,16 +267,14 @@ const Profile = () => {
                   onPress={() => setFiles({ ...files, profile_pic: null })}
                 >
                   <Image
-                    source={{ uri: files.profile_pic }}
+                    source={{ uri: files.profile_pic.uri }}
                     style={{ height: 150, width: '100%' }}
                   />
                 </Pressable>
               ) : (
                 <UploadDoc
                   text="Upload profile picture"
-                  setUploadFile={(file) =>
-                    handleFileUpload('profile_pic', file)
-                  }
+                  setUploadFile={() => pickImage('profile_pic')}
                 />
               )}
             </View>
@@ -258,7 +306,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    width: '90 %',
+    width: '90%',
     marginTop: 20
   },
   tabSection: {
