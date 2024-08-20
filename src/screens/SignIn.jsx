@@ -69,10 +69,11 @@ const SignIn = () => {
 
     try {
       let response = await client.post('/login/agent-mobile', bodyContent)
+      console.log(response);
       setShowOtpField(true)
-      await setCache('userData', response?.data)
-      await setCache('token', response?.data?.token)
-      navigation.navigate('drawer')
+      // await setCache('userData', response?.data)
+      // await setCache('token', response?.data?.token)
+      // navigation.navigate('drawer')
     } catch (error) {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
@@ -209,7 +210,10 @@ const SignIn = () => {
                   />
                 </View>
 
-                {showOtpField && <VerifyOTP />}
+                {showOtpField &&  <VerifyOTP
+                    data={{ phoneNumber: formData.phoneNumber }} // Pass phoneNumber to VerifyOTP
+                    setShowOtpField={setShowOtpField}
+                  />}
               </View>
             )}
             {!showOtpField && (
