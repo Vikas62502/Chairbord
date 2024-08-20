@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import InputText from '../../components/common/InputText'
 
 const VerifyOTP = ({ data, setShowOtpField }) => {
+  // console.log(data), "dataaaaaaaa";
   const navigation = useNavigation()
   let sixStringArray = ['', '', '', '', '', '']
 
@@ -26,13 +27,14 @@ const VerifyOTP = ({ data, setShowOtpField }) => {
   const verifyOtpApi = async () => {
     setLoading(true)
 
-    let bodyContent = JSON.stringify({
-      ...data,
+    const bodyContent = JSON.stringify({
+      phoneNumber: data.phoneNumber,
       otp: otp.join('')
-    })
+    });
 
+    // console.log(bodyContent);
     try {
-      let response = await client.post('/register/agent-otp', bodyContent)
+      let response = await client.post('/login/agent-otp', bodyContent)
       setShowGeneratePassword(true)
       setUserId(response?.data?.newUserId)
     } catch (error) {
