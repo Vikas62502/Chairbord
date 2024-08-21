@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: width * 0.9,
-    height: '100%',
+    height: '90%',
     resizeMode: 'stretch'
   },
   paginationDot: {

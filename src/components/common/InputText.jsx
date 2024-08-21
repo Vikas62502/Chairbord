@@ -12,7 +12,7 @@ const InputText = ({
   editable = true
 }) => {
   return (
-    <View style={{ marginTop: '5%', alignItems: 'center' }}>
+    <View style={{  alignItems: 'center' }}>
       <TextInput
         style={[styles.textInput, inputStyle]}
         value={value}
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
     borderColor: '#263238',
     borderWidth: 1,
     color: '#000000',
-    width: '90%',
+    width: '100%',
     fontSize: 16,
-    borderRadius: 20,
+    borderRadius: 20, 
     height: 60,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     backgroundColor: '#F3F3F3'
   }
 })

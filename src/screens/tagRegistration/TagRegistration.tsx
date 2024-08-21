@@ -385,12 +385,11 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     label: {
-        fontWeight: '600',
+        fontWeight: '400',
         fontSize: 16,
         lineHeight: 19,
         color: "#000000",
-        marginTop: "5%",
-        marginBottom: "3%"
+        marginBottom: "4%"
     },
     dataDetailContainer: {
         borderWidth: 1,
