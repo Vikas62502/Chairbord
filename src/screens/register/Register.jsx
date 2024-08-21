@@ -4,9 +4,9 @@ import InputText from '../../components/common/InputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import OverlayHeader from '../../components/OverlayHeader'
-import VerifyOTP from '../opt/VerifyOTP'
 import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
+import RegisterVerifyOtp from '../opt/RegisterVerifyOtp'
 
 const Register = () => {
   const [showOtpField, setShowOtpField] = useState(false)
@@ -83,7 +83,10 @@ const Register = () => {
           editable={!showOtpField}
         />
         {showOtpField ? (
-          <VerifyOTP data={formData} setShowOtpField={setShowOtpField} />
+          <RegisterVerifyOtp
+            data={formData}
+            setShowOtpField={setShowOtpField}
+          />
         ) : (
           <View style={styles.getOtpButton}>
             <SecondaryButton title={'Get OTP'} onPress={sendOtpRequest} />

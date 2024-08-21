@@ -6,9 +6,9 @@ import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
 import { useNavigation } from '@react-navigation/native'
 import InputText from '../../components/common/InputText'
+import { setCache } from '../../helper/Storage'
 
 const VerifyOTP = ({ data, setShowOtpField }) => {
-  // console.log(data), "dataaaaaaaa";
   const navigation = useNavigation()
   let sixStringArray = ['', '', '', '', '', '']
 
@@ -30,13 +30,14 @@ const VerifyOTP = ({ data, setShowOtpField }) => {
     const bodyContent = JSON.stringify({
       phoneNumber: data.phoneNumber,
       otp: otp.join('')
-    });
+    })
 
-    // console.log(bodyContent);
+    console.log(bodyContent, 'bodycontent')
     try {
       let response = await client.post('/login/agent-otp', bodyContent)
-      setShowGeneratePassword(true)
-      setUserId(response?.data?.newUserId)
+      await setCache('token', response?.data?.token)
+      await setCache('userData', response?.data)
+      navigation.navigate('drawer')
     } catch (error) {
       Alert.alert('Something went wrong')
       console.log(error, 'error')

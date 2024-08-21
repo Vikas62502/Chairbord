@@ -5,7 +5,8 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { getCache } from '../../helper/Storage';
 import OverlayHeader from '../../components/OverlayHeader';
@@ -91,16 +92,41 @@ const CustomerRegistration = (props: any) => {
 
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
-      console.log(res, 'res');
-      props.navigation.navigate('imageGallary',
-        {
+      if (res.status === 203) {
+        Alert.alert(
+          res?.data?.error?.errorDesc || 'Something went wrong', // Title/Message
+          '', // You can add a message here if you want. If not, keep it as an empty string.
+          [
+            {
+              text: 'OK',
+              onPress: () => setLoading(false) // Action for the 'OK' button
+            }
+          ]
+        );
+
+      } else {
+        // Navigate to the next screen if everything is fine
+        props.navigation.navigate('imageGallary', {
           sessionId: await getCache('session'),
           response: response,
           customerId: customerId
-        }
-      )
-    } catch (error) {
-      console.log(error, 'error')
+        });
+      }
+
+      // console.log(res, 'wallet creation log');
+      // props.navigation.navigate('imageGallary',
+      //   {
+      //     sessionId: await getCache('session'),
+      //     response: response,
+      //     customerId: customerId
+      //   }
+      // )
+    } catch (error: any) {
+      Alert.alert(error?.error?.response?.msg || error?.data?.response?.msg || 'Something went wrong');
+      console.log('--------------------------------------------------------------------------------')
+      console.error(`[customer reg] [${JSON.stringify(error)}]`)
+      // console.log(error?.error?.response?.msg, 'wallet creation error')
+      // console.log(error?.data?.response?.msg, 'wallet creation error')
     } finally {
       setLoading(false);
     }

@@ -14,6 +14,7 @@ import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileMod
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
+    console.log(custDetails, "custdetail")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(false)
@@ -101,7 +102,7 @@ const TagRegistration = (props: any) => {
 
     const registerFastagApi = async () => {
         setLoading(true)
-        const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
+        const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
         try {
             const bodyData = JSON.stringify({
                 "regDetails": {
@@ -179,7 +180,7 @@ const TagRegistration = (props: any) => {
 
     const getTheVehicleModel = async (manufacturer: any) => {
         setVehicleManufacturer(manufacturer?.title)
-        const response: any = await getVehicleModelList(sessionId, manufacturer?.title)
+        const response: any = await getVehicleModelList(sessionId, manufacturer?.title || vrnDetails?.vehicleManuf)
         setVehicleModel(response.data.vehicleModelList)
     }
 
