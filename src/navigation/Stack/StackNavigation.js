@@ -25,6 +25,7 @@ import ImageCollection from '../../screens/tagRegistration/ImageCollection';
 import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 import TagReplacementForm from '../../screens/tagReplacement/TagReplacementForm';
+import RegisterVerifyOtp from '../../screens/opt/RegisterVerifyOtp';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -107,6 +108,9 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="imageGallary" component={ImageCollection} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="registerVerifyOtp" component={RegisterVerifyOtp} options={{
                 headerShown: false
             }} />
         </Stack.Navigator>

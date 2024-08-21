@@ -1,9 +1,8 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
-const SecondaryButton = ({ onPress, title, disabled }) => {
+const SecondaryButton = ({ onPress, title, disabled = false }) => {
   const buttonContainerStyle = disabled
     ? styles.disableAppButtonContainer
     : styles.appButtonContainer

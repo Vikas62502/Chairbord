@@ -4,13 +4,14 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native'
-import dashboardCardData from './dashboardCardData'
 import React, { useState } from 'react'
 import SwipperComponent from './SwipperComponent'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
+const { width, height } = Dimensions.get('window')
 
 const DashboardCards = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
@@ -49,8 +50,7 @@ const Home = () => {
   const [activeTime, setActiveTime] = useState('Today')
   return (
     <ScrollView style={styles.container}>
-      
-      <View style={{ height: '20%', width: '100%', marginBottom: '10%' }}>
+      <View style={styles.swipperContainer}>
         <SwipperComponent />
       </View>
       <View
@@ -67,6 +67,7 @@ const Home = () => {
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         
       <DashboardCards
+        {/* <DashboardCards
           title={'BAJAJ'}
           subTitle={'Issuance'}
           icon={require('../../assets/dashboard/customerOnBoard.png')}
@@ -78,6 +79,8 @@ const Home = () => {
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'sbiissuance'}
         />
+          router={'tagReplacement'}
+        /> */}
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}
@@ -138,6 +141,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: 'light-blue',
+  },
+  swipperContainer: {
+    height: height * 0.3,
+    padding: '5%',
+    marginBottom: '5%'
   },
   dashboardCard: {
     borderWidth: 1,
