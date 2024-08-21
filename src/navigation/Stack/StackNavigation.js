@@ -93,8 +93,6 @@ const StackNavigation = () => {
             <Stack.Screen name="profileAndMasterInfo" component={ProfileAndMasterInfo} options={{
                 headerShown: false
             }} />
-
-
             <Stack.Screen name="order" component={Order} options={{
                 headerShown: false
             }} />
