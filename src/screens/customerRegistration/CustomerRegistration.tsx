@@ -74,7 +74,7 @@ const CustomerRegistration = (props: any) => {
       sessionId: sessionId,
       custDetails: {
         name: customerFirstName,
-        lastName: customerLastName || 'NA',
+        lastName: customerLastName || '',
         mobileNo: mobile,
         dob: dateOfBirth,
         doc: [
@@ -92,6 +92,7 @@ const CustomerRegistration = (props: any) => {
 
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
+      console.log(`[request error] [${JSON.stringify(res)}]`)
       if (res.status === 203) {
         Alert.alert(
           res?.data?.error?.errorDesc || 'Something went wrong', // Title/Message
@@ -109,7 +110,8 @@ const CustomerRegistration = (props: any) => {
         props.navigation.navigate('imageGallary', {
           sessionId: await getCache('session'),
           response: response,
-          customerId: customerId
+          customerId: customerId,
+          CusRegData: res
         });
       }
 

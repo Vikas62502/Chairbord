@@ -28,6 +28,8 @@ const OTP = (props) => {
         sessionId: await getCache('session')
       })
 
+      console.log(response, 'otp response')
+
       if (
         response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
       ) {

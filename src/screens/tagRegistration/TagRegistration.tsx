@@ -14,7 +14,8 @@ import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileMod
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
-    console.log(custDetails, "custdetail")
+    const { CustomerRegData } = props.route.params;
+    console.log(CustomerRegData, " tag registration CusRegData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(false)
@@ -92,11 +93,11 @@ const TagRegistration = (props: any) => {
     const customerDetailsData = [
         {
             title: "Name",
-            value: `: ${custDetails?.name}`
+            value: `: ${custDetails?.name || CustomerRegData?.name}`
         },
         {
             title: "Mobile Number",
-            value: `: ${custDetails?.mobileNo}`
+            value: `: ${custDetails?.mobileNo || CustomerRegData?.mobileNo}`
         },
     ]
 
@@ -110,7 +111,7 @@ const TagRegistration = (props: any) => {
                 },
                 "agentId": Number(userData?.user?.id),
                 "masterId": "",
-                "agentName": userData?.user?.name || "",
+                "agentName": userData?.user?.name || CustomerRegData?.name || "",
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || "",
                     "chassis": vrnDetails?.chassisNo || chassisNo,
