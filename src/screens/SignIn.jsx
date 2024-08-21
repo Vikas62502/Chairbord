@@ -155,7 +155,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
-                  placeholder={'Phone Number or email'}
+                  placeholder={'Enter your Email'}
                   secure={false}
                   onChangeText={(email) =>
                     setFormData({ ...formData, email: email.toLowerCase() })

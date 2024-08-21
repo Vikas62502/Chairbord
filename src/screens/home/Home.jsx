@@ -66,8 +66,7 @@ const Home = () => {
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         
-      <DashboardCards
-        {/* <DashboardCards
+         {/* <DashboardCards
           title={'BAJAJ'}
           subTitle={'Issuance'}
           icon={require('../../assets/dashboard/customerOnBoard.png')}
@@ -78,9 +77,8 @@ const Home = () => {
           subTitle={'Issuance'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'sbiissuance'}
-        />
-          router={'tagReplacement'}
         /> */}
+
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}
