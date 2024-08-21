@@ -88,7 +88,6 @@ const Mobileverification = (props: any) => {
       <OverlayHeader
         title={'Mobile Verification'}
         showBackButton={true}
-        navigateTo={() => props.navigation.goBack()}
       />
       <View style={styles.container}>
         {loading && (
@@ -134,11 +133,11 @@ const Mobileverification = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: '5%'
+    // padding: '0%'
   },
   errorText: {
-    padding: '2%',
-    paddingHorizontal: '4%',
+    padding: '4%',
+    paddingHorizontal: '8%',
     color: '#FF0000'
   },
   loaderContainer: {

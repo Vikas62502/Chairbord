@@ -33,9 +33,9 @@ export default InputText
 const styles = StyleSheet.create({
   textInput: {
     borderColor: '#263238',
-    borderWidth: 2,
+    borderWidth: 1,
     color: '#000000',
-    width: '80%',
+    width: '90%',
     fontSize: 16,
     borderRadius: 20,
     height: 60,

@@ -15,8 +15,8 @@ const ExcelButton = ({ title, onpressOperation }) => {
         >
           <Text style={styles.excelButtonText}>{title}</Text>
           <Image
-            source={require('../../assets/addIcon.png')}
-            // style={{ marginLeft: '5%' }}
+            source={require('../../assets/downloadIcon.png')}
+            style={{ height:20 }}
           />
         </LinearGradient>
       </Pressable>
@@ -28,17 +28,22 @@ const styles = StyleSheet.create({
   excelButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+  width:110,
+  height: 40,
     color: 'white',
-    borderRadius: 12,
-    paddingHorizontal: '3%'
+    borderRadius: 50,
+    paddingHorizontal: '5%'
   },
   excelButtonText: {
     fontWeight: '500',
-    fontSize: 12,
-    lineHeight: 14,
+    fontSize: 16,
+    lineHeight: 16,
     color: '#FFFFFF',
-    paddingVertical: '3%'
+    // marginHorizontal:50,
+    paddingVertical: '5%',
+    justifyContent:'center',
+    alignItems:'center'
   }
 })
 

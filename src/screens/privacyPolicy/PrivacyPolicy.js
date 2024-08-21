@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
     const navigation = useNavigation()
     return (
         <SafeAreaView style={styles.container}>
-            <OverlayHeader title={"Privacy Policy"} navigateTo={() => navigation.goBack()} />
+            <OverlayHeader title={"Privacy Policy"}  />
             <ScrollView style={{ padding: "5%", marginBottom: "10%" }}>
                 {privacyPolicyData.map((data, index) => (
                     <Accordions title={data.title} content={data.content} key={index} />

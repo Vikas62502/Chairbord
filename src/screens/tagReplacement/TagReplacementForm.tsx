@@ -14,7 +14,7 @@ import { getCache } from '../../helper/Storage'
 import OverlayHeader from '../../components/OverlayHeader'
 import CustomerDetailsCard from '../../components/CustomerDetailsCard'
 import InputText from '../../components/common/InputText'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldBig'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
 

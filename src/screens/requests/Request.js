@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, Image, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import RequestCard from './RequestCard'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldSmall'
 import RequestModal from './RequestModal'
 import RequestFilter from './RequestFilter'
+import ExcelButton from '../../components/ui/ExcelButton'
 
 const requestCardData = [
     {
@@ -87,14 +88,11 @@ const Request = () => {
                 <View style={styles.divider}></View>
 
                 <View >
-                    <View style={{ flexDirection: "row" }}>
-                        <View style={{ maxWidth: "70%", marginEnd: "5%" }}>
+                    <View style={{ flexDirection: "row", alignItems:'center'  }}>
+                        <View style={{ maxWidth: "65%", marginEnd: "5%" }}>
                             <SelectField dataToRender={tagSerialNumber} title={"Select request type"} />
                         </View>
-                        <View style={styles.excelButton}>
-                            <Text style={{ fontWeight: "500", fontSize: 14, lineHeight: 19, color: "#FFFFFF" }}>Excel</Text>
-                            <Image source={require("../../assets/requestScreen/downloadIcon.png")} style={{ marginLeft: "3%" }} />
-                        </View>
+                        <ExcelButton title={"Excel"} style={{justifyContent:'center', padding:10}} />
                     </View>
                 </View>
 

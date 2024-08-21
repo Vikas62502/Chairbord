@@ -10,7 +10,7 @@ import React from 'react'
 import TagOfInput from '../../components/common/TagOfInput'
 import CustomInputText from '../../components/common/CustomInputText'
 import UploadDoc from '../../components/common/UploadDoc'
-import SelectField from '../../components/common/SelectField'
+import SelectField from '../../components/common/SelectFieldBig'
 import LinearButton from '../../components/common/LinearButton'
 import {launchImageLibrary} from 'react-native-image-picker';
 

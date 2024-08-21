@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { getCache } from '../../helper/Storage';
 import OverlayHeader from '../../components/OverlayHeader';
-import SelectField from '../../components/common/SelectField';
+import SelectField from '../../components/common/SelectFieldBig';
 import PrimaryBtn from '../../components/common/PrimaryBtn';
 import CustomInputText from '../../components/common/CustomInputText';
 import { client } from '../../client/Axios';

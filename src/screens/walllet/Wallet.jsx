@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   activeTag: {
-    backgroundColor: '#263238'
+    backgroundColor: '#02546D'
   }
 })
 
