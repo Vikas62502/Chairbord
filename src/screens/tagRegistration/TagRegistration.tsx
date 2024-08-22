@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colorData, npciVehicleClassIDData, commercialOptions, fuelData } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
@@ -34,6 +34,8 @@ const TagRegistration = (props: any) => {
     const [npciIdData, setNpciIdData] = useState("4")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
+
+    console.log(vehicleModel, "vehicleModel")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -175,36 +177,27 @@ const TagRegistration = (props: any) => {
         setUserData(userData)
     }
     const getMakerIfVahanFails = async () => {
-        const response: any = await getVehicleMakerList(sessionId)
-        setListOfMakers(response?.data?.vehicleMakerList)
+        console.log('getMakerIfVahanFails')
+        const response: any = await getVehicleMakerList(props.route.params?.sessionId)
+        console.log(response, 'maker list')
+        setListOfMakers(response?.vehicleMakerList)
     }
 
     const getTheVehicleModel = async (manufacturer: any) => {
+        console.log('getTheVehicleModel', manufacturer)
         setVehicleManufacturer(manufacturer?.title)
-        const response: any = await getVehicleModelList(sessionId, manufacturer?.title || vrnDetails?.vehicleManuf)
-        setVehicleModel(response.data.vehicleModelList)
+        const response: any = await getVehicleModelList(props?.route?.params?.sessionId, manufacturer?.title)
+        console.log(response?.vehicleMakerList, 'model list')
+        setVehicleModel(response?.vehicleModelList)
     }
 
     useEffect(() => {
-        if (sessionId && !vrnDetails?.vehicleManuf) {
-            getMakerIfVahanFails();
-        }
-    }, [sessionId, vrnDetails?.vehicleManuf])
+        console.log("vahan failed", props.route.params?.sessionId)
+        getMakerIfVahanFails();
+    }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
     useEffect(() => {
         getUserData()
     }, [])
-
-
-    const handleDateChange = (text: string, field: string) => {
-        let cleaned = text.replace(/[^0-9]/g, '');
-        if (cleaned?.length >= 2) {
-            cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2);
-        }
-        if (cleaned?.length >= 5) {
-            cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5);
-        }
-        setPermitExpiryDate(cleaned);
-    };
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -258,12 +251,14 @@ const TagRegistration = (props: any) => {
 
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Manufacturer"} />
-                        {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 ? <CustomInputText
-                            placeholder={"Vehicle Manufacturer"}
-                            value={vrnDetails?.vehicleManuf}
-                            onChangeText={(text: string) => setVehicleManufacturer(text)}
-                            isEditable={false}
-                        /> : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={getTheVehicleModel} />}
+                        {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 && vrnDetails?.model?.length > 2 ?
+                            <CustomInputText
+                                placeholder={"Vehicle Manufacturer"}
+                                value={vrnDetails?.vehicleManuf}
+                                onChangeText={(text: string) => setVehicleManufacturer(text)}
+                                isEditable={false}
+                            />
+                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={getTheVehicleModel} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
