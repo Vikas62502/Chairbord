@@ -67,19 +67,15 @@ const TopupWallet = () => {
   }, [order]);
 
   const createOrderCashfree = async () => {
-    try {
-      const response = await client.post('/cashfree-payment/create-order', {
-        amount: topupAmount
-      });
-      setOrder({
-        payment_session_id: response.data.payment_session_id,
-        order_id: response.data.order_id,
-        order_expiry_time: response.data.order_expiry_time
-      });
-    } catch (error) {
-      console.error('Error creating order:', error);
-    }
-  };
+    const response = await client.post('/cashfree-payment/create-order', {
+      amount: topupAmount
+    })
+    setOrder({
+      payment_session_id: response.data.payment_session_id,
+      order_id: response.data.order_id,
+      order_expiry_time: response.data.order_expiry_time
+    })
+  }
 
   const topUpApi = async () => {
     setLoading(true);
@@ -132,7 +128,7 @@ const TopupWallet = () => {
       await client.post('/wallet/agent/own-wallet/transactions', {
         amount: topupAmount,
         reason: 'Cashfree Credit'
-      });
+      })
     } catch (e) {
       console.error('Error updating balance:', e);
     }
