@@ -20,7 +20,7 @@ const DrawerHeader = () => {
           onPress={() => navigation.navigate('screen1')}
         >
           <Image source={require('../assets/avatar.png')} />
-          <Text style={styles.profileText}>Alex</Text>
+          <Text style={styles.profileText}>User</Text>
         </TouchableOpacity>
       </View>
       <View>

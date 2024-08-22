@@ -12,7 +12,9 @@ const InputText = ({
   editable = true
 }) => {
   return (
-    <View style={{  alignItems: 'center' }}>
+    <View style={{  alignItems: 'center' ,marginHorizontal:20,
+      marginVertical:10
+    }}>
       <TextInput
         style={[styles.textInput, inputStyle]}
         value={value}

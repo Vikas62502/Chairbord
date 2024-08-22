@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     width: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: '45%',
+    marginHorizontal:20,
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
     width: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: '45%',
+    marginHorizontal:20,
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   linearGradient: {

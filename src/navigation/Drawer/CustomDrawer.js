@@ -7,7 +7,7 @@ import LogoutModal from '../../screens/logout/LogoutModal';
 
 const profileData = [
     {
-        title: "Alex",
+        title: "User",
         icon: require('../../assets/DrawerNavigation/avatar.png'),
         screen: "profileAndMasterInfo",
     }
