@@ -133,7 +133,8 @@ const Mobileverification = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: '0%'
+    padding: '5%',
+    gap:20
   },
   errorText: {
     padding: '4%',

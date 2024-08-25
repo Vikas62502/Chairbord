@@ -11,17 +11,22 @@ const TagReplacement = (props: any) => {
     const navigation = useNavigation()
     const [mobileNumber, setMobileNumber] = React.useState("")
     const [vehicleNumber, setVehicleNumber] = React.useState("")
+    const[DropdownData,setDropdownData]=React.useState("")
     const getDetailsDropdownData = [
         {
+            id: 1,
             title: "By OTP"
         },
         {
+            id: 2,
             title: "By Password"
         },
         {
+            id: 3,
             title: "By Tag Number"
         },
         {
+            id: 4,
             title: "Get new tag"
         },
     ]
@@ -55,24 +60,24 @@ const TagReplacement = (props: any) => {
     //         Alert.alert(response.error ?? '')
     //     }
     // }
-    const data = [
-        {
-            id: 1,
-            title: "By OTP"
-        },
-        {
-            id: 2,
-            title: "By Password"
-        },
-        {
-            id: 3,
-            title: "By Tag Number"
-        },
-        {
-            id: 4,
-            title: "Get new tag"
-        },
-    ]
+    // const data = [
+    //     {
+    //         id: 1,
+    //         title: "By OTP"
+    //     },
+    //     {
+    //         id: 2,
+    //         title: "By Password"
+    //     },
+    //     {
+    //         id: 3,
+    //         title: "By Tag Number"
+    //     },
+    //     {
+    //         id: 4,
+    //         title: "Get new tag"
+    //     },
+    // ]
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Replacement"} />
@@ -80,7 +85,7 @@ const TagReplacement = (props: any) => {
                 <Text style={styles.label}>Get Details By</Text>
 
                 <View style={{ marginBottom: "5%" }}>
-                    <SelectField dataToRender={data} title={"Select"} />
+                    <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
                 </View>
 
                 <CustomInputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />

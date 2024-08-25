@@ -57,15 +57,15 @@ const Home = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          padding: 10,
-          marginBottom: '10%'
+          marginBottom: '10%',
+          marginHorizontal:10,
+          width:'auto'
         }}
       >
-        <Image source={require('../../assets/dashboard/registerTag.png')} />
+        <Image source={require('../../assets/dashboard/registerTag.png')}  />
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-        
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal:5, width:'auto' , justifyContent:'space-between' }
          {/* <DashboardCards
           title={'BAJAJ'}
           subTitle={'Issuance'}
@@ -78,7 +78,6 @@ const Home = () => {
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'sbiissuance'}
         /> */}
-
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}

@@ -43,20 +43,24 @@ const OtpInputText = ({ otp, setOtp }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    width: '80%'
+    width: 'auto',
+    marginHorizontal:10,
   },
   input: {
-    height: 55,
-    width: 50,
+    height: 50,
+    width: 45,
     borderWidth: 1,
     borderRadius: 20,
     textAlign: 'center',
-    fontSize: 32,
+    fontSize: 26,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignContent: 'center',
     fontWeight: '400',
     fontFamily: 'inter',
-    lineHeight: 38,
+    lineHeight: 30,
     color: '#263238'
   }
 })

@@ -105,7 +105,7 @@ const SignIn = () => {
           <View style={{ alignItems: 'center' }}>
             <Text style={styles.heading}>Welcome</Text>
             <Text style={styles.content}>
-              please enter your account details here
+              Please enter your account details here
             </Text>
           </View>
           <View
@@ -155,7 +155,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
-                  placeholder={'Enter your Email'}
+                  placeholder={'Enter email'}
                   secure={false}
                   onChangeText={(email) =>
                     setFormData({ ...formData, email: email.toLowerCase() })
@@ -179,7 +179,7 @@ const SignIn = () => {
                 </Pressable>
                 <View style={{ alignItems: 'center' }}>
                   <SecondaryButton
-                    title={'Login'}
+                    title={'Sign In'}
                     disable={true}
                     onPress={() => loginApi()}
                   />
@@ -221,9 +221,9 @@ const SignIn = () => {
               <View>
                 <DividerWithText />
 
-                <Text style={{ color: '#263238', textAlign: 'center' }}>
+                {/* <Text style={styles.text}>
                   Dont't have an account?
-                </Text>
+                </Text> */}
                 <View style={{ alignItems: 'center' }}>
                   <SecondaryButton
                     title={'Sign Up'}
@@ -240,7 +240,8 @@ const SignIn = () => {
                     >
                       <Text style={styles.link}>Terms of Service</Text>
                     </TouchableOpacity>{' '}
-                    <Text style={styles.termsText}>and</Text>
+
+                    <Text >&</Text>
                     <TouchableOpacity
                       onPress={() =>
                         handleLinkPress('https://example.com/privacy')
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     width: '65%',
-    marginTop: 20
+    marginTop: 10
   },
   verticalDivider: {
     height: '100%',
@@ -275,14 +276,15 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#263238',
-    margin: '5%',
+    marginBottom: '5%',
     textAlign: 'center'
   },
   heading: {
     color: '#000000',
     fontWeight: '600',
     fontSize: 32,
-    lineHeight: 38
+    lineHeight: 38,
+    marginTop:10
   },
   tabSection: {
     width: '50%'
@@ -303,27 +305,32 @@ const styles = StyleSheet.create({
   },
   content: {
     fontWeight: '400',
-    fontSize: 15,
+    fontSize: 12,
     color: '#263238',
     fontFamily: 'inter'
   },
   termsContainer: {
     marginTop: '2%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   termsText: {
     color: '#263238',
     fontFamily: 'inter',
-    fontWeight: '400',
-    fontSize: 11,
+    fontSize: 12,
     lineHeight: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    justifyContent: 'center',
   },
   link: {
     color: '#0693D9',
     textDecorationLine: 'none',
     lineHeight: 16,
-    fontSize: 11
+    fontFamily: 'inter',
+    fontWeight: '400',
+    fontSize: 12,
+    textAlign: 'center',
+    justifyContent: 'center',
   }
 })
 
