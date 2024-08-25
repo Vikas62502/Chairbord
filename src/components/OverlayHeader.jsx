@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 
-const OverlayHeader = ({ title, navigateTo='dashboard', showBackButton = true }) => {
+const OverlayHeader = ({ title, showBackButton = true }) => {
   const navigation = useNavigation()
   return (
     <View style={styles.container}>
@@ -14,7 +14,7 @@ const OverlayHeader = ({ title, navigateTo='dashboard', showBackButton = true })
             {showBackButton && (
               <View>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate(navigateTo)}
+                   onPress={() => navigation.goBack()}
                   style={styles.backArrow}
                 >
                   <Image source={require('../assets/backArrowButton.png')} />

@@ -1,9 +1,13 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { useNavigation, DrawerActions } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
+import { getCache } from '../helper/Storage'
+import useUserData from '../helper/useUserData'
 
 const DrawerHeader = () => {
+  const userData = useUserData();
+
   const navigation = useNavigation()
   return (
     <LinearGradient colors={['#02546D', '#142D40']} style={styles.container}>
@@ -20,7 +24,7 @@ const DrawerHeader = () => {
           onPress={() => navigation.navigate('screen1')}
         >
           <Image source={require('../assets/avatar.png')} />
-          <Text style={styles.profileText}>User</Text>
+          <Text style={styles.profileText}>{userData?.user?.name || 'User'}</Text>
         </TouchableOpacity>
       </View>
       <View>
