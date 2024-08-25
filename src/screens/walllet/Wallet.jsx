@@ -12,7 +12,7 @@ const Wallet = (props) => {
   const [activeTag, setActiveTag] = useState('All')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [walletDetails, setWalletDetails] = useState([])
-  console.log(walletDetails?.transactions, 'transactions')
+  // console.log(walletDetails?.transactions, 'transactions')
 
   const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw']
 
