@@ -65,7 +65,7 @@ const Register = () => {
       <OverlayHeader
         title={'Register'}
         showBackButton={true}
-        navigateTo={() => navigation.goBack()}
+        navigateTo={'SignIn'}
       />
       {loading && <Loader />}
       <View>

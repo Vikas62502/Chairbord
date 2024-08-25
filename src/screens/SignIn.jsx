@@ -90,7 +90,7 @@ const SignIn = () => {
       <OverlayHeader
         title={'Sign in'}
         showBackButton={true}
-        navigateTo={() => navigation.goBack()}
+        navigateTo={'SignIn'}
       />
       {loading && <Loader />}
       <KeyboardAvoidingView

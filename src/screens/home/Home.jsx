@@ -65,9 +65,19 @@ const Home = () => {
         <Image source={require('../../assets/dashboard/registerTag.png')}  />
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal:5, width:'auto' , justifyContent:'space-between' }}>
-        
-     
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal:5, width:'auto' , justifyContent:'space-between' }
+         {/* <DashboardCards
+          title={'BAJAJ'}
+          subTitle={'Issuance'}
+          icon={require('../../assets/dashboard/customerOnBoard.png')}
+          router={'bajajissuance'} 
+        />
+        <DashboardCards
+          title={'SBI'}
+          subTitle={'Issuance'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'sbiissuance'}
+        /> */}
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}

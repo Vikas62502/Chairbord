@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ActivityIndicator, ScrollView, Image, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
@@ -7,7 +7,8 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
-  const { sessionId, customerId } = props?.route?.params;
+  const { sessionId, customerId, CusRegData } = props?.route?.params;
+  console.log(CusRegData?.data?.custDetails?.name, "cus details ImageCollection");
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -131,6 +132,7 @@ const ImageCollection = (props: any) => {
               sessionId: sessionId,
               imageGallaryData: imageGallaryData,
               response: props?.route?.params?.response,
+              CustomerRegData: CusRegData?.data?.custDetails
             })}
             disabled={!allImagesSet}
           />
