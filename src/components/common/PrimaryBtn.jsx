@@ -36,21 +36,23 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderRadius: 25,
     height: 75,
-    width: 360,
+    width:'auto',
     alignItems: 'between',
     justifyContent: 'center',
-    paddingHorizontal: 10,
-    overflow: 'hidden' // Ensure the gradient follows the button's shape
+    paddingHorizontal: '45%',
+    marginHorizontal:20,
+    overflow: 'hidden'// Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
     marginTop: 120,
     elevation: 8,
     borderRadius: 25,
     height: 75,
-    width: 360,
+    width: 'auto',
     alignItems: 'between',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: '45%',
+    marginHorizontal:20,
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   linearGradient: {
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '10%'
   },
   appButtonText: {
-    fontSize: 32,
+    fontSize: 28,
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',

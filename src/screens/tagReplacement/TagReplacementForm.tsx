@@ -118,7 +118,6 @@ const TagReplacementForm = (props: any) => {
         <OverlayHeader
           title={'Tag Replacement'}
           showBackButton={true}
-          navigateTo={() => props.navigation.goBack()}
         />
 
         <View style={styles.container}>
@@ -193,15 +192,15 @@ const TagReplacementForm = (props: any) => {
               flex: 1,
               justifyContent: 'space-between',
               flexDirection: 'row',
-              gap: 10,
+              gap: 5,
               marginVertical: '5%'
             }}
           >
             <TouchableOpacity
               style={{
                 borderWidth: 1,
-                borderColor: '#263238',
-                width: '50%',
+                borderColor: 'black',
+                width: '45%',
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: 25
@@ -213,14 +212,15 @@ const TagReplacementForm = (props: any) => {
                     color: '#263238',
                     fontSize: 28,
                     lineHeight: 33,
-                    fontWeight: '500'
+                    fontWeight: '500',
+                
                   }}
                 >
                   Cancel
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={{ width: '50%' }}>
+            <View style={{ width: '45%' }}>
               <SecondaryButton
                 title={'Submit'}
               // onPress={() => customerTagReplacement()}

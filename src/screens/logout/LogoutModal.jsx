@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#263238',
-    backgroundColor: '#263238',
+    borderColor: '#02546D',
+    backgroundColor: '#02546D',
     width: '45%'
   },
   logoutText: {

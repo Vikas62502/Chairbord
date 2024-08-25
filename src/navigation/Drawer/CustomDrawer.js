@@ -4,16 +4,18 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient';
 import LogoutModal from '../../screens/logout/LogoutModal';
+import useUserData from '../../helper/useUserData';
 
-const profileData = [
-    {
-        title: "Alex",
-        icon: require('../../assets/DrawerNavigation/avatar.png'),
-        screen: "profileAndMasterInfo",
-    }
-]
+// const profileData = [
+//     {
+//         title: "User",
+//         icon: require('../../assets/DrawerNavigation/avatar.png'),
+//         screen: "profileAndMasterInfo",
+//     }
+// ]
 
 const ProfileDraweritem = ({ title, icons, navigateTo }) => {
+    const userData = useUserData();
     const navigation = useNavigation();
     return (
         <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
@@ -23,7 +25,7 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
                     <Image source={icons} alt='profileLogo' />
                     <View style={{ width: "70%" }}>
                         <Text style={{ fontSize: 20, fontWeight: 700, color: "#FFFFFF", lineHeight: 24, }}>
-                            {title}
+                            {userData?.user?.name || 'User'}
                         </Text>
                     </View>
                 </View>
@@ -125,19 +127,20 @@ const CustomDrawer = () => {
         <LinearGradient colors={['#02546D', '#142D40']} style={styles.DrawerStyles}>
             <DrawerContentScrollView>
                 <View>
-                    <ProfileDraweritem title={profileData[0].title} icons={profileData[0].icon} navigateTo={profileData[0].screen} />
+                    <ProfileDraweritem
+                        icons={require('../../assets/DrawerNavigation/avatar.png')}
+                        navigateTo="profileAndMasterInfo"
+                    />
                 </View>
 
-                {data.map((element, index) => {
-                    return (
-                        <CustomDrawerItems
-                            key={index}
-                            title={element.title}
-                            icons={element.icon}
-                            navigateTo={element.screen}
-                        />
-                    )
-                })}
+                {data.map((element, index) => (
+                    <CustomDrawerItems
+                        key={index}
+                        title={element.title}
+                        icons={element.icon}
+                        navigateTo={element.screen}
+                    />
+                ))}
                 {/* <Pressable onPress={() => setModalVisible(true)}
                 >
                     <CustomDrawerItems
