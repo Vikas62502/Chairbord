@@ -7,14 +7,31 @@ import {
   ScrollView,
   Dimensions
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SwipperComponent from './SwipperComponent'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
+import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
 
 const DashboardCards = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
+
+  const getUserData = async () => {
+    try {
+      const value = await getCache('userData')
+      console.log(value, 'userData')
+      if (value !== null) {
+        return JSON.parse(value)
+      }
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   return (
     <Pressable
       style={styles.dashboardCard}
@@ -37,9 +54,14 @@ const DashboardCards = ({ title, subTitle, icon, router }) => {
           }}
         >
           <Image
-            style={{ alignItems: 'center',justifyContent:'center', left: 10, top: 11 }}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              left: 10,
+              top: 11
+            }}
             source={icon}
-            />
+          />
         </View>
       </View>
     </Pressable>
@@ -58,26 +80,22 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginBottom: '10%',
-          marginHorizontal:10,
-          width:'auto'
+          marginHorizontal: 10,
+          width: 'auto'
         }}
       >
-        <Image source={require('../../assets/dashboard/registerTag.png')}  />
+        <Image source={require('../../assets/dashboard/registerTag.png')} />
         <Image source={require('../../assets/dashboard/tagInStock.png')} />
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal:5, width:'auto' , justifyContent:'space-between' }
-         {/* <DashboardCards
-          title={'BAJAJ'}
-          subTitle={'Issuance'}
-          icon={require('../../assets/dashboard/customerOnBoard.png')}
-          router={'bajajissuance'} 
-        />
-        <DashboardCards
-          title={'SBI'}
-          subTitle={'Issuance'}
-          icon={require('../../assets/dashboard/tagReplacement.png')}
-          router={'sbiissuance'}
-        /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          marginHorizontal: 5,
+          width: 'auto',
+          justifyContent: 'space-between'
+        }}
+      >
         <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}
@@ -137,7 +155,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: 'light-blue',
+    backgroundColor: 'light-blue'
   },
   swipperContainer: {
     height: height * 0.3,
@@ -150,7 +168,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 60,
     borderRadius: 20,
-  margin: 5,
+    margin: 5,
     padding: 10
   },
   dashbordCardText: {
@@ -176,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontWeight: '600',
-    margin: 15,
+    margin: 15
   },
   activeTimeText: {
     color: 'white',
@@ -185,6 +203,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Proxima Nova'
   }
 })
-
 
 export default Home

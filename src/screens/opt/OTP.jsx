@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
+  Alert,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -21,33 +22,51 @@ const OTP = (props) => {
   const [otp, setOtp] = useState(sixStringArray)
 
   const verifyOtp = async () => {
+    console.log('validate otp')
     setLoading(true)
     try {
+      console.log(otp.join(''), 'otp boi')
+      console.log(await getCache('session'), 'session id')
       const response = await client.post('/bajaj/validateOtp', {
         otp: otp.join(''),
         sessionId: await getCache('session')
       })
 
-      console.log(response, 'otp response')
-
-      if (
-        response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
-      ) {
-        navigation.navigate('imageGallary', {
-          sessionId: await getCache('session'),
-          response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
-        })
+      if (response?.status === 203) {
+        console.log(response?.data, 'error')
+        console.log(response?.data?.errorDesc, 'error')
+        Alert.alert(
+          response?.data?.errorDesc || 'Something went wrong', // Title/Message
+          '', // You can add a message here if you want. If not, keep it as an empty string.
+          [
+            {
+              text: 'OK',
+              onPress: () => setLoading(false) // Action for the 'OK' button
+            }
+          ]
+        )
       } else {
-        navigation.navigate('customerRegistration', {
-          otpData: response?.data,
-          sessionId: await getCache('session'),
-          response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
-        })
+        if (
+          response?.data?.validateOtpResp?.custDetails?.walletStatus ===
+          'Active'
+        ) {
+          navigation.navigate('imageGallary', {
+            sessionId: await getCache('session'),
+            response: response?.data?.validateOtpResp,
+            customerId: response?.data?.customerId
+          })
+        } else {
+          navigation.navigate('customerRegistration', {
+            otpData: response?.data,
+            sessionId: await getCache('session'),
+            response: response?.data?.validateOtpResp,
+            customerId: response?.data?.customerId
+          })
+        }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error, "errordasdsa")
+      console.log(JSON.stringify(error), 'errorasdasda')
     } finally {
       setLoading(false)
     }

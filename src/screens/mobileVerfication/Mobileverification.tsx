@@ -65,8 +65,9 @@ const Mobileverification = (props: any) => {
         sessionId: res?.data?.validateCustResp?.sessionId,
         VerificationFormData: VerificationFormData,
       })
+      console.log(res, "otp response")
     } catch (error) {
-      console.log(error, "error")
+      console.log(JSON.stringify(error), "error")
     } finally {
       setLoading(false)
     }
@@ -134,7 +135,7 @@ const Mobileverification = (props: any) => {
 const styles = StyleSheet.create({
   container: {
     padding: '5%',
-    gap:20
+    gap: 20
   },
   errorText: {
     padding: '4%',

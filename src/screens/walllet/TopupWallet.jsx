@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -6,13 +6,13 @@ import {
   StyleSheet,
   Pressable,
   Image
-} from 'react-native';
-import OverlayHeader from '../../components/OverlayHeader';
-import HorizontalDivider from '../../components/common/HorizontalDivider';
-import CustomInputText from '../../components/common/CustomInputText';
-import LinearButton from '../../components/common/LinearButton';
-import Loader from '../../components/ui/Loader';
-import { client } from '../../client/Axios';
+} from 'react-native'
+import OverlayHeader from '../../components/OverlayHeader'
+import HorizontalDivider from '../../components/common/HorizontalDivider'
+import CustomInputText from '../../components/common/CustomInputText'
+import LinearButton from '../../components/common/LinearButton'
+import Loader from '../../components/ui/Loader'
+import { client } from '../../client/Axios'
 import {
   CFDropCheckoutPayment,
   CFEnvironment,
@@ -20,18 +20,18 @@ import {
   CFPaymentModes,
   CFSession,
   CFThemeBuilder
-} from 'cashfree-pg-api-contract';
-import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk';
+} from 'cashfree-pg-api-contract'
+import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
 
 const TopupWallet = () => {
-  const [topupAmount, setTopupAmount] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [orderStatus, setOrderStatus] = useState();
+  const [topupAmount, setTopupAmount] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [orderStatus, setOrderStatus] = useState()
   const [order, setOrder] = useState({
     payment_session_id: '',
     order_id: '',
-    order_expiry_time: 'order_expiry_time',
-  });
+    order_expiry_time: 'order_expiry_time'
+  })
 
   useEffect(() => {
     const onReceivedEvent = (eventName, map) => {
@@ -39,32 +39,33 @@ const TopupWallet = () => {
         'Event received on screen: ' +
           eventName +
           ' map: ' +
-          JSON.stringify(map),
-      );
-    };
-    
-    const onVerify = orderId => {
-      console.log('Payment Successful:', orderId);
-      updateStatus(orderId);
-    };
-    
+          JSON.stringify(map)
+      )
+    }
+
+    const onVerify = (orderId) => {
+      console.log('Payment Successful:', orderId)
+      topupBalanceBackend()
+      updateStatus(orderId)
+    }
+
     const onError = (error, orderId) => {
       console.log(
-        'Payment Failed: ' + JSON.stringify(error) + '\norderId is :' + orderId,
-      );
-      updateStatus(JSON.stringify(error));
-    };
+        'Payment Failed: ' + JSON.stringify(error) + '\norderId is :' + orderId
+      )
+      updateStatus(JSON.stringify(error))
+    }
 
     if (order.payment_session_id && order.order_id) {
-      CFPaymentGatewayService.setEventSubscriber({ onReceivedEvent });
-      CFPaymentGatewayService.setCallback({ onVerify, onError });
+      CFPaymentGatewayService.setEventSubscriber({ onReceivedEvent })
+      CFPaymentGatewayService.setCallback({ onVerify, onError })
     }
 
     return () => {
-      CFPaymentGatewayService.removeCallback();
-      CFPaymentGatewayService.removeEventSubscriber();
-    };
-  }, [order]);
+      CFPaymentGatewayService.removeCallback()
+      CFPaymentGatewayService.removeEventSubscriber()
+    }
+  }, [order])
 
   const createOrderCashfree = async () => {
     const response = await client.post('/cashfree-payment/create-order', {
@@ -78,30 +79,30 @@ const TopupWallet = () => {
   }
 
   const topUpApi = async () => {
-    setLoading(true);
-    await createOrderCashfree();
-    setLoading(false);
-  };
+    setLoading(true)
+    await createOrderCashfree()
+    setLoading(false)
+  }
 
   const getSession = () => {
     return new CFSession(
       order.payment_session_id, // sessionId
       order.order_id, // orderId
       CFEnvironment.SANDBOX
-    );
-  };
+    )
+  }
 
   const startCheckout = async () => {
     try {
-      const session = getSession();
+      const session = getSession()
       const paymentModes = new CFPaymentComponentBuilder()
         .add(CFPaymentModes.CARD)
         .add(CFPaymentModes.UPI)
         .add(CFPaymentModes.NB)
         .add(CFPaymentModes.WALLET)
         .add(CFPaymentModes.PAY_LATER)
-        .build();
-      
+        .build()
+
       const theme = new CFThemeBuilder()
         .setNavigationBarBackgroundColor('#94ee95')
         .setNavigationBarTextColor('#FFFFFF')
@@ -109,41 +110,42 @@ const TopupWallet = () => {
         .setButtonTextColor('#FFFFFF')
         .setPrimaryTextColor('#212121')
         .setSecondaryTextColor('#757575')
-        .build();
-      
+        .build()
+
       const dropPayment = new CFDropCheckoutPayment(
         session,
         paymentModes,
         theme
-      );
-      
-      CFPaymentGatewayService.doPayment(dropPayment);
+      )
+
+      CFPaymentGatewayService.doPayment(dropPayment)
     } catch (e) {
-      console.error('Error starting checkout:', e);
+      console.error('Error starting checkout:', e)
     }
-  };
+  }
 
   const topupBalanceBackend = async () => {
     try {
-      await client.post('/wallet/agent/own-wallet/transactions', {
+      const res = await client.post('/wallet/agent/own-wallet/transactions', {
         amount: topupAmount,
         reason: 'Cashfree Credit'
       })
+      console.log('Balance updated:', res)
     } catch (e) {
-      console.error('Error updating balance:', e);
+      console.error('Error updating balance:', e)
     }
-  };
+  }
 
   useEffect(() => {
     if (order.payment_session_id && order.order_id) {
-      startCheckout();
-      console.log('Order state has been updated:', order);
+      startCheckout()
+      console.log('Order state has been updated:', order)
     }
-  }, [order]);
+  }, [order])
 
   const updateStatus = (message) => {
-    setOrderStatus(message);
-  };
+    setOrderStatus(message)
+  }
 
   return (
     <>
@@ -181,8 +183,8 @@ const TopupWallet = () => {
               {[500, 1000, 1500, 2000].map((amount, index) => (
                 <Pressable
                   onPress={() => {
-                    setTopupAmount(amount.toString());
-                    console.log(amount);
+                    setTopupAmount(amount.toString())
+                    console.log(amount)
                   }}
                   key={index}
                   style={{
@@ -255,8 +257,8 @@ const TopupWallet = () => {
         </View>
       </ScrollView>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -306,9 +308,9 @@ const styles = StyleSheet.create({
   },
   accountNoText: {
     fontSize: 16,
-    fontWeight:'600',
+    fontWeight: '600',
     color: '#000000'
   }
-});
+})
 
-export default TopupWallet;
+export default TopupWallet
