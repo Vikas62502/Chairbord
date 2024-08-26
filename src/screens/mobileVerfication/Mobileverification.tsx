@@ -119,7 +119,7 @@ const Mobileverification = (props: any) => {
           name
         </Text>
 
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View style={styles.bottomContainer}>
           <PrimaryBtn
             title={'Sent OTP'}
             onPress={sendOTP}
@@ -134,10 +134,10 @@ const Mobileverification = (props: any) => {
 const styles = StyleSheet.create({
   container: {
     padding: '5%',
-    gap:20
+
   },
   errorText: {
-    padding: '4%',
+    padding: '0%',
     paddingHorizontal: '8%',
     color: '#FF0000'
   },
@@ -148,6 +148,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     zIndex: 10,
   },
+  bottomContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // paddingHorizontal: "5%",
+},
 })
 
 export default Mobileverification

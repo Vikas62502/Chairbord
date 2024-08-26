@@ -19,6 +19,7 @@ import LinearButton from '../../components/common/LinearButton'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { launchImageLibrary } from 'react-native-image-picker'
+import InputText from '../../components/common/InputText'
 
 const Profile = (props) => {
   const [step, setStep] = useState(1)
@@ -179,20 +180,20 @@ const Profile = (props) => {
         {step === 1 ? (
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <TagOfInput text="Personal Information" />
-            <View style={{ marginVertical: '5%' }}>
-              <CustomInputText
+            <View style={{  }}>
+              <InputText
                 placeholder="Enter Name"
                 value={formData.name}
                 onChangeText={(value) => formDataHandler('name', value)}
               />
             </View>
-            <CustomInputText
+            <InputText
               placeholder="Enter Father’s Name"
               value={formData.father_name}
               onChangeText={(value) => formDataHandler('father_name', value)}
             />
-            <View style={{ marginVertical: '5%' }}>
-              <CustomInputText
+            <View style={{ }}>
+              <InputText
                 placeholder="Enter Mother’s Name"
                 value={formData.mother_name}
                 onChangeText={(value) => formDataHandler('mother_name', value)}
@@ -200,7 +201,7 @@ const Profile = (props) => {
             </View>
 
             <TagOfInput text="ID Proof" />
-            <CustomInputText
+            <InputText
               placeholder="Enter PAN card number"
               value={formData.pan_card_number}
               onChangeText={(value) =>
@@ -208,7 +209,7 @@ const Profile = (props) => {
               }
             />
 
-            <View style={{ marginTop: '5%' }}>
+            <View style={{ }}>
               <TagOfInput text="PAN card photo" />
             </View>
             <View style={{ height: 150, width: '100%' }}>
@@ -229,11 +230,11 @@ const Profile = (props) => {
               )}
             </View>
 
-            <View style={{ marginTop: '5%' }}>
+            <View style={{  }}>
               <TagOfInput text="POS Proof" />
             </View>
 
-            <CustomInputText
+            <InputText
               placeholder="Enter POS number"
               value={formData.pos_number}
               onChangeText={(value) => formDataHandler('pos_number', value)}

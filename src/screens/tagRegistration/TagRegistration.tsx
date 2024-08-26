@@ -11,6 +11,7 @@ import SelectField from '../../components/common/SelectFieldBig'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
+import InputText from '../../components/common/InputText'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
@@ -228,16 +229,16 @@ const TagRegistration = (props: any) => {
                 <Text style={styles.label}>Vehicle Details</Text>
 
                 <CustomLabelText label={"Vehicle Number"} />
-                <CustomInputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo}
+                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo}
                     onChangeText={(text: string) => setVehicleNumber(text)} isEditable={false}
                 />
 
                 <View style={{ marginTop: "5%" }}>
                     <CustomLabelText label={"Chasis Number"} />
                     {vrnDetails && vrnDetails?.chassisNo?.length > 2 ?
-                        <CustomInputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
+                        <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
                             isEditable={false}
-                        /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
+                        /> : <InputText placeholder={"Enter Chasis number"} value={chassisNo}
                             onChangeText={(text: string) => setChasisNo(text?.toUpperCase())}
                         />}
                 </View>
@@ -247,11 +248,11 @@ const TagRegistration = (props: any) => {
                     <Text style={styles.label}>Vehicle Details</Text>
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vrn Number"} />
-                        <CustomInputText
+                        <InputText
                             placeholder={"Enter vehicle number"}
                             value={vrnDetails?.vehicleNo}
                             onChangeText={(text: string) => setVehicleNumber(text)}
-                            isEditable={false}
+                            // isEditable={false}
                         />
                     </View>
 

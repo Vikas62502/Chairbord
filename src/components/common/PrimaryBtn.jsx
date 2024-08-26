@@ -32,7 +32,7 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
 
 const styles = StyleSheet.create({
   appButtonContainer: {
-    marginTop: 120,
+    marginTop: 300,
     elevation: 8,
     borderRadius: 25,
     height: 75,
@@ -40,11 +40,10 @@ const styles = StyleSheet.create({
     alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
-    marginHorizontal:20,
     overflow: 'hidden'// Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
-    marginTop: 120,
+    marginTop: 300,
     elevation: 8,
     borderRadius: 25,
     height: 75,
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
     alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
-    marginHorizontal:20,
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   linearGradient: {

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     color: '#151E26'
   },
   dropdownStyle: {
-    borderWidth: .5,
+    borderWidth: 1,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',

@@ -6,6 +6,7 @@ import OverlayHeader from '../../components/OverlayHeader'
 import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import SelectField from '../../components/common/SelectFieldBig'
+import InputText from '../../components/common/InputText'
 
 const TagReplacement = (props: any) => {
     const navigation = useNavigation()
@@ -84,13 +85,13 @@ const TagReplacement = (props: any) => {
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
 
-                <View style={{ marginBottom: "5%" }}>
+                <View style={{ marginBottom: "4%" }}>
                     <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
                 </View>
 
-                <CustomInputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />
-                <View style={{ marginVertical: "5%" }}>
-                    <CustomInputText value={vehicleNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => setVehicleNumber(text.toUpperCase())}
+                <InputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />
+                <View style={{ }}>
+                    <InputText value={vehicleNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => setVehicleNumber(text.toUpperCase())}
                     />
                 </View>
 
@@ -124,13 +125,12 @@ const styles = StyleSheet.create({
 
     },
     errorText: {
-        padding: "2%",
+        padding: "0%",
         paddingHorizontal: "4%",
         color: "#FF0000",
     },
     bottomContainer: {
         justifyContent: 'center',
-        alignItems: 'center',
         marginBottom: 16,
         paddingHorizontal: "5%",
     },

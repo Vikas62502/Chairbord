@@ -13,6 +13,7 @@ import UploadDoc from '../../components/common/UploadDoc'
 import SelectField from '../../components/common/SelectFieldBig'
 import LinearButton from '../../components/common/LinearButton'
 import {launchImageLibrary} from 'react-native-image-picker';
+import InputText from '../../components/common/InputText'
 
 const Step2 = ({
   registerCompleteData,
@@ -46,13 +47,13 @@ const Step2 = ({
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TagOfInput text="Address Detail" />
-      <CustomInputText
+      <InputText
         placeholder="Enter address"
         value={formData.address}
         onChangeText={(value) => formDataHandler('address', value)}
       />
-      <View style={{ marginVertical: '5%' }}>
-        <CustomInputText
+      <View style={{  }}>
+        <InputText
           placeholder="Enter address line 2"
           value={formData.address2}
           onChangeText={(value) => formDataHandler('address2', value)}
@@ -65,22 +66,22 @@ const Step2 = ({
         }}
       >
         <View style={{ width: '48%' }}>
-          <CustomInputText
+          <InputText
             placeholder="Pincode"
             value={formData.pincode}
             onChangeText={(value) => formDataHandler('pincode', value)}
           />
         </View>
         <View style={{ width: '48%' }}>
-          <CustomInputText
+          <InputText
             placeholder="City"
             value={formData.city}
             onChangeText={(value) => formDataHandler('city', value)}
           />
         </View>
       </View>
-      <View style={{ marginVertical: '5%' }}>
-        <CustomInputText
+      <View style={{ }}>
+        <InputText
           placeholder="Enter state"
           value={formData.state}
           onChangeText={(value) => formDataHandler('state', value)}
@@ -99,8 +100,8 @@ const Step2 = ({
           formDataHandler('id_proof_document_type', value?.id)
         }}
       />
-      <View style={{ marginTop: '5%' }}>
-        <CustomInputText
+      <View style={{ }}>
+        <InputText
           placeholder="Enter document number"
           value={formData.id_proof_document_number}
           onChangeText={(value) =>
@@ -163,7 +164,7 @@ const Step2 = ({
             fontWeight: '500',
             fontSize: 16,
             alignSelf: 'center',
-            marginTop: '5%'
+            
           }}
         >
           I hereby accept all the{' '}
@@ -173,7 +174,7 @@ const Step2 = ({
               fontWeight: '500',
               fontSize: 16,
               alignSelf: 'center',
-              marginTop: '5%'
+              
             }}
           >
             terms & conditions.

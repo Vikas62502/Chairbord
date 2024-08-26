@@ -177,7 +177,7 @@ const SignIn = () => {
                     Forgot your Password?
                   </Text>
                 </Pressable>
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ }}>
                   <SecondaryButton
                     title={'Sign In'}
                     disable={true}
@@ -198,7 +198,6 @@ const SignIn = () => {
                   <View
                     style={{
                       justifyContent: 'center',
-                      alignItems: 'center',
                       marginTop: 25
                     }}
                   >
@@ -224,7 +223,7 @@ const SignIn = () => {
                 {/* <Text style={styles.text}>
                   Dont't have an account?
                 </Text> */}
-                <View style={{ alignItems: 'center' }}>
+                <View style={{  }}>
                   <SecondaryButton
                     title={'Sign Up'}
                     onPress={() => navigation.navigate('register')}
@@ -261,12 +260,15 @@ const SignIn = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: "5%",
+},
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    width: '65%',
+    width: '80%',
     marginTop: 10
   },
   verticalDivider: {
