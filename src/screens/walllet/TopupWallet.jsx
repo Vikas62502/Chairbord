@@ -88,7 +88,7 @@ const TopupWallet = () => {
     return new CFSession(
       order.payment_session_id, // sessionId
       order.order_id, // orderId
-      CFEnvironment.SANDBOX
+      CFEnvironment.PRODUCTION // environment
     )
   }
 

@@ -11,6 +11,7 @@ import SelectField from '../../components/common/SelectFieldBig'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
+import showAlert from '../../utils/showAlert'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
@@ -157,7 +158,9 @@ const TagRegistration = (props: any) => {
             )
             console.log(res, "res");
             successResponse()
-        } catch (error) {
+        } catch (error: any) {
+            showAlert(error.response.data.error.errorDesc || 'Tag registration failed',
+                () => setLoading(false));
             console.log(error)
             failureResponse()
         } finally {

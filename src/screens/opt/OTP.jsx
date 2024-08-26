@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   View
 } from 'react-native'
 import OtpInputText from './OtpInputText'
@@ -14,6 +13,7 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
+import showAlert from '../../utils/showAlert'
 
 const OTP = (props) => {
   const userData = props.route.params?.VerificationFormData
@@ -25,52 +25,48 @@ const OTP = (props) => {
     console.log('validate otp')
     setLoading(true)
     try {
-      console.log(otp.join(''), 'otp boi')
-      console.log(await getCache('session'), 'session id')
+      const sessionId = await getCache('session')
       const response = await client.post('/bajaj/validateOtp', {
         otp: otp.join(''),
-        sessionId: await getCache('session')
+        sessionId: sessionId
       })
 
-      if (response?.status === 203) {
-        console.log(response?.data, 'error')
-        console.log(response?.data?.errorDesc, 'error')
-        Alert.alert(
-          response?.data?.errorDesc || 'Something went wrong', // Title/Message
-          '', // You can add a message here if you want. If not, keep it as an empty string.
-          [
-            {
-              text: 'OK',
-              onPress: () => setLoading(false) // Action for the 'OK' button
-            }
-          ]
-        )
+      if (
+        response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
+      ) {
+        navigation.navigate('imageGallary', {
+          sessionId: sessionId,
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId
+        })
       } else {
-        if (
-          response?.data?.validateOtpResp?.custDetails?.walletStatus ===
-          'Active'
-        ) {
-          navigation.navigate('imageGallary', {
-            sessionId: await getCache('session'),
-            response: response?.data?.validateOtpResp,
-            customerId: response?.data?.customerId
-          })
-        } else {
-          navigation.navigate('customerRegistration', {
-            otpData: response?.data,
-            sessionId: await getCache('session'),
-            response: response?.data?.validateOtpResp,
-            customerId: response?.data?.customerId
-          })
-        }
+        navigation.navigate('customerRegistration', {
+          otpData: response?.data,
+          sessionId: sessionId,
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId
+        })
       }
     } catch (error) {
-      console.log(error, "errordasdsa")
-      console.log(JSON.stringify(error), 'errorasdasda')
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.log('Error Data:', error.response.data)
+        console.log('Error Status:', error.response.status)
+        console.log('Error Headers:', error.response.headers)
+
+        // Handle specific error codes or messages from the server
+        if (error.response.status === 400 && error.response.data?.error) {
+          showAlert(
+            error.response.data.error.errorDesc || 'OTP Validation Failed',
+            () => navigation.goBack()
+          )
+        }
+      }
     } finally {
       setLoading(false)
     }
   }
+
   const navigation = useNavigation()
   return (
     <SafeAreaView>

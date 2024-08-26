@@ -14,6 +14,7 @@ import SelectField from '../../components/common/SelectFieldBig';
 import PrimaryBtn from '../../components/common/PrimaryBtn';
 import CustomInputText from '../../components/common/CustomInputText';
 import { client } from '../../client/Axios';
+import showAlert from '../../utils/showAlert';
 
 const CustomerRegistration = (props: any) => {
   const { otpData, response, customerId } = props.route.params;
@@ -93,42 +94,19 @@ const CustomerRegistration = (props: any) => {
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
       console.log(`[request error] [${JSON.stringify(res)}]`)
-      if (res.status === 203) {
-        Alert.alert(
-          res?.data?.error?.errorDesc || 'Something went wrong', // Title/Message
-          '', // You can add a message here if you want. If not, keep it as an empty string.
-          [
-            {
-              text: 'OK',
-              onPress: () => setLoading(false) // Action for the 'OK' button
-            }
-          ]
-        );
 
-      } else {
-        // Navigate to the next screen if everything is fine
-        props.navigation.navigate('imageGallary', {
-          sessionId: await getCache('session'),
-          response: response,
-          customerId: customerId,
-          CusRegData: res
-        });
-      }
+      // Navigate to the next screen if everything is fine
+      props.navigation.navigate('imageGallary', {
+        sessionId: await getCache('session'),
+        response: response,
+        customerId: customerId,
+        CusRegData: res
+      });
+    }
 
-      // console.log(res, 'wallet creation log');
-      // props.navigation.navigate('imageGallary',
-      //   {
-      //     sessionId: await getCache('session'),
-      //     response: response,
-      //     customerId: customerId
-      //   }
-      // )
-    } catch (error: any) {
-      Alert.alert(error?.error?.response?.msg || error?.data?.response?.msg || 'Something went wrong');
-      console.log('--------------------------------------------------------------------------------')
-      console.error(`[customer reg] [${JSON.stringify(error)}]`)
-      // console.log(error?.error?.response?.msg, 'wallet creation error')
-      // console.log(error?.data?.response?.msg, 'wallet creation error')
+    catch (error: any) {
+      showAlert(error.response.data.error.errorDesc || 'Customer registration failed',
+        () => setLoading(false));
     } finally {
       setLoading(false);
     }

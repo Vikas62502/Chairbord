@@ -7,6 +7,7 @@ import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
 import RegisterVerifyOtp from '../opt/RegisterVerifyOtp'
+import showAlert from '../../utils/showAlert'
 
 const Register = () => {
   const [showOtpField, setShowOtpField] = useState(false)
@@ -34,7 +35,7 @@ const Register = () => {
       console.log(response, 'response with register')
       setShowOtpField(true)
     } catch (error) {
-      Alert.alert('Something went wrong')
+      showAlert(error.response.data.error || 'User registration failed')
       console.log(error, 'error')
     } finally {
       setLoading(false)

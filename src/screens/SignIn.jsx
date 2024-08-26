@@ -50,12 +50,16 @@ const SignIn = () => {
       await setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      Alert.alert('Something went wrong', 'Please try again later', [
-        {
-          text: 'OK',
-          style: 'cancel'
-        }
-      ])
+      Alert.alert(
+        'Either Id or password is Wrong !!',
+        'Please try again later',
+        [
+          {
+            text: 'OK',
+            style: 'cancel'
+          }
+        ]
+      )
     } finally {
       setLoading(false)
     }
@@ -155,7 +159,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
-                  placeholder={'Enter email'}
+                  placeholder={'Enter email or phone number'}
                   secure={false}
                   onChangeText={(email) =>
                     setFormData({ ...formData, email: email.toLowerCase() })
@@ -240,8 +244,7 @@ const SignIn = () => {
                     >
                       <Text style={styles.link}>Terms of Service</Text>
                     </TouchableOpacity>{' '}
-
-                    <Text >&</Text>
+                    <Text>&</Text>
                     <TouchableOpacity
                       onPress={() =>
                         handleLinkPress('https://example.com/privacy')
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 32,
     lineHeight: 38,
-    marginTop:10
+    marginTop: 10
   },
   tabSection: {
     width: '50%'
@@ -320,7 +323,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   link: {
     color: '#0693D9',
@@ -330,7 +333,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 12,
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 })
 
