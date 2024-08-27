@@ -35,6 +35,8 @@ const TagRegistration = (props: any) => {
     const [npciIdData, setNpciIdData] = useState("4")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState<any>({})
+    console.log(errors, "errors")
 
     console.log(vehicleModel, "vehicleModel")
 
@@ -104,7 +106,52 @@ const TagRegistration = (props: any) => {
         },
     ]
 
+    const validateFields = () => {
+        let newErrors: any = {};
+
+        if (!vrnDetails?.chassisNo && !chassisNo) {
+            newErrors.chassisNo = 'Chassis number is required';
+        }
+
+        if (!vrnDetails?.vehicleManuf && !vehicleManufacturer) {
+            newErrors.vehicleManufacturer = 'Vehicle Manufacturer is required';
+        }
+
+        if (!vrnDetails?.model && !vehicleModelValue) {
+            newErrors.vehicleModel = 'Vehicle Model is required';
+        }
+
+        if (!vrnDetails?.vehicleColour && !vehicleColor) {
+            newErrors.vehicleColor = 'Vehicle Color is required';
+        }
+
+        if (!vrnDetails?.npciVehicleClassID && !npciIdData) {
+            newErrors.npciIdData = 'NPCI Class is required';
+        }
+
+        if (!vrnDetails?.vehicleDescriptor && !vehicleFuelType) {
+            newErrors.vehicleFuelType = 'Fuel Type is required';
+        }
+
+        if (!vrnDetails?.commercial && vehicleIscommercial === "") {
+            newErrors.vehicleIscommercial = 'Is Commercial is required';
+        }
+
+        setErrors(newErrors);
+
+        // Show alert if there are errors
+        if (Object.keys(newErrors).length > 0) {
+            showAlert('Please fill in all required fields');
+            return false;
+        }
+
+        return true;
+    }
+
     const registerFastagApi = async () => {
+        if (!validateFields()) {
+            return;
+        }
         setLoading(true)
         const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
         try {
@@ -240,7 +287,7 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
                             isEditable={false}
                         /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
-                            onChangeText={(text: string) => setChasisNo(text?.toUpperCase())}
+                            onChangeText={(text: string) => setChasisNo(text?.toUpperCase())} borderColor={chassisNo?.length < 2 ? "red" : "#263238"}
                         />}
                 </View>
 
@@ -266,7 +313,7 @@ const TagRegistration = (props: any) => {
                                 onChangeText={(text: string) => setVehicleManufacturer(text)}
                                 isEditable={false}
                             />
-                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={getTheVehicleModel} />}
+                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={getTheVehicleModel} borderColor={!vehicleManufacturer ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -276,7 +323,7 @@ const TagRegistration = (props: any) => {
                             value={vrnDetails?.model}
                             onChangeText={(text: string) => setVehicleModelValue(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} />}
+                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} borderColor={!vehicleModelValue ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -316,7 +363,7 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={''} value='001' onChangeText={(text: string) => setTagSerialNumber2(text)} isEditable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} />
+                        <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} />
                     </View>
                 </View>
                 <View style={{ marginBottom: "5%" }}>
@@ -332,7 +379,9 @@ const TagRegistration = (props: any) => {
                     <CustomLabelText label={"Fuel Type"} />
                     {
                         vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
-                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleFuelType(value.title)} />
+                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleFuelType(value.title)}
+                            borderColor={!vehicleFuelType ? "red" : "black"}
+                        />
                     }
                 </View>
 
@@ -388,11 +437,11 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     label: {
-        fontWeight: '400',
+        fontWeight: '600',
         fontSize: 16,
         lineHeight: 19,
         color: "#000000",
-        marginBottom: "4%"
+        marginVertical: "4%"
     },
     dataDetailContainer: {
         borderWidth: 1,

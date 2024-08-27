@@ -2,7 +2,12 @@ import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import React, { useRef, useState } from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
 
-const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
+const SelectFieldBig = ({
+  dataToRender,
+  title,
+  selectedValue,
+  borderColor = 'black'
+}) => {
   const dropdownRef = useRef(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggleDropdown = () => {
@@ -13,8 +18,9 @@ const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
     }
     setDropdownOpen(!dropdownOpen)
   }
+
   return (
-    <View style={styles.dropdownStyle}>
+    <View style={[styles.dropdownStyle, { borderColor: borderColor }]}>
       <SelectDropdown
         ref={dropdownRef}
         data={dataToRender}
@@ -102,7 +108,7 @@ const styles = StyleSheet.create({
     color: '#151E26'
   },
   dropdownStyle: {
-    borderWidth: .5,
+    borderWidth: 1,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
