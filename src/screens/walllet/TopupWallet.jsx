@@ -23,7 +23,8 @@ import {
 } from 'cashfree-pg-api-contract'
 import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
 
-const TopupWallet = () => {
+const TopupWallet = (props) => {
+  const walletBalance = props?.route?.params?.walletBalance
   const [topupAmount, setTopupAmount] = useState('')
   const [loading, setLoading] = useState(false)
   const [orderStatus, setOrderStatus] = useState()
@@ -155,7 +156,7 @@ const TopupWallet = () => {
         <View style={{ padding: '5%' }}>
           <View style={styles.balanceCard}>
             <Text style={styles.balanceText}>Balance</Text>
-            <Text style={styles.amountText}>₹1,055</Text>
+            <Text style={styles.amountText}>{walletBalance}</Text>
             <HorizontalDivider />
             <Text
               style={[
