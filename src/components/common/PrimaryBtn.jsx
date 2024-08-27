@@ -32,7 +32,6 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
 
 const styles = StyleSheet.create({
   appButtonContainer: {
-    marginTop: 300,
     elevation: 8,
     borderRadius: 25,
     height: 75,
@@ -43,7 +42,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden'// Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
-    marginTop: 300,
     elevation: 8,
     borderRadius: 25,
     height: 75,

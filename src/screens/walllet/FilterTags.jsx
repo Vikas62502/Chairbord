@@ -257,13 +257,13 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 25,
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: '#263238'
   },
   applyButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     marginLeft: 10
   },
   applyButtonText: {
@@ -273,6 +273,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 24,
+    marginBottom:5,
     color: '#000000'
   },
   filterType: {
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   },
   capsule: {
     borderWidth: 0.5,
-    borderColor: '#263238',
+    borderColor: 'black',
     borderRadius: 20,
     paddingHorizontal: '4%',
     paddingVertical: '3%',
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '4%',
     paddingVertical: '3%',
     marginVertical: '3%',
-    backgroundColor: '#263238'
+    backgroundColor: '#02546D'
   },
   activeTagText: {
     fontWeight: '500',
@@ -315,17 +316,17 @@ const styles = StyleSheet.create({
   },
   selectDate: {
     flexDirection: 'row',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#A5A5A5',
     paddingVertical: '3%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingHorizontal: '5%',
     width: '45%'
   },
   buttonText: {
-    color: '#263238',
+    color: 'black',
     fontWeight: '400',
     fontSize: 20,
     lineHeight: 24,

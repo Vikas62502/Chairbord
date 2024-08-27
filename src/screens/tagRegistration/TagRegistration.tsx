@@ -12,6 +12,7 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 import InputText from '../../components/common/InputText'
+import BottomNavigator from '../../navigation/bottom/BottomNavigator'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
@@ -352,16 +353,19 @@ const TagRegistration = (props: any) => {
 
 
 
-                <View style={{ marginTop: 20, alignItems: "center", justifyContent: "center" }}>
+                <View style={{ marginTop: 20, justifyContent: "center" }}>
                     <SecondaryButton
                         title={"Submit"}
                         onPress={() => {
                             registerFastagApi()
                         }}
                     />
+                    
                 </View>
+                
 
             </View>
+
             <SuccessModal
                 visible={modalVisible}
                 onClose={() => {
@@ -412,6 +416,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 16
     },
+    
     dateInput: {
         borderColor: '#263238',
         borderWidth: 1,

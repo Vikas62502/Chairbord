@@ -36,52 +36,48 @@ const InventoryFilterModal = ({ visible, onClose, onApply }) => {
 
           <View>
             <Text style={styles.filterType}>Status</Text>
-            <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
+            <View style={{ flexDirection: 'row',  flexWrap: 'wrap' }}>
               {banks.map((data, index) => (
                 <TouchableOpacity
-                  key={index}
-                  onPress={() => setSelectedTag(data)}
+                key={index}
+                onPress={() => setSelectedTag(data)}
+                style={
+                  SelectedTag === data ? styles.activeCapsule : styles.capsule
+                }
+              >
+                <Text
+                  style={
+                    SelectedTag === data
+                      ? styles.activeTagText
+                      : styles.tagText
+                  }
                 >
-                  {SelectedTag === data ? (
-                    <LinearGradient
-                      colors={['#02546D', '#142D40']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.activeCapsule}
-                    >
-                      <Text style={styles.activeTagText}>{data}</Text>
-                    </LinearGradient>
-                  ) : (
-                    <View style={styles.capsule}>
-                      <Text style={styles.tagText}>{data}</Text>
-                    </View>
-                  )}
-                </TouchableOpacity>
+                  {data}
+                </Text>
+              </TouchableOpacity>
               ))}
             </View>
           </View>
           <View>
             <Text style={styles.filterType}>Type</Text>
-            <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {status.map((data, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => setSelectedTag(data)}
+                  style={
+                    SelectedTag === data ? styles.activeCapsule : styles.capsule
+                  }
                 >
-                  {SelectedTag === data ? (
-                    <LinearGradient
-                      colors={['#02546D', '#142D40']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.activeCapsule}
-                    >
-                      <Text style={styles.activeTagText}>{data}</Text>
-                    </LinearGradient>
-                  ) : (
-                    <View style={styles.capsule}>
-                      <Text style={styles.tagText}>{data}</Text>
-                    </View>
-                  )}
+                  <Text
+                    style={
+                      SelectedTag === data
+                        ? styles.activeTagText
+                        : styles.tagText
+                    }
+                  >
+                    {data}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -130,13 +126,13 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 25,
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#263238'
+    borderWidth: 1,
+    borderColor: 'black'
   },
   applyButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     marginLeft: 10
   },
   applyButtonText: {
@@ -146,6 +142,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 24,
+    marginBottom:5,
     color: '#000000'
   },
   filterType: {
@@ -153,16 +150,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#000000',
-    marginTop: '5%',
-    marginBottom: '5%'
+    marginTop: '1%',
+    
   },
   capsule: {
-    borderWidth: 0.5,
-    borderColor: '#263238',
+    borderWidth: 1,
+    borderColor: 'black',
     borderRadius: 20,
     paddingHorizontal: '4%',
     paddingVertical: '3%',
-    marginVertical: '3%'
+    marginVertical: '3%',
+    marginEnd: '3%'
   },
   tagText: {
     fontWeight: '500',
@@ -170,16 +168,17 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textAlign: 'center',
     color: '#000000',
-    padding: 5
+    
   },
   activeCapsule: {
-    borderWidth: 0.5,
-    borderColor: '#263238',
+    borderWidth: 1,
+    borderColor: '#02546D',
     borderRadius: 20,
     paddingHorizontal: '4%',
     paddingVertical: '3%',
     marginVertical: '3%',
-    backgroundColor: '#263238'
+    marginEnd: '3%',
+    backgroundColor: '#02546D'
   },
   activeTagText: {
     fontWeight: '500',
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textAlign: 'center',
     color: 'white',
-    padding: 5
+
   },
   buttonText: {
     color: '#263238',

@@ -121,18 +121,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
         color: "#000000",
-        marginBottom: "4%"
+        marginBottom: "2%"
 
     },
     errorText: {
         padding: "0%",
-        paddingHorizontal: "4%",
+        paddingHorizontal: "2%",
         color: "#FF0000",
     },
     bottomContainer: {
-        justifyContent: 'center',
-        marginBottom: 16,
-        paddingHorizontal: "5%",
+        justifyContent: 'flex-end',
+    
+        padding: "5%",
+        height: "40%",
     },
 })
 

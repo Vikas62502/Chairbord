@@ -133,12 +133,11 @@ const Mobileverification = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
+    
     padding: '5%',
-
   },
   errorText: {
-    padding: '0%',
-    paddingHorizontal: '8%',
+    paddingHorizontal: '2%',
     color: '#FF0000'
   },
   loaderContainer: {
@@ -149,9 +148,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   bottomContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // paddingHorizontal: "5%",
+    justifyContent: 'flex-end',
+    height: '50%',
+    
 },
 })
 
