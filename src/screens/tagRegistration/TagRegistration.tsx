@@ -19,7 +19,7 @@ const TagRegistration = (props: any) => {
     console.log(CustomerRegData, " tag registration CusRegData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
-    const [modalVisible, setModalVisible] = useState<null | boolean>(false)
+    const [modalVisible, setModalVisible] = useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
     const navigation = useNavigation()
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
@@ -153,16 +153,19 @@ const TagRegistration = (props: any) => {
                     "udf5": ""
                 }
             })
+            console.log(bodyData, "bodydata")
+
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
             )
             console.log(res, "res");
             successResponse()
         } catch (error: any) {
-            showAlert(error.response.data.error.errorDesc || 'Tag registration failed',
+            console.log(error || 'Tag registration failed')
+            // failureResponse()
+            showAlert(error.response.data.error.msg || 'Tag registration failed',
                 () => setLoading(false));
             console.log(error)
-            failureResponse()
         } finally {
             setLoading(false)
         }
@@ -193,6 +196,8 @@ const TagRegistration = (props: any) => {
         console.log(response?.vehicleMakerList, 'model list')
         setVehicleModel(response?.vehicleModelList)
     }
+
+    console.log(vrnDetails?.vehicleDescriptor, "vrnDetails?.vehicleDescriptor")
 
     useEffect(() => {
         console.log("vahan failed", props.route.params?.sessionId)
@@ -323,15 +328,14 @@ const TagRegistration = (props: any) => {
 
                 </View>
 
-                {vrnDetails?.commercial === true &&
-                    <View style={{ marginVertical: "5%" }}>
-                        <CustomLabelText label={"Fuel Type"} />
-                        {
-                            vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
-                                dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleFuelType(value.title)} />
-                        }
-                    </View>
-                }
+                <View style={{ marginVertical: "5%" }}>
+                    <CustomLabelText label={"Fuel Type"} />
+                    {
+                        vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
+                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleFuelType(value.title)} />
+                    }
+                </View>
+
                 {/* <View style={{ marginBottom: "5%" }}>
                     {vrnDetails && vrnDetails?.commercial ? <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} /> : <SelectField
                         dataToRender={commercialOptions} title={'Select national permit'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
