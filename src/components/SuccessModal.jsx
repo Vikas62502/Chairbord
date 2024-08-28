@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   okButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     borderRadius: 12,
     paddingVertical: '4%',
     paddingHorizontal: '15%'
