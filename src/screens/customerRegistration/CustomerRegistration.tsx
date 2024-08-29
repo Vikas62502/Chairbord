@@ -18,7 +18,7 @@ import showAlert from '../../utils/showAlert';
 
 const CustomerRegistration = (props: any) => {
   const { otpData, response, customerId } = props.route.params;
-  console.log(otpData, response, customerId, 'response');
+  console.log(otpData, 'response');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
   const [loading, setLoading] = useState(false);
