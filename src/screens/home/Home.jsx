@@ -57,7 +57,7 @@ const Home = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: '10%',
+          marginBottom: '5%',
           marginHorizontal:10,
           width:'auto'
         }}
