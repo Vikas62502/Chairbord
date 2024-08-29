@@ -27,7 +27,7 @@ const ImageCollection = (props: any) => {
         customerId: customerId,
         vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || "RJ45CM9948",
       })
-
+      console.log("api called");
       const res = await client.post("/bajaj/uploadImages",
         bodyData
       )
@@ -39,8 +39,8 @@ const ImageCollection = (props: any) => {
           image: base64Image
         }
       }));
-    } catch (error) {
-      console.log(error, "error");
+    } catch (error: any) {
+      console.log(JSON.stringify(error.response.data), "error");
     } finally {
       setLoading(false)
     }

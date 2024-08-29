@@ -16,7 +16,7 @@ import showAlert from '../../utils/showAlert'
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
     const { CustomerRegData } = props.route.params;
-    console.log(CustomerRegData, " tag registration CusRegData")
+    console.log(vrnDetails, "vrnDetails")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
@@ -254,6 +254,19 @@ const TagRegistration = (props: any) => {
         getUserData()
     }, [])
 
+    const handleDateChange = (text: string) => {
+        let cleaned = text.replace(/[^0-9]/g, '');
+        if (cleaned?.length >= 2) {
+            cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2);
+        }
+        if (cleaned?.length >= 5) {
+            cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5);
+        }
+        setPermitExpiryDate(cleaned);
+    };
+
+    console.log(vrnDetails?.commercial)
+
     return (
         <ScrollView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Registration"} />
@@ -367,9 +380,21 @@ const TagRegistration = (props: any) => {
                     </View>
                 </View>
                 <View style={{ marginBottom: "5%" }}>
+                    {vrnDetails && vrnDetails?.isNationalPermit === "1" && vrnDetails.permitExpiryDate.length < 2 && <View>
+                        <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
+                        <CustomInputText
+                            placeholder='DD-MM-YYYY'
+                            placeholderTextColor='#263238'
+                            style={styles.dateInput}
+                            value={permitExpiryDate}
+                            onChangeText={(text: string) => handleDateChange(text)}
+                            keyboardType='numeric'
+                            maxLength={10}
+                        />
+                    </View>}
                     {vrnDetails && vrnDetails?.commercial !== undefined ? <View>
                         <CustomLabelText label={"Is Commercial"} />
-                        <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial ? false : "false"} isEditable={false} />
+                        <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} />
                     </View> : <SelectField
                         dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
 
