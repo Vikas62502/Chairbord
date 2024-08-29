@@ -197,6 +197,8 @@ const SignIn = () => {
                   onChangeText={(value) =>
                     setFormData({ ...formData, phoneNumber: value })
                   }
+                  keyboardType="numeric"
+                  editable={!showOtpField}
                 />
                 {!showOtpField && (
                   <View

@@ -22,6 +22,7 @@ const CustomInputText = ({
         secureTextEntry={secure}
         keyboardType={keyboardType}
         editable={isEditable}
+        
       />
     </View>
   )

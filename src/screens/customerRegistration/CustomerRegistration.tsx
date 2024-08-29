@@ -93,19 +93,20 @@ const CustomerRegistration = (props: any) => {
 
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
-      console.log(`[request error] [${JSON.stringify(res)}]`)
+      console.log(`[request res] [${JSON.stringify(res)}]`)
 
       // Navigate to the next screen if everything is fine
       props.navigation.navigate('imageGallary', {
         sessionId: await getCache('session'),
         response: response,
         customerId: customerId,
-        CusRegData: res
+        CusRegData: res,
+        otpData: otpData
       });
     }
 
     catch (error: any) {
-      showAlert(error.response.data.error.errorDesc || 'Customer registration failed',
+      showAlert(error?.response?.data?.error?.errorDesc || error?.response?.data?.error?.msg || 'Customer registration failed',
         () => setLoading(false));
     } finally {
       setLoading(false);
@@ -194,7 +195,7 @@ const CustomerRegistration = (props: any) => {
         {documentType.docType === 2 || documentType.docType === 4 ? (
           <>
             <Text style={styles.label}>Enter Expiry Date</Text>
-            <View>
+            <View style={{ paddingHorizontal: "5%" }}>
               <CustomInputText
                 placeholder='DD-MM-YYYY'
                 placeholderTextColor='#263238'

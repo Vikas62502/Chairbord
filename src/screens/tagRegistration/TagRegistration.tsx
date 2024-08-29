@@ -15,8 +15,10 @@ import showAlert from '../../utils/showAlert'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
-    const { CustomerRegData } = props.route.params;
-    console.log(vrnDetails, "vrnDetails")
+    const { CustomerRegData, otpData } = props.route.params;
+    console.log(CustomerRegData?.name, "custDetails")
+    // console.log(vrnDetails, "vrnDetails")
+    // console.log(otpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
@@ -36,9 +38,9 @@ const TagRegistration = (props: any) => {
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState<any>({})
-    console.log(errors, "errors")
+    // console.log(errors, "errors")
 
-    console.log(vehicleModel, "vehicleModel")
+    // console.log(vehicleModel, "vehicleModel")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -186,7 +188,7 @@ const TagRegistration = (props: any) => {
                     "stateOfRegistration": vrnDetails?.vehicleNo?.slice(0, 2) || vrnDetails?.stateOfRegistration,
                 },
                 "custDetails": {
-                    "name": custDetails?.name,
+                    "name": custDetails?.name || CustomerRegData?.name,
                     "mobileNo": custDetails?.mobileNo,
                     "walletId": custDetails?.walletId,
                 },
@@ -376,7 +378,7 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={''} value='001' onChangeText={(text: string) => setTagSerialNumber2(text)} isEditable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} />
+                        <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
                     </View>
                 </View>
                 <View style={{ marginBottom: "5%" }}>

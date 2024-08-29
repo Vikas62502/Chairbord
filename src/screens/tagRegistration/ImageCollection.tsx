@@ -7,7 +7,8 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
-  const { sessionId, customerId, CusRegData } = props?.route?.params;
+  const { sessionId, customerId, CusRegData, otpData } = props?.route?.params;
+  console.log(otpData, "otpData");
   console.log(CusRegData?.data?.custDetails?.name, "cus details ImageCollection");
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
@@ -25,7 +26,7 @@ const ImageCollection = (props: any) => {
           "image": base64Image
         },
         customerId: customerId,
-        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || "RJ45CM9948",
+        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo,
       })
       console.log("api called");
       const res = await client.post("/bajaj/uploadImages",
@@ -132,7 +133,8 @@ const ImageCollection = (props: any) => {
               sessionId: sessionId,
               imageGallaryData: imageGallaryData,
               response: props?.route?.params?.response,
-              CustomerRegData: CusRegData?.data?.custDetails
+              CustomerRegData: CusRegData?.data?.custDetails,
+              otpData: otpData
             })}
             disabled={!allImagesSet}
           />
