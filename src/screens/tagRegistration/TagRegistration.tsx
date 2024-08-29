@@ -394,7 +394,7 @@ const TagRegistration = (props: any) => {
                     </View>}
                     {vrnDetails && vrnDetails?.commercial !== undefined ? <View>
                         <CustomLabelText label={"Is Commercial"} />
-                        <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} />
+                        <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial === false ? "false" : "true"} isEditable={false} />
                     </View> : <SelectField
                         dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
 
