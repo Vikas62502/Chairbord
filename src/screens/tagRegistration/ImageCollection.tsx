@@ -7,9 +7,7 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
-  const { sessionId, customerId, CusRegData, otpData } = props?.route?.params;
-  console.log(otpData, "otpData");
-  console.log(CusRegData?.data?.custDetails?.name, "cus details ImageCollection");
+  const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -26,7 +24,7 @@ const ImageCollection = (props: any) => {
           "image": base64Image
         },
         customerId: customerId,
-        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo,
+        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || userData?.vehicleNo?.toUpperCase(),
       })
       console.log("api called");
       const res = await client.post("/bajaj/uploadImages",
@@ -41,6 +39,7 @@ const ImageCollection = (props: any) => {
         }
       }));
     } catch (error: any) {
+      // showAlert("Error", error.response.data.message);
       console.log(JSON.stringify(error.response.data), "error");
     } finally {
       setLoading(false)

@@ -105,8 +105,23 @@ export const typesData = [
 ];
 
 export const fuelData = [
-    { id: 1, title: "Gasoline" },
-    { id: 2, title: "Diesel" },
-    { id: 3, title: "Electric" },
-    { id: 4, title: "Hybrid" },
+    { id: 1, title: "Hybrid" },
+    { id: 2, title: "Petrol" },
+    { id: 3, title: "Diesel/Hybrid" },
+    { id: 4, title: "Ethanol" },
+    { id: 5, title: "Petrol/Methanol" },
+    { id: 6, title: "Methanol" },
+    { id: 7, title: "Petrol/Ethanol" },
+    { id: 8, title: "LNG" },
+    { id: 9, title: "Other" },
+    { id: 10, title: "Electric" },
+    { id: 11, title: "Diesel" },
+    { id: 12, title: "Petrol/CNG" },
+    { id: 13, title: "Electric(BOV)" },
+    { id: 14, title: "Petrol/LPG" },
+    { id: 15, title: "CNG Only" },
+    { id: 16, title: "LPG Only" },
+    { id: 17, title: "Solar" },
+    { id: 18, title: "Petrol/Hybrid" },
+    { id: 19, title: "MotorcarLMV" },
 ];

@@ -37,14 +37,16 @@ const OTP = (props) => {
         navigation.navigate('imageGallary', {
           sessionId: sessionId,
           response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
+          customerId: response?.data?.customerId,
+          userData: userData
         })
       } else {
         navigation.navigate('customerRegistration', {
           otpData: response?.data,
           sessionId: sessionId,
           response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
+          customerId: response?.data?.customerId,
+          userData: userData
         })
       }
     } catch (error) {
