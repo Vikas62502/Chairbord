@@ -19,7 +19,7 @@ const SwipperComponent = () => {
         index={1}
         showPagination
         paginationStyle={{
-          bottom: -40
+          bottom: -20
         }}
         paginationActiveDotColor={'blue'}
         paginationDefaultColor={'gray'}

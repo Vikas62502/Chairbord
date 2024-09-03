@@ -5,8 +5,11 @@ import OverlayHeader from '../../components/OverlayHeader'
 import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import SelectField from '../../components/common/SelectFieldBig'
+import InputText from '../../components/common/InputText'
+
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
+
 
 const TagReplacement = (props: any) => {
     const [userData, setUserData] = React.useState<any>()
@@ -76,15 +79,22 @@ const TagReplacement = (props: any) => {
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
 
-                {/* <View style={{ marginBottom: "5%" }}>
+
+                <View style={{ marginBottom: "4%" }}>
+
                     <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
                 </View> */}
                 <View style={{ marginVertical: "5%" }}>
                     <CustomInputText value={replacementOtpData.mobileNumber} placeholder={"Enter mobile number"} onChangeText={(text: string) => formDatahandler('mobileNumber', text)} keyboardType='numeric' />
                 </View>
+
+                <InputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />
+                <View style={{ }}>
+                    <InputText value={vehicleNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => setVehicleNumber(text.toUpperCase())}
                 <CustomInputText placeholder={"Enter Vehicle number"} value={replacementOtpData.vehicleNumber} onChangeText={(text: string) => formDatahandler('vehicleNumber', text)} />
                 <View style={{ marginVertical: "5%" }}>
                     <CustomInputText value={replacementOtpData.engineNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => formDatahandler('engineNumber', text)}
+
                     />
                 </View>
 
@@ -114,19 +124,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
         color: "#000000",
-        marginBottom: "4%"
+        marginBottom: "2%"
 
     },
     errorText: {
-        padding: "2%",
-        paddingHorizontal: "4%",
+        padding: "0%",
+        paddingHorizontal: "2%",
         color: "#FF0000",
     },
     bottomContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 16,
-        paddingHorizontal: "5%",
+        justifyContent: 'flex-end',
+    
+        padding: "5%",
+        height: "40%",
     },
 })
 

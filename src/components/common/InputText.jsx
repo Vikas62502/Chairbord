@@ -25,9 +25,10 @@ const InputText = ({
   keyboardType = 'default'
 }) => {
   return (
-    <View
-      style={{ alignItems: 'center', marginHorizontal: 20, marginVertical: 10 }}
-    >
+    <View style={{  alignItems: 'center' ,
+      marginVertical:10
+    }}>
+
       <TextInput
         style={[styles.textInput, inputStyle]}
         value={value}
