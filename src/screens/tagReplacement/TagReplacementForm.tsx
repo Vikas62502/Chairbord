@@ -17,6 +17,9 @@ import InputText from '../../components/common/InputText'
 import SelectField from '../../components/common/SelectFieldBig'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
+import { client } from '../../client/Axios'
+import Loader from '../../components/ui/Loader'
+import showAlert from '../../utils/showAlert'
 
 const replacementReason = [
   {
@@ -42,28 +45,22 @@ const replacementReason = [
 ]
 
 const TagReplacementForm = (props: any) => {
-  // Dummy data to replace dynamic data
-  const validateOtpResp = {
-    custDetails: {
-      name: 'John Doe',
-      mobileNo: '1234567890',
-      walletId: 'wallet123'
-    },
-    vrnDetails: {
-      vehicleNo: 'ABC1234',
-      chassisNo: 'CHASSIS1234',
-      engineNo: 'ENGINE1234',
-      isCommercial: false,
-      vehicleType: 'Sedan',
-      repTagCost: '500'
-    }
-  }
+  const { response, customerId, userData } = props?.route?.params
+  const session_Id = props?.route?.params
+  // console.log(response, customerId, userData, session_Id, 'logged!')
 
-  const mobileNo = validateOtpResp.custDetails.mobileNo
-  const walletId = validateOtpResp.custDetails.walletId
-  const vehicleNo = validateOtpResp.vrnDetails.vehicleNo
-  const chassisNo = validateOtpResp.vrnDetails.chassisNo
-  const debitAmt = validateOtpResp.vrnDetails.repTagCost
+  const { mobileNo, walletId } = response.custDetails
+
+  const {
+    vehicleNo,
+    chassisNo,
+    repTagCost: debitAmt,
+    engineNo,
+    isNationalPermit: nationalPermit,
+    permitExpiryDate,
+    stateOfRegistration,
+    vehicleDescriptor
+  } = response.vrnDetails
 
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
@@ -72,34 +69,94 @@ const TagReplacementForm = (props: any) => {
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
+  const [userInfo, setUserInfo] = useState<any>()
+
+  // console.log(userInfo.user.id, 'userData');
+
+  const getUserData = async () => {
+    try {
+      const value = await getCache('userData')
+      setUserInfo(value)
+      if (value !== null) {
+        return JSON.parse(value)
+      }
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
+  const replaceFastag = async () => {
+    setLoading(true)
+    try {
+      const body = {
+        mobileNo: mobileNo,
+        walletId: walletId,
+        vehicleNo: vehicleNo,
+        agentId: parseInt(userInfo.user.id),
+        masterId: parseInt(userInfo.user.master_id) || '',
+        debitAmt: debitAmt,
+        requestId: parseInt(response.requestId),
+        sessionId: session_Id,
+        serialNo: '608268-001-' + tagSerialNumber,
+        reason: reasonOfReplacement,
+        reasonDesc: description || '',
+        chassisNo: chassisNo,
+        engineNo: engineNo,
+        isNationalPermit: nationalPermit || '',
+        permitExpiryDate: permitExpiryDate || '',
+        stateOfRegistration: stateOfRegistration || '',
+        vehicleDescriptor: vehicleDescriptor || '',
+        udf1: '',
+        udf2: '',
+        udf3: '',
+        udf4: '',
+        udf5: ''
+      }
+      console.log(body, "body data");
+      const res = await client.post(`/bajaj/replaceFastag`, body);
+      console.log(res, "response");
+      setModelIsSuccess(true);
+      setModalShow(true);
+    } catch (err : any) {
+      console.log(err)
+      showAlert(err.response.data.error.msg || 'Tag replacement failed',
+        () => setLoading(false));
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const customerDetailsData = [
     {
       title: 'Name',
-      value: `:  ${validateOtpResp.custDetails.name}`
+      value: `:  ${response.custDetails.name}`
     },
     {
       title: 'Mobile Number',
-      value: `:  ${validateOtpResp.custDetails.mobileNo}`
+      value: `:  ${response.custDetails.mobileNo}`
     }
   ]
 
   const existingTagDetailData = [
     {
       title: 'Chassis No.',
-      value: `:  ${validateOtpResp.vrnDetails.chassisNo}`
+      value: `:  ${response.vrnDetails.chassisNo}`
     },
     {
       title: 'Engine No.',
-      value: `:  ${validateOtpResp.vrnDetails.engineNo}`
+      value: `:  ${response.vrnDetails.engineNo}`
     },
     {
       title: 'Commercial Status',
-      value: `:  ${validateOtpResp.vrnDetails.isCommercial}`
+      value: `:  ${response.vrnDetails.commercial}`
     },
     {
       title: 'Vehicle Type',
-      value: `:  ${validateOtpResp.vrnDetails.vehicleType}`
+      value: `:  ${response.vrnDetails.vehicleType}`
     }
   ]
 
@@ -115,11 +172,8 @@ const TagReplacementForm = (props: any) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <OverlayHeader
-          title={'Tag Replacement'}
-          showBackButton={true}
-        />
-
+        <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
+        {loading && <Loader/>}
         <View style={styles.container}>
           {loading && (
             <View style={styles.loaderContainer}>
@@ -132,8 +186,8 @@ const TagReplacementForm = (props: any) => {
           />
 
           <Text style={styles.label}>Vehicle number</Text>
-          <View style={{ flex: 1}}>
-            <InputText placeholder={''} value={vehicleNo} editable={false} />
+          <View style={{ flex: 1 }}>
+            <InputText placeholder={''} value={vehicleNo} isEditable={false} />
           </View>
 
           <CustomerDetailsCard
@@ -141,7 +195,8 @@ const TagReplacementForm = (props: any) => {
             title="Existing tag details"
           />
           <Text style={styles.subDescription}>
-            Only Tag Serial number will be updated, all other details will remain the same
+            Only Tag Serial number will be updated, all other details will
+            remain the same
           </Text>
 
           <Text style={styles.label}>Tag serial number</Text>
@@ -150,24 +205,31 @@ const TagReplacementForm = (props: any) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <View style={{ flex: 1 }}>
-              <InputText placeholder={''} value='608268' editable={false} />
+              <InputText placeholder={''} value="608268" isEditable={false} />
             </View>
-            <View style={{ flex: 1, marginHorizontal: "5%" }}>
-              <InputText placeholder={''} value='001' editable={false} />
+            <View style={{ flex: 1, marginHorizontal: '5%' }}>
+              <InputText placeholder={''} value="001" isEditable={false} />
             </View>
             <View style={{ flex: 1 }}>
-              <InputText placeholder={'xxxxxx'} onChangeText={(text: string) => setTagSerialNumber(text)} value={tagSerialNumber} />
+              <InputText
+                placeholder={'xxxxxx'}
+                onChangeText={(text: string) => setTagSerialNumber(text)}
+                value={tagSerialNumber}
+              />
             </View>
           </View>
 
           <Text style={styles.label}>Replacement reason</Text>
           <SelectField
-            selectedValue={(value: any) => setReasonOfReplacement(value.reasonId)}
+            selectedValue={(value: any) =>
+              setReasonOfReplacement(value.reasonId)
+            }
             dataToRender={replacementReason}
+            borderColor={!reasonOfReplacement ? 'red' : 'black'}
             title={'Select replacement reason'}
           />
 
@@ -175,7 +237,12 @@ const TagReplacementForm = (props: any) => {
             <View>
               <Text style={styles.label}>Description</Text>
               <TextInput
-                style={{ borderWidth: 1, borderColor: "#000000", borderRadius: 25, color: '#000000' }}
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#000000',
+                  borderRadius: 25,
+                  color: '#000000'
+                }}
                 placeholder={'Enter description'}
                 onChangeText={(text: string) => setDescription(text)}
                 value={description}
@@ -212,8 +279,7 @@ const TagReplacementForm = (props: any) => {
                     color: '#263238',
                     fontSize: 28,
                     lineHeight: 33,
-                    fontWeight: '500',
-                
+                    fontWeight: '500'
                   }}
                 >
                   Cancel
@@ -223,13 +289,17 @@ const TagReplacementForm = (props: any) => {
             <View style={{ width: '45%' }}>
               <SecondaryButton
                 title={'Submit'}
-              // onPress={() => customerTagReplacement()}
+                onPress={() => replaceFastag()}
               />
             </View>
           </View>
         </View>
 
-        <SuccessModal isSuccess={modelIsSuccess} visible={modalShow} title={'Tag replaced successfully'} />
+        <SuccessModal
+          isSuccess={modelIsSuccess}
+          visible={modalShow}
+          title={'Tag replaced successfully'}
+        />
       </ScrollView>
     </SafeAreaView>
   )
@@ -265,8 +335,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    zIndex: 10,
-  },
+    zIndex: 10
+  }
 })
 
 export default TagReplacementForm

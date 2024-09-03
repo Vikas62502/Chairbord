@@ -33,7 +33,12 @@ const OTP = (props) => {
       })
 
       if (otpType === 'tagReplacement') {
-        return props.navigation.navigate('tagReplacementForm')
+        return props.navigation.navigate('tagReplacementForm',  {
+          sessionId: sessionId,
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId,
+          userData: userData
+        })
       }
 
       if (
