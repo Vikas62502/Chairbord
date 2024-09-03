@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     height: 75,
     width:'auto',
     alignItems: 'between',
+    margin:10,
     justifyContent: 'center',
     paddingHorizontal: '45%',
     overflow: 'hidden'// Ensure the gradient follows the button's shape
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     height: 75,
     width: 'auto',
+    margin:10,
     alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
