@@ -97,9 +97,9 @@ const TagReplacement = (props: any) => {
 
 
                 {/* error message */}
-                <Text style={styles.errorText}>*Details not found
+                {/* <Text style={styles.errorText}>*Details not found
                     Invalid mobile number, tag serial number or bank name
-                </Text>
+                </Text> */}
             </View>
 
             <View style={styles.bottomContainer}>
@@ -131,9 +131,10 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         justifyContent: 'flex-end',
-    
-        padding: "5%",
         height: "40%",
+        padding: "5%",
+    
+
     },
 })
 

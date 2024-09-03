@@ -114,26 +114,27 @@ const Mobileverification = (props: any) => {
           onChangeText={(txt: string) => formHandler('engineNo', txt?.toUpperCase())}
           maxLength={5}
         />
-        <Text style={styles.errorText}>
+        {/* <Text style={styles.errorText}>
           *Details not found Invalid mobile number, tag serial number or bank
           name
-        </Text>
+        </Text> */}
 
-        <View style={styles.bottomContainer}>
+        
+      </View>
+      <View style={styles.bottomContainer}>
           <PrimaryBtn
             title={'Sent OTP'}
             onPress={sendOTP}
             disabled={VerificationFormData?.mobile?.length < 10 || VerificationFormData?.vehicleNo?.length < 7 || VerificationFormData?.engineNo?.length < 5}
           />
         </View>
-      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    
+flex: 1,
     padding: '5%',
   },
   errorText: {
@@ -149,7 +150,8 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     justifyContent: 'flex-end',
-    height: '50%',
+        padding: "5%",
+        height: "50%",
     
 },
 })

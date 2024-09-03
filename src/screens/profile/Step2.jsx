@@ -45,7 +45,7 @@ const Step2 = ({
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <ScrollView contentContainerStyle={styles.scrollViewContent} >
       <TagOfInput text="Address Detail" />
       <InputText
         placeholder="Enter address"

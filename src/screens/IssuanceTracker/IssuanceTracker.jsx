@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView,RefreshControl, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
 import SelectFieldSmall from '../../components/common/SelectFieldSmall'
@@ -7,9 +7,23 @@ import ExcelButton from '../../components/ui/ExcelButton'
 import IssuanceCards from './IssuanceCards'
 
 const IssuanceTracker = () => {
-  const [showIssuanceModal, setShowIssuanceModal] = useState(false)
+  const [showIssuanceModal, setShowIssuanceModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      IssuanceTracker();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
-    <ScrollView>
+    <ScrollView refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <View style={{ padding: '5%' }}>
         <SearchBar setShowInventoryModal={setShowIssuanceModal} />
 

@@ -220,7 +220,7 @@ const TagReplacementForm = (props: any) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={{ width: '45%' }}>
+            <View style={{ width: '45%', }}>
               <SecondaryButton
                 title={'Submit'}
               // onPress={() => customerTagReplacement()}

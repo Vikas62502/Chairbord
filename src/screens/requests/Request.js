@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, Image, TextInput } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Pressable, RefreshControl, Image, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import RequestCard from './RequestCard'
 import SelectField from '../../components/common/SelectFieldSmall'
@@ -61,8 +61,22 @@ const Request = () => {
     const [searchText, setSearchText] = useState('')
     const [showFilterModal, setShowFilterModal] = useState(false)
     const [dataShowModal, setDataShowModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+         Request();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
             <View style={{ padding: "5%" }}>
                 <View style={styles.searchAndfilter}>
                     <View style={styles.searchField}>
