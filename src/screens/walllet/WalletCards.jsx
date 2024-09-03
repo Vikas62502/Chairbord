@@ -107,8 +107,10 @@ const styles = StyleSheet.create({
     color: '#000000'
   },
   ImageStyles: {
-    backgroundColor: '#9C9C9C',
+    backgroundColor: 'white',
     padding: '4%',
+    borderColor: '#00000080',
+    borderWidth:.4,
     borderRadius: 50
   },
   descriptionText: {
