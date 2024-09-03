@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -6,7 +7,6 @@ import {
   Pressable,
   Image
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
 import CustomInputText from '../../components/common/CustomInputText'
@@ -23,15 +23,50 @@ import {
 } from 'cashfree-pg-api-contract'
 import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
 
-const TopupWallet = () => {
+const TopupWallet = (props) => {
+  const walletBalance = props?.route?.params?.walletBalance
   const [topupAmount, setTopupAmount] = useState('')
   const [loading, setLoading] = useState(false)
-
+  const [orderStatus, setOrderStatus] = useState()
   const [order, setOrder] = useState({
     payment_session_id: '',
     order_id: '',
     order_expiry_time: 'order_expiry_time'
   })
+
+  useEffect(() => {
+    const onReceivedEvent = (eventName, map) => {
+      console.log(
+        'Event received on screen: ' +
+          eventName +
+          ' map: ' +
+          JSON.stringify(map)
+      )
+    }
+
+    const onVerify = (orderId) => {
+      console.log('Payment Successful:', orderId)
+      topupBalanceBackend()
+      updateStatus(orderId)
+    }
+
+    const onError = (error, orderId) => {
+      console.log(
+        'Payment Failed: ' + JSON.stringify(error) + '\norderId is :' + orderId
+      )
+      updateStatus(JSON.stringify(error))
+    }
+
+    if (order.payment_session_id && order.order_id) {
+      CFPaymentGatewayService.setEventSubscriber({ onReceivedEvent })
+      CFPaymentGatewayService.setCallback({ onVerify, onError })
+    }
+
+    return () => {
+      CFPaymentGatewayService.removeCallback()
+      CFPaymentGatewayService.removeEventSubscriber()
+    }
+  }, [order])
 
   const createOrderCashfree = async () => {
     const response = await client.post('/cashfree-payment/create-order', {
@@ -45,18 +80,20 @@ const TopupWallet = () => {
   }
 
   const topUpApi = async () => {
+    setLoading(true)
     await createOrderCashfree()
+    setLoading(false)
   }
 
   const getSession = () => {
     return new CFSession(
       order.payment_session_id, // sessionId
       order.order_id, // orderId
-      CFEnvironment.SANDBOX
+      CFEnvironment.PRODUCTION // environment
     )
   }
 
-  const _startCheckout = async () => {
+  const startCheckout = async () => {
     try {
       const session = getSession()
       const paymentModes = new CFPaymentComponentBuilder()
@@ -66,6 +103,7 @@ const TopupWallet = () => {
         .add(CFPaymentModes.WALLET)
         .add(CFPaymentModes.PAY_LATER)
         .build()
+
       const theme = new CFThemeBuilder()
         .setNavigationBarBackgroundColor('#94ee95')
         .setNavigationBarTextColor('#FFFFFF')
@@ -74,41 +112,41 @@ const TopupWallet = () => {
         .setPrimaryTextColor('#212121')
         .setSecondaryTextColor('#757575')
         .build()
+
       const dropPayment = new CFDropCheckoutPayment(
         session,
         paymentModes,
         theme
       )
-      console.log(JSON.stringify(dropPayment))
+
       CFPaymentGatewayService.doPayment(dropPayment)
     } catch (e) {
-      console.log(e)
+      console.error('Error starting checkout:', e)
     }
-  }
-  const startCheckout = async () => {
-    await _startCheckout()
   }
 
   const topupBalanceBackend = async () => {
     try {
-      await client.post(`/wallet/agent/own-wallet/transactions`, {
+      const res = await client.post('/wallet/agent/own-wallet/transactions', {
         amount: topupAmount,
         reason: 'Cashfree Credit'
       })
+      console.log('Balance updated:', res)
     } catch (e) {
-      console.log(e)
+      console.error('Error updating balance:', e)
     }
   }
+
   useEffect(() => {
     if (order.payment_session_id && order.order_id) {
       startCheckout()
       console.log('Order state has been updated:', order)
     }
-
-    topupBalanceBackend()
   }, [order])
 
-
+  const updateStatus = (message) => {
+    setOrderStatus(message)
+  }
 
   return (
     <>
@@ -118,9 +156,8 @@ const TopupWallet = () => {
         <View style={{ padding: '5%' }}>
           <View style={styles.balanceCard}>
             <Text style={styles.balanceText}>Balance</Text>
-            <Text style={styles.amountText}>₹1,055</Text>
+            <Text style={styles.amountText}>{walletBalance}</Text>
             <HorizontalDivider />
-
             <Text
               style={[
                 styles.miniText,
@@ -135,7 +172,6 @@ const TopupWallet = () => {
               value={topupAmount}
               onChangeText={(text) => setTopupAmount(text)}
             />
-
             <Text
               style={[
                 styles.miniText,
@@ -144,12 +180,11 @@ const TopupWallet = () => {
             >
               Recommended
             </Text>
-
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: '8%' }}>
               {[500, 1000, 1500, 2000].map((amount, index) => (
                 <Pressable
                   onPress={() => {
-                    setTopupAmount(amount)
+                    setTopupAmount(amount.toString())
                     console.log(amount)
                   }}
                   key={index}
@@ -164,15 +199,12 @@ const TopupWallet = () => {
                 </Pressable>
               ))}
             </View>
-
             <LinearButton
               title={'PROCEED TO TOPUP'}
               onPress={() => topUpApi()}
               style={{ marginTop: '5%' }}
             />
-
             <HorizontalDivider />
-
             <View
               style={{
                 flexDirection: 'row',
@@ -195,37 +227,10 @@ const TopupWallet = () => {
                   </Text>
                 </View>
               </View>
-
               <Image
                 source={require('../../assets/screens/wallet/rightArrow.png')}
               />
             </View>
-
-            {/* <View style={[styles.WalletDetailsCard, { marginTop: '5%' }]}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    alignItems: 'center'
-                  }}
-                >
-                  <Image
-                    source={require('../../assets/screens/wallet/contactSupportIcon.png')}
-                  />
-                  <Text style={styles.accountNoText}>Contact support</Text>
-                </View>
-                <Image
-                  source={require('../../assets/screens/wallet/rightArrow.png')}
-                />
-              </View>
-            </View> */}
           </View>
           <View style={[styles.WalletDetailsCard, { marginTop: '5%' }]}>
             <View
@@ -286,7 +291,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
     lineHeight: 14
-    // marginBottom: '3%'
   },
   recommendText: {
     fontWeight: '500',

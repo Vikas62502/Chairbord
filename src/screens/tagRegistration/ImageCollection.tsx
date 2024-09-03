@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ActivityIndicator, ScrollView, Image, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
@@ -7,7 +7,7 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 
 const ImageCollection = (props: any) => {
-  const { sessionId, customerId } = props?.route?.params;
+  const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -24,9 +24,9 @@ const ImageCollection = (props: any) => {
           "image": base64Image
         },
         customerId: customerId,
-        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || "RJ45CM9948",
+        vehicleId: props?.route?.params?.response?.vrnDetails?.vehicleNo || userData?.vehicleNo?.toUpperCase(),
       })
-
+      console.log("api called");
       const res = await client.post("/bajaj/uploadImages",
         bodyData
       )
@@ -38,8 +38,9 @@ const ImageCollection = (props: any) => {
           image: base64Image
         }
       }));
-    } catch (error) {
-      console.log(error, "error");
+    } catch (error: any) {
+      // showAlert("Error", error.response.data.message);
+      console.log(JSON.stringify(error.response.data), "error");
     } finally {
       setLoading(false)
     }
@@ -131,6 +132,8 @@ const ImageCollection = (props: any) => {
               sessionId: sessionId,
               imageGallaryData: imageGallaryData,
               response: props?.route?.params?.response,
+              CustomerRegData: CusRegData?.data?.custDetails,
+              otpData: otpData
             })}
             disabled={!allImagesSet}
           />

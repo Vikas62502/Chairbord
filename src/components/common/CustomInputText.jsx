@@ -8,12 +8,13 @@ const CustomInputText = ({
   secure = false,
   inputStyle,
   keyboardType = 'default',
-  isEditable
+  isEditable,
+  borderColor = '#263238'
 }) => {
   return (
     <View style={{ alignItems: 'center' }}>
       <TextInput
-        style={[styles.textInput, inputStyle]}
+        style={[styles.textInput, inputStyle, { borderColor: borderColor }]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={'#263238'}
@@ -21,6 +22,7 @@ const CustomInputText = ({
         secureTextEntry={secure}
         keyboardType={keyboardType}
         editable={isEditable}
+        
       />
     </View>
   )
@@ -28,8 +30,7 @@ const CustomInputText = ({
 
 const styles = StyleSheet.create({
   textInput: {
-    borderColor: '#263238',
-    borderWidth: 0.5,
+    borderWidth: 1,
     color: '#000000',
     width: '100%',
     fontSize: 16,

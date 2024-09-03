@@ -7,6 +7,7 @@ import { client } from '../../client/Axios'
 import { useNavigation } from '@react-navigation/native'
 import InputText from '../../components/common/InputText'
 import { setCache } from '../../helper/Storage'
+import showAlert from '../../utils/showAlert'
 
 const VerifyOTP = ({ data, setShowOtpField }) => {
   const navigation = useNavigation()
@@ -31,16 +32,16 @@ const VerifyOTP = ({ data, setShowOtpField }) => {
       phoneNumber: data.phoneNumber,
       otp: otp.join('')
     })
-
-    console.log(bodyContent, 'bodycontent')
     try {
       let response = await client.post('/login/agent-otp', bodyContent)
+      console.log(response, 'otp response')
       await setCache('token', response?.data?.token)
       await setCache('userData', response?.data)
       navigation.navigate('drawer')
     } catch (error) {
-      Alert.alert('Something went wrong')
-      console.log(error, 'error')
+      showAlert(error.response.data.error.errorDesc || 'OTP Validation Failed')
+      // Alert.alert('Something went wrong')
+      console.log(JSON.stringify(error.response.data), 'otp error')
       setShowOtpField(false)
     } finally {
       setLoading(false)

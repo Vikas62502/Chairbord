@@ -12,6 +12,7 @@ const getVehicleMakerList = async (sessionId: string) => {
 }
 
 const getVehicleModelList = async (sessionId: string, vehicleMake: string) => {
+    console.log('vehicleMake', vehicleMake)
     try {
         const response = await client.post('/bajaj/vehicleModelList', {
             sessionId: sessionId,

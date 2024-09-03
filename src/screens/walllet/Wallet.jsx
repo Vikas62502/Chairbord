@@ -12,13 +12,13 @@ const Wallet = (props) => {
   const [activeTag, setActiveTag] = useState('All')
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [walletDetails, setWalletDetails] = useState([])
-  console.log(walletDetails?.transactions, 'transactions')
+  // console.log(walletDetails?.transactions, 'transactions')
 
   const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw']
-
   const getWalletDetails = async () => {
     try {
       const response = await client.get(`/wallet/transactions/agent-get`)
+      console.log('Wallet details fetched:', response.data)
       setWalletDetails(response.data)
     } catch (error) {
       console.log(error, 'error')
@@ -26,8 +26,14 @@ const Wallet = (props) => {
   }
 
   useEffect(() => {
-    getWalletDetails() 
+    console.log('Fetching wallet details...')
+    getWalletDetails()
   }, [])
+
+  useEffect(() => {
+    console.log('Wallet details updated:')
+  }, [walletDetails])
+
   return (
     <ScrollView style={styles.container}>
       <View style={{ padding: '5%' }}>
@@ -38,7 +44,13 @@ const Wallet = (props) => {
           </Text>
 
           <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
-            <Pressable onPress={() => props.navigation.navigate('topupWallet')}>
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('topupWallet', {
+                  walletBalance: walletDetails?.agent?.balance || 0
+                })
+              }
+            >
               <Image
                 source={require('../../assets/screens/wallet/topUp.png')}
               />

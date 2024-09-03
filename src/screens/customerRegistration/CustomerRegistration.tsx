@@ -14,10 +14,11 @@ import SelectField from '../../components/common/SelectFieldBig';
 import PrimaryBtn from '../../components/common/PrimaryBtn';
 import CustomInputText from '../../components/common/CustomInputText';
 import { client } from '../../client/Axios';
+import showAlert from '../../utils/showAlert';
 
 const CustomerRegistration = (props: any) => {
   const { otpData, response, customerId } = props.route.params;
-  console.log(otpData, response, customerId, 'response');
+  console.log(otpData, 'response');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -74,7 +75,7 @@ const CustomerRegistration = (props: any) => {
       sessionId: sessionId,
       custDetails: {
         name: customerFirstName,
-        lastName: customerLastName || 'NA',
+        lastName: customerLastName || '',
         mobileNo: mobile,
         dob: dateOfBirth,
         doc: [
@@ -92,41 +93,21 @@ const CustomerRegistration = (props: any) => {
 
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);
-      if (res.status === 203) {
-        Alert.alert(
-          res?.data?.error?.errorDesc || 'Something went wrong', // Title/Message
-          '', // You can add a message here if you want. If not, keep it as an empty string.
-          [
-            {
-              text: 'OK',
-              onPress: () => setLoading(false) // Action for the 'OK' button
-            }
-          ]
-        );
+      console.log(`[request res] [${JSON.stringify(res)}]`)
 
-      } else {
-        // Navigate to the next screen if everything is fine
-        props.navigation.navigate('imageGallary', {
-          sessionId: await getCache('session'),
-          response: response,
-          customerId: customerId
-        });
-      }
+      // Navigate to the next screen if everything is fine
+      props.navigation.navigate('imageGallary', {
+        sessionId: await getCache('session'),
+        response: response,
+        customerId: customerId,
+        CusRegData: res,
+        otpData: otpData
+      });
+    }
 
-      // console.log(res, 'wallet creation log');
-      // props.navigation.navigate('imageGallary',
-      //   {
-      //     sessionId: await getCache('session'),
-      //     response: response,
-      //     customerId: customerId
-      //   }
-      // )
-    } catch (error: any) {
-      Alert.alert(error?.error?.response?.msg || error?.data?.response?.msg || 'Something went wrong');
-      console.log('--------------------------------------------------------------------------------')
-      console.error(`[customer reg] [${JSON.stringify(error)}]`)
-      // console.log(error?.error?.response?.msg, 'wallet creation error')
-      // console.log(error?.data?.response?.msg, 'wallet creation error')
+    catch (error: any) {
+      showAlert(error?.response?.data?.error?.errorDesc || error?.response?.data?.error?.msg || 'Customer registration failed',
+        () => setLoading(false));
     } finally {
       setLoading(false);
     }
@@ -214,7 +195,7 @@ const CustomerRegistration = (props: any) => {
         {documentType.docType === 2 || documentType.docType === 4 ? (
           <>
             <Text style={styles.label}>Enter Expiry Date</Text>
-            <View>
+            <View style={{ paddingHorizontal: "5%" }}>
               <CustomInputText
                 placeholder='DD-MM-YYYY'
                 placeholderTextColor='#263238'
