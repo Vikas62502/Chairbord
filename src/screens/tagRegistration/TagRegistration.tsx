@@ -19,7 +19,9 @@ import showAlert from '../../utils/showAlert'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
-    const { CustomerRegData, otpData } = props.route.params;
+    console.log(vrnDetails, "vrnDetails")
+    const { CustomerRegData, otpData, userOtpData } = props.route.params;
+    console.log(userOtpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
@@ -291,8 +293,8 @@ const TagRegistration = (props: any) => {
                 <Text style={styles.label}>Vehicle Details</Text>
 
                 <CustomLabelText label={"Vehicle Number"} />
-                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo}
-                    onChangeText={(text: string) => setVehicleNumber(text)} isEditable={false}
+                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
+                    onChangeText={{}} isEditable={false}
                 />
 
                 <View style={{ marginTop: "5%" }}>
@@ -310,11 +312,8 @@ const TagRegistration = (props: any) => {
                     <Text style={styles.label}>Vehicle Details</Text>
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vrn Number"} />
-                        <InputText
-                            placeholder={"Enter vehicle number"}
-                            value={vrnDetails?.vehicleNo}
-                            onChangeText={(text: string) => setVehicleNumber(text)}
-                            // isEditable={false}
+                        <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
+                            onChangeText={{}} isEditable={false}
                         />
                     </View>
 
@@ -342,12 +341,12 @@ const TagRegistration = (props: any) => {
 
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Color"} />
-                        {vrnDetails && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
+                        {vrnDetails && !vrnDetails?.vehicleColour && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
                             placeholder={"Vehicle Color"}
                             value={vrnDetails?.vehicleColour}
                             onChangeText={(text: string) => setVehicleColor(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} />}
+                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -445,9 +444,9 @@ const TagRegistration = (props: any) => {
                             registerFastagApi()
                         }}
                     />
-                    
+
                 </View>
-                
+
 
             </View>
 
@@ -501,7 +500,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 16
     },
-    
+
     dateInput: {
         borderColor: '#263238',
         borderWidth: 1,

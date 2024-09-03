@@ -21,14 +21,11 @@ const InputText = ({
   inputStyle,
   id,
   maxLength,
-  editable = true,
+  isEditable = true,
   keyboardType = 'default'
 }) => {
   return (
-    <View style={{  alignItems: 'center' ,
-      marginVertical:10
-    }}>
-
+    <View style={{ alignItems: 'center', marginVertical: 10 }}>
       <TextInput
         style={[styles.textInput, inputStyle]}
         value={value}
@@ -38,7 +35,7 @@ const InputText = ({
         secureTextEntry={secure}
         id={id}
         maxLength={maxLength}
-        editable={editable}
+        editable={isEditable}
         keyboardType={keyboardType}
         // autoCapitalize="characters"
       />

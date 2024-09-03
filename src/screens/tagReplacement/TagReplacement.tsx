@@ -27,7 +27,6 @@ const TagReplacement = (props: any) => {
         })
     }
 
-
     const sendOTP = async () => {
         setLoading(true)
         try {
@@ -64,6 +63,7 @@ const TagReplacement = (props: any) => {
             setLoading(false)
         }
     }
+
     const getUserData = async () => {
         let userData = await getCache('userData')
         setUserData(userData)
@@ -72,6 +72,7 @@ const TagReplacement = (props: any) => {
     useEffect(() => {
         getUserData()
     }, [])
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Replacement"} />
@@ -79,25 +80,28 @@ const TagReplacement = (props: any) => {
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
 
-
                 <View style={{ marginBottom: "4%" }}>
-
-                    <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
-                </View> */}
-                <View style={{ marginVertical: "5%" }}>
-                    <CustomInputText value={replacementOtpData.mobileNumber} placeholder={"Enter mobile number"} onChangeText={(text: string) => formDatahandler('mobileNumber', text)} keyboardType='numeric' />
-                </View>
-
-                <InputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />
-                <View style={{ }}>
-                    <InputText value={vehicleNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => setVehicleNumber(text.toUpperCase())}
-                <CustomInputText placeholder={"Enter Vehicle number"} value={replacementOtpData.vehicleNumber} onChangeText={(text: string) => formDatahandler('vehicleNumber', text)} />
-                <View style={{ marginVertical: "5%" }}>
-                    <CustomInputText value={replacementOtpData.engineNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => formDatahandler('engineNumber', text)}
-
+                    <CustomInputText
+                        value={replacementOtpData.mobileNumber}
+                        placeholder={"Enter mobile number"}
+                        onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
+                        keyboardType='numeric'
                     />
                 </View>
 
+                <CustomInputText
+                    placeholder={"Enter Vehicle number"}
+                    value={replacementOtpData.vehicleNumber}
+                    onChangeText={(text: string) => formDatahandler('vehicleNumber', text.toUpperCase())}
+                />
+
+                <View style={{ marginVertical: "5%" }}>
+                    <CustomInputText
+                        value={replacementOtpData.engineNumber}
+                        placeholder={"Enter last 5 digit engine number"}
+                        onChangeText={(text: string) => formDatahandler('engineNumber', text)}
+                    />
+                </View>
 
                 {/* error message */}
                 <Text style={styles.errorText}>*Details not found
@@ -106,9 +110,7 @@ const TagReplacement = (props: any) => {
             </View>
 
             <View style={styles.bottomContainer}>
-                <PrimaryBtn title={"Next"}
-                    onPress={sendOTP}
-                />
+                <PrimaryBtn title={"Next"} onPress={sendOTP} />
             </View>
         </SafeAreaView>
     )
@@ -125,7 +127,6 @@ const styles = StyleSheet.create({
         lineHeight: 19,
         color: "#000000",
         marginBottom: "2%"
-
     },
     errorText: {
         padding: "0%",
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         justifyContent: 'flex-end',
-    
         padding: "5%",
         height: "40%",
     },
