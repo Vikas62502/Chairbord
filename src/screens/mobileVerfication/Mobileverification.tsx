@@ -115,7 +115,7 @@ const Mobileverification = (props: any) => {
           value={VerificationFormData.engineNo}
           onChangeText={(txt: string) => formHandler('engineNo', txt)}
           maxLength={5}
-          keyboardType={'numeric'}
+          keyboardType={'default'}
         />
         <Text style={styles.errorText}>
           *Details not found Invalid mobile number, tag serial number or bank

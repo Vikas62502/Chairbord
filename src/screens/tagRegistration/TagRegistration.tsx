@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -16,14 +16,10 @@ import showAlert from '../../utils/showAlert'
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
     const { CustomerRegData, otpData } = props.route.params;
-    console.log(CustomerRegData?.name, "custDetails")
-    // console.log(vrnDetails, "vrnDetails")
-    // console.log(otpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
-    const navigation = useNavigation()
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
     const [vehicleColor, setVehicleColor] = useState("")
@@ -37,10 +33,8 @@ const TagRegistration = (props: any) => {
     const [npciIdData, setNpciIdData] = useState("4")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
+    const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
     const [errors, setErrors] = useState<any>({})
-    // console.log(errors, "errors")
-
-    // console.log(vehicleModel, "vehicleModel")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -108,6 +102,7 @@ const TagRegistration = (props: any) => {
         },
     ]
 
+    // error validation
     const validateFields = () => {
         let newErrors: any = {};
 
@@ -185,7 +180,7 @@ const TagRegistration = (props: any) => {
                     "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
                     "isNationalPermit": vrnDetails?.isNationalPermit || "2",
                     "permitExpiryDate": vrnDetails?.permitExpiryDate || permitExpiryDate,
-                    "stateOfRegistration": vrnDetails?.vehicleNo?.slice(0, 2) || vrnDetails?.stateOfRegistration,
+                    "stateOfRegistration": vrnDetails?.stateOfRegistration || stateOfRegistration,
                 },
                 "custDetails": {
                     "name": custDetails?.name || CustomerRegData?.name,
@@ -411,6 +406,15 @@ const TagRegistration = (props: any) => {
                         />
                     }
                 </View>
+
+                {
+                    vrnDetails && !vrnDetails?.stateOfRegistration && <View style={{ marginVertical: "5%" }}>
+                        <CustomLabelText label={"State of Registration"} />
+                        <SelectField
+                            dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
+                    </View>
+
+                }
 
                 {/* <View style={{ marginBottom: "5%" }}>
                     {vrnDetails && vrnDetails?.commercial ? <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} /> : <SelectField
