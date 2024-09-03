@@ -132,7 +132,7 @@ const TagReplacementForm = (props: any) => {
           />
 
           <Text style={styles.label}>Vehicle number</Text>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1}}>
             <InputText placeholder={''} value={vehicleNo} editable={false} />
           </View>
 

@@ -32,7 +32,7 @@ const customerDetailsData = [
 const OrderSummary = (props) => {
   return (
     <>
-      <OverlayHeader title={'Wallet'} navigateTo={'drawer'} />
+      <OverlayHeader title={'Order Summary'} navigateTo={'drawer'} />
       <ScrollView style={styles.container}>
         <View style={{ padding: '5%' }}>
           <View style={styles.WalletDetailsCard}>

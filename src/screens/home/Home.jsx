@@ -79,9 +79,9 @@ const Home = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: '10%',
-          marginHorizontal: 10,
-          width: 'auto'
+          marginBottom: '5%',
+          marginHorizontal:10,
+          width:'auto'
         }}
       >
         <Image source={require('../../assets/dashboard/registerTag.png')} />

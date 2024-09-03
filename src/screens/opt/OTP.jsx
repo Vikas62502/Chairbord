@@ -17,6 +17,7 @@ import showAlert from '../../utils/showAlert'
 
 const OTP = (props) => {
   const userData = props.route.params?.VerificationFormData
+  const otpType = props.route.params?.type
   const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
@@ -30,6 +31,10 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: sessionId
       })
+
+      if (otpType === 'tagReplacement') {
+        return props.navigation.navigate('tagReplacementForm')
+      }
 
       if (
         response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
@@ -86,7 +91,9 @@ const OTP = (props) => {
           <Text style={styles.OtpVerificationText}>OTP Verification</Text>
           <Text style={styles.otpDescription}>
             Enter the OTP sent to{' '}
-            <Text style={{ color: '#000000' }}>{`+91${userData.mobile}`}</Text>
+            <Text style={{ color: '#000000' }}>{`+91${
+              userData?.mobile || userData?.mobileNumber
+            }`}</Text>
           </Text>
 
           <View style={{ flexDirection: 'row', marginVertical: '5%' }}>

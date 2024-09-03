@@ -63,7 +63,9 @@ const CardAccordian = ({ title, content }) => {
           style={[
             styles.content,
             {
-              color: '#000000'
+              color: '#000000',
+              borderWidth:.5,
+              borderRadius:20,
             }
           ]}
           onLayout={(event) => {
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '4%',
-    backgroundColor: '#F3F3F3',
+    backgroundColor: 'white',
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#263238'

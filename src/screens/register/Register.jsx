@@ -69,7 +69,7 @@ const Register = () => {
         navigateTo={'SignIn'}
       />
       {loading && <Loader />}
-      <View>
+      <View style={styles.container}>
         <InputText
           id={'email_id'}
           placeholder={'Enter email id'}
@@ -99,9 +99,11 @@ const Register = () => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: "5%",
+},
   getOtpButton: {
     marginTop: '10%',
-    alignItems: 'center'
   }
 })
 

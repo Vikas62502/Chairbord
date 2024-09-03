@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -11,19 +11,21 @@ import SelectField from '../../components/common/SelectFieldBig'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
+import InputText from '../../components/common/InputText'
+import BottomNavigator from '../../navigation/bottom/BottomNavigator'
+
 import showAlert from '../../utils/showAlert'
+
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
-    const { CustomerRegData, otpData } = props.route.params;
-    console.log(CustomerRegData?.name, "custDetails")
-    // console.log(vrnDetails, "vrnDetails")
-    // console.log(otpData, "otpData")
+    console.log(vrnDetails, "vrnDetails")
+    const { CustomerRegData, otpData, userOtpData } = props.route.params;
+    console.log(userOtpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
-    const navigation = useNavigation()
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
     const [vehicleColor, setVehicleColor] = useState("")
@@ -37,10 +39,8 @@ const TagRegistration = (props: any) => {
     const [npciIdData, setNpciIdData] = useState("4")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
+    const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
     const [errors, setErrors] = useState<any>({})
-    // console.log(errors, "errors")
-
-    // console.log(vehicleModel, "vehicleModel")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -108,6 +108,7 @@ const TagRegistration = (props: any) => {
         },
     ]
 
+    // error validation
     const validateFields = () => {
         let newErrors: any = {};
 
@@ -185,7 +186,7 @@ const TagRegistration = (props: any) => {
                     "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
                     "isNationalPermit": vrnDetails?.isNationalPermit || "2",
                     "permitExpiryDate": vrnDetails?.permitExpiryDate || permitExpiryDate,
-                    "stateOfRegistration": vrnDetails?.vehicleNo?.slice(0, 2) || vrnDetails?.stateOfRegistration,
+                    "stateOfRegistration": vrnDetails?.stateOfRegistration || stateOfRegistration,
                 },
                 "custDetails": {
                     "name": custDetails?.name || CustomerRegData?.name,
@@ -292,14 +293,14 @@ const TagRegistration = (props: any) => {
                 <Text style={styles.label}>Vehicle Details</Text>
 
                 <CustomLabelText label={"Vehicle Number"} />
-                <CustomInputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo}
-                    onChangeText={(text: string) => setVehicleNumber(text)} isEditable={false}
+                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
+                    onChangeText={{}} isEditable={false}
                 />
 
                 <View style={{ marginTop: "5%" }}>
                     <CustomLabelText label={"Chasis Number"} />
                     {vrnDetails && vrnDetails?.chassisNo?.length > 2 ?
-                        <CustomInputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
+                        <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
                             isEditable={false}
                         /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
                             onChangeText={(text: string) => setChasisNo(text?.toUpperCase())} borderColor={chassisNo?.length < 2 ? "red" : "#263238"}
@@ -311,11 +312,8 @@ const TagRegistration = (props: any) => {
                     <Text style={styles.label}>Vehicle Details</Text>
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vrn Number"} />
-                        <CustomInputText
-                            placeholder={"Enter vehicle number"}
-                            value={vrnDetails?.vehicleNo}
-                            onChangeText={(text: string) => setVehicleNumber(text)}
-                            isEditable={false}
+                        <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
+                            onChangeText={{}} isEditable={false}
                         />
                     </View>
 
@@ -343,12 +341,12 @@ const TagRegistration = (props: any) => {
 
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Color"} />
-                        {vrnDetails && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
+                        {vrnDetails && !vrnDetails?.vehicleColour && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
                             placeholder={"Vehicle Color"}
                             value={vrnDetails?.vehicleColour}
                             onChangeText={(text: string) => setVehicleColor(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} />}
+                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -412,6 +410,15 @@ const TagRegistration = (props: any) => {
                     }
                 </View>
 
+                {
+                    vrnDetails && !vrnDetails?.stateOfRegistration && <View style={{ marginVertical: "5%" }}>
+                        <CustomLabelText label={"State of Registration"} />
+                        <SelectField
+                            dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
+                    </View>
+
+                }
+
                 {/* <View style={{ marginBottom: "5%" }}>
                     {vrnDetails && vrnDetails?.commercial ? <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} /> : <SelectField
                         dataToRender={commercialOptions} title={'Select national permit'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
@@ -430,16 +437,19 @@ const TagRegistration = (props: any) => {
 
 
 
-                <View style={{ marginTop: 20, alignItems: "center", justifyContent: "center" }}>
+                <View style={{ marginTop: 20, justifyContent: "center" }}>
                     <SecondaryButton
                         title={"Submit"}
                         onPress={() => {
                             registerFastagApi()
                         }}
                     />
+
                 </View>
 
+
             </View>
+
             <SuccessModal
                 visible={modalVisible}
                 onClose={() => {
@@ -490,6 +500,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 16
     },
+
     dateInput: {
         borderColor: '#263238',
         borderWidth: 1,

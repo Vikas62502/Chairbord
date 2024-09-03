@@ -133,7 +133,8 @@ const ImageCollection = (props: any) => {
               imageGallaryData: imageGallaryData,
               response: props?.route?.params?.response,
               CustomerRegData: CusRegData?.data?.custDetails,
-              otpData: otpData
+              otpData: otpData,
+              userOtpData: userData
             })}
             disabled={!allImagesSet}
           />

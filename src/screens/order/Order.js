@@ -5,6 +5,7 @@ import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
 import CreateReturnModal from '../return/CreateReturnModal'
 import CreateButton from '../../components/ui/CreateButton'
+import OrderFilter from './OrderFilter'
 
 const orderCardData = [
   {
@@ -128,7 +129,10 @@ const Order = (props) => {
         onClose={() => setShowFilterModal(false)}
       /> */}
 
-
+<OrderFilter
+        visible={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+      />
       <CreateOrderModal
         visible={createOrderModal}
         onClose={() => setCreateOrderModal(false)}

@@ -48,7 +48,7 @@ const SuccessModal = ({ visible, onClose, title, isSuccess }) => {
               : 'Please ask customer to contact NHAI FASTag Toll free no. 1033'}
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('drawer')}
+            onPress={() => navigation.goBack()}
             style={styles.okButton}
           >
             <Text style={styles.okButtonText}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   okButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     borderRadius: 12,
     paddingVertical: '4%',
     paddingHorizontal: '15%'

@@ -10,14 +10,14 @@ import {
 } from 'react-native'
 import DatePicker from 'react-native-date-picker'
 
-const FilterTags = ({ visible, onClose, onApply }) => {
+const OrderFilter = ({ visible, onClose, onApply }) => {
   const [SelectedTag, setSelectedTag] = useState(false)
   const [isChooseDateActive, setIsChooseDateActive] = useState(false)
   const [date, setDate] = useState(new Date())
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const [open, setOpen] = useState(false)
 
-  const statusTagData = ['Successful', 'Pending', 'Failed']
-  const typeTagData = ['Payment', 'Recieved', 'TopUp']
+  const statusTagData = ['Dispatched', 'Approved', 'Return','Rejected','Acknowledge','Select all']
   const statusDurationData = [
     'Last 1 Month',
     'Last 3 Months',
@@ -33,36 +33,12 @@ const FilterTags = ({ visible, onClose, onApply }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContent}>
-          <Text style={styles.headingText}>Filter Payments</Text>
+          <Text style={styles.headingText}>Filter Orders</Text>
 
           <View>
             <Text style={styles.filterType}>Status</Text>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
+            <View style={{ flexDirection: 'row',  flexWrap: 'wrap',gap: 10 }}>
               {statusTagData.map((data, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => setSelectedTag(data)}
-                  style={
-                    SelectedTag === data ? styles.activeCapsule : styles.capsule
-                  }
-                >
-                  <Text
-                    style={
-                      SelectedTag === data
-                        ? styles.activeTagText
-                        : styles.tagText
-                    }
-                  >
-                    {data}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-          <View>
-            <Text style={styles.filterType}>Type</Text>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
-              {typeTagData.map((data, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => setSelectedTag(data)}
@@ -334,4 +310,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FilterTags
+export default OrderFilter

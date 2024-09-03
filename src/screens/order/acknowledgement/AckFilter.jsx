@@ -1,26 +1,33 @@
 import React, { useState } from 'react'
 import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
 
-const InventoryFilterModal = ({ visible, onClose, onApply }) => {
+const AckFilter = ({ visible, onClose, onApply }) => {
   const [SelectedTag, setSelectedTag] = useState(false)
 
-  const banks = [
-    'Kotak bank',
-    'State bank of India',
-    'Icici bank',
+  const bankTagData = [
+    'Kotak',
+    'State bank of india',
+    'ICICI',
     'Bank of Baroda',
-    'Axis bank',
-    'Dena bank',
-    'Select bank'
+    'Axis',
+    'Bajaj',
+    'Select all'
   ]
-
-  const status = [
-    'In-stock',
-    'Issued',
-    'Returned',
-    'Replacement',
-    'Replaced',
+  const vcTagData = [
+    'VC-4',
+    'VC-5',
+    'VC-6',
+    'VC-7',
+    'VC-12',
+    'VC-15',
+    'VC-16',
+    'Select all'
+  ]
+  const statusTagData = [
+    'New',
+    'Missing',
+    'Damaged',
+    'Received',
     'Select all'
   ]
   return (
@@ -35,33 +42,57 @@ const InventoryFilterModal = ({ visible, onClose, onApply }) => {
           <Text style={styles.headingText}>Filter</Text>
 
           <View>
-            <Text style={styles.filterType}>Status</Text>
-            <View style={{ flexDirection: 'row',  flexWrap: 'wrap' }}>
-              {banks.map((data, index) => (
+            <Text style={styles.filterType}>Bank </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {bankTagData.map((data, index) => (
                 <TouchableOpacity
-                key={index}
-                onPress={() => setSelectedTag(data)}
-                style={
-                  SelectedTag === data ? styles.activeCapsule : styles.capsule
-                }
-              >
-                <Text
+                  key={index}
+                  onPress={() => setSelectedTag(data)}
                   style={
-                    SelectedTag === data
-                      ? styles.activeTagText
-                      : styles.tagText
+                    SelectedTag === data ? styles.activeCapsule : styles.capsule
                   }
                 >
-                  {data}
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={
+                      SelectedTag === data
+                        ? styles.activeTagText
+                        : styles.tagText
+                    }
+                  >
+                    {data}
+                  </Text>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
           <View>
-            <Text style={styles.filterType}>Type</Text>
+            <Text style={styles.filterType}>Vehicle class</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {status.map((data, index) => (
+              {vcTagData.map((data, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => setSelectedTag(data)}
+                  style={
+                    SelectedTag === data ? styles.activeCapsule : styles.capsule
+                  }
+                >
+                  <Text
+                    style={
+                      SelectedTag === data
+                        ? styles.activeTagText
+                        : styles.tagText
+                    }
+                  >
+                    {data}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View>
+            <Text style={styles.filterType}>Status</Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {statusTagData.map((data, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => setSelectedTag(data)}
@@ -128,7 +159,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 25,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth:1,
     borderColor: 'black'
   },
   applyButton: {
@@ -150,12 +181,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#000000',
-    marginTop: '1%',
-    
+    marginTop: '1%'
   },
   capsule: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#263238',
     borderRadius: 20,
     paddingHorizontal: '4%',
     paddingVertical: '3%',
@@ -167,8 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     textAlign: 'center',
-    color: '#000000',
-    
+    color: '#000000'
   },
   activeCapsule: {
     borderWidth: 1,
@@ -185,8 +214,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     textAlign: 'center',
-    color: 'white',
-
+    color: 'white'
+  },
+  selectDate: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: '#A5A5A5',
+    paddingVertical: '3%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 25,
+    paddingHorizontal: '5%',
+    width: '45%'
   },
   buttonText: {
     color: '#263238',
@@ -196,5 +235,4 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 })
-
-export default InventoryFilterModal
+export default AckFilter
