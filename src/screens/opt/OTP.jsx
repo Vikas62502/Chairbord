@@ -18,6 +18,7 @@ import showAlert from '../../utils/showAlert'
 const OTP = (props) => {
   const userData = props.route.params?.VerificationFormData
   const otpType = props.route.params?.type
+  const { sessionId: _sessionId } = props.route.params
   const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
@@ -33,8 +34,8 @@ const OTP = (props) => {
       })
 
       if (otpType === 'tagReplacement') {
-        return props.navigation.navigate('tagReplacementForm',  {
-          sessionId: sessionId,
+        return props.navigation.navigate('tagReplacementForm', {
+          sessionId: _sessionId,
           response: response?.data?.validateOtpResp,
           customerId: response?.data?.customerId,
           userData: userData

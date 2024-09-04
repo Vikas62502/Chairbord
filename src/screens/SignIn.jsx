@@ -181,7 +181,7 @@ const SignIn = () => {
                     Forgot your Password?
                   </Text>
                 </Pressable>
-                <View style={{ }}>
+                <View style={{}}>
                   <SecondaryButton
                     title={'Sign In'}
                     disable={true}
@@ -229,7 +229,7 @@ const SignIn = () => {
                 {/* <Text style={styles.text}>
                   Dont't have an account?
                 </Text> */}
-                <View style={{  }}>
+                <View style={{}}>
                   <SecondaryButton
                     title={'Sign Up'}
                     onPress={() => navigation.navigate('register')}
@@ -240,7 +240,9 @@ const SignIn = () => {
                     By signing up you accept the {'\n'}
                     <TouchableOpacity
                       onPress={() =>
-                        handleLinkPress('https://example.com/terms')
+                        handleLinkPress(
+                          'https://chairbord.com/terms-conditions.html'
+                        )
                       }
                     >
                       <Text style={styles.link}>Terms of Service</Text>
@@ -248,7 +250,9 @@ const SignIn = () => {
                     <Text>&</Text>
                     <TouchableOpacity
                       onPress={() =>
-                        handleLinkPress('https://example.com/privacy')
+                        handleLinkPress(
+                          'https://chairbord.com/terms-conditions.html'
+                        )
                       }
                     >
                       <Text style={styles.link}> Privacy policy</Text>
@@ -266,8 +270,8 @@ const SignIn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: "5%",
-},
+    padding: '5%'
+  },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',

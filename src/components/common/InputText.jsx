@@ -22,12 +22,13 @@ const InputText = ({
   id,
   maxLength,
   isEditable = true,
-  keyboardType = 'default'
+  keyboardType = 'default',
+  borderColor = '#263238'
 }) => {
   return (
     <View style={{ alignItems: 'center', marginVertical: 10 }}>
       <TextInput
-        style={[styles.textInput, inputStyle]}
+        style={[styles.textInput, inputStyle, { borderColor: borderColor }]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={'#263238'}

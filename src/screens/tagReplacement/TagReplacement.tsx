@@ -73,6 +73,8 @@ const TagReplacement = (props: any) => {
         getUserData()
     }, [])
 
+    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Replacement"} />

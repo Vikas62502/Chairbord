@@ -19,9 +19,7 @@ import showAlert from '../../utils/showAlert'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
-    console.log(vrnDetails, "vrnDetails")
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
-    console.log(userOtpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
@@ -229,30 +227,25 @@ const TagRegistration = (props: any) => {
 
 
     const getUserData = async () => {
-        let userData = await getCache('userData')
+        const userData = await getCache('userData')
         setUserData(userData)
     }
     const getMakerIfVahanFails = async () => {
-        console.log('getMakerIfVahanFails')
         const response: any = await getVehicleMakerList(props.route.params?.sessionId)
-        console.log(response, 'maker list')
         setListOfMakers(response?.vehicleMakerList)
     }
 
     const getTheVehicleModel = async (manufacturer: any) => {
-        console.log('getTheVehicleModel', manufacturer)
         setVehicleManufacturer(manufacturer?.title)
         const response: any = await getVehicleModelList(props?.route?.params?.sessionId, manufacturer?.title)
-        console.log(response?.vehicleMakerList, 'model list')
         setVehicleModel(response?.vehicleModelList)
     }
-
-    console.log(vrnDetails?.vehicleDescriptor, "vrnDetails?.vehicleDescriptor")
 
     useEffect(() => {
         console.log("vahan failed", props.route.params?.sessionId)
         getMakerIfVahanFails();
     }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
+
     useEffect(() => {
         getUserData()
     }, [])
@@ -267,8 +260,6 @@ const TagRegistration = (props: any) => {
         }
         setPermitExpiryDate(cleaned);
     };
-
-    console.log(vrnDetails?.commercial)
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -418,13 +409,6 @@ const TagRegistration = (props: any) => {
                     </View>
 
                 }
-
-                {/* <View style={{ marginBottom: "5%" }}>
-                    {vrnDetails && vrnDetails?.commercial ? <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial} isEditable={false} /> : <SelectField
-                        dataToRender={commercialOptions} title={'Select national permit'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
-                    <SelectField
-                        dataToRender={commercialOptions} title={'Select national permit'} selectedValue={(value) => setVehicleIscommercial(value.title)} />
-                </View> */}
 
                 <View style={styles.dataDetailContainer}>
                     {customerData && customerData.map((data, index) => (

@@ -20,6 +20,9 @@ import SuccessModal from '../../components/SuccessModal'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import showAlert from '../../utils/showAlert'
+import { fuelData, stateData } from '../tagRegistration/staticData'
+import CustomLabelText from '../../components/ui/CustomLabelText'
+import CustomInputText from '../../components/common/CustomInputText'
 
 const replacementReason = [
   {
@@ -45,9 +48,10 @@ const replacementReason = [
 ]
 
 const TagReplacementForm = (props: any) => {
-  const { response, customerId, userData } = props?.route?.params
-  const session_Id = props?.route?.params
-  // console.log(response, customerId, userData, session_Id, 'logged!')
+  const { response, customerId, userData, sessionId: _sessionId } = props?.route?.params
+
+  console.log(response, customerId, userData, _sessionId, 'logged!')
+  console.log(response.vrnDetails)
 
   const { mobileNo, walletId } = response.custDetails
 
@@ -57,10 +61,10 @@ const TagReplacementForm = (props: any) => {
     repTagCost: debitAmt,
     engineNo,
     isNationalPermit: nationalPermit,
-    permitExpiryDate,
-    stateOfRegistration,
-    vehicleDescriptor
-  } = response.vrnDetails
+    permitExpiryDate: _permitExpiryDate,
+    // stateOfRegistration,
+    // vehicleDescriptor
+  } = response?.vrnDetails
 
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
@@ -70,8 +74,13 @@ const TagReplacementForm = (props: any) => {
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState<any>()
+  const [stateOfRegistration, setStateOfRegistration] = useState(response.vrnDetails.stateOfRegistration)
+  const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
+  const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
 
-  // console.log(userInfo.user.id, 'userData');
+  console.log(response, 'response')
+  console.log(vehicleDescriptor, 'vehicleDescriptor')
+  console.log(stateOfRegistration, 'stateOfRegistration')
 
   const getUserData = async () => {
     try {
@@ -100,13 +109,13 @@ const TagReplacementForm = (props: any) => {
         masterId: parseInt(userInfo.user.master_id) || '',
         debitAmt: debitAmt,
         requestId: parseInt(response.requestId),
-        sessionId: session_Id,
+        sessionId: _sessionId,
         serialNo: '608268-001-' + tagSerialNumber,
         reason: reasonOfReplacement,
         reasonDesc: description || '',
         chassisNo: chassisNo,
         engineNo: engineNo,
-        isNationalPermit: nationalPermit || '',
+        isNationalPermit: nationalPermit || '2',
         permitExpiryDate: permitExpiryDate || '',
         stateOfRegistration: stateOfRegistration || '',
         vehicleDescriptor: vehicleDescriptor || '',
@@ -121,7 +130,7 @@ const TagReplacementForm = (props: any) => {
       console.log(res, "response");
       setModelIsSuccess(true);
       setModalShow(true);
-    } catch (err : any) {
+    } catch (err: any) {
       console.log(err)
       showAlert(err.response.data.error.msg || 'Tag replacement failed',
         () => setLoading(false));
@@ -169,11 +178,22 @@ const TagReplacementForm = (props: any) => {
     getSessionId()
   }, [sessionId])
 
+  const handleDateChange = (text: string) => {
+    let cleaned = text.replace(/[^0-9]/g, '');
+    if (cleaned?.length >= 2) {
+      cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2);
+    }
+    if (cleaned?.length >= 5) {
+      cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5);
+    }
+    setPermitExpiryDate(cleaned);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
-        {loading && <Loader/>}
+        {loading && <Loader />}
         <View style={styles.container}>
           {loading && (
             <View style={styles.loaderContainer}>
@@ -221,6 +241,34 @@ const TagReplacementForm = (props: any) => {
                 value={tagSerialNumber}
               />
             </View>
+          </View>
+          {nationalPermit === "1" && <View>
+            <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
+            <CustomInputText
+              placeholder='DD-MM-YYYY'
+              placeholderTextColor='#263238'
+              style={styles.dateInput}
+              value={permitExpiryDate}
+              onChangeText={(text: string) => handleDateChange(text)}
+              keyboardType='numeric'
+              maxLength={10}
+            />
+          </View>}
+          {
+            response.vrnDetails && !response.vrnDetails.stateOfRegistration && <View style={{ marginVertical: "5%" }}>
+              <CustomLabelText label={"State of Registration"} />
+              <SelectField
+                dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
+            </View>
+          }
+          <View style={{ marginVertical: "5%" }}>
+            <CustomLabelText label={"Fuel Type"} />
+            {
+              response?.vrnDetails && response?.vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={response?.vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
+                dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleDescriptor(value.title)}
+                borderColor={!vehicleDescriptor ? "red" : "black"}
+              />
+            }
           </View>
 
           <Text style={styles.label}>Replacement reason</Text>
@@ -329,6 +377,18 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: '3%',
     width: '80%'
+  },
+  dateInput: {
+    borderColor: '#263238',
+    borderWidth: 1,
+    color: '#000000',
+    width: '100%',
+    fontSize: 16,
+    borderRadius: 20,
+    height: 60,
+    paddingHorizontal: '5%',
+    backgroundColor: '#F3F3F3',
+    textAlign: 'center'
   },
   loaderContainer: {
     ...StyleSheet.absoluteFillObject,
