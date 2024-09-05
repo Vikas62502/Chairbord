@@ -54,7 +54,7 @@ const ImageCollection = (props: any) => {
       <OverlayHeader
         title={'Image Collection'}
         showBackButton={true}
-        navigateTo={() => props.navigation.goBack()}
+        // navigateTo={() => props.navigation.goBack()}
       />
       {loading && (
         <Loader />

@@ -39,6 +39,9 @@ const Wallet = (props) => {
     getWalletDetails();
   }, []);
 
+  const sortedTransactions = walletDetails?.transactions?.sort((a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt)
+  })
   return (
     <ScrollView
       style={styles.container}
@@ -116,35 +119,36 @@ const Wallet = (props) => {
         </ScrollView>
 
         <View>
-          {walletDetails?.transactions?.map((data, index) => (
+          {sortedTransactions?.map((data, index) => (
             <WalletCards
               key={index}
               logo={data.logo}
               title={data.reason}
-              description={data.description}
+              reason={data.reason}
               amountValue={data.amount}
-              ID={data.ID}
+              type={data.type}
+              ID={data.transactionId}
               RefNo={data.RefNo}
               date={data.updatedAt}
               time={data.updatedAt}
             />
           ))}
         </View>
-        <View>
+        {/* <View>
           {walletCardData.map((data, index) => (
             <WalletCards
               key={index}
               logo={data.logo}
               title={data.title}
-              description={data.description}
+              reason={data.reason}
               amountValue={data.amount}
-              ID={data.ID}
+              ID={data.transactionId}
               RefNo={data.RefNo}
               date={data.date}
               time={data.time}
             />
           ))}
-        </View>
+        </View> */}
       </View>
 
       {/* Filter modal */}
