@@ -105,16 +105,17 @@ const OTP = (props) => {
           <View style={{ flexDirection: 'row', marginVertical: '5%' }}>
             <OtpInputText otp={otp} setOtp={setOtp} />
           </View>
-
+           <View style={{ justifyContent: 'flex-end' , alignItems:'center'  }}>
           <Text style={styles.otpDescription}>
             Didn’t you recieve the OTP?
             <Text style={{ color: '#085AF8' }}> Resend OTP</Text>
           </Text>
           <PrimaryBtn
-            title={'Verify'}
+             title={'Verify'}
             disabled={loading}
             onPress={() => verifyOtp()}
           />
+          </View>
         </View>
       </View>
     </SafeAreaView>

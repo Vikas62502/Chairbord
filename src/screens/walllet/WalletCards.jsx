@@ -2,29 +2,47 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
+// Utility function to format the date and time from ISO string
+const formatDateAndTime = (isoString) => {
+  const dateObj = new Date(isoString)
+  // Extract day, month, and year
+  const day = dateObj.getDate().toString().padStart(2, '0'); // Pad single digit day with leading zero
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Pad single digit month with leading zero
+  const year = dateObj.getFullYear();
+
+  // Format date as DD-MM-YYYY
+  const date = `${day}-${month}-${year}`;
+
+  const time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // Formats time in "HH:MM" format
+  return { date, time }
+}
+
 const WalletCards = ({
   amountValue,
   logo,
   title,
-  description,
-  date,
-  time,
+  reason,
+  type,
+  date, // Assuming this is in ISO 8601 format
   ID,
   RefNo
 }) => {
   const navigation = useNavigation()
-  const amountColor = amountValue >= 0 ? '#25B73C' : '#FF0000'
+  const amountColor = type=== 'credit' ? '#25B73C' : '#FF0000'
+  const { date: formattedDate, time: formattedTime } = formatDateAndTime(date)
+
   return (
     <Pressable
       style={styles.cardContainer}
       onPress={() =>
         navigation.navigate('walletDetails', {
-          title: title,
-          description: description,
-          date: date,
-          time: time,
-          ID: ID,
-          RefNo: RefNo
+          title,
+          reason,
+          date: formattedDate,
+          type,
+          time: formattedTime,
+          ID,
+          RefNo
         })
       }
     >
@@ -38,21 +56,21 @@ const WalletCards = ({
                 gap: 10
               }}
             >
-              <View style={styles.ImageStyles}>
+              {/* <View style={styles.ImageStyles}>
                 <Image source={logo} />
-              </View>
+              </View> */}
               <Text style={styles.heading}>{title}</Text>
             </View>
-            <Text style={styles.descriptionText}>{description}</Text>
+            <Text style={styles.reasonText}>{reason}</Text>
           </View>
           <View>
             <Text style={[styles.amount, { color: amountColor }]}>
-              {amountValue >= 0 ? '+' : '-'}₹{Math.abs(amountValue)}
+              {type=== 'credit'? '+' : '-'}₹{Math.abs(amountValue)}
             </Text>
             <View style={styles.amountAndDate}>
-              <Text style={styles.dataAndTimeText}>{date}</Text>
+              <Text style={styles.dataAndTimeText}>{formattedDate}</Text>
               <View style={styles.verticalDivider} />
-              <Text style={styles.dataAndTimeText}>{time}</Text>
+              <Text style={styles.dataAndTimeText}>{formattedTime}</Text>
             </View>
           </View>
         </View>
@@ -98,7 +116,7 @@ const styles = StyleSheet.create({
     marginTop: '5%'
   },
   HeadingAndPriceSection: {
-    padding: '3%'
+    padding: '5%'
   },
   heading: {
     fontWeight: '600',
@@ -110,15 +128,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: '4%',
     borderColor: '#00000080',
-    borderWidth:.4,
+    borderWidth: 0.4,
     borderRadius: 50
   },
-  descriptionText: {
+  reasonText: {
     color: '#9C9C9C',
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 14,
-    marginTop: '5%'
+    marginTop: '10%'
   },
   amount: {
     fontWeight: '600',
@@ -126,7 +144,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'right'
   },
-
   dataAndTimeText: {
     color: '#9C9C9C',
     fontWeight: '500',

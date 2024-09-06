@@ -6,6 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   Pressable,
+  RefreshControl,
   Image,
   ActivityIndicator,
   Alert
@@ -25,6 +26,7 @@ const Profile = (props) => {
   const [step, setStep] = useState(1)
   const [userData, setUserData] = useState({})
   const [loading, setLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
   const [formData, setFormData] = useState({
     agentId: userData?.id,
     name: '',
@@ -120,6 +122,17 @@ const Profile = (props) => {
     }
   }
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getUserdata();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const getUserdata = async () => {
     const data = await getCache('userData')
     setUserData(data?.user)
@@ -139,12 +152,13 @@ const Profile = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: '5%' }}>
+    <SafeAreaView style={{ flex: 1, padding: '5%' }} >
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: '5%'
+          marginBottom: '5%',
+         
         }}
       >
         {loading && (
@@ -178,7 +192,9 @@ const Profile = (props) => {
       </View>
       <View>
         {step === 1 ? (
-          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <ScrollView contentContainerStyle={styles.scrollViewContent} refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
             <TagOfInput text="Personal Information" />
             <View style={{  }}>
               <InputText
@@ -280,7 +296,7 @@ const Profile = (props) => {
               )}
             </View>
             <View
-              style={{ alignSelf: 'center', marginTop: '5%', width: '100%' }}
+              style={{ alignSelf: 'center', marginTop: '5%', width: '100%', }}
             >
               <LinearButton title={'Step 2'} onPress={() => setStep(2)} />
             </View>

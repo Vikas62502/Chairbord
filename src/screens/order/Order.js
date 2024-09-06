@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, TextInput, Pressable } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image,RefreshControl, TextInput, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
@@ -52,7 +52,18 @@ const Order = (props) => {
   const [createReturnModal, setCreateReturnModal] = useState(false);
   const [userData, setUserData] = useState()
   console.log(userData, 'userData')
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getUserData();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const getUserData = async () => {
     let userData = await getCache('userData')
@@ -75,7 +86,9 @@ const Order = (props) => {
   }, [])
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <View style={{ padding: "5%" }}>
         <View style={styles.searchAndfilter}>
           <View style={styles.searchField}>

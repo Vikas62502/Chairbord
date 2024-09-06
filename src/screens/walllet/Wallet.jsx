@@ -1,41 +1,54 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
-import WalletCards from './WalletCards'
-import walletCardData from './WalletCardData'
-import FilterTags from './FilterTags'
-import { client } from '../../client/Axios'
-import getDate from '../../utils/getDate'
+import { View, Text, StyleSheet, Image, RefreshControl, Pressable, ScrollView, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import WalletCards from './WalletCards';
+import walletCardData from './WalletCardData';
+import FilterTags from './FilterTags';
+import { client } from '../../client/Axios';
+import getDate from '../../utils/getDate';
 
 const Wallet = (props) => {
-  const [searchText, setSearchText] = useState('')
-  const [activeTag, setActiveTag] = useState('All')
-  const [showFilterModal, setShowFilterModal] = useState(false)
-  const [walletDetails, setWalletDetails] = useState([])
-  // console.log(walletDetails?.transactions, 'transactions')
+  const [searchText, setSearchText] = useState('');
+  const [activeTag, setActiveTag] = useState('All');
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [walletDetails, setWalletDetails] = useState([]);
+  console.log(walletDetails?.transactions, 'transactions')
+  const [refreshing, setRefreshing] = useState(false);
+  const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
 
-  const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw']
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getWalletDetails();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const getWalletDetails = async () => {
     try {
-      const response = await client.get(`/wallet/transactions/agent-get`)
-      console.log('Wallet details fetched:', response.data)
-      setWalletDetails(response.data)
+      const response = await client.get(`/wallet/transactions/agent-get`);
+      setWalletDetails(response.data);
     } catch (error) {
-      console.log(error, 'error')
+      console.log(error, 'error');
     }
-  }
+  };
 
   useEffect(() => {
-    console.log('Fetching wallet details...')
-    getWalletDetails()
-  }, [])
+    getWalletDetails();
+  }, []);
 
-  useEffect(() => {
-    console.log('Wallet details updated:')
-  }, [walletDetails])
-
+  const sortedTransactions = walletDetails?.transactions?.sort((a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt)
+  })
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={{ padding: '5%' }}>
         <View style={styles.balanceCard}>
           <Text style={styles.balanceText}>Balance</Text>
@@ -58,9 +71,7 @@ const Wallet = (props) => {
             </Pressable>
 
             <View>
-              <Image
-                source={require('../../assets/screens/wallet/dowload.png')}
-              />
+              <Image source={require('../../assets/screens/wallet/dowload.png')} />
               <Text style={styles.tagText}>Statement</Text>
             </View>
           </View>
@@ -116,35 +127,36 @@ const Wallet = (props) => {
         </ScrollView>
 
         <View>
-          {walletDetails?.transactions?.map((data, index) => (
+          {sortedTransactions?.map((data, index) => (
             <WalletCards
               key={index}
               logo={data.logo}
               title={data.reason}
-              description={data.description}
+              reason={data.reason}
               amountValue={data.amount}
-              ID={data.ID}
+              type={data.type}
+              ID={data.transactionId}
               RefNo={data.RefNo}
               date={data.updatedAt}
               time={data.updatedAt}
             />
           ))}
         </View>
-        <View>
+        {/* <View>
           {walletCardData.map((data, index) => (
             <WalletCards
               key={index}
               logo={data.logo}
               title={data.title}
-              description={data.description}
+              reason={data.reason}
               amountValue={data.amount}
-              ID={data.ID}
+              ID={data.transactionId}
               RefNo={data.RefNo}
               date={data.date}
               time={data.time}
             />
           ))}
-        </View>
+        </View> */}
       </View>
 
       {/* Filter modal */}
@@ -153,8 +165,8 @@ const Wallet = (props) => {
         onClose={() => setShowFilterModal(false)}
       />
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
