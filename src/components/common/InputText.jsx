@@ -1,6 +1,18 @@
 import React from 'react'
 import { StyleSheet, View, TextInput } from 'react-native'
 
+// interface inputTextInterce {
+//   value: string
+//   placeholder: string
+//   onChangeText: (text: string) => void
+//   secure?: boolean
+//   inputStyle?: object
+//   id?: string
+//   maxLength?: number
+//   editable?: boolean
+//   keyboardType?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad'
+// }
+
 const InputText = ({
   value,
   placeholder,
@@ -9,14 +21,14 @@ const InputText = ({
   inputStyle,
   id,
   maxLength,
-  editable = true
+  isEditable = true,
+  keyboardType = 'default',
+  borderColor = '#263238'
 }) => {
   return (
-    <View style={{  alignItems: 'center' ,
-      marginVertical:10
-    }}>
+    <View style={{ alignItems: 'center', marginVertical: 10 }}>
       <TextInput
-        style={[styles.textInput, inputStyle]}
+        style={[styles.textInput, inputStyle, { borderColor: borderColor }]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={'#263238'}
@@ -24,7 +36,9 @@ const InputText = ({
         secureTextEntry={secure}
         id={id}
         maxLength={maxLength}
-        editable={editable}
+        editable={isEditable}
+        keyboardType={keyboardType}
+        // autoCapitalize="characters"
       />
     </View>
   )
@@ -39,7 +53,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     width: '100%',
     fontSize: 16,
-    borderRadius: 20, 
+    borderRadius: 20,
     height: 60,
     paddingHorizontal: 20,
     backgroundColor: '#F3F3F3'

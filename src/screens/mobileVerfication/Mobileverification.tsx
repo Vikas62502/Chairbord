@@ -45,9 +45,9 @@ const Mobileverification = (props: any) => {
         requestId: '',
         channel: '',
         agentId: userData?.user?.id,
-        vehicleNo: VerificationFormData.vehicleNo,
+        vehicleNo: VerificationFormData.vehicleNo?.toUpperCase(),
         chassisNo: '',
-        engineNo: VerificationFormData.engineNo,
+        engineNo: VerificationFormData.engineNo?.toUpperCase(),
         mobileNo: VerificationFormData.mobile,
         reqType: 'REG',
         resend: 0,
@@ -65,8 +65,9 @@ const Mobileverification = (props: any) => {
         sessionId: res?.data?.validateCustResp?.sessionId,
         VerificationFormData: VerificationFormData,
       })
+      console.log(res, "otp response")
     } catch (error) {
-      console.log(error, "error")
+      console.log(JSON.stringify(error), "error")
     } finally {
       setLoading(false)
     }
@@ -100,19 +101,21 @@ const Mobileverification = (props: any) => {
           secure={false}
           value={VerificationFormData.mobile}
           onChangeText={(txt: string) => formHandler('mobile', txt)}
+          keyboardType={'numeric'}
         />
         <InputText
           placeholder={'Enter Vehicle Number'}
           secure={false}
           value={VerificationFormData.vehicleNo}
-          onChangeText={(txt: string) => formHandler('vehicleNo', txt?.toUpperCase())}
+          onChangeText={(txt: string) => formHandler('vehicleNo', txt)}
         />
         <InputText
           placeholder={'Enter last 5 digit engine number'}
           secure={false}
           value={VerificationFormData.engineNo}
-          onChangeText={(txt: string) => formHandler('engineNo', txt?.toUpperCase())}
+          onChangeText={(txt: string) => formHandler('engineNo', txt)}
           maxLength={5}
+          keyboardType={'default'}
         />
         {/* <Text style={styles.errorText}>
           *Details not found Invalid mobile number, tag serial number or bank

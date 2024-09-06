@@ -50,12 +50,16 @@ const SignIn = () => {
       await setCache('token', response?.data?.token)
       navigation.navigate('drawer')
     } catch (error) {
-      Alert.alert('Something went wrong', 'Please try again later', [
-        {
-          text: 'OK',
-          style: 'cancel'
-        }
-      ])
+      Alert.alert(
+        'Either Id or password is Wrong !!',
+        'Please try again later',
+        [
+          {
+            text: 'OK',
+            style: 'cancel'
+          }
+        ]
+      )
     } finally {
       setLoading(false)
     }
@@ -90,7 +94,7 @@ const SignIn = () => {
       <OverlayHeader
         title={'Sign in'}
         showBackButton={true}
-        navigateTo={() => navigation.goBack()}
+        navigateTo={'SignIn'}
       />
       {loading && <Loader />}
       <KeyboardAvoidingView
@@ -155,7 +159,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
-                  placeholder={'Enter email'}
+                  placeholder={'Enter email or phone number'}
                   secure={false}
                   onChangeText={(email) =>
                     setFormData({ ...formData, email: email.toLowerCase() })
@@ -177,7 +181,7 @@ const SignIn = () => {
                     Forgot your Password?
                   </Text>
                 </Pressable>
-                <View style={{ }}>
+                <View style={{}}>
                   <SecondaryButton
                     title={'Sign In'}
                     disable={true}
@@ -193,6 +197,8 @@ const SignIn = () => {
                   onChangeText={(value) =>
                     setFormData({ ...formData, phoneNumber: value })
                   }
+                  keyboardType="numeric"
+                  editable={!showOtpField}
                 />
                 {!showOtpField && (
                   <View
@@ -223,7 +229,7 @@ const SignIn = () => {
                 {/* <Text style={styles.text}>
                   Dont't have an account?
                 </Text> */}
-                <View style={{  }}>
+                <View style={{}}>
                   <SecondaryButton
                     title={'Sign Up'}
                     onPress={() => navigation.navigate('register')}
@@ -234,16 +240,19 @@ const SignIn = () => {
                     By signing up you accept the {'\n'}
                     <TouchableOpacity
                       onPress={() =>
-                        handleLinkPress('https://example.com/terms')
+                        handleLinkPress(
+                          'https://chairbord.com/terms-conditions.html'
+                        )
                       }
                     >
                       <Text style={styles.link}>Terms of Service</Text>
                     </TouchableOpacity>{' '}
-
-                    <Text >&</Text>
+                    <Text>&</Text>
                     <TouchableOpacity
                       onPress={() =>
-                        handleLinkPress('https://example.com/privacy')
+                        handleLinkPress(
+                          'https://chairbord.com/terms-conditions.html'
+                        )
                       }
                     >
                       <Text style={styles.link}> Privacy policy</Text>
@@ -261,8 +270,8 @@ const SignIn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: "5%",
-},
+    padding: '5%'
+  },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -286,7 +295,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 32,
     lineHeight: 38,
-    marginTop:10
+    marginTop: 10
   },
   tabSection: {
     width: '50%'
@@ -322,7 +331,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   link: {
     color: '#0693D9',
@@ -332,7 +341,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 12,
     textAlign: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 })
 

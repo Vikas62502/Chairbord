@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   ActivityIndicator,
+  Alert,
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   View
 } from 'react-native'
 import OtpInputText from './OtpInputText'
@@ -13,43 +13,73 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { useNavigation } from '@react-navigation/native'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
+import showAlert from '../../utils/showAlert'
 
 const OTP = (props) => {
   const userData = props.route.params?.VerificationFormData
+  const otpType = props.route.params?.type
+  const { sessionId: _sessionId } = props.route.params
   const [loading, setLoading] = useState(false)
   let sixStringArray = ['', '', '', '', '', '']
   const [otp, setOtp] = useState(sixStringArray)
 
   const verifyOtp = async () => {
+    console.log('validate otp')
     setLoading(true)
     try {
+      const sessionId = await getCache('session')
       const response = await client.post('/bajaj/validateOtp', {
         otp: otp.join(''),
-        sessionId: await getCache('session')
+        sessionId: sessionId
       })
+
+      if (otpType === 'tagReplacement') {
+        return props.navigation.navigate('tagReplacementForm', {
+          sessionId: _sessionId,
+          response: response?.data?.validateOtpResp,
+          customerId: response?.data?.customerId,
+          userData: userData
+        })
+      }
 
       if (
         response?.data?.validateOtpResp?.custDetails?.walletStatus === 'Active'
       ) {
         navigation.navigate('imageGallary', {
-          sessionId: await getCache('session'),
+          sessionId: sessionId,
           response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
+          customerId: response?.data?.customerId,
+          userData: userData
         })
       } else {
         navigation.navigate('customerRegistration', {
           otpData: response?.data,
-          sessionId: await getCache('session'),
+          sessionId: sessionId,
           response: response?.data?.validateOtpResp,
-          customerId: response?.data?.customerId
+          customerId: response?.data?.customerId,
+          userData: userData
         })
       }
     } catch (error) {
-      console.log(error)
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.log('Error Data:', error.response.data)
+        console.log('Error Status:', error.response.status)
+        console.log('Error Headers:', error.response.headers)
+
+        // Handle specific error codes or messages from the server
+        if (error.response.status === 400 && error.response.data?.error) {
+          showAlert(
+            error.response.data.error.errorDesc || 'OTP Validation Failed',
+            () => navigation.goBack()
+          )
+        }
+      }
     } finally {
       setLoading(false)
     }
   }
+
   const navigation = useNavigation()
   return (
     <SafeAreaView>
@@ -67,7 +97,9 @@ const OTP = (props) => {
           <Text style={styles.OtpVerificationText}>OTP Verification</Text>
           <Text style={styles.otpDescription}>
             Enter the OTP sent to{' '}
-            <Text style={{ color: '#000000' }}>{`+91${userData.mobile}`}</Text>
+            <Text style={{ color: '#000000' }}>{`+91${
+              userData?.mobile || userData?.mobileNumber
+            }`}</Text>
           </Text>
 
           <View style={{ flexDirection: 'row', marginVertical: '5%' }}>
