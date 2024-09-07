@@ -310,13 +310,6 @@ const TagRegistration = (props: any) => {
 
                 <>
                     <Text style={styles.label}>Vehicle Details</Text>
-                    {/* <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"Vrn Number"} />
-                        <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
-                            onChangeText={{}} isEditable={false}
-                        />
-                    </View> */}
-
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Manufacturer"} />
                         {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 && vrnDetails?.model?.length > 2 ?
@@ -399,24 +392,6 @@ const TagRegistration = (props: any) => {
                         borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
                     />
                 </View>}
-
-
-                <View style={{ marginTop: "5%" }}>
-                    {vrnDetails && vrnDetails?.isNationalPermit === "1" && vrnDetails.permitExpiryDate.length < 2 && <View>
-                        <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
-                        <CustomInputText
-                            placeholder='DD-MM-YYYY'
-                            placeholderTextColor='#263238'
-                            style={styles.dateInput}
-                            value={permitExpiryDate}
-                            onChangeText={(text: string) => handleDateChange(text)}
-                            keyboardType='numeric'
-                            maxLength={10}
-                        />
-                    </View>}
-
-
-                </View>
 
                 <View style={{ marginBottom: "5%" }}>
                     <CustomLabelText label={"Fuel Type"} />
