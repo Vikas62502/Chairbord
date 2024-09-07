@@ -71,23 +71,26 @@ const DashboardCards = ({ title, subTitle, icon, router }) => {
 
 const Home = () => {
   const [activeTime, setActiveTime] = useState('Today')
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     try {
-      Home();
+      Home()
     } catch (error) {
-      console.log(error, 'error');
+      console.log(error, 'error')
     } finally {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  };
-  
+  }
+
   return (
-    <ScrollView style={styles.container} refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.swipperContainer}>
         <SwipperComponent />
       </View>
@@ -96,8 +99,8 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginBottom: '5%',
-          marginHorizontal:10,
-          width:'auto'
+          marginHorizontal: 10,
+          width: 'auto'
         }}
       >
         <Image source={require('../../assets/dashboard/registerTag.png')} />
@@ -117,6 +120,7 @@ const Home = () => {
           subTitle={'Registration'}
           icon={require('../../assets/dashboard/tagRegistration.png')}
           router={'mobileVerification'}
+          // router={'tagRegistration'}
         />
         <DashboardCards
           title={'Tag'}
