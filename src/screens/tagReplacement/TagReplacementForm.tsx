@@ -132,7 +132,7 @@ const TagReplacementForm = (props: any) => {
       setModalShow(true);
     } catch (err: any) {
       console.log(err)
-      showAlert(err.response.data.error.msg || 'Tag replacement failed',
+      showAlert(err.response.data.error.msg || err.response.data.error.errorDesc || 'Tag replacement failed',
         () => setLoading(false));
     } finally {
       setLoading(false)

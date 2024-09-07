@@ -211,7 +211,7 @@ const TagRegistration = (props: any) => {
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
             // failureResponse()
-            showAlert(error.response.data.error.msg || 'Tag registration failed',
+            showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
                 () => setLoading(false));
             console.log(error)
         } finally {
