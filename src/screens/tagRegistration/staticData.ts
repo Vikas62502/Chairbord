@@ -76,8 +76,13 @@ export const npciVehicleClassIDData = [
 ]
 
 export const commercialOptions = [
-    { id: 1, title: "Yes" },
-    { id: 2, title: "No" }
+    { id: 1, title: "true" },
+    { id: 2, title: "false" }
+];
+
+export const isNationalPermitOptions = [
+    { id: 1, title: "Yes", value: "1" },
+    { id: 2, title: "No", value: "2" }
 ];
 
 export const manufacturerData = [
@@ -150,7 +155,7 @@ export const stateData = [
     { id: 21, title: "Rajasthan", code: "RJ" },
     { id: 22, title: "Sikkim", code: "SK" },
     { id: 23, title: "Tamil Nadu", code: "TN" },
-    { id: 24, title: "Telangana", code: "TS,TG" },
+    { id: 24, title: "Telangana", code: "TG" },
     { id: 25, title: "Tripura", code: "TR" },
     { id: 26, title: "Uttar Pradesh", code: "UP" },
     { id: 27, title: "Uttarakhand", code: "UK" },
