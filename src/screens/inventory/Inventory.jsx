@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, Image } from 'react-native'
+import { View, Text, ScrollView,RefreshControl, Pressable, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
 import InventoryCards from './InventoryCards'
@@ -12,7 +12,18 @@ const Inventory = () => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
   const [userData, setUserData] = useState()
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getWalletDetails();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const getUserData = async () => {
     let userData = await getCache('userData')
     setUserData(userData, 'userData')
@@ -40,7 +51,9 @@ const Inventory = () => {
   }, [userData])
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <View style={{ padding: '5%' }}>
         <SearchBar setShowInventoryModal={setShowInventoryModal} />
 

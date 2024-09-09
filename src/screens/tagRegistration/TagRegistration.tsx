@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -18,23 +18,25 @@ import showAlert from '../../utils/showAlert'
 
 
 const TagRegistration = (props: any) => {
-    const { custDetails, vrnDetails, sessionId } = props.route.params?.response;
+    const { custDetails, vrnDetails, sessionId } = props.route.params.response;
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
     const [chassisNo, setChasisNo] = React.useState<any>("")
+    const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
     const [modalVisible, setModalVisible] = useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
-    const [vehicleColor, setVehicleColor] = useState("")
+    const [vehicleColor, setVehicleColor] = useState(vrnDetails?.vehicleColour || "")
     const [tagSerialNumber1, setTagSerialNumber1] = useState("608268")
     const [tagSerialNumber2, setTagSerialNumber2] = useState("001")
     const [tagSerialNumber3, setTagSerialNumber3] = useState("")
     const [vehicleIscommercial, setVehicleIscommercial] = useState("")
+    const [nationalpermit, setNationalPermit] = useState("")
     const [vehicleFuelType, setVehicleFuelType] = useState("")
     const [listOfMakers, setListOfMakers] = useState(["Toyota", "Honda", "Ford"])
     const [vehicleModelValue, setVehicleModelValue] = useState("")
-    const [npciIdData, setNpciIdData] = useState("4")
+    const [npciIdData, setNpciIdData] = useState("")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
@@ -166,14 +168,14 @@ const TagRegistration = (props: any) => {
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || "",
                     "chassis": vrnDetails?.chassisNo || chassisNo,
-                    "engine": vrnDetails?.engineNo || "",
+                    "engine": engineNumber || vrnDetails?.engineNo || "",
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
                     "model": vrnDetails?.model || vehicleModelValue,
                     "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
                     "type": vrnDetails?.type,
                     "status": "Active",
                     "npciStatus": "Active",
-                    "isCommercial": vrnDetails?.commercial || vehicleIscommercial,
+                    "isCommercial": vehicleIscommercial,
                     "tagVehicleClassID": "4",
                     "npciVehicleClassID": npciIdData || "4",
                     "vehicleType": vrnDetails?.vehicleType,
@@ -182,8 +184,8 @@ const TagRegistration = (props: any) => {
                     "tagCost": vrnDetails?.tagCost,
                     "debitAmt": dynamicDebitAmount.toString(),
                     "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
-                    "isNationalPermit": vrnDetails?.isNationalPermit || "2",
-                    "permitExpiryDate": vrnDetails?.permitExpiryDate || permitExpiryDate,
+                    "isNationalPermit": nationalpermit || vrnDetails?.isNationalPermit || "2",
+                    "permitExpiryDate": permitExpiryDate || vrnDetails?.permitExpiryDate,
                     "stateOfRegistration": vrnDetails?.stateOfRegistration || stateOfRegistration,
                 },
                 "custDetails": {
@@ -206,7 +208,7 @@ const TagRegistration = (props: any) => {
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
             )
-            console.log(res, "res");
+            console.log(res, "registration res")
             successResponse()
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
@@ -218,13 +220,6 @@ const TagRegistration = (props: any) => {
             setLoading(false)
         }
     }
-
-
-    useEffect(() => {
-        setVehicleIscommercial(vrnDetails?.isCommercial ? 'true' : 'false');
-    }, [vrnDetails?.isCommercial])
-
-
 
     const getUserData = async () => {
         const userData = await getCache('userData')
@@ -252,14 +247,19 @@ const TagRegistration = (props: any) => {
 
     const handleDateChange = (text: string) => {
         let cleaned = text.replace(/[^0-9]/g, '');
-        if (cleaned?.length >= 2) {
-            cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2);
+        if (cleaned.length > 2) {
+            cleaned = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
         }
-        if (cleaned?.length >= 5) {
-            cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5);
+        if (cleaned.length > 5) {
+            cleaned = cleaned.slice(0, 5) + '/' + cleaned.slice(5);
         }
+        if (cleaned.length > 10) {
+            cleaned = cleaned.slice(0, 10);
+        }
+
         setPermitExpiryDate(cleaned);
     };
+
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -297,17 +297,19 @@ const TagRegistration = (props: any) => {
                             onChangeText={(text: string) => setChasisNo(text?.toUpperCase())} borderColor={chassisNo?.length < 2 ? "red" : "#263238"}
                         />}
                 </View>
+                <View style={{ marginTop: "5%" }}>
+                    <CustomLabelText label={"Enter Engine number"} />
+                    {vrnDetails && vrnDetails?.engineNo?.length > 2 ?
+                        <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.engineNo}
+                            isEditable={false}
+                        /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
+                            onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
+                        />}
+                </View>
 
 
                 <>
                     <Text style={styles.label}>Vehicle Details</Text>
-                    <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"Vrn Number"} />
-                        <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
-                            onChangeText={{}} isEditable={false}
-                        />
-                    </View>
-
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Manufacturer"} />
                         {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 && vrnDetails?.model?.length > 2 ?
@@ -332,7 +334,7 @@ const TagRegistration = (props: any) => {
 
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Color"} />
-                        {vrnDetails && !vrnDetails?.vehicleColour && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
+                        {vrnDetails && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
                             placeholder={"Vehicle Color"}
                             value={vrnDetails?.vehicleColour}
                             onChangeText={(text: string) => setVehicleColor(text)}
@@ -342,12 +344,7 @@ const TagRegistration = (props: any) => {
 
                     <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"NPCI Class"} />
-                        {vrnDetails && vrnDetails?.npciVehicleClassID ? <CustomInputText
-                            placeholder={"NPCI vehicle class"}
-                            value={vrnDetails?.npciVehicleClassID}
-                            onChangeText={(text: string) => setNpciIdData(text)}
-                            isEditable={false}
-                        /> : <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} />}
+                        <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
                     </View>
                 </>
 
@@ -370,28 +367,33 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
                     </View>
                 </View>
+
                 <View style={{ marginBottom: "5%" }}>
-                    {vrnDetails && vrnDetails?.isNationalPermit === "1" && vrnDetails.permitExpiryDate.length < 2 && <View>
-                        <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
-                        <CustomInputText
-                            placeholder='DD-MM-YYYY'
-                            placeholderTextColor='#263238'
-                            style={styles.dateInput}
-                            value={permitExpiryDate}
-                            onChangeText={(text: string) => handleDateChange(text)}
-                            keyboardType='numeric'
-                            maxLength={10}
-                        />
-                    </View>}
-                    {vrnDetails && vrnDetails?.commercial !== undefined ? <View>
-                        <CustomLabelText label={"Is Commercial"} />
-                        <CustomInputText placeholder={'Enter national permit'} value={vrnDetails?.commercial === false ? "false" : "true"} isEditable={false} />
-                    </View> : <SelectField
-                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.title)} />}
-
+                    <CustomLabelText label={"Is Commercial"} />
+                    <SelectField
+                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.title)} borderColor={!vehicleIscommercial ? "red" : "black"} />
                 </View>
+                {vehicleIscommercial === "true" && <View style={{ marginBottom: "5%" }}>
+                    <CustomLabelText label={"Is National Permit"} />
+                    <SelectField
+                        dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
+                </View>}
 
-                <View style={{ marginVertical: "5%" }}>
+                {vehicleIscommercial === "true" && nationalpermit === "1" && <View>
+                    <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
+                    <CustomInputText
+                        placeholder='DD-MM-YYYY'
+                        placeholderTextColor='#263238'
+                        style={styles.dateInput}
+                        value={permitExpiryDate}
+                        onChangeText={(text: string) => handleDateChange(text)}
+                        keyboardType='numeric'
+                        maxLength={10}
+                        borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
+                    />
+                </View>}
+
+                <View style={{ marginBottom: "5%" }}>
                     <CustomLabelText label={"Fuel Type"} />
                     {
                         vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
