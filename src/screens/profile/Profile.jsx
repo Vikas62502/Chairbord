@@ -21,12 +21,20 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { launchImageLibrary } from 'react-native-image-picker'
 import InputText from '../../components/common/InputText'
+import SecondaryButton from '../../components/common/SecondaryButton'
+import RegisterVerifyOtp from '../opt/RegisterVerifyOtp'
+import AadharVerifyOtp from '../opt/AadharVerifyOtp'
+
 
 const Profile = (props) => {
   const [step, setStep] = useState(1)
   const [userData, setUserData] = useState({})
+  const [showOtpField, setShowOtpField] = useState(false)
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
+  const [showAadharVerificationBorder, setShowAadharVerificationBorder] = useState(false);
+  const [showPanVerificationBorder, setShowPanVerificationBorder] = useState(false);
+  const [showPanVerification, setShowPanVerification] = useState(null)
   const [formData, setFormData] = useState({
     agentId: userData?.id,
     name: '',
@@ -122,6 +130,30 @@ const Profile = (props) => {
     }
   }
 
+  const sendOtpRequest = async () => {
+    setShowOtpField(true)
+  }
+
+
+  // const sendOtpRequest = async () => {
+  //   setLoading(true)
+
+  //   let bodyContent = JSON.stringify({
+  //     email_id: formData.email_id,
+  //     mobile_number: formData.mobile_number
+  //   })
+
+  //   try {
+  //     let response = await client.post('/register/agent', bodyContent)
+  //     console.log(response, 'response with register')
+  //     setShowOtpField(true)
+  //   } catch (error) {
+  //     Alert.alert('Something went wrong')
+  //     console.log(error, 'error')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -152,8 +184,18 @@ const Profile = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: '5%' }} >
-      <View
+    <SafeAreaView style={{ flex: 1, padding: '5%', }} >
+      {showAadharVerificationBorder && (
+    <View style={styles.aadharVerificationBorder}>
+      <Text style={styles.borderText}>Aadhar Verification</Text>
+    </View>
+  )}
+  {showPanVerificationBorder && (
+    <View style={styles.panVerificationBorder}>
+      <Text style={styles.borderText}>Pan Verification</Text>
+    </View>
+  )}
+      {/* <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
@@ -166,7 +208,7 @@ const Profile = (props) => {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
-        <View style={styles.tabContainer}>
+         <View style={styles.tabContainer}>
           <TouchableOpacity
             style={[styles.tabSection, step === 1 && styles.activeState]}
             onPress={() => setStep(1)}
@@ -188,14 +230,24 @@ const Profile = (props) => {
               Step 2
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </View> 
+      </View> */}
       <View>
-        {step === 1 ? (
-          <ScrollView contentContainerStyle={styles.scrollViewContent} refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-            <TagOfInput text="Personal Information" />
+        {/* {step === 1 ? ( */}
+        <ScrollView contentContainerStyle={styles.scrollViewContent} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+          {/* <TagOfInput text="Personal Information" /> */}
+          <View style={{}}>
+            <InputText
+              // id={'aadhar_number'}
+              placeholder={"Enter Aadhar Number"}
+              maxLength={10}
+              // onChangeText={(value) => formDataHandler('aadhar_number', value)}
+              editable={!showOtpField}
+            />
+          </View>
+          {/* <TagOfInput text="Personal Information" />
             <View style={{  }}>
               <InputText
                 placeholder="Enter Name"
@@ -294,14 +346,87 @@ const Profile = (props) => {
                   setUploadFile={() => pickImage('profile_pic')}
                 />
               )}
-            </View>
-            <View
+            </View> */}
+          {/* <View
               style={{ alignSelf: 'center', marginTop: '5%', width: '100%', }}
             >
               <LinearButton title={'Step 2'} onPress={() => setStep(2)} />
+            </View> */}
+          {showOtpField ? (
+            <View>
+              <AadharVerifyOtp
+            data={formData}
+            setShowOtpField={setShowOtpField}
+          />
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                gap: 5,
+                marginVertical: '5%'
+              }}
+
+            >
+            
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'black',
+                  width: '45%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 25
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      color: '#263238',
+                      fontSize: 28,
+                      lineHeight: 33,
+                      fontWeight: '500',
+
+                    }}
+                  >
+                    Resend
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={{ width: '45%', }}>
+                <SecondaryButton
+                  title={'Verify'}
+                  onPress={() =>{ setShowAadharVerificationBorder(true); setShowPanVerification(true);}}
+                />
+              </View>
             </View>
-          </ScrollView>
-        ) : (
+           </View>
+            
+          ) : (
+            <View style={styles.getOtpButton}>
+              <SecondaryButton title={'Get OTP'} onPress={sendOtpRequest} />
+              
+            </View>
+          )}
+          {showPanVerification && (
+            
+          <View style={{marginTop:30}}>
+            
+            <InputText
+              // id={'aadhar_number'}
+              placeholder={"Enter PAN Number"}
+              maxLength={10}
+              // onChangeText={(value) => formDataHandler('aadhar_number', value)}
+            />
+            <SecondaryButton
+                  title={'Verify'}
+                  onPress={() =>{ setShowPanVerificationBorder(true);}}
+                />
+          </View>
+          )
+          }
+        </ScrollView>
+        {/* ) : (
           <Step2
             formDataHandler={formDataHandler}
             handleFileUpload={handleFileUpload}
@@ -311,7 +436,7 @@ const Profile = (props) => {
             setFiles={setFiles}
             registerCompleteData={registerCompleteData}
           />
-        )}
+        )} */}
       </View>
     </SafeAreaView>
   )
@@ -325,6 +450,42 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: '90%',
     marginTop: 20
+  },
+  aadharVerificationBorder: {
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    right: 10,
+    bottom: 410,
+    borderWidth: 1,
+    borderRadius:25,
+    borderColor: '#000000', // Border color
+    zIndex: 10, // Make sure the border is on top
+    justifyContent: 'flex-start', // Align items to the top
+    alignItems: 'center', // Center horizontally
+  },
+  borderText: {
+    position: 'absolute',
+    top: -12, // Position the text above the top border
+    left: 20,
+    backgroundColor: '#F3F3F3', // Background color to cover the border behind the text
+    paddingHorizontal: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  panVerificationBorder: {
+    position: 'absolute',
+    top: 300,
+    left: 10,
+    right: 10,
+    bottom: 200,
+    borderRadius:25,
+    borderWidth: 1,
+    borderColor: '#000000', // Border color
+    zIndex: 10, // Make sure the border is on top
+    justifyContent: 'flex-start', // Align items to the top
+    alignItems: 'center', // Center horizontally
   },
   tabSection: {
     width: '50%'
@@ -353,6 +514,9 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     paddingBottom: 300
+  },
+  getOtpButton: {
+    marginTop: '5%',
   }
 })
 

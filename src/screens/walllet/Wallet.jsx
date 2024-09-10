@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 1,
     borderColor: '#858585',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     paddingVertical: 5
   },
   searchIcon: {
