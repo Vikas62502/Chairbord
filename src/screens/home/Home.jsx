@@ -276,6 +276,18 @@ const Home = () => {
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'tagReplacement'}
         />
+        <DashboardCards
+          title={'Tag'}
+          subTitle={'Registration'}
+          icon={require('../../assets/dashboard/tagRegistration.png')}
+          router={'mobileVerification'}
+        />
+        <DashboardCards
+          title={'Tag'}
+          subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'tagReplacement'}
+        />
       </View>
       <View style={styles.dividerContainer}>
         <View style={styles.divider}></View>
@@ -317,7 +329,6 @@ const styles = StyleSheet.create({
   swipperContainer: {
     height: height * 0.3,
     padding: '5%',
-    marginBottom: '5%'
   },
   dashboardCard: {
     borderWidth: isTablet?2:1,
