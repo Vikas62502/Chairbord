@@ -210,6 +210,7 @@ import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const DashboardCards = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
   return (
@@ -230,6 +231,24 @@ const DashboardCards = ({ title, subTitle, icon, router }) => {
             source={icon}
             />
         </View>
+      </View>
+    </Pressable>
+  )
+}
+const DashboardCards2 = ({ title, subTitle, icon, router }) => {
+  const navigation = useNavigation()
+  return (
+    <Pressable
+      style={styles.dashboardCard2}
+      onPress={() => navigation.navigate(router)}
+    >
+      <View style={styles.iconContainer2}>
+        <Image style={styles.icon2} source={icon} />
+      </View>
+      
+      <View style={styles.textContainer}>
+        <Text style={styles.dashbordCardText2}>{title}</Text>
+        <Text style={styles.dashbordCardText2}>{subTitle}</Text>
       </View>
     </Pressable>
   )
@@ -264,7 +283,7 @@ const Home = () => {
         <Image source={require('../../assets/dashboard/tagInStock.png')} style={styles.image}/>
       </View>
       <View style={styles.cardsContainer}>
-        <DashboardCards
+        {/* <DashboardCards
           title={'Tag'}
           subTitle={'Registration'}
           icon={require('../../assets/dashboard/tagRegistration.png')}
@@ -286,6 +305,30 @@ const Home = () => {
           title={'Tag'}
           subTitle={'Replacement'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'tagReplacement'}
+        /> */}
+        <DashboardCards2
+          title={'Tag Registration'}
+          // subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/tagRegistration.png')}
+          router={'mobileVerification'}
+        />
+        <DashboardCards2
+          title={'Tag Replacement'}
+          // subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/tagReplacement.png')}
+          router={'tagReplacement'}
+        />
+        <DashboardCards2
+          title={'Wallet'}
+          // subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/wallet.png')}
+          router={'wallet'}
+        />
+        <DashboardCards2
+          title={'Issuance Tracker'}
+          // subTitle={'Replacement'}
+          icon={require('../../assets/dashboard/issuance.png')}
           router={'tagReplacement'}
         />
       </View>
@@ -330,38 +373,69 @@ const styles = StyleSheet.create({
     height: height * 0.3,
     padding: '5%',
   },
-  dashboardCard: {
-    borderWidth: isTablet?2:1,
-    borderColor: '#000000',
-    width:isTablet?width*0.43: width * 0.40, // responsive width
-    height:isTablet?height*0.08: height * 0.07, // responsive height
-    borderRadius: isTablet?30:20,
-    margin:isTablet?20:10,
-    padding: 5,
-  },
-  dashbordCardText: {
-    fontWeight: '600',
-    fontSize: isTablet?28:16, // responsive font size
-    lineHeight: isTablet?32:20,
-    color: 'black'
-  },
-  iconContainer: {
-    position: 'absolute',
-    right: -8,
-    top: -7,
-    backgroundColor: '#02546D',
-    height:isTablet?height*0.08: height * 0.07, // responsive height
-    borderRadius: isTablet?30: 20,
-    width: width * 0.12 // responsive width
-  },
-  icon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    left: isTablet?20:10,
-    top: isTablet?16:12,
-    width:'60%',
-    height:isTablet?'60%':'50%'
-  },
+  // dashboardCard: {
+  //   borderWidth: isTablet?2:1,
+  //   borderColor: '#000000',
+  //   width:isTablet?width*0.43: width * 0.40, // responsive width
+  //   height:isTablet?height*0.08: height * 0.07, // responsive height
+  //   borderRadius: isTablet?30:isSmallScreen?15:20,
+  //   margin:isTablet?20:10,
+  //   padding: 5,
+  // },
+  // dashbordCardText: {
+  //   fontWeight: '600',
+  //   fontSize: isTablet?28:16, // responsive font size
+  //   lineHeight: isTablet?32:20,
+  //   color: 'black'
+  // },
+  // iconContainer: {
+  //   position: 'absolute',
+  //   right: -8,
+  //   top: -6,
+  //   backgroundColor: '#02546D',
+  //   height:isTablet?height*0.08: height * 0.07, // responsive height
+  //   borderRadius: isTablet?30:isSmallScreen?15: 20,
+  //   width: width * 0.12 // responsive width
+  // },
+  // icon: {
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   left: isTablet?20:10,
+  //   top: isTablet?16:isSmallScreen?10:12,
+  //   width:'60%',
+  //   height:isTablet?'60%':isSmallScreen?'55%':'50%'
+  // },
+    dashboardCard2: {
+      width: width * 0.20, // responsive width
+      height:height * 0.12, // adjusted height for better spacing
+      // backgroundColor:'red',
+      alignItems: 'center', // center the content horizontally
+      justifyContent: 'flex-start', // center the content vertically
+    },
+    dashbordCardText2: {
+      fontWeight: '400',
+      fontSize: isTablet ? 24 : 14, // responsive font size
+      lineHeight: isTablet?28:18,
+      color: 'black',
+      textAlign: 'center', // center the text horizontally
+    },
+    iconContainer2: {
+      backgroundColor: '#02546D',
+      height: isTablet ? 80 : 50, // responsive height
+      width:isTablet?80: 50, // responsive width
+      borderRadius: 50,
+      alignItems: 'center', // center the icon within the container
+      justifyContent: 'center', // center the icon within the container
+      marginBottom:isTablet?12: 8, // space between icon and text
+    },
+    icon2: {
+      width: '55%',
+      height:'55%',
+    },
+    textContainer: {
+      alignItems: 'center', // center text container horizontally
+    },
+  
   dividerContainer: {
     alignItems: 'center', 
     marginTop: '1%'
@@ -417,8 +491,14 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: 5,
+    marginHorizontal:isTablet?30: 15,
+    marginVertical:10,
+    borderRadius:25,
+    padding:10,
+    height:'auto',
     width: 'auto',
+    // backgroundColor:'#E7E7E7',
+    backgroundColor:'#E0E0E0',
     justifyContent: 'space-between'
   },
 })

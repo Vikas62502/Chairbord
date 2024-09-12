@@ -1,7 +1,9 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable,Dimensions } from 'react-native'
 import React, { useRef, useState } from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
   const dropdownRef = useRef(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -46,7 +48,7 @@ const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
-      <Pressable onPress={toggleDropdown} style={{ marginRight: '5%' }}>
+      <Pressable onPress={toggleDropdown} style={{ marginRight: 10 }}>
         <Image source={require('../../assets/arrowBottom.png')} />
       </Pressable>
     </View>
@@ -63,16 +65,16 @@ const styles = StyleSheet.create({
   },
   dropdownButtonStyle: {
     width: '90%',
-    height: 60,
+    height: isTablet?80:60,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: '5%'
+    paddingHorizontal: isTablet?10:20,
   },
   dropdownButtonTxtStyle: {
     flex: 1,
-    fontSize: 16,
+    fontSize: isTablet?20:16,
     fontWeight: '400',
     color: '#263238'
   },
@@ -81,16 +83,16 @@ const styles = StyleSheet.create({
   },
   dropdownButtonIconStyle: {
     fontSize: 28,
-    marginRight: 8
+    marginRight: 10
   },
   dropdownMenuStyle: {
     backgroundColor: '#E9ECEF',
-    borderRadius: 8
+    borderRadius: 15
   },
   dropdownItemStyle: {
     width: '100%',
     flexDirection: 'row',
-    paddingHorizontal: '5%',
+    paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 8
@@ -102,8 +104,8 @@ const styles = StyleSheet.create({
     color: '#151E26'
   },
   dropdownStyle: {
-    borderWidth: 1,
-    borderRadius: 20,
+    borderWidth: isTablet?2:1,
+    borderRadius: isTablet?25:20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

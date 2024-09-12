@@ -156,6 +156,7 @@ const Wallet = (props) => {
         visible={showFilterModal}
         onClose={() => setShowFilterModal(false)}
       />
+      
     </ScrollView>
   );
 };

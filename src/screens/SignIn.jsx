@@ -10,7 +10,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native'
 import InputText from '../components/common/InputText'
 import SecondaryButton from '../components/common/SecondaryButton'
@@ -22,6 +23,9 @@ import Loader from '../components/ui/Loader'
 import { client } from '../client/Axios'
 import { setCache } from '../helper/Storage'
 
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const SignIn = () => {
   const [active, setActive] = useState('password')
   const [showOtpField, setShowOtpField] = useState(false)
@@ -262,14 +266,15 @@ const SignIn = () => {
 const styles = StyleSheet.create({
   container: {
     padding: "5%",
+    paddingVertical:isSmallScreen?"1%":"0%"
 },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    width: '80%',
-    marginTop: 10
+    width: isSmallScreen?"70%":'80%',
+    marginTop: isSmallScreen?6:10
   },
   verticalDivider: {
     height: '100%',
@@ -278,14 +283,14 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#263238',
-    marginBottom: '5%',
+    marginBottom:isSmallScreen?"3%": '5%',
     textAlign: 'center'
   },
   heading: {
     color: '#000000',
     fontWeight: '600',
-    fontSize: 32,
-    lineHeight: 38,
+    fontSize:isSmallScreen?26: 32,
+    lineHeight: isSmallScreen?32:38,
     marginTop:10
   },
   tabSection: {
@@ -297,7 +302,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     fontWeight: '400',
-    fontSize: 20,
+    fontSize: isSmallScreen?16:20,
     lineHeight: 24,
     textAlign: 'center',
     color: '#A6A6A6'

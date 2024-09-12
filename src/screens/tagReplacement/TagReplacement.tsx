@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Alert,Dimensions } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { setCache } from '../../helper/Storage'
@@ -7,7 +7,9 @@ import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import SelectField from '../../components/common/SelectFieldBig'
 import InputText from '../../components/common/InputText'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const TagReplacement = (props: any) => {
     const navigation = useNavigation()
     const [mobileNumber, setMobileNumber] = React.useState("")
@@ -85,7 +87,7 @@ const TagReplacement = (props: any) => {
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
 
-                <View style={{ marginBottom: "4%" }}>
+                <View style={{ marginBottom: 10 }}>
                     <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
                 </View>
 
@@ -114,14 +116,14 @@ const TagReplacement = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: "5%"
+        padding: "5%",
     },
     label: {
         fontWeight: '400',
-        fontSize: 16,
+        fontSize: isTablet?20:16,
         lineHeight: 19,
         color: "#000000",
-        marginBottom: "2%"
+        marginBottom: 10
 
     },
     errorText: {

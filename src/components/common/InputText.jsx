@@ -1,6 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, TextInput } from 'react-native'
+import { StyleSheet, View, TextInput ,   Dimensions
+} from 'react-native'
 
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const InputText = ({
   value,
   placeholder,
@@ -13,7 +17,7 @@ const InputText = ({
 }) => {
   return (
     <View style={{  alignItems: 'center' ,
-      marginVertical:10
+      marginVertical:isSmallScreen?8:10
     }}>
       <TextInput
         style={[styles.textInput, inputStyle]}
@@ -35,13 +39,13 @@ export default InputText
 const styles = StyleSheet.create({
   textInput: {
     borderColor: '#263238',
-    borderWidth: 1,
+    borderWidth: isTablet?2:1,
     color: '#000000',
     width: '100%',
-    fontSize: 16,
+    fontSize: isTablet?20:16,
     borderRadius: 20, 
-    height: 60,
-    paddingHorizontal: 20,
+    height: isTablet?80:60,
+    paddingHorizontal: isTablet?30: 20,
     backgroundColor: '#F3F3F3'
   }
 })
