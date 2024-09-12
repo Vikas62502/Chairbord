@@ -176,7 +176,7 @@ const TagRegistration = (props: any) => {
                     "status": "Active",
                     "npciStatus": "Active",
                     "isCommercial": vehicleIscommercial,
-                    "tagVehicleClassID": "4",
+                    "tagVehicleClassID": npciIdData || "4",
                     "npciVehicleClassID": npciIdData || "4",
                     "vehicleType": vrnDetails?.vehicleType,
                     "rechargeAmount": vrnDetails?.rechargeAmount,
