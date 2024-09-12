@@ -97,9 +97,7 @@ const RegisterVerifyOtp = ({ data, setShowOtpField }: any) => {
                     <View style={{ alignItems: 'center', marginTop: '10%' }}>
                         <SecondaryButton
                             title={'Verify Password'}
-                            onPress={() => {
-                                generatePassword()
-                            }}
+                            onPress={() => generatePassword()}
 
                         />
                     </View>

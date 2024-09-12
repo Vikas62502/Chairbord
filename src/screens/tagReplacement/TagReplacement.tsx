@@ -1,3 +1,4 @@
+
 import { View, Text, SafeAreaView, StyleSheet, Alert,Dimensions } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -10,93 +11,100 @@ import InputText from '../../components/common/InputText'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen =width<=420;
+import { client } from '../../client/Axios'
+import Loader from '../../components/ui/Loader'
 const TagReplacement = (props: any) => {
-    const navigation = useNavigation()
-    const [mobileNumber, setMobileNumber] = React.useState("")
-    const [vehicleNumber, setVehicleNumber] = React.useState("")
-    const[DropdownData,setDropdownData]=React.useState("")
-    const getDetailsDropdownData = [
-        {
-            id: 1,
-            title: "By OTP"
-        },
-        {
-            id: 2,
-            title: "By Password"
-        },
-        {
-            id: 3,
-            title: "By Tag Number"
-        },
-        {
-            id: 4,
-            title: "Get new tag"
-        },
-    ]
+    const [userData, setUserData] = React.useState<any>()
+    const [loading, setLoading] = React.useState(false)
+    const [replacementOtpData, setReplacementOtpData] = React.useState<any>({
+        mobileNumber: '',
+        vehicleNumber: '',
+        engineNumber: ''
+    })
 
-    // const sendOTP = async () => {
-    //     // setLoading(true)
-    //     const request: CustomerOTPRequest = {
-    //         mobileNo: mobileNumber,
-    //         vehicleNo: vehicleNumber,
-    //         reqType: 'REP',
-    //         chassisNo: '',
-    //         resend: '0',
-    //         udf1: '',
-    //         udf2: '',
-    //         udf3: '',
-    //         udf4: '',
-    //         udf5: '',
-    //     }
-    //     const response: ApiData<SendOtpResponse> = await sendCustomerOTP(request)
-    //     console.log(response, "tag replacement response")
+    const formDatahandler = (key: string, value: string) => {
+        setReplacementOtpData({
+            ...replacementOtpData,
+            [key]: value
+        })
+    }
 
-    //     if (response.success && response.data?.validateCustResp.sessionId) {
-    //         await setCache('session', response.data?.validateCustResp.sessionId)
-    //         props.navigation.navigate('OTP', {
-    //             session: response.data?.validateCustResp.sessionId,
-    //             mobile: mobileNumber,
-    //             vehicleNo: vehicleNumber,
-    //             to: "TagReplacement"
-    //         })
-    //     } else {
-    //         Alert.alert(response.error ?? '')
-    //     }
-    // }
-    // const data = [
-    //     {
-    //         id: 1,
-    //         title: "By OTP"
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "By Password"
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "By Tag Number"
-    //     },
-    //     {
-    //         id: 4,
-    //         title: "Get new tag"
-    //     },
-    // ]
+    const sendOTP = async () => {
+        setLoading(true)
+        try {
+            const res = await client.post('/bajaj/sendOtp', {
+                requestId: '',
+                channel: '',
+                agentId: userData?.user?.id,
+                vehicleNo: replacementOtpData.vehicleNumber?.toUpperCase(),
+                chassisNo: '',
+                engineNo: replacementOtpData.engineNumber?.toUpperCase(),
+                mobileNo: replacementOtpData.mobileNumber,
+                reqType: 'REP',
+                resend: 0,
+                isChassis: 0,
+                udf1: '',
+                udf2: '',
+                udf3: '',
+                udf4: '',
+                udf5: '',
+            })
+            console.log(JSON.stringify(res), "otp response")
+
+            await setCache('session', res?.data?.validateCustResp?.sessionId)
+            props.navigation.navigate("OTP", {
+                otpData: res.data,
+                sessionId: res?.data?.validateCustResp?.sessionId,
+                VerificationFormData: replacementOtpData,
+                type: 'tagReplacement'
+            })
+            console.log(res, "otp response")
+        } catch (error) {
+            console.log(JSON.stringify(error), "error")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const getUserData = async () => {
+        let userData = await getCache('userData')
+        setUserData(userData)
+    }
+
+    useEffect(() => {
+        getUserData()
+    }, [])
+
+    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Replacement"} />
+            {loading && <Loader />}
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
-
-                <View style={{ marginBottom: 10 }}>
-                    <SelectField dataToRender={getDetailsDropdownData} title={"Select"} selectedValue={setDropdownData}/>
-                </View>
-
-                <InputText placeholder={"Enter mobile number"} onChangeText={(text) => setMobileNumber(text)} />
-                <View style={{ }}>
-                    <InputText value={vehicleNumber} placeholder={"Enter last 5 digit engine number"} onChangeText={(text: string) => setVehicleNumber(text.toUpperCase())}
+                <View style={{ marginBottom: "4%" }}>
+                    <CustomInputText
+                        value={replacementOtpData.mobileNumber}
+                        placeholder={"Enter mobile number"}
+                        onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
+                        keyboardType='numeric'
                     />
                 </View>
 
+                <CustomInputText
+                    placeholder={"Enter Vehicle number"}
+                    value={replacementOtpData.vehicleNumber}
+                    onChangeText={(text: string) => formDatahandler('vehicleNumber', text.toUpperCase())}
+                />
+
+                <View style={{ marginVertical: "5%" }}>
+                    <CustomInputText
+                        value={replacementOtpData.engineNumber}
+                        placeholder={"Enter last 5 digit engine number"}
+                        onChangeText={(text: string) => formDatahandler('engineNumber', text)}
+                    />
+                </View>
 
                 {/* error message */}
                 {/* <Text style={styles.errorText}>*Details not found
@@ -105,9 +113,7 @@ const TagReplacement = (props: any) => {
             </View>
 
             <View style={styles.bottomContainer}>
-                <PrimaryBtn title={"Next"}
-                    onPress={() => props.navigation.navigate('tagReplacementForm')}
-                />
+                <PrimaryBtn title={"Next"} onPress={sendOTP} />
             </View>
         </SafeAreaView>
     )
@@ -124,7 +130,6 @@ const styles = StyleSheet.create({
         lineHeight: 19,
         color: "#000000",
         marginBottom: 10
-
     },
     errorText: {
         padding: "0%",

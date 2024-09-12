@@ -15,8 +15,9 @@ const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
     }
     setDropdownOpen(!dropdownOpen)
   }
+
   return (
-    <View style={styles.dropdownStyle}>
+    <View style={[styles.dropdownStyle, { borderColor: borderColor }]}>
       <SelectDropdown
         ref={dropdownRef}
         data={dataToRender}

@@ -204,15 +204,32 @@ import {
   ScrollView,
   Dimensions
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SwipperComponent from './SwipperComponent'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
+import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen =width<=420;
 const DashboardCards = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
+
+  const getUserData = async () => {
+    try {
+      const value = await getCache('userData')
+      console.log(value, 'userData')
+      if (value !== null) {
+        return JSON.parse(value)
+      }
+    } catch (e) {
+      console.log('error', e)
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   return (
     <Pressable
       style={styles.dashboardCard}
@@ -229,7 +246,7 @@ const DashboardCards = ({ title, subTitle, icon, router }) => {
           <Image
             style={styles.icon}
             source={icon}
-            />
+          />
         </View>
       </View>
     </Pressable>
@@ -256,23 +273,26 @@ const DashboardCards2 = ({ title, subTitle, icon, router }) => {
 
 const Home = () => {
   const [activeTime, setActiveTime] = useState('Today')
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     try {
-      Home();
+      Home()
     } catch (error) {
-      console.log(error, 'error');
+      console.log(error, 'error')
     } finally {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  };
-  
+  }
+
   return (
-    <ScrollView style={styles.container} refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.swipperContainer}>
         <SwipperComponent />
       </View>
@@ -300,6 +320,7 @@ const Home = () => {
           subTitle={'Registration'}
           icon={require('../../assets/dashboard/tagRegistration.png')}
           router={'mobileVerification'}
+          // router={'tagRegistration'}
         />
         <DashboardCards
           title={'Tag'}
@@ -367,7 +388,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: 'light-blue',
+    backgroundColor: 'light-blue'
   },
   swipperContainer: {
     height: height * 0.3,

@@ -2,9 +2,11 @@ import React from 'react'
 import { StyleSheet, View, TextInput ,   Dimensions
 } from 'react-native'
 
+
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen =width<=420;
+
 const InputText = ({
   value,
   placeholder,
@@ -13,14 +15,16 @@ const InputText = ({
   inputStyle,
   id,
   maxLength,
-  editable = true
+  isEditable = true,
+  keyboardType = 'default',
+  borderColor = '#263238'
 }) => {
   return (
     <View style={{  alignItems: 'center' ,
       marginVertical:isSmallScreen?8:10
     }}>
       <TextInput
-        style={[styles.textInput, inputStyle]}
+        style={[styles.textInput, inputStyle, { borderColor: borderColor }]}
         value={value}
         placeholder={placeholder}
         placeholderTextColor={'#263238'}
@@ -28,7 +32,9 @@ const InputText = ({
         secureTextEntry={secure}
         id={id}
         maxLength={maxLength}
-        editable={editable}
+        editable={isEditable}
+        keyboardType={keyboardType}
+        // autoCapitalize="characters"
       />
     </View>
   )

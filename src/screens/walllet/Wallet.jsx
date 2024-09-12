@@ -57,8 +57,16 @@ const Wallet = (props) => {
           </Text>
 
           <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
-            <Pressable onPress={() => props.navigation.navigate('topupWallet')}>
-              <Image source={require('../../assets/screens/wallet/topUp.png')} />
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('topupWallet', {
+                  walletBalance: walletDetails?.agent?.balance || 0
+                })
+              }
+            >
+              <Image
+                source={require('../../assets/screens/wallet/topUp.png')}
+              />
               <Text style={styles.tagText}>Top up</Text>
             </Pressable>
 
