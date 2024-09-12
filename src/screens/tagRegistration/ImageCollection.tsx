@@ -62,7 +62,7 @@ const ImageCollection = (props: any) => {
       )}
 
       <ScrollView>
-        <View style={{ marginTop: "10%", padding: "5%" }}>
+        <View style={{  padding: "5%" }}>
           <Text style={{ color: "#000000", fontSize: 16, fontWeight: "400", marginBottom: "3%" }}>RC copy photo</Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <View style={{ height: 200, width: 180, }}>
@@ -71,7 +71,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.RCFRONT?.image }}
                   style={{ height: 150, width: '100%' }}
                 />
-              </Pressable> : <UploadDoc text={'Upload RC copy (Front)'} setUploadFile={(value: any) => handleImageSelected('RCFRONT', value)} />}
+              </Pressable> : <UploadDoc text={'Upload RC copy (Front)'} setUploadFile={(value: any) => handleImageSelected('RCFRONT', value)} backgroundType={"RC"} />}
             </View>
             <View style={{ height: 200, width: 180, }}>
               {imageGallaryData && imageGallaryData?.RCBACK ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, RCBACK: null })}>
@@ -79,7 +79,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.RCBACK?.image }}
                   style={{ height: 150, width: '100%' }}
                 />
-              </Pressable> : <UploadDoc text={'Upload RC copy (Back)'} setUploadFile={(value: any) => handleImageSelected('RCBACK', value)} />}
+              </Pressable> : <UploadDoc text={'Upload RC copy (Back)'} setUploadFile={(value: any) => handleImageSelected('RCBACK', value)} backgroundType={"RC"} />}
             </View>
           </View>
 
@@ -93,7 +93,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image }}
                   style={{ height: 150, width: '100%' }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} />}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"}/>}
             </View>
 
             <View style={{ height: 200, width: "100%" }}>
@@ -103,7 +103,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLESIDE?.image }}
                   style={{ height: 150, width: '100%' }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} />}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} />}
             </View>
             {/* </View> */}
           </View>
@@ -118,7 +118,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.TAGAFFIX?.image }}
                   style={{ height: 150, width: '100%' }}
                 />
-              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} />}
+              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} />}
 
             </View>
 

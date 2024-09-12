@@ -1,16 +1,18 @@
-import { View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native'
-import React, { useEffect } from 'react'
-import { getCache, setCache } from '../../helper/Storage'
+
+import { View, Text, SafeAreaView, StyleSheet, Alert,Dimensions } from 'react-native'
+import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { setCache } from '../../helper/Storage'
 import OverlayHeader from '../../components/OverlayHeader'
 import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import SelectField from '../../components/common/SelectFieldBig'
 import InputText from '../../components/common/InputText'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
-
-
 const TagReplacement = (props: any) => {
     const [userData, setUserData] = React.useState<any>()
     const [loading, setLoading] = React.useState(false)
@@ -81,7 +83,6 @@ const TagReplacement = (props: any) => {
             {loading && <Loader />}
             <View style={styles.container}>
                 <Text style={styles.label}>Get Details By</Text>
-
                 <View style={{ marginBottom: "4%" }}>
                     <CustomInputText
                         value={replacementOtpData.mobileNumber}
@@ -121,14 +122,14 @@ const TagReplacement = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: "5%"
+        padding: "5%",
     },
     label: {
         fontWeight: '400',
-        fontSize: 16,
+        fontSize: isTablet?20:16,
         lineHeight: 19,
         color: "#000000",
-        marginBottom: "2%"
+        marginBottom: 10
     },
     errorText: {
         padding: "0%",

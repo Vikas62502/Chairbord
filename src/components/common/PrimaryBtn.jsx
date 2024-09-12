@@ -1,7 +1,9 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View,Dimensions } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const PrimaryBtn = ({ onPress, title, disabled }) => {
   const buttonContainerStyle = disabled
     ? styles.disableAppButtonContainer
@@ -33,8 +35,8 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
 const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
-    borderRadius: 25,
-    height: 75,
+    borderRadius: isTablet?30:25,
+    height: isTablet?90:75,
     width:'auto',
     alignItems: 'between',
     margin:10,
@@ -44,8 +46,8 @@ const styles = StyleSheet.create({
   },
   disableAppButtonContainer: {
     elevation: 8,
-    borderRadius: 25,
-    height: 75,
+    borderRadius: isTablet?30:25,
+    height: isTablet?90:75,
     width: 'auto',
     margin:10,
     alignItems: 'between',
@@ -55,13 +57,13 @@ const styles = StyleSheet.create({
   },
   linearGradient: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 25,
+    borderRadius: isTablet?30:25,
     alignItems: 'between',
     justifyContent: 'center',
-    paddingHorizontal: '10%'
+    paddingHorizontal: 30
   },
   appButtonText: {
-    fontSize: 28,
+    fontSize: isTablet?36:28,
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',

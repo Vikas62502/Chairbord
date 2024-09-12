@@ -1,8 +1,11 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet,Dimensions } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const OverlayHeader = ({ title, showBackButton = true }) => {
   const navigation = useNavigation()
   return (
@@ -48,7 +51,7 @@ const styles = StyleSheet.create({
   },
   overlayContainer: {
     position: 'relative',
-    height: 172
+    height: 170,
   },
   overlay: {
     position: 'absolute',
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
   },
   overlayText: {
     fontWeight: '700',
-    fontSize: 24,
+    fontSize: isTablet?28:24,
     lineHeight: 29,
     color: 'white'
   },
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
   },
   chairBordLogo: {
     position: 'absolute',
-    left: '33%',
+    left: isTablet?'38%':'33%',
     top: '10%',
     zIndex: 0
   }

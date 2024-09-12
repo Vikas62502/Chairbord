@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, View, Image } from 'react-native'
 import { SwiperFlatList } from 'react-native-swiper-flatlist'
 
 const { width, height } = Dimensions.get('window')
-
+const isTablet = width > 768;
 const SwipperComponent = () => {
   const swipperImages = [
     require('../../assets/swipperImage/bajajImage.jpg'),
@@ -19,7 +19,7 @@ const SwipperComponent = () => {
         index={1}
         showPagination
         paginationStyle={{
-          bottom: -20
+          bottom: isTablet?-70:-20
         }}
         paginationActiveDotColor={'blue'}
         paginationDefaultColor={'gray'}
@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   image: {
     flex: 1,
     width: width * 0.9,
-    height: '90%',
+    height: isTablet?"100%":'90%',
     resizeMode: 'stretch'
   },
   paginationDot: {

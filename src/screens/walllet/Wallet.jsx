@@ -164,6 +164,7 @@ const Wallet = (props) => {
         visible={showFilterModal}
         onClose={() => setShowFilterModal(false)}
       />
+      
     </ScrollView>
   );
 };
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 1,
     borderColor: '#858585',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     paddingVertical: 5
   },
   searchIcon: {
