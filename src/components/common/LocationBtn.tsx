@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen =width<=420;
-const PrimaryBtn = ({ onPress, title, disabled }) => {
+const LocationBtn = ({ onPress, title, disabled }) => {
   const buttonContainerStyle = disabled
     ? styles.disableAppButtonContainer
     : styles.appButtonContainer
@@ -21,11 +21,12 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            zIndex:10
           }}
         >
           <Text style={styles.appButtonText}>{title}</Text>
-          <Image source={require('../../assets/rightArrow.png')} />
+          <Image source={require('../../assets/gps.png') } />
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -36,9 +37,8 @@ const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
     borderRadius: isTablet?30:25,
-    height: isTablet?90:75,
+    height: isTablet?90:50,
     width:'auto',
-    alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
     overflow: 'hidden'// Ensure the gradient follows the button's shape
@@ -46,22 +46,20 @@ const styles = StyleSheet.create({
   disableAppButtonContainer: {
     elevation: 8,
     borderRadius: isTablet?30:25,
-    height: isTablet?90:75,
+    height: isTablet?90:60,
     width: 'auto',
-    alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   linearGradient: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: isTablet?30:25,
-    alignItems: 'between',
+    borderRadius: 50,
     justifyContent: 'center',
     paddingHorizontal: 30
   },
   appButtonText: {
-    fontSize: isTablet?36:28,
+    fontSize: isTablet?36:18,
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',
@@ -69,4 +67,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PrimaryBtn
+export default LocationBtn

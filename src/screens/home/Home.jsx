@@ -211,47 +211,47 @@ import LinearGradient from 'react-native-linear-gradient'
 import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
-const DashboardCards = ({ title, subTitle, icon, router }) => {
-  const navigation = useNavigation()
+const isSmallScreen =width<400;
+// const DashboardCards = ({ title, subTitle, icon, router }) => {
+//   const navigation = useNavigation()
 
-  const getUserData = async () => {
-    try {
-      const value = await getCache('userData')
-      console.log(value, 'userData')
-      if (value !== null) {
-        return JSON.parse(value)
-      }
-    } catch (e) {
-      console.log('error', e)
-    }
-  }
+//   const getUserData = async () => {
+//     try {
+//       const value = await getCache('userData')
+//       console.log(value, 'userData')
+//       if (value !== null) {
+//         return JSON.parse(value)
+//       }
+//     } catch (e) {
+//       console.log('error', e)
+//     }
+//   }
 
-  useEffect(() => {
-    getUserData()
-  }, [])
-  return (
-    <Pressable
-      style={styles.dashboardCard}
-      onPress={() => navigation.navigate(router)}
-    >
-      <View style={{ position: 'relative' }}>
-        <View style={{ alignItems: 'center', width: '80%' }}>
-          <Text style={styles.dashbordCardText}>{title}</Text>
-          <Text style={styles.dashbordCardText}>{subTitle}</Text>
-        </View>
-        <View
-          style={styles.iconContainer}
-        >
-          <Image
-            style={styles.icon}
-            source={icon}
-          />
-        </View>
-      </View>
-    </Pressable>
-  )
-}
+//   useEffect(() => {
+//     getUserData()
+//   }, [])
+//   return (
+//     <Pressable
+//       style={styles.dashboardCard}
+//       onPress={() => navigation.navigate(router)}
+//     >
+//       <View style={{ position: 'relative' }}>
+//         <View style={{ alignItems: 'center', width: '80%' }}>
+//           <Text style={styles.dashbordCardText}>{title}</Text>
+//           <Text style={styles.dashbordCardText}>{subTitle}</Text>
+//         </View>
+//         <View
+//           style={styles.iconContainer}
+//         >
+//           <Image
+//             style={styles.icon}
+//             source={icon}
+//           />
+//         </View>
+//       </View>
+//     </Pressable>
+//   )
+// }
 const DashboardCards2 = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
   return (
@@ -329,14 +329,14 @@ const Home = () => {
           router={'tagReplacement'}
         /> */}
         <DashboardCards2
-          title={'Tag Registration'}
-          // subTitle={'Replacement'}
+          title={'Tag'}
+          subTitle={'Registration'}
           icon={require('../../assets/dashboard/tagRegistration.png')}
           router={'mobileVerification'}
         />
         <DashboardCards2
-          title={'Tag Replacement'}
-          // subTitle={'Replacement'}
+          title={'Tag'}
+          subTitle={'Replacement'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'tagReplacement'}
         />
@@ -347,8 +347,8 @@ const Home = () => {
           router={'wallet'}
         />
         <DashboardCards2
-          title={'Issuance Tracker'}
-          // subTitle={'Replacement'}
+          title={'Issuance'}
+          subTitle={'Tracker'}
           icon={require('../../assets/dashboard/issuance.png')}
           router={'tagReplacement'}
         />
@@ -357,7 +357,7 @@ const Home = () => {
         <View style={styles.divider}></View>
       </View>
 
-      <View style={styles.timeSelector}>
+      {/* <View style={styles.timeSelector}>
         {['Today', 'Week', 'Month'].map((data, index) => (
           <Pressable
             key={index}
@@ -380,7 +380,7 @@ const Home = () => {
             )}
           </Pressable>
         ))}
-      </View>
+      </View> */}
     </ScrollView>
   )
 }
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     },
     dashbordCardText2: {
       fontWeight: '400',
-      fontSize: isTablet ? 24 : 14, // responsive font size
+      fontSize: isTablet ? 24 :isSmallScreen?12: 14, // responsive font size
       lineHeight: isTablet?28:18,
       color: 'black',
       textAlign: 'center', // center the text horizontally

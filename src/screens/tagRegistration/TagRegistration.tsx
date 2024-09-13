@@ -19,7 +19,12 @@ import showAlert from '../../utils/showAlert'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params.response;
+    console.log(vrnDetails, "vrn")
+
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
+    console.log(userOtpData, "userData")
+    console.log(CustomerRegData, "CustomerRegData")
+    console.log(otpData, "otpdata")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
@@ -143,7 +148,7 @@ const TagRegistration = (props: any) => {
         setErrors(newErrors);
 
         // Show alert if there are errors
-        if (Object.keys(newErrors).length > 0) {
+        if (Object.keys(newErrors)?.length > 0) {
             showAlert('Please fill in all required fields');
             return false;
         }
@@ -166,7 +171,7 @@ const TagRegistration = (props: any) => {
                 "masterId": "",
                 "agentName": userData?.user?.name || CustomerRegData?.name || "",
                 "vrnDetails": {
-                    "vrn": vrnDetails?.vehicleNo || "",
+                    "vrn": vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase(),
                     "chassis": vrnDetails?.chassisNo || chassisNo,
                     "engine": engineNumber || vrnDetails?.engineNo || "",
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
@@ -247,13 +252,13 @@ const TagRegistration = (props: any) => {
 
     const handleDateChange = (text: string) => {
         let cleaned = text.replace(/[^0-9]/g, '');
-        if (cleaned.length > 2) {
+        if (cleaned?.length > 2) {
             cleaned = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
         }
-        if (cleaned.length > 5) {
+        if (cleaned?.length > 5) {
             cleaned = cleaned.slice(0, 5) + '/' + cleaned.slice(5);
         }
-        if (cleaned.length > 10) {
+        if (cleaned?.length > 10) {
             cleaned = cleaned.slice(0, 10);
         }
 
@@ -461,7 +466,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontWeight: '600',
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: 19,
         color: "#000000",
         marginVertical: "4%"
@@ -508,7 +513,7 @@ const styles = StyleSheet.create({
     customerDetailsContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: "3%"
+        marginBottom: "1%"
     },
     uploadDocContainer: {
         borderWidth: 1,

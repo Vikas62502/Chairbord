@@ -76,8 +76,8 @@ export const npciVehicleClassIDData = [
 ]
 
 export const commercialOptions = [
-    { id: 1, title: "true" },
-    { id: 2, title: "false" }
+    { id: 1, title: "True" },
+    { id: 2, title: "False" }
 ];
 
 export const isNationalPermitOptions = [

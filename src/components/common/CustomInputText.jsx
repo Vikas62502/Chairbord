@@ -1,6 +1,9 @@
-import { View, StyleSheet, TextInput } from 'react-native'
+import { View, StyleSheet, TextInput,Dimensions } from 'react-native'
 import React from 'react'
 
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<=420;
 const CustomInputText = ({
   value,
   placeholder,
@@ -30,14 +33,15 @@ const CustomInputText = ({
 
 const styles = StyleSheet.create({
   textInput: {
-    borderWidth: 1,
+    borderColor: '#263238',
+    borderWidth: isTablet?2:1,
     color: '#000000',
     width: '100%',
-    fontSize: 16,
-    borderRadius: 20,
-    height: 60,
-    paddingHorizontal: 15
-    // backgroundColor: '#F3F3F3'
+    fontSize: isTablet?20:16,
+    borderRadius: 20, 
+    height: isTablet?80:60,
+    paddingHorizontal: isTablet?30: 20,
+    backgroundColor: '#F3F3F3'
   }
 })
 

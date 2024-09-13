@@ -15,10 +15,14 @@ const UploadDoc = ({ text, setUploadFile, backgroundType }) => {
         return require('../../assets/Background/rc.webp'); // Path to RC background image
       case 'FASTAG':
         return require('../../assets/Background/fastag-1.png'); // Path to FASTag background image
-        case 'Vehicle-Front':
+      case 'Vehicle-Front':
         return require('../../assets/Background/bgremove-front.png');
-        case 'Vehicle-Side':
+      case 'Vehicle-Side':
         return require('../../assets/Background/bgremove-side.png');
+        case 'Pan-Card':
+        return require('../../assets/Background/pan.jpg');
+        case 'Aadhar-Card':
+        return require('../../assets/Background/aadhar.png');
       default:
         return require('../../assets/uploadLogo.png'); // Default background image
     }

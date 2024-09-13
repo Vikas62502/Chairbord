@@ -26,6 +26,7 @@ import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 import TagReplacementForm from '../../screens/tagReplacement/TagReplacementForm';
 import RegisterVerifyOtp from '../../screens/opt/RegisterVerifyOtp';
+import AdditionalDetails from '../../screens/profile/additionalDetails';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -91,6 +92,9 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="profileAndMasterInfo" component={ProfileAndMasterInfo} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="additionalDetails" component={AdditionalDetails} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="order" component={Order} options={{

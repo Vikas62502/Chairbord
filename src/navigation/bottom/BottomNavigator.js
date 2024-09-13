@@ -5,7 +5,7 @@ import Inventory from '../../screens/inventory/Inventory';
 import Orders from '../../screens/order/Order';
 import Home from '../../screens/home/Home';
 import Wallet from '../../screens/walllet/Wallet';
-import Profile from '../../screens/profile/Profile';
+import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification'; '../../screens/profile/aadharAndPanVerification';
 import ContactUs from '../../screens/contactUs/ContactUs';
 
 // Import of tab navigation icons
@@ -84,8 +84,8 @@ const BottomNavigator = () => {
         }}
       /> */}
       <Bottom.Screen
-        name="profile"
-        component={Profile}
+        name="aadharAndPanVerification"
+        component={AadharAndPanVerification}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

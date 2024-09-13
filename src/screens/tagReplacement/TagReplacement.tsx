@@ -1,8 +1,8 @@
 
 import { View, Text, SafeAreaView, StyleSheet, Alert,Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { setCache } from '../../helper/Storage'
+import { getCache, setCache } from '../../helper/Storage'
 import OverlayHeader from '../../components/OverlayHeader'
 import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'

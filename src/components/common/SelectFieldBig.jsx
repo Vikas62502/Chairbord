@@ -4,7 +4,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen =width<=420;
-const SelectFieldBig = ({ dataToRender, title, selectedValue }) => {
+const SelectFieldBig = ({ dataToRender, title, selectedValue,borderColor }) => {
   const dropdownRef = useRef(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggleDropdown = () => {
