@@ -23,6 +23,8 @@ const UploadDoc = ({ text, setUploadFile, backgroundType }) => {
         return require('../../assets/Background/pan.jpg');
         case 'Aadhar-Card':
         return require('../../assets/Background/aadhar.png');
+        case 'POS':
+        return require('../../assets/Background/pos.jpg');
       default:
         return require('../../assets/uploadLogo.png'); // Default background image
     }

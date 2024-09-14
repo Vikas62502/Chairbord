@@ -82,7 +82,7 @@ const TagReplacement = (props: any) => {
             <OverlayHeader title={"Tag Replacement"} />
             {loading && <Loader />}
             <View style={styles.container}>
-                <Text style={styles.label}>Get Details By</Text>
+                {/* <Text style={styles.label}>Get Details By</Text> */}
                 <View style={{ marginBottom: "4%" }}>
                     <CustomInputText
                         value={replacementOtpData.mobileNumber}

@@ -39,31 +39,31 @@ const AadharAndPanVerification = (props) => {
   const [formData, setFormData] = useState({
     agentId: userData?.id,
     name: '',
-    email_id: userData?.email_id || '',
-    mobile_number: userData?.mobile_number || '',
-    father_name: '',
-    mother_name: '',
-    contact_person_name: '',
-    contact_person_mobile_number: '',
-    relationship_status: '',
-    address: '',
-    pincode: '',
-    city: '',
-    address2: '',
-    state: '',
-    pan_card_number: '',
-    id_proof_document_type: '',
-    id_proof_document_number: '',
-    pos_number: ''
+    aadharNumber: '',
+    panCardNumber: '',
+    // email_id: userData?.email_id || '',
+    // mobile_number: userData?.mobile_number || '',
+    // father_name: '',
+    // mother_name: '',
+    // contact_person_name: '',
+    // contact_person_mobile_number: '',
+    // relationship_status: '',
+    // address: '',
+    // pincode: '',
+    // city: '',
+    // address2: '',
+    // state: '',
+    // pan_card_number: '',
+    // id_proof_document_type: '',
+    // id_proof_document_number: '',
+    // pos_number: ''
     // address_document_type :"",
     // address_document_number :"",
   })
   const [files, setFiles] = useState({
-    pan_card_photo: null,
-    id_proof_front_photo: null,
-    id_proof_back_photo: null,
-    profile_pic: null,
-    pos_proof_photo: null
+    panCardPhoto: null,
+    aadharFront: null,
+    aadharBack: null,
   })
 
   const formDataHandler = (key, value) => {
@@ -95,41 +95,92 @@ const AadharAndPanVerification = (props) => {
     })
   }
 
-  const registerCompleteData = async () => {
-    setLoading(true)
-    const form = new FormData()
-
-    for (const key in formData) {
-      form.append(key, formData[key])
+  const verifyAadhar = async () => {
+    setLoading(true);
+    try {
+      const response = await client.post('/verify/aadhar', {
+        aadharNumber: formData.aadharNumber,
+      });
+      console.log('Aadhar verification success', response);
+      Alert.alert('Success', 'Aadhar Verified Successfully');
+    } catch (error) {
+      console.error('Aadhar verification failed:', error);
+      Alert.alert('Error', 'Failed to verify Aadhar');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    for (const key in files) {
-      if (files[key]) {
-        form.append(key, {
-          uri: files[key].uri,
-          name: files[key].name,
-          type: files[key].type
-        })
-      }
+  const verifyPan = async () => {
+    setLoading(true);
+    const form = new FormData();
+    form.append('panCardNumber', formData.panCardNumber);
+    if (files.panCardPhoto) {
+      form.append('panCardPhoto', {
+        uri: files.panCardPhoto.uri,
+        name: files.panCardPhoto.name,
+        type: files.panCardPhoto.type,
+      });
     }
 
     try {
-      const response = await client.post('/register/agent-complete', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      Alert.alert('Success', 'Profile updated successfully', [
-        { text: 'OK', onPress: () => props.navigation?.navigate('Home') }
-      ])
-      console.log('response:', response)
+      const response = await client.post('/verify/pan', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      console.log('Pan verification success', response);
+      Alert.alert('Success', 'Pan Verified Successfully');
     } catch (error) {
-      Alert.alert('Error', 'Error creating agent', [{ text: 'OK' }])
-      console.error('Error creating agent:', error)
+      console.error('Pan verification failed:', error);
+      Alert.alert('Error', 'Failed to verify Pan');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  useEffect(() => {
+    // Fetch user data from cache or API
+    const getUserdata = async () => {
+      const data = await getCache('userData');
+      setUserData(data?.user);
+    };
+    getUserdata();
+  }, []);
+
+  // const registerCompleteData = async () => {
+  //   setLoading(true)
+  //   const form = new FormData()
+
+  //   for (const key in formData) {
+  //     form.append(key, formData[key])
+  //   }
+
+  //   for (const key in files) {
+  //     if (files[key]) {
+  //       form.append(key, {
+  //         uri: files[key].uri,
+  //         name: files[key].name,
+  //         type: files[key].type
+  //       })
+  //     }
+  //   }
+
+  //   try {
+  //     const response = await client.post('/register/agent-complete', form, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     })
+  //     Alert.alert('Success', 'Profile updated successfully', [
+  //       { text: 'OK', onPress: () => props.navigation?.navigate('Home') }
+  //     ])
+  //     console.log('response:', response)
+  //   } catch (error) {
+  //     Alert.alert('Error', 'Error creating agent', [{ text: 'OK' }])
+  //     console.error('Error creating agent:', error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const sendOtpRequest = async () => {
     setShowOtpField(true)
@@ -166,23 +217,23 @@ const AadharAndPanVerification = (props) => {
     }
   };
 
-  const getUserdata = async () => {
-    const data = await getCache('userData')
-    setUserData(data?.user)
-  }
+  // const getUserdata = async () => {
+  //   const data = await getCache('userData')
+  //   setUserData(data?.user)
+  // }
 
-  useEffect(() => {
-    setFormData((formData) => ({
-      ...formData,
-      agentId: userData?.id,
-      email_id: userData?.email_id,
-      mobile_number: userData?.mobile_number
-    }))
-  }, [userData])
+  // useEffect(() => {
+  //   setFormData((formData) => ({
+  //     ...formData,
+  //     agentId: userData?.id,
+  //     email_id: userData?.email_id,
+  //     mobile_number: userData?.mobile_number
+  //   }))
+  // }, [userData])
 
-  useEffect(() => {
-    getUserdata()
-  }, [userData?.user?.id])
+  // useEffect(() => {
+  //   getUserdata()
+  // }, [userData?.user?.id])
 
   return (
     <SafeAreaView style={{ flex: 1, padding: '5%', }} >
@@ -249,14 +300,25 @@ const AadharAndPanVerification = (props) => {
                   style={{ height: 150, width: '100%' }}
                 /> 
               </Pressable> :}*/}
-              <UploadDoc text={'Upload Aadhar Card Image'} backgroundType={"Aadhar-Card"} />
+              <UploadDoc text={'Upload Aadhar Card Front'} setUploadFile={() => pickImage('aadharFront')} backgroundType={"Aadhar-Card"} />
+            </View>
+            <View style={{ height: 200, width: "100%", marginVertical: 5 }}>
+
+              {/* {imageGallaryData && imageGallaryData?.VEHICLEFRONT ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, VEHICLEFRONT: null })}> */}
+              {/* <Image
+                  source={{ uri: imageGallaryData?.VEHICLEFRONT?.image }}
+                  style={{ height: 150, width: '100%' }}
+                /> 
+              </Pressable> :}*/}
+              <UploadDoc text={'Upload Aadhar Card Back'} setUploadFile={() => pickImage('aadharBack')} backgroundType={"Aadhar-Card"} />
             </View>
             <InputText
               // id={'aadhar_number'}
               placeholder={"Enter Aadhar Number"}
               maxLength={12}
-              // onChangeText={(value) => formDataHandler('aadhar_number', value)}
-              editable={!showOtpField}
+              value={formData.aadharNumber}
+              onChangeText={(value) => formDataHandler('aadhar_number', value)}
+              // editable={!showOtpField}
             />
 
             {/* <TagOfInput text="Personal Information" />
@@ -408,7 +470,7 @@ const AadharAndPanVerification = (props) => {
                   <View style={{ width: '45%', }}>
                     <SecondaryButton
                       title={'Verify'}
-                      onPress={() => { setShowPanVerification(true); setShowOtpField(false); }}
+                      onPress={() => { setShowPanVerification(true); verifyAadhar;  setShowOtpField(false); }}
                     />
                   </View>
                 </View>
@@ -433,17 +495,18 @@ const AadharAndPanVerification = (props) => {
                   style={{ height: 150, width: '100%' }}
                 /> 
               </Pressable> :}*/}
-                <UploadDoc text={'Upload Pan Card Image'} backgroundType={"Pan-Card"} />
+                <UploadDoc text={'Upload Pan Card Image'} setUploadFile={() => pickImage('panCardPhoto')} backgroundType={"Pan-Card"} />
               </View>
               <InputText
                 // id={'aadhar_number'}
                 placeholder={"Enter PAN Number"}
                 maxLength={10}
-              // onChangeText={(value) => formDataHandler('aadhar_number', value)}
+                value={formData.panCardNumber}
+              onChangeText={(value) => formDataHandler('panCardNumber', value)}
               />
               <SecondaryButton
                 title={'Verify'}
-                onPress={() => { setShowPanVerificationBorder(true); }}
+                onPress={() => { setShowPanVerificationBorder(true);verifyPan; }}
               />
             </View>
           )

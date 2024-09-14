@@ -1,7 +1,9 @@
 
 import { View, Text, SafeAreaView, StyleSheet, Alert, Dimensions, PermissionsAndroid, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native'
 import { getCache, setCache } from '../../helper/Storage'
 import OverlayHeader from '../../components/OverlayHeader'
@@ -15,6 +17,7 @@ const isSmallScreen = width <= 420;
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import LocationBtn from '../../components/common/LocationBtn';
+import UploadDoc from '../../components/common/UploadDoc';
 const AdditionalDetails = (props: any) => {
     const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [locationError, setLocationError] = useState<string | null>(null);
@@ -72,44 +75,59 @@ const AdditionalDetails = (props: any) => {
     // }
     const requestLocationPermission = async () => {
         try {
-            if (Platform.OS === 'android') {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                    {
-                        title: 'Location Access Required',
-                        message: 'This app needs to access your location',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                    }
-                );
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    getCurrentLocation();
-                } else {
-                    Alert.alert('Permission Denied', 'Location permission is needed to access your location.');
-                }
-            } else {
-                // For iOS
-                getCurrentLocation();
-            }
+          let permissionResult;
+          if (Platform.OS === 'android') {
+            permissionResult = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+          } else {
+            permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+          }
+    
+          if (permissionResult === RESULTS.GRANTED) {
+            getCurrentLocation();
+          } else {
+            Alert.alert('Permission Denied', 'Location permission is needed to access your location.');
+          }
         } catch (err) {
-            console.warn(err);
+          console.warn(err);
         }
-    };
+      };
 
-    const getCurrentLocation = () => {
+      const getCurrentLocation = () => {
         Geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setLocation({ latitude, longitude });
-                setLocationError(null);
-            },
-            (error) => {
-                setLocationError(error.message);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+            // fetchCityAndState(latitude, longitude);
+          },
+          (error) => {
+            setLocationError(error.message);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );
-    };
+      };
+    //   const fetchCityAndState = async (latitude, longitude) => {
+    //     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`;
+    
+    //     try {
+    //       const response = await axios.get(url, {
+    //         headers: {
+    //           'User-Agent': 'MyApp (myemail@example.com)', // Replace with your app name and email
+    //           'Referer': 'http://yourwebsite.com/' // Replace with your domain or app URL
+    //         }
+    //       });
+    
+    //       if (response.data && response.data.address) {
+    //         const city = response.data.address.city || response.data.address.town || response.data.address.village || '';
+    //         const state = response.data.address.state || '';
+    //         setAddress({ city, state });
+    //       } else {
+    //         setLocationError('No results found for the provided coordinates.');
+    //       }
+    //     } catch (error) {
+    //       setLocationError('Error fetching location details.');
+    //       console.error('Error fetching location details:', error);
+    //     }
+    //   };
     console.log(getCurrentLocation)
     // const getUserData = async () => {
     //     let userData = await getCache('userData')
@@ -132,7 +150,7 @@ const AdditionalDetails = (props: any) => {
 
                     <InputText
                         // value={replacementOtpData.mobileNumber}
-                        placeholder={"Enter relative name"}
+                        placeholder={"Enter contact person name"}
                     // onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
                     />
                 </View>
@@ -140,13 +158,13 @@ const AdditionalDetails = (props: any) => {
 
                     <InputText
                         // value={replacementOtpData.mobileNumber}
-                        placeholder={"Enter relative number"}
+                        placeholder={"Enter contact person number"}
                         // onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
                         keyboardType='numeric'
                     />
                 </View>
                 <View style={{ margin: 5}}>
-                    <LocationBtn title={'Get Current Location'} onPress={requestLocationPermission} />
+                    <LocationBtn title={'Get POS Location'} onPress={requestLocationPermission} />
                     {location && (
                         <Text style={{ color: "black", margin: 10 }}>
                             Your Current location: Latitude: {location.latitude}, Longitude: {location.longitude}
@@ -154,6 +172,16 @@ const AdditionalDetails = (props: any) => {
                     )}
                     {locationError && <Text style={styles.errorText}>{locationError}</Text>}
                 </View>
+                <View style={{ height: 200, width: "100%", marginVertical: 5 }}>
+
+              {/* {imageGallaryData && imageGallaryData?.VEHICLEFRONT ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, VEHICLEFRONT: null })}> */}
+              {/* <Image
+                  source={{ uri: imageGallaryData?.VEHICLEFRONT?.image }}
+                  style={{ height: 150, width: '100%' }}
+                /> 
+              </Pressable> :}*/}
+              <UploadDoc text={'Upload Pos Location Image'} backgroundType={"POS"} />
+            </View>
             </View>
 
             <View style={styles.bottomContainer}>
