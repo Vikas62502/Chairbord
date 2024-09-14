@@ -69,8 +69,12 @@ const ForgetYourPassword = () => {
         navigateTo={() => navigation.goBack()}
       />
       {loading && <Loader />}
-      <View>
+      <View style={{
+          marginHorizontal: 20,
+          marginTop: '5%'
+        }}>
         <InputText
+         
           placeholder={'Enter Email / Phone Number'}
           onChangeText={(value) => formDataHandler('email', value)}
         />
@@ -109,7 +113,7 @@ const ForgetYourPassword = () => {
                 </View>
               </>
             ) : (
-              <View style={{ marginVertical: '4%', alignItems: 'center' }}>
+              <View style={{ marginVertical: '4%',  }}>
                 <SecondaryButton
                   title={'Get OTP'}
                   onPress={sendPasswordResetOtp}

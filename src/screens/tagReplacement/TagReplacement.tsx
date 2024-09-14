@@ -83,8 +83,8 @@ const TagReplacement = (props: any) => {
             {loading && <Loader />}
             <View style={styles.container}>
                 {/* <Text style={styles.label}>Get Details By</Text> */}
-                <View style={{ marginBottom: "4%" }}>
-                    <CustomInputText
+                <View style={{ }}>
+                    <InputText
                         value={replacementOtpData.mobileNumber}
                         placeholder={"Enter mobile number"}
                         onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
@@ -92,14 +92,14 @@ const TagReplacement = (props: any) => {
                     />
                 </View>
 
-                <CustomInputText
+                <InputText
                     placeholder={"Enter Vehicle number"}
                     value={replacementOtpData.vehicleNumber}
                     onChangeText={(text: string) => formDatahandler('vehicleNumber', text.toUpperCase())}
                 />
 
-                <View style={{ marginVertical: "5%" }}>
-                    <CustomInputText
+                <View style={{ }}>
+                    <InputText
                         value={replacementOtpData.engineNumber}
                         placeholder={"Enter last 5 digit engine number"}
                         onChangeText={(text: string) => formDatahandler('engineNumber', text)}

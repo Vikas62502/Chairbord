@@ -14,50 +14,67 @@ const FastTagAndGps = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <View style={styles.content}>
+      
         <Image
           source={require('../assets/homeScreen/fasttagAndGPS.png')}
           style={styles.image}
         />
-      </View>
-      <View style={{ alignItems: 'center' }}>
+      
+      
         <Text style={styles.heading}>FASTAG and GPS</Text>
         <Text style={styles.font}>
           The easiest way of monitor and dispatch your vehicle
         </Text>
+      
       </View>
-
+      <View style={styles.bottomContainer}>
       <PrimaryBtn
         onPress={() => navigation.navigate('HistoricalData')}
         // onPress={() => navigation.navigate('order')}
         title={'Next'}
       />
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%'
+    flex: 1, // Take up the full screen
+    justifyContent: 'space-between', // Space between content and button
+    alignItems: 'center', // Center content horizontally
+  },
+  content: {
+    flex: 1, // Allow content to take available space
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
+    paddingHorizontal: 20, // Optional: Add horizontal padding for better spacing
   },
   image: {
-    alignSelf: 'center'
+    width: 250, // Adjust as needed
+    height: 250, // Adjust as needed
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     color: '#03536D',
-    fontWeight: '600',
-    fontFamily: 'inter'
+    fontWeight: '600', 
+    fontFamily: 'inter',
+    textAlign: 'center',
+    marginVertical: 10, // Add vertical margin between image and text
   },
   font: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#263238',
     fontWeight: '400',
     fontFamily: 'inter',
-    maxWidth: 286,
-    textAlign: 'center'
+    maxWidth: 300,
+    textAlign: 'center',
+  },
+  bottomContainer: {
+    padding: 20, // Add padding around the button
+    width: '100%',
+    alignItems: 'center', // Center button horizontally
   }
 })
 

@@ -350,7 +350,7 @@ const Home = () => {
           title={'Issuance'}
           subTitle={'Tracker'}
           icon={require('../../assets/dashboard/issuance.png')}
-          router={'tagReplacement'}
+          router={'issuanceTracker'}
         />
       </View>
       <View style={styles.dividerContainer}>

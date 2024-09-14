@@ -163,6 +163,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
+                        value={formData.email}
                   placeholder={'Enter email or phone number'}
                   secure={false}
                   onChangeText={(email) =>
@@ -170,6 +171,7 @@ const SignIn = () => {
                   }
                 />
                 <InputText
+                        value={formData.password}
                   placeholder={'Password'}
                   secure={true}
                   onChangeText={(pass) =>
@@ -196,6 +198,7 @@ const SignIn = () => {
             ) : (
               <View>
                 <InputText
+                        value={formData.phoneNumber}
                   placeholder={'Phone Number'}
                   secure={false}
                   onChangeText={(value) =>

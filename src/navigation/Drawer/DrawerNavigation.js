@@ -62,7 +62,7 @@ const DrawerNavigation = ({ }) => {
                 options={{ header: () => <OverlayHeader title={"Requests"} /> }}
             />
             <Drawer.Screen
-                name="issuenceTracker"
+                name="issuanceTracker"
                 component={IssuanceTracker}
                 options={{ header: () => <OverlayHeader title={"Issuance Tracker"} /> }}
             />

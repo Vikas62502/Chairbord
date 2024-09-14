@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -14,51 +13,63 @@ const HistoricalData = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <View style={styles.content}>
         <Image
           source={require('../assets/homeScreen/historicalData.png')}
           style={styles.image}
         />
-      </View>
-      <View style={{ alignItems: 'center' }}>
         <Text style={styles.heading}>Historical data</Text>
         <Text style={styles.font}>
           You can access location history and detailed log by logging into the
           GPS portal.
         </Text>
       </View>
-
-      <PrimaryBtn
-        onPress={() => navigation.navigate('SmsAlert')}
-        title={'Next'}
-      />
+      <View style={styles.bottomContainer}>
+        <PrimaryBtn
+          onPress={() => navigation.navigate('SmsAlert')}
+          title={'Next'}
+        />
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%'
+    flex: 1, // Take up the full screen
+    justifyContent: 'space-between', // Space between content and button
+    alignItems: 'center', // Center content horizontally
+  },
+  content: {
+    flex: 1, // Allow content to take available space
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
+    paddingHorizontal: 20, // Optional: Add horizontal padding for better spacing
   },
   image: {
-    alignSelf: 'center'
+    width: 250, // Adjust as needed
+    height: 250, // Adjust as needed
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     color: '#03536D',
-    fontWeight: '600', 
+    fontWeight: '600',
     fontFamily: 'inter',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginVertical: 10, // Add vertical margin between image and text
   },
   font: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#263238',
     fontWeight: '400',
     fontFamily: 'inter',
-    maxWidth: 286,
-    textAlign: 'center'
+    maxWidth: 300,
+    textAlign: 'center',
+  },
+  bottomContainer: {
+    padding: 20, // Add padding around the button
+    width: '100%',
+    alignItems: 'center', // Center button horizontally
   }
 })
 

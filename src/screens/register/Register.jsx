@@ -71,12 +71,14 @@ const Register = () => {
       {loading && <Loader />}
       <View style={styles.container}>
         <InputText
+                                value={formData.email_id}
           id={'email_id'}
           placeholder={'Enter email id'}
           onChangeText={(value) => formDataHandler('email_id', value)}
           editable={!showOtpField}
         />
         <InputText
+                                value={formData.mobile_number}
           id={'mobile_number'}
           placeholder={'Enter mobile number'}
           onChangeText={(value) => formDataHandler('mobile_number', value)}

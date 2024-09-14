@@ -59,7 +59,7 @@ const data = [
     {
         title: 'Issuance Tracker',
         icon: require('../../assets/DrawerNavigation/issuence.png'),
-        screen: 'issuenceTracker'
+        screen: 'issuanceTracker'
     },
     {
         title: 'Vehicle Tracking',

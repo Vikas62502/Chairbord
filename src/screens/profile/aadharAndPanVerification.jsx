@@ -317,10 +317,9 @@ const AadharAndPanVerification = (props) => {
               placeholder={"Enter Aadhar Number"}
               maxLength={12}
               value={formData.aadharNumber}
-              onChangeText={(value) => formDataHandler('aadhar_number', value)}
+              onChangeText={(value) => formDataHandler('aadharNumber', value)}
               // editable={!showOtpField}
             />
-
             {/* <TagOfInput text="Personal Information" />
             <View style={{  }}>
               <InputText
