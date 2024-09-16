@@ -27,7 +27,7 @@ const AadharAndPanVerification = (props) => {
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [ref_id, setRefId] = useState(null)
-  const [showPanVerification, setShowPanVerification] = useState(true)
+  const [showPanVerification, setShowPanVerification] = useState(null)
   const [formData, setFormData] = useState({
     agentId: userData?.id,
     name: '',
@@ -208,7 +208,7 @@ const AadharAndPanVerification = (props) => {
                   data={formData}
                   setShowOtpField={setShowOtpField}
                   setShowPanVerification={setShowPanVerification}
-                  verifyAadhar={verifyAadhar}
+                  // verifyAadhar={verifyAadhar}
                   ref_id={ref_id}
                 />
               </View>

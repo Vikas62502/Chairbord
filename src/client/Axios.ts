@@ -5,8 +5,8 @@ import { setupInterceptorsTo } from './interceptor'
 
 
 // const customBaseUrl = 'http://192.168.31.51'
-// const customBaseUrl = 'http://10.0.2.2'
-const customBaseUrl = 'http://192.168.29.41'
+const customBaseUrl = 'http://10.0.2.2'
+// const customBaseUrl = 'http://192.168.29.41'
 // const customBaseUrl = 'http://43.204.133.228'
 
 

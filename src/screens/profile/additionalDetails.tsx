@@ -1,128 +1,237 @@
-
-import { View, Text, SafeAreaView, StyleSheet, Alert, Dimensions,  Platform } from 'react-native';
-import React, {  useState } from 'react';
-import Geolocation from '@react-native-community/geolocation';
-import {  request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  Alert,
+  Dimensions,
+  Platform,
+  Pressable,
+  Image
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import Geolocation from '@react-native-community/geolocation'
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions'
 import OverlayHeader from '../../components/OverlayHeader'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import InputText from '../../components/common/InputText'
+import { launchImageLibrary } from 'react-native-image-picker'
+import LocationBtn from '../../components/common/LocationBtn'
+import UploadDoc from '../../components/common/UploadDoc'
+import { client } from '../../client/Axios'
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen = width <= 420;
-import LocationBtn from '../../components/common/LocationBtn';
-import UploadDoc from '../../components/common/UploadDoc';
+const isTablet = width > 768
+
 const AdditionalDetails = (props: any) => {
-    const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-    const [locationError, setLocationError] = useState<string | null>(null);
-    const [contactPersonData, setContactPersonData] = useState<any>({
-        contactPersonName: '',
-        contactPersonNumber: ''
+  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null)
+  const [locationError, setLocationError] = useState<string | null>(null)
+  const [contactPersonData, setContactPersonData] = useState<any>({
+    contactPersonName: '',
+    contactPersonNumber: ''
+  })
+
+  // State for storing images
+  const [posLocationImage, setPosLocationImage] = useState<any>(null)
+  const [eSign, setESign] = useState<any>(null)
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log('POS Location Image:', posLocationImage)
+  }, [posLocationImage])
+
+  useEffect(() => {
+    console.log('E-Sign Image:', eSign)
+  }, [eSign])
+
+  const formDataHandler = (key: string, value: string) => {
+    setContactPersonData({
+      ...contactPersonData,
+      [key]: value
     })
+  }
 
-    const formDatahandler = (key: string, value: string) => {
-        setContactPersonData({
-            ...contactPersonData,
-            [key]: value
-        })
+  const requestLocationPermission = async () => {
+    try {
+      let permissionResult
+      if (Platform.OS === 'android') {
+        permissionResult = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      } else {
+        permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+      }
+
+      if (permissionResult === RESULTS.GRANTED) {
+        getCurrentLocation()
+      } else {
+        Alert.alert('Permission Denied', 'Location permission is needed to access your location.')
+      }
+    } catch (err) {
+      console.warn(err)
     }
-    console.log(location, 'location')
-    const requestLocationPermission = async () => {
-        try {
-          let permissionResult;
-          if (Platform.OS === 'android') {
-            permissionResult = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-          } else {
-            permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-          }
-    
-          if (permissionResult === RESULTS.GRANTED) {
-            getCurrentLocation();
-          } else {
-            Alert.alert('Permission Denied', 'Location permission is needed to access your location.');
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      };
+  }
 
-      const getCurrentLocation = () => {
-        Geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setLocation({ latitude, longitude });
-            console.log('latitude', latitude)
-          },
-          (error) => {
-            setLocationError(error.message);
-          },
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-      };
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <OverlayHeader title={"Additional Details"} />
-            <View style={styles.container}>
-                <View style={{ marginBottom: 2 }}>
-
-                    <InputText
-                        value={contactPersonData.contactPersonName}
-                        placeholder={"Enter contact person name"}
-                    onChangeText={(text: string) => formDatahandler('contactPersonName', text)}
-                    />
-                </View>
-                <View style={{ marginBottom: 2 }}>
-
-                    <InputText
-                        // value={replacementOtpData.mobileNumber}
-                        placeholder={"Enter contact person number"}
-                        onChangeText={(text: string) => formDatahandler('contactPersonNumber', text)}
-                        keyboardType='numeric'
-                    />
-                </View>
-                <View style={{ margin: 5}}>
-                    <LocationBtn title={'Get POS Location'} onPress={requestLocationPermission} />
-                    {location && (
-                        <Text style={{ color: "black", margin: 10 }}>
-                            Your Current location: Latitude: {location.latitude}, Longitude: {location.longitude}
-                        </Text>
-                    )}
-                    {locationError && <Text style={styles.errorText}>{locationError}</Text>}
-                </View>
-                <View style={{ height: 200, width: "100%", marginVertical: 5 }}>
-
-              <UploadDoc text={'Upload Pos Location Image'} backgroundType={"POS"} />
-            </View>
-            </View>
-
-            <View style={styles.bottomContainer}>
-                <PrimaryBtn title={"Next"} />
-            </View>
-        </SafeAreaView>
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        setLocation({ latitude, longitude })
+      },
+      (error) => {
+        setLocationError(error.message)
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
+  }
+
+  // Image Picker function for POS Location or E-sign
+  const pickImage = (typeOfImg: string) => {
+    const options = {
+      mediaType: 'photo'
+    }
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker')
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error)
+      } else {
+        const source = {
+          uri: response.assets[0].uri,
+          name: response.assets[0].fileName,
+          type: response.assets[0].type
+        }
+
+        if (typeOfImg === 'POS Location') {
+          setPosLocationImage(source) // Set POS Location image
+        } else if (typeOfImg === 'E-Sign') {
+          setESign(source) // Set E-sign image
+        }
+      }
+    })
+  }
+
+  const handleSendData = async () => {
+    setLoading(true);
+    try {
+      const form = new FormData()
+
+      form.append('contact_person_name', contactPersonData?.contactPersonName)
+      form.append('contact_person_mobile_number', contactPersonData?.contactPersonNumber)
+      form.append('latitude', location?.latitude)
+      form.append('longitude', location?.longitude)
+      form.append('e_sign_photo', eSign);
+      form.append('pos_proof_photo', posLocationImage)
+
+      const response = await client.post('/cashfree/e-sign', form, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      console.log('E-Sign Verification success', response)
+      Alert.alert('Success', 'E-sign Verified Successfully', [
+        {
+          text: 'Ok',
+          onPress: () => props.navigation.navigate('dashboard')
+        }
+      ])
+
+    } catch(error) {
+      console.error('Something went wrong:', error)
+      Alert.alert('Error', 'Something went wrong')
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader title={'Additional Details'} />
+      <View style={styles.container}>
+        <View style={{ marginBottom: 2 }}>
+          <InputText
+            value={contactPersonData.contactPersonName}
+            placeholder={'Enter contact person name'}
+            onChangeText={(text: string) => formDataHandler('contactPersonName', text)}
+          />
+        </View>
+        <View style={{ marginBottom: 2 }}>
+          <InputText
+            placeholder={'Enter contact person number'}
+            onChangeText={(text: string) => formDataHandler('contactPersonNumber', text)}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <View style={{ margin: 5 }}>
+          <LocationBtn title={'Get POS Location'} onPress={requestLocationPermission} />
+          {location && (
+            <Text style={{ color: 'black', margin: 10 }}>
+              Your Current location: Latitude: {location.latitude}, Longitude: {location.longitude}
+            </Text>
+          )}
+          {locationError && <Text style={styles.errorText}>{locationError}</Text>}
+        </View>
+
+        {/* POS Location Image Upload */}
+        <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+          {posLocationImage ? (
+            <Pressable onPress={() => setPosLocationImage(null)}>
+              <Image source={{ uri: posLocationImage.uri }} style={{ height: 100, width: '100%' }} />
+            </Pressable>
+          ) : (
+            <UploadDoc
+              text={'Upload POS Location Image'}
+              setUploadFile={() => pickImage('POS Location')}
+              backgroundType={'POS'}
+            />
+          )}
+        </View>
+
+        {/* E-sign Image Upload */}
+        <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+          {eSign ? (
+            <Pressable onPress={() => setESign(null)}>
+              <Image source={{ uri: eSign.uri }} style={{ height: 100, width: '100%' }} />
+            </Pressable>
+          ) : (
+            <UploadDoc
+              text={'Upload E-sign'}
+              setUploadFile={() => pickImage('E-Sign')}
+              backgroundType={'E-Sign'}
+            />
+          )}
+        </View>
+      </View>
+
+      <View style={styles.bottomContainer}>
+        <PrimaryBtn 
+        title={'Next'}
+        onPress={() => handleSendData()}
+         />
+      </View>
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: "5%",
-    },
-    label: {
-        fontWeight: '400',
-        fontSize: isTablet ? 20 : 16,
-        lineHeight: 19,
-        color: "#000000",
-        marginBottom: 10
-    },
-    errorText: {
-        padding: "0%",
-        paddingHorizontal: "2%",
-        color: "#FF0000",
-    },
-    bottomContainer: {
-        justifyContent: 'flex-end',
-        height: "40%",
-        padding: "5%",
-    },
+  container: {
+    flex: 1,
+    padding: '5%'
+  },
+  label: {
+    fontWeight: '400',
+    fontSize: isTablet ? 20 : 16,
+    lineHeight: 19,
+    color: '#000000',
+    marginBottom: 10
+  },
+  errorText: {
+    padding: '0%',
+    paddingHorizontal: '2%',
+    color: '#FF0000'
+  },
+  bottomContainer: {
+    justifyContent: 'flex-end',
+    height: '40%',
+    padding: '5%'
+  }
 })
 
 export default AdditionalDetails
@@ -243,7 +352,7 @@ export default AdditionalDetails
 //     console.log(getCurrentLocation)
 //     const fetchCityAndState = async (latitude, longitude) => {
 //         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`;
-    
+
 //         try {
 //           const response = await axios.get(url, {
 //             headers: {
@@ -251,7 +360,7 @@ export default AdditionalDetails
 //               'Referer': 'http://yourwebsite.com/' // Replace with your domain or app URL
 //             }
 //           });
-    
+
 //           if (response.data && response.data.address) {
 //             const city = response.data.address.city || response.data.address.town || response.data.address.village || '';
 //             const state = response.data.address.state || '';
@@ -267,7 +376,6 @@ export default AdditionalDetails
 //     useEffect(() => {
 //         requestLocationPermission();
 //     }, []);
-
 
 //     return (
 //         <SafeAreaView style={{ flex: 1 }}>
@@ -304,7 +412,7 @@ export default AdditionalDetails
 //         ) : (<Text style={styles.errorText}>{locationError}</Text>) }
 //                 </View>
 //             </View>
-            
+
 //             <View style={styles.bottomContainer}>
 //                 <PrimaryBtn title={"Next"} />
 //             </View>
