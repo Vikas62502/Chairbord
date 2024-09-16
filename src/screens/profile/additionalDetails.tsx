@@ -1,78 +1,31 @@
 
-import { View, Text, SafeAreaView, StyleSheet, Alert, Dimensions, PermissionsAndroid, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, StyleSheet, Alert, Dimensions,  Platform } from 'react-native';
+import React, {  useState } from 'react';
 import Geolocation from '@react-native-community/geolocation';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'
-import { getCache, setCache } from '../../helper/Storage'
+import {  request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import OverlayHeader from '../../components/OverlayHeader'
-import CustomInputText from '../../components/common/CustomInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
-import SelectField from '../../components/common/SelectFieldBig'
 import InputText from '../../components/common/InputText'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width <= 420;
-import { client } from '../../client/Axios'
-import Loader from '../../components/ui/Loader'
 import LocationBtn from '../../components/common/LocationBtn';
 import UploadDoc from '../../components/common/UploadDoc';
 const AdditionalDetails = (props: any) => {
     const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [locationError, setLocationError] = useState<string | null>(null);
+    const [contactPersonData, setContactPersonData] = useState<any>({
+        contactPersonName: '',
+        contactPersonNumber: ''
+    })
+
+    const formDatahandler = (key: string, value: string) => {
+        setContactPersonData({
+            ...contactPersonData,
+            [key]: value
+        })
+    }
     console.log(location, 'location')
-    // const [userData, setUserData] = React.useState<any>()
-    // const [loading, setLoading] = React.useState(false)
-    // const [replacementOtpData, setReplacementOtpData] = React.useState<any>({
-    //     mobileNumber: '',
-    //     vehicleNumber: '',
-    //     engineNumber: ''
-    // })
-
-    // const formDatahandler = (key: string, value: string) => {
-    //     setReplacementOtpData({
-    //         ...replacementOtpData,
-    //         [key]: value
-    //     })
-    // }
-
-    // const sendOTP = async () => {
-    //     setLoading(true)
-    //     try {
-    //         const res = await client.post('/bajaj/sendOtp', {
-    //             requestId: '',
-    //             channel: '',
-    //             agentId: userData?.user?.id,
-    //             vehicleNo: replacementOtpData.vehicleNumber?.toUpperCase(),
-    //             chassisNo: '',
-    //             engineNo: replacementOtpData.engineNumber?.toUpperCase(),
-    //             mobileNo: replacementOtpData.mobileNumber,
-    //             reqType: 'REP',
-    //             resend: 0,
-    //             isChassis: 0,
-    //             udf1: '',
-    //             udf2: '',
-    //             udf3: '',
-    //             udf4: '',
-    //             udf5: '',
-    //         })
-    //         console.log(JSON.stringify(res), "otp response")
-
-    //         await setCache('session', res?.data?.validateCustResp?.sessionId)
-    //         props.navigation.navigate("OTP", {
-    //             otpData: res.data,
-    //             sessionId: res?.data?.validateCustResp?.sessionId,
-    //             VerificationFormData: replacementOtpData,
-    //             type: 'tagReplacement'
-    //         })
-    //         console.log(res, "otp response")
-    //     } catch (error) {
-    //         console.log(JSON.stringify(error), "error")
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
     const requestLocationPermission = async () => {
         try {
           let permissionResult;
@@ -97,7 +50,7 @@ const AdditionalDetails = (props: any) => {
           (position) => {
             const { latitude, longitude } = position.coords;
             setLocation({ latitude, longitude });
-            // fetchCityAndState(latitude, longitude);
+            console.log('latitude', latitude)
           },
           (error) => {
             setLocationError(error.message);
@@ -105,43 +58,6 @@ const AdditionalDetails = (props: any) => {
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );
       };
-    //   const fetchCityAndState = async (latitude, longitude) => {
-    //     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`;
-    
-    //     try {
-    //       const response = await axios.get(url, {
-    //         headers: {
-    //           'User-Agent': 'MyApp (myemail@example.com)', // Replace with your app name and email
-    //           'Referer': 'http://yourwebsite.com/' // Replace with your domain or app URL
-    //         }
-    //       });
-    
-    //       if (response.data && response.data.address) {
-    //         const city = response.data.address.city || response.data.address.town || response.data.address.village || '';
-    //         const state = response.data.address.state || '';
-    //         setAddress({ city, state });
-    //       } else {
-    //         setLocationError('No results found for the provided coordinates.');
-    //       }
-    //     } catch (error) {
-    //       setLocationError('Error fetching location details.');
-    //       console.error('Error fetching location details:', error);
-    //     }
-    //   };
-    console.log(getCurrentLocation)
-    // const getUserData = async () => {
-    //     let userData = await getCache('userData')
-    //     setUserData(userData)
-    // }
-
-    // useEffect(() => {
-    //     getUserData()
-    // }, [])
-    useEffect(() => {
-        requestLocationPermission();
-    }, []);
-
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <OverlayHeader title={"Additional Details"} />
@@ -149,9 +65,9 @@ const AdditionalDetails = (props: any) => {
                 <View style={{ marginBottom: 2 }}>
 
                     <InputText
-                        // value={replacementOtpData.mobileNumber}
+                        value={contactPersonData.contactPersonName}
                         placeholder={"Enter contact person name"}
-                    // onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
+                    onChangeText={(text: string) => formDatahandler('contactPersonName', text)}
                     />
                 </View>
                 <View style={{ marginBottom: 2 }}>
@@ -159,7 +75,7 @@ const AdditionalDetails = (props: any) => {
                     <InputText
                         // value={replacementOtpData.mobileNumber}
                         placeholder={"Enter contact person number"}
-                        // onChangeText={(text: string) => formDatahandler('mobileNumber', text)}
+                        onChangeText={(text: string) => formDatahandler('contactPersonNumber', text)}
                         keyboardType='numeric'
                     />
                 </View>
@@ -174,12 +90,6 @@ const AdditionalDetails = (props: any) => {
                 </View>
                 <View style={{ height: 200, width: "100%", marginVertical: 5 }}>
 
-              {/* {imageGallaryData && imageGallaryData?.VEHICLEFRONT ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, VEHICLEFRONT: null })}> */}
-              {/* <Image
-                  source={{ uri: imageGallaryData?.VEHICLEFRONT?.image }}
-                  style={{ height: 150, width: '100%' }}
-                /> 
-              </Pressable> :}*/}
               <UploadDoc text={'Upload Pos Location Image'} backgroundType={"POS"} />
             </View>
             </View>

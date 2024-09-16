@@ -208,7 +208,6 @@ const TagRegistration = (props: any) => {
                     "udf5": ""
                 }
             })
-            console.log(bodyData, "bodydata")
 
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
