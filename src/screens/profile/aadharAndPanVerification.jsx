@@ -145,7 +145,7 @@ const AadharAndPanVerification = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: '5%' }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: '5%', }}>
       <View>
         <ScrollView
           contentContainerStyle={styles.scrollViewContent}
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    paddingBottom: 30
+    paddingVertical: 20
   },
   // nextButton: {
   //   marginTop: 50,

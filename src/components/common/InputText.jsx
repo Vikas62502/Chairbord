@@ -5,10 +5,11 @@ import {
   TextInput,
   Text,
   Dimensions,
-  Animated
+  Animated,
+  TouchableWithoutFeedback
 } from 'react-native'
 
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 const isTablet = width > 768
 const isSmallScreen = width <= 420
 
@@ -25,6 +26,7 @@ const InputText = ({
   borderColor = 'black'
 }) => {
   const [isFocused, setIsFocused] = useState(false)
+  const inputRef = useRef(null)
 
   // Animated values for label
   const animatedTop = useRef(
@@ -53,6 +55,11 @@ const InputText = ({
     }).start()
   }, [isFocused, value])
 
+  const handleLabelPress = () => {
+    // Focus on the input field when label is pressed
+    inputRef.current.focus()
+  }
+
   return (
     <View style={{ width: '100%', marginVertical: isSmallScreen ? 8 : 10 }}>
       <View
@@ -61,22 +68,25 @@ const InputText = ({
           { borderColor: isFocused ? 'black' : 'gray' }
         ]}
       >
-        {/* Animated Floating Label */}
-        <Animated.Text
-          style={[
-            styles.label,
-            {
-              top: animatedTop,
-              fontSize: animatedFontSize,
-              color: isFocused ? borderColor : 'gray'
-            }
-          ]}
-          pointerEvents="none"
-        >
-          {placeholder}
-        </Animated.Text>
+        {/* Touchable label that triggers focus on TextInput */}
+        <TouchableWithoutFeedback onPress={handleLabelPress}>
+          <Animated.Text
+            style={[
+              styles.label,
+              {
+                top: animatedTop,
+                fontSize: animatedFontSize,
+                color: isFocused ? borderColor : 'gray'
+              }
+            ]}
+            pointerEvents="none"
+          >
+            {placeholder}
+          </Animated.Text>
+        </TouchableWithoutFeedback>
 
         <TextInput
+          ref={inputRef}
           style={[styles.textInput, inputStyle]}
           value={value}
           placeholderTextColor={'transparent'}
@@ -133,7 +143,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: isTablet ? 30 : 20,
     zIndex: 1,
-    backgroundColor: '#F3F3F3', // Optional background to cover input field
+    backgroundColor: '#F3F3F3', // Updated background to match input container for smooth transition
     paddingHorizontal: 4 // Optional padding for better visual
   }
 })
