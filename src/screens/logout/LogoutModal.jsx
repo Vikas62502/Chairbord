@@ -8,29 +8,43 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const LogoutModal = (props) => {
+  const [modalVisible, setModalVisible] = useState(true)
+
   const handleClearCache = async () => {
+    console.log('called logout')
     await AsyncStorage.clear()
     props.navigation.navigate('SignIn')
+    setModalVisible(false)
   }
+
+  const handleCancel = () => {
+    setModalVisible(false) // Close the modal
+    props.navigation.navigate('dashboard') // Navigate back to dashboard
+  }
+
+  // white screen bug solved
+  useEffect(() => {
+    setModalVisible(true)
+  }, [])
+
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={true}
+        visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-          // setModalVisible(false)
+          setModalVisible(false)
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('dashboard')}
+              onPress={handleCancel}
               style={{ alignSelf: 'flex-end', paddingBottom: '5%' }}
             >
               <View>
@@ -52,14 +66,14 @@ const LogoutModal = (props) => {
               }}
             >
               <Pressable
-                style={[styles.cancelButton]}
-                onPress={() => props.navigation.navigate('dashboard')}
+                style={styles.cancelButton}
+                onPress={handleCancel} // Handle cancel action
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </Pressable>
               <Pressable
-                style={[styles.logoutButton]}
-                onPress={handleClearCache}
+                style={styles.logoutButton}
+                onPress={handleClearCache} // Handle logout action
               >
                 <Text style={styles.logoutText}>Logout</Text>
               </Pressable>
@@ -121,12 +135,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 20,
     lineHeight: 24
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF'
-  },
-  buttonClose: {
-    backgroundColor: 'white'
   },
   textStyle: {
     color: '#263238',

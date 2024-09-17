@@ -19,6 +19,7 @@ import { launchImageLibrary } from 'react-native-image-picker'
 import LocationBtn from '../../components/common/LocationBtn'
 import UploadDoc from '../../components/common/UploadDoc'
 import { client } from '../../client/Axios'
+import DocumentPicker from 'react-native-document-picker';
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
 
@@ -72,44 +73,75 @@ const AdditionalDetails = (props: any) => {
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords
-        setLocation({ latitude, longitude })
+        const { latitude, longitude } = position.coords;
+        console.log('Position: ', position);
+        setLocation({ latitude, longitude });
       },
       (error) => {
-        console.error('Geolocation error:', error.message);
-        setLocationError(error.message)
+        console.error('Error fetching location: ', error);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    )
+    );
+
   }
 
-  // Image Picker function for POS Location or E-sign
-  const pickImage = (typeOfImg: string) => {
-    const options = {
-      mediaType: 'photo'
-    }
+  // // Image Picker function for POS Location or E-sign
+  // const pickImage = (typeOfImg: string) => {
+  //   // Don't re-pick image if one already exists
+  //   if ((typeOfImg === 'POS Location' && posLocationImage) || (typeOfImg === 'E-Sign' && eSign)) {
+  //     console.log(`${typeOfImg} image already selected`);
+  //     return;
+  //   }
 
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker')
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error)
+  //   const options = {
+  //     mediaType: 'photo'
+  //   };
+
+  //   launchImageLibrary(options, (response) => {
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else if (response.assets && response.assets.length > 0) {
+  //       const source = {
+  //         uri: response.assets[0].uri,
+  //         name: response.assets[0].fileName,
+  //         type: response.assets[0].type
+  //       };
+
+  //       if (typeOfImg === 'POS Location') {
+  //         setPosLocationImage(source); // Set POS Location image
+  //       } else if (typeOfImg === 'E-Sign') {
+  //         setESign(source); // Set E-sign image
+  //       }
+  //     }
+  //   });
+  // };
+  // Document Picker for selecting any file (including images)
+  const pickImage = async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles], // You can specify specific file types
+      });
+
+      console.log('Selected file:', response);
+
+      const source = {
+        uri: response[0].uri,
+        name: response[0].name,
+        type: response[0].type
+      };
+      console.log(source)
+      // Handle your selected file here
+      // setSelectedFile(source);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled file picker');
       } else {
-        const source = {
-          uri: response.assets[0].uri,
-          name: response.assets[0].fileName,
-          type: response.assets[0].type
-        }
-
-        if (typeOfImg === 'POS Location') {
-          setPosLocationImage(source) // Set POS Location image
-        } else if (typeOfImg === 'E-Sign') {
-          setESign(source) // Set E-sign image
-        }
+        console.log('Unknown error: ', err);
       }
-    })
-  }
-
+    }
+  };
   const handleSendData = async () => {
     setLoading(true);
     try {
@@ -117,8 +149,8 @@ const AdditionalDetails = (props: any) => {
 
       form.append('contact_person_name', contactPersonData?.contactPersonName)
       form.append('contact_person_mobile_number', contactPersonData?.contactPersonNumber)
-      form.append('latitude', location?.latitude)
-      form.append('longitude', location?.longitude)
+      form.append('latitude', location?.latitude || 0)
+      form.append('longitude', location?.longitude || 0)
       form.append('e_sign_photo', eSign);
       form.append('pos_proof_photo', posLocationImage)
 
@@ -133,7 +165,7 @@ const AdditionalDetails = (props: any) => {
         }
       ])
 
-    } catch(error) {
+    } catch (error) {
       console.error('Something went wrong:', error)
       Alert.alert('Error', 'Something went wrong')
     } finally {

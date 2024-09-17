@@ -24,8 +24,8 @@ import { client } from '../client/Axios'
 import { setCache } from '../helper/Storage'
 
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen =width<=420;
+const isTablet = width > 768
+const isSmallScreen = width <= 420
 const SignIn = () => {
   const [active, setActive] = useState('password')
   const [showOtpField, setShowOtpField] = useState(false)
@@ -163,7 +163,7 @@ const SignIn = () => {
             {active === 'password' ? (
               <>
                 <InputText
-                        value={formData.email}
+                  value={formData.email}
                   placeholder={'Enter email or phone number'}
                   secure={false}
                   onChangeText={(email) =>
@@ -171,7 +171,7 @@ const SignIn = () => {
                   }
                 />
                 <InputText
-                        value={formData.password}
+                  value={formData.password}
                   placeholder={'Password'}
                   secure={true}
                   onChangeText={(pass) =>
@@ -198,7 +198,7 @@ const SignIn = () => {
             ) : (
               <View>
                 <InputText
-                        value={formData.phoneNumber}
+                  value={formData.phoneNumber}
                   placeholder={'Phone Number'}
                   secure={false}
                   onChangeText={(value) =>
@@ -277,16 +277,16 @@ const SignIn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: "5%",
-    paddingVertical:isSmallScreen?"1%":"0%"
-},
+    padding: '5%',
+    paddingVertical: isSmallScreen ? '1%' : '0%'
+  },
   tabContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    width: isSmallScreen?"70%":'80%',
-    marginTop: isSmallScreen?6:10
+    width: isSmallScreen ? '70%' : '80%',
+    marginTop: isSmallScreen ? 6 : 10
   },
   verticalDivider: {
     height: '100%',
@@ -295,15 +295,15 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#263238',
-    marginBottom:isSmallScreen?"3%": '5%',
+    marginBottom: isSmallScreen ? '3%' : '5%',
     textAlign: 'center'
   },
   heading: {
     color: '#000000',
     fontWeight: '600',
-    fontSize:isSmallScreen?26: 32,
-    lineHeight: isSmallScreen?32:38,
-    marginTop:10
+    fontSize: isSmallScreen ? 26 : 32,
+    lineHeight: isSmallScreen ? 32 : 38,
+    marginTop: 10
   },
   tabSection: {
     width: '50%'
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     fontWeight: '400',
-    fontSize: isSmallScreen?16:20,
+    fontSize: isSmallScreen ? 16 : 20,
     lineHeight: 24,
     textAlign: 'center',
     color: '#A6A6A6'
