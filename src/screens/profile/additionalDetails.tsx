@@ -76,6 +76,7 @@ const AdditionalDetails = (props: any) => {
         setLocation({ latitude, longitude })
       },
       (error) => {
+        console.error('Geolocation error:', error.message);
         setLocationError(error.message)
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
@@ -185,7 +186,7 @@ const AdditionalDetails = (props: any) => {
         </View>
 
         {/* E-sign Image Upload */}
-        <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+        {/* <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
           {eSign ? (
             <Pressable onPress={() => setESign(null)}>
               <Image source={{ uri: eSign.uri }} style={{ height: 100, width: '100%' }} />
@@ -197,13 +198,14 @@ const AdditionalDetails = (props: any) => {
               backgroundType={'E-Sign'}
             />
           )}
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.bottomContainer}>
         <PrimaryBtn 
         title={'Next'}
-        onPress={() => handleSendData()}
+        // onPress={() => handleSendData()}
+        onPress={() => props.navigation.navigate('consentForm')}
          />
       </View>
     </SafeAreaView>

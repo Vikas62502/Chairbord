@@ -202,11 +202,13 @@ import {
   Pressable,
   RefreshControl,
   ScrollView,
-  Dimensions
+  Dimensions,
+  BackHandler, 
+  Alert 
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SwipperComponent from './SwipperComponent'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
@@ -274,6 +276,29 @@ const DashboardCards2 = ({ title, subTitle, icon, router }) => {
 const Home = () => {
   const [activeTime, setActiveTime] = useState('Today')
   const [refreshing, setRefreshing] = useState(false)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        // If the modal is already visible or you don't want to show it:
+        Alert.alert('Confirm exit', 'Do you want to exit the app?', [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => BackHandler.exitApp() },
+        ]);
+        return true; // This prevents the default back behavior
+      };
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress
+      );
+
+      return () => backHandler.remove();
+    }, [])
+  );
+
 
   const onRefresh = async () => {
     setRefreshing(true)
