@@ -78,7 +78,8 @@ const AdditionalDetails = (props: any) => {
         setLocation({ latitude, longitude });
       },
       (error) => {
-        console.error('Error fetching location: ', error);
+        console.error('Geolocation error:', error.message);
+        setLocationError(error.message)
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
