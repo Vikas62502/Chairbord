@@ -25,6 +25,8 @@ const UploadDoc = ({ text, setUploadFile, backgroundType }) => {
         return require('../../assets/Background/aadhar.png');
         case 'POS':
         return require('../../assets/Background/pos.jpg');
+        case 'E-Sign':
+          return require('../../assets/Background/e-sign.jpg');
       default:
         return require('../../assets/uploadLogo.png'); // Default background image
     }

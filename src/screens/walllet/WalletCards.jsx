@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 19,
-    color: '#000000'
+    color: '#000000',
+    width:150,
   },
   ImageStyles: {
     backgroundColor: 'white',

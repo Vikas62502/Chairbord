@@ -11,7 +11,6 @@ const Wallet = (props) => {
   const [activeTag, setActiveTag] = useState('All');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [walletDetails, setWalletDetails] = useState([]);
-  console.log(walletDetails?.transactions, 'transactions')
   const [refreshing, setRefreshing] = useState(false);
   const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
 
@@ -40,8 +39,20 @@ const Wallet = (props) => {
   }, []);
 
   const sortedTransactions = walletDetails?.transactions?.sort((a, b) => {
-    return new Date(b.updatedAt) - new Date(a.updatedAt)
-  })
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  });
+
+  // Filter transactions based on searchText
+  const filteredTransactions = sortedTransactions?.filter((transaction) => {
+    const searchLower = searchText.toLowerCase();
+    return (
+      transaction.reason.toLowerCase().includes(searchLower) ||
+      transaction.transactionId.toLowerCase().includes(searchLower) ||
+      transaction.RefNo?.toLowerCase().includes(searchLower) ||
+      transaction.amount.toString().includes(searchLower)
+    );
+  });
+
   return (
     <ScrollView
       style={styles.container}
@@ -127,7 +138,7 @@ const Wallet = (props) => {
         </ScrollView>
 
         <View>
-          {sortedTransactions?.map((data, index) => (
+          {filteredTransactions?.map((data, index) => (
             <WalletCards
               key={index}
               logo={data.logo}
@@ -142,21 +153,6 @@ const Wallet = (props) => {
             />
           ))}
         </View>
-        {/* <View>
-          {walletCardData.map((data, index) => (
-            <WalletCards
-              key={index}
-              logo={data.logo}
-              title={data.title}
-              reason={data.reason}
-              amountValue={data.amount}
-              ID={data.transactionId}
-              RefNo={data.RefNo}
-              date={data.date}
-              time={data.time}
-            />
-          ))}
-        </View> */}
       </View>
 
       {/* Filter modal */}
@@ -209,8 +205,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '80%',
-    gap: 20,
+    // width: '80%',
+    gap: 10,
     marginTop: '5%'
   },
   searchField: {
@@ -219,8 +215,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 22,
     borderWidth: 1,
+    width:'80%',
     borderColor: '#858585',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     paddingVertical: 5
   },
   searchIcon: {
@@ -245,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     width: '100%',
     paddingHorizontal: '5%',
-    paddingBottom: '10%'
+    paddingBottom: '10%',
   },
   transactionText: {
     fontWeight: '600',
@@ -267,6 +264,6 @@ const styles = StyleSheet.create({
   activeTag: {
     backgroundColor: '#02546D'
   }
-})
+});
 
-export default Wallet
+export default Wallet;

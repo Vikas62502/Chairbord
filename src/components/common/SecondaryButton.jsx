@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
+const isSmallScreen =width<400;
 
 const SecondaryButton = ({ onPress, title, disabled = false }) => {
   const buttonContainerStyle = disabled
