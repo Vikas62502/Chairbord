@@ -5923,10 +5923,10 @@ react-native-date-picker@^5.0.1:
   resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-5.0.1.tgz"
   integrity sha512-0AzGE94jugCPGQM3YOgH3lF85QDOiN1/5KAY30rgQB3c6UI1pQNoU9txyxj9UdcRdcAxc1BSy30OEekL0+3ZQw==
 
-react-native-document-picker@^9.1.1:
-  version "9.1.1"
-  resolved "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-9.1.1.tgz"
-  integrity sha512-BW+7DbsILuFThlBm7NUFVUmKKf6Awkcf9R0q8wiCU2DlGGtAKQTt2iHpO5+Dn/7WMPB+rqNv3X1HsmJQ0t5R3g==
+react-native-document-picker@^9.3.1:
+  version "9.3.1"
+  resolved "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-9.3.1.tgz"
+  integrity sha512-Vcofv9wfB0j67zawFjfq9WQPMMzXxOZL9kBmvWDpjVuEcVK73ndRmlXHlkeFl5ZHVsv4Zb6oZYhqm9u5omJOPA==
   dependencies:
     invariant "^2.2.4"
 
