@@ -44,7 +44,7 @@ const FASTagRecharge = () => {
     return (
         <View style={{ flex: 1 }}>
             <ScrollView>
-                <OverlayHeader title={"FASTag Recharge"} navigateTo={() => navigation.goBack()} />
+                <OverlayHeader title={"FASTag Recharge"} navigateTo={() => navigation.()} />
                 <View style={styles.container}>
                     <Text style={styles.label}>Input type</Text>
                     <SelectField dataToRender={requestTypeDropdownData} title={"Mobile number"} />
