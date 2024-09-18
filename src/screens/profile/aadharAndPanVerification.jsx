@@ -111,9 +111,11 @@ const AadharAndPanVerification = (props) => {
           headers: { 'Content-Type': 'multipart/form-data' }
         }
       )
+      setShowOtpField(true)
       setRefId(response.data.ref_id)
       console.log('Aadhar verification success', response)
-      setShowOtpField(true)
+      
+      
     } catch (error) {
       console.error('Aadhar verification failed:', error)
       Alert.alert('Error', 'Failed to verify Aadhar')
@@ -190,6 +192,7 @@ const AadharAndPanVerification = (props) => {
             <InputText
               placeholder={'Enter Aadhar Number'}
               maxLength={12}
+              keyboardType='numeric'
               value={formData.aadharNumber}
               onChangeText={(value) => formDataHandler('aadharNumber', value)}
               // editable={showOtpField}

@@ -17,7 +17,7 @@ const SecondaryButton = ({ onPress, title, disabled = false }) => {
     : ['#02546D', '#142D40']
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
+    <TouchableOpacity onPress={disabled ? null : onPress} style={buttonContainerStyle}>
       <LinearGradient colors={gradientColors} style={styles.linearGradient}>
         <View
           style={{

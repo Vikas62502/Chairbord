@@ -36,6 +36,12 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
             setShowPanVerification(true)
             verifyAadhar
             setShowOtpField(false)
+            Alert.alert('Success', 'Aadhar Verified Successfully', [
+                {
+                  text: 'Ok',
+                  onPress: () => console.log('OK Pressed')
+                }
+              ])
         } catch (error: any) {
             Alert.alert('Error', error.response.data.message)
         } finally {
@@ -43,6 +49,10 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
         }
     }
 
+    const resendOtp = () => {
+        setOtp(['', '', '', '', '', '']) // Reset the OTP field
+        sendAdharOtp() // Call the resend OTP function
+    }
     return (
         <View>
             <View
@@ -66,7 +76,7 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
                 }}
             >
                 <TouchableOpacity
-                    onPress={sendAdharOtp}
+                    onPress={resendOtp}
                     style={{
                         borderWidth: 1,
                         borderColor: 'black',

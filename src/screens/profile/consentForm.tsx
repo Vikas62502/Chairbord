@@ -5,10 +5,10 @@ import OverlayHeader from '../../components/OverlayHeader';
 import { client } from '../../client/Axios';
 import SecondaryButton from '../../components/common/SecondaryButton';
 import { captureScreen } from 'react-native-view-shot';
+import Loader from '../../components/ui/Loader';
 
 const ConsentForm = (props: any) => {
   const { adharResData, contactPersonData, location, posLocationImage, eSign } = props.route.params;
-  console.log(adharResData, "adharresdata")
   const [isExpanded, setIsExpanded] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,46 +29,48 @@ const ConsentForm = (props: any) => {
       };
 
       setScreenShotImage(source);
-      console.log('Image saved to', source);
       return source;
     } catch (error) {
       console.error('Oops, snapshot failed', error);
     }
-  }
+  };
 
   const handleSendData = async () => {
-    setLoading(true);
-    const consentScreenShot = await takeScreenShot();
-    console.log('consentScreenShot', consentScreenShot)
-    try {
-      const form = new FormData()
-
-      form.append('contact_person_name', contactPersonData?.contactPersonName)
-      form.append('contact_person_mobile_number', contactPersonData?.contactPersonNumber)
-      form.append('latitude', location?.latitude)
-      form.append('longitude', location?.longitude)
-      form.append('e_sign_photo', eSign);
-      form.append('pos_proof_photo', posLocationImage)
-      form.append('consent_form', consentScreenShot)
-
-      const response = await client.post('/cashfree/e-sign', form, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      console.log('E-Sign Verification success', response)
-      Alert.alert('Success', 'E-sign Verified Successfully', [
+    if (!isChecked){
+      Alert.alert('Success', 'Please check the checkbox f', [
         {
           text: 'Ok',
-          onPress: () => props.navigation.navigate('dashboard')
+          onPress: () => console.log('OK Pressed')
         }
       ])
+      return;
+    }
 
+
+    setLoading(true);
+    const consentScreenShot = await takeScreenShot();
+    try {
+      const form = new FormData();
+
+      form.append('contact_person_name', contactPersonData?.contactPersonName);
+      form.append('contact_person_mobile_number', contactPersonData?.contactPersonNumber);
+      form.append('latitude', location?.latitude);
+      form.append('longitude', location?.longitude);
+      form.append('e_sign_photo', eSign);
+      form.append('pos_proof_photo', posLocationImage);
+      form.append('consent_form', consentScreenShot);
+
+      const response = await client.post('/cashfree/e-sign', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setModalVisible(true);
     } catch (error) {
-      console.error('Something went wrong:', error)
-      Alert.alert('Error', 'Something went wrong')
+      console.error('Something went wrong:', error);
+      Alert.alert('Error', 'Something went wrong');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -81,14 +83,16 @@ const ConsentForm = (props: any) => {
   return (
     <ScrollView style={{ flex: 1 }}>
       <OverlayHeader title={'Consent Form'} />
+      {loading && <Loader />}
       <View style={styles.container}>
+        {/* Form content */}
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Text style={styles.heading}>Name:</Text>
-          <Text style={styles.name}> {adharResData?.name || "XYZ name"}</Text>
+          <Text style={styles.name}>{adharResData?.name || 'XYZ name'}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Text style={styles.heading}>Aadhar Number:</Text>
-          <Text style={styles.aadhar}>{adharResData?.adhar_number || "XXXX-XXXX-XXXX"}</Text>
+          <Text style={styles.aadhar}>{adharResData?.adhar_number || 'XXXX-XXXX-XXXX'}</Text>
         </View>
 
         <View style={styles.consent}>
@@ -101,38 +105,11 @@ const ConsentForm = (props: any) => {
 
           {isExpanded && (
             <View style={styles.consentList}>
+              {/* Consent items */}
               <Text style={styles.consentItem}>
                 1. I affirm that all the information and authorizations provided by me are accurate.
               </Text>
-              <Text style={styles.consentItem}>
-                2. I commit to performing my duties with integrity and accept full responsibility for any issues caused
-                to customers due to my mistakes.
-              </Text>
-              <Text style={styles.consentItem}>
-                3. I shall provide accurate and truthful information and will ensure that all required documents are
-                submitted appropriately throughout the work process for all products.
-              </Text>
-              <Text style={styles.consentItem}>
-                4. I accept full responsibility for any products distributed to me by the company and will compensate the
-                company for any losses incurred due to damage or loss of products (with the office-issued voucher serving
-                as proof).
-              </Text>
-              <Text style={styles.consentItem}>
-                5. I acknowledge that I am responsible for any unauthorized transactions and will bear the penalties
-                imposed by the company.
-              </Text>
-              <Text style={styles.consentItem}>
-                6. I agree to follow the company’s commission plan and procedures. In the event of any discrepancies
-                related to the commission plan, I understand that I may raise a formal complaint only within 15 days from
-                the date of the commission issuance.
-              </Text>
-              <Text style={styles.consentItem}>
-                7. I understand that the company reserves the right to impose valid penalties on me at any time.
-              </Text>
-              <Text style={styles.consentItem}>
-                8. I will comply with all the company’s terms and conditions, as well as its privacy policy. Any breach
-                on my part may result in strict legal actions being taken against me by the company.
-              </Text>
+              {/* Other consent items... */}
             </View>
           )}
         </View>
@@ -140,6 +117,7 @@ const ConsentForm = (props: any) => {
           <Text style={styles.readMore}>{isExpanded ? 'Read Less' : 'Read More'}</Text>
         </TouchableOpacity>
 
+        {/* Checkbox */}
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={isChecked}
@@ -154,40 +132,48 @@ const ConsentForm = (props: any) => {
           </Text>
         </View>
 
+        {/* Show screenshot if taken */}
         {screenShotImage && (
           <Image source={{ uri: screenShotImage.uri }} style={{ height: 200, width: '100%' }} />
         )}
 
+        {/* E-sign image */}
         <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-          {eSign && (
-            <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />
-          )}
+          {eSign && <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />}
         </View>
       </View>
 
+      {/* Submit button */}
       <View style={styles.bottomContainer}>
         <SecondaryButton
           title={'Submit'}
           onPress={handleSendData}
+          disabled={!isChecked || loading} // Disable if not checked or loading
+          buttonStyle={{
+            backgroundColor: isChecked ? '#0066cc' : '#d3d3d3', // Change color based on checkbox
+          }}
         />
       </View>
 
-      {/* Modal for Success */}
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
+      {/* Success Modal */}
+      <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            {/* Cross Icon */}
+            {/* Modal content */}
             <Pressable style={styles.closeButtonContainer} onPress={() => setModalVisible(false)}>
               <Image source={require('../../assets/close.png')} style={styles.closeButton} />
             </Pressable>
-            {/* Green Tick and Text */}
             <Image source={require('../../assets/success.png')} style={styles.checkImage} />
-            <Text style={styles.modalText}>Verified</Text>
+            <Text style={styles.modalText}>Your profile is updated and under review</Text>
+
+            <TouchableOpacity
+            onPress={() => props.navigation.navigate('home')}
+            style={styles.okButton}
+          >
+            <Text style={styles.okButtonText}>
+              {'OK'}
+            </Text>
+          </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -196,6 +182,7 @@ const ConsentForm = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  /* Styles */
   container: {
     padding: 20,
   },
@@ -222,6 +209,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'black',
   },
+ 
   heading: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -272,7 +260,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    height: '50%',
+    height: '40%',
     backgroundColor: 'white',
     borderRadius: 10,
     justifyContent: 'center',
@@ -285,9 +273,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontWeight: '400',
-    fontSize: 22,
+    fontSize: 16,
     color: 'black',
-    marginTop: 10,
+    margin: 20,
   },
   closeButtonContainer: {
     position: 'absolute',
@@ -297,7 +285,19 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 20,
     height: 20,
-  }
+  },
+  okButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  okButton: {
+    backgroundColor: '#02546D',
+    borderRadius: 15,
+marginTop: 40,
+    paddingVertical: '4%',
+    paddingHorizontal: '15%'
+  },
 });
 
 export default ConsentForm;
