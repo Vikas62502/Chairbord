@@ -10,10 +10,12 @@ interface adharVerifyInterface {
     setShowPanVerification: (value: boolean) => void
     verifyAadhar: any
     setShowOtpField: any,
-    ref_id: string
+    ref_id: string,
+    setAdharResData: any,
+    sendAdharOtp: any
 }
 
-const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerification, verifyAadhar, setShowOtpField, ref_id }) => {
+const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerification, verifyAadhar, setShowOtpField, ref_id, setAdharResData, sendAdharOtp }) => {
     const navigation: any = useNavigation()
     const [loading, setLoading] = useState(false)
     let sixStringArray = ['', '', '', '', '', '']
@@ -30,6 +32,7 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
         try {
             let response = await client.post('/cashfree/validate-otp-adhar', bodyData)
             console.log('response', response.data)
+            setAdharResData(response.data)
             setShowPanVerification(true)
             verifyAadhar
             setShowOtpField(false)
@@ -63,6 +66,7 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
                 }}
             >
                 <TouchableOpacity
+                    onPress={sendAdharOtp}
                     style={{
                         borderWidth: 1,
                         borderColor: 'black',

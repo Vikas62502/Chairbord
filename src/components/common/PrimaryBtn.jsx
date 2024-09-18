@@ -1,9 +1,16 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View,Dimensions } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen =width<=420;
+const isTablet = width > 768
+const isSmallScreen = width <= 420
 const PrimaryBtn = ({ onPress, title, disabled }) => {
   const buttonContainerStyle = disabled
     ? styles.disableAppButtonContainer
@@ -14,7 +21,10 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
     : ['#02546D', '#142D40']
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
+    <TouchableOpacity
+      onPress={disabled ? null : onPress}
+      style={buttonContainerStyle}
+    >
       <LinearGradient colors={gradientColors} style={styles.linearGradient}>
         <View
           style={{
@@ -35,18 +45,18 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
 const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
-    borderRadius: isTablet?30:25,
-    height: isTablet?90:75,
-    width:'auto',
+    borderRadius: isTablet ? 30 : 25,
+    height: isTablet ? 90 : 75,
+    width: 'auto',
     alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: '45%',
-    overflow: 'hidden'// Ensure the gradient follows the button's shape
+    overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
     elevation: 8,
-    borderRadius: isTablet?30:25,
-    height: isTablet?90:75,
+    borderRadius: isTablet ? 30 : 25,
+    height: isTablet ? 90 : 75,
     width: 'auto',
     alignItems: 'between',
     justifyContent: 'center',
@@ -55,13 +65,13 @@ const styles = StyleSheet.create({
   },
   linearGradient: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: isTablet?30:25,
+    borderRadius: isTablet ? 30 : 25,
     alignItems: 'between',
     justifyContent: 'center',
     paddingHorizontal: 30
   },
   appButtonText: {
-    fontSize: isTablet?36:28,
+    fontSize: isTablet ? 36 : 28,
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',

@@ -69,7 +69,7 @@ const TopupWallet = (props) => {
   }, [order])
 
   const createOrderCashfree = async () => {
-    const response = await client.post('/cashfree-payment/create-order', {
+    const response = await client.post('/cashfree/create-order', {
       amount: topupAmount
     })
     setOrder({

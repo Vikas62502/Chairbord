@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
   SafeAreaView,
@@ -14,7 +13,6 @@ import React, { useEffect, useState } from 'react'
 import UploadDoc from '../../components/common/UploadDoc'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
-import { launchImageLibrary } from 'react-native-image-picker'
 import InputText from '../../components/common/InputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import AadharVerifyOtp from '../opt/AadharVerifyOtp'
@@ -27,6 +25,8 @@ const AadharAndPanVerification = (props) => {
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [ref_id, setRefId] = useState(null)
+  const [adharResData, setAdharResData] = useState(null)
+  console.log(adharResData, 'adharResData')
   const [showPanVerification, setShowPanVerification] = useState(null)
   const [formData, setFormData] = useState({
     agentId: userData?.id,
@@ -50,27 +50,6 @@ const AadharAndPanVerification = (props) => {
     setFiles({ ...files, [key]: file })
   }
 
-  const pickImage = (key) => {
-    const options = {
-      mediaType: 'photo'
-    }
-
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker')
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error)
-      } else {
-        const source = {
-          uri: response.assets[0].uri,
-          name: response.assets[0].fileName,
-          type: response.assets[0].type
-        }
-        handleFileUpload(key, source)
-      }
-    })
-  }
-
   const verifyPan = async () => {
     console.log('Pan verification')
     setLoading(true)
@@ -86,7 +65,15 @@ const AadharAndPanVerification = (props) => {
       Alert.alert('Success', 'Pan Verified Successfully', [
         {
           text: 'Ok',
-          onPress: () => props.navigation.navigate('additionalDetails')
+          onPress: () =>
+            props.navigation.navigate('additionalDetails', {
+              adharResData: {
+                ...adharResData,
+                pan_verified: true,
+                pan_number: formData.panCardNumber?.toUpperCase(),
+                adhar_number: formData.aadharNumber
+              }
+            })
         }
       ])
     } catch (error) {
@@ -145,7 +132,7 @@ const AadharAndPanVerification = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: '5%', }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: '5%' }}>
       <View>
         <ScrollView
           contentContainerStyle={styles.scrollViewContent}
@@ -170,8 +157,11 @@ const AadharAndPanVerification = (props) => {
               ) : (
                 <UploadDoc
                   text={'Upload Aadhar Card Front'}
-                  setUploadFile={() => pickImage('aadharFront')}
+                  setUploadFile={(source: any) =>
+                    handleFileUpload('aadharFront', source)
+                  }
                   backgroundType={'Aadhar-Card'}
+                  uploadDoc={true}
                 />
               )}
               {/* </View> */}
@@ -189,8 +179,11 @@ const AadharAndPanVerification = (props) => {
               ) : (
                 <UploadDoc
                   text={'Upload Aadhar Card Back'}
-                  setUploadFile={() => pickImage('aadharBack')}
+                  setUploadFile={(source: any) =>
+                    handleFileUpload('aadharBack', source)
+                  }
                   backgroundType={'Aadhar-Card'}
+                  uploadDoc={true}
                 />
               )}
             </View>
@@ -208,8 +201,9 @@ const AadharAndPanVerification = (props) => {
                   data={formData}
                   setShowOtpField={setShowOtpField}
                   setShowPanVerification={setShowPanVerification}
-                  // verifyAadhar={verifyAadhar}
+                  setAdharResData={setAdharResData}
                   ref_id={ref_id}
+                  sendAdharOtp={sendAdharOtp}
                 />
               </View>
             ) : !showPanVerification ? (
@@ -235,8 +229,11 @@ const AadharAndPanVerification = (props) => {
                 ) : (
                   <UploadDoc
                     text={'Upload Pan Card Image'}
-                    setUploadFile={() => pickImage('panCardPhoto')}
+                    setUploadFile={(source: any) =>
+                      handleFileUpload('panCardPhoto', source)
+                    }
                     backgroundType={'Pan-Card'}
+                    uploadDoc={true}
                   />
                 )}
               </View>
@@ -254,7 +251,16 @@ const AadharAndPanVerification = (props) => {
           <View style={styles.nextButton}>
             <PrimaryBtn
               title={'Next'}
-              onPress={() => props.navigation.navigate('additionalDetails')}
+              onPress={() =>
+                props.navigation.navigate('additionalDetails', {
+                  adharResData: {
+                    ...adharResData,
+                    pan_verified: true,
+                    pan_number: formData.panCardNumber?.toUpperCase(),
+                    adhar_number: formData.aadharNumber
+                  }
+                })
+              }
             />
           </View>
         </ScrollView>
