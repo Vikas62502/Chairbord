@@ -15,7 +15,7 @@ import TermsAndCondition from '../../screens/termsAndCondition/TermsAndCondition
 import WalletDetails from '../../screens/walllet/WalletDetails';
 import TopupWallet from '../../screens/walllet/TopupWallet';
 import OrderSummary from '../../screens/order/OrderSummary';
-import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo';
+import ProfileAndMasterInfo from '../../screens/profile/profileAndMasterInfo';
 import Order from '../../screens/order/Order';
 import Acknowledgement from '../../screens/order/acknowledgement/Acknowledgement';
 import OrderDetails from '../../screens/order/OrderDetails';
@@ -28,6 +28,12 @@ import TagReplacementForm from '../../screens/tagReplacement/TagReplacementForm'
 import RegisterVerifyOtp from '../../screens/opt/RegisterVerifyOtp';
 import AdditionalDetails from '../../screens/profile/additionalDetails';
 import ConsentForm from '../../screens/profile/consentForm';
+import Wallet from '../../screens/walllet/Wallet';
+import IssuanceTracker from '../../screens/IssuanceTracker/IssuanceTracker';
+import Inventory from '../../screens/inventory/Inventory';
+import Request from '../../screens/requests/Request';
+import ContactUs from '../../screens/contactUs/ContactUs';
+import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -62,6 +68,9 @@ const StackNavigation = () => {
             <Stack.Screen name="walletDetails" component={WalletDetails} options={{
                 headerShown: false
             }} />
+            <Stack.Screen name="wallet" component={Wallet} options={{
+                headerShown: false
+            }} />
             <Stack.Screen name="topupWallet" component={TopupWallet} options={{
                 headerShown: false
             }} />
@@ -72,6 +81,9 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="tagReplacementForm" component={TagReplacementForm} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="issuanceTracker" component={IssuanceTracker} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="orderDescription" component={OrderSummary} options={{
@@ -92,19 +104,28 @@ const StackNavigation = () => {
             <Stack.Screen name="termsAndCondition" component={TermsAndCondition} options={{
                 headerShown: false
             }} />
-            <Stack.Screen name="profileAndMasterInfo" component={ProfileAndMasterInfo} options={{
-                headerShown: false
-            }} />
             <Stack.Screen name="additionalDetails" component={AdditionalDetails} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="consentForm" component={ConsentForm} options={{
                 headerShown: false
             }} />
-            <Stack.Screen name="order" component={Order} options={{
+            <Stack.Screen name="orders" component={Order} options={{
+                headerShown: false
+            }} />
+             <Stack.Screen name="inventory" component={Inventory} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="requests" component={Request} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="contactUs" component={ContactUs} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="acknowledgement" component={Acknowledgement} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="aadharAndPanVerification" component={AadharAndPanVerification} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="orderDetails" component={OrderDetails} options={{

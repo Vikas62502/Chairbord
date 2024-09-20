@@ -18,6 +18,7 @@ import SecondaryButton from '../../components/common/SecondaryButton'
 import AadharVerifyOtp from '../opt/AadharVerifyOtp'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import Loader from '../../components/ui/Loader'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const AadharAndPanVerification = (props) => {
   const [userData, setUserData] = useState({})
@@ -64,7 +65,7 @@ const AadharAndPanVerification = (props) => {
       console.log('Pan verification success', response)
       Alert.alert('Success', 'Pan Verified Successfully', [
         {
-          text: 'Ok',
+          text: 'Next',
           onPress: () =>
             props.navigation.navigate('additionalDetails', {
               adharResData: {
@@ -134,8 +135,8 @@ const AadharAndPanVerification = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: '5%' }}>
-      <View>
+    <SafeAreaView style={{ flex: 1,  }}>
+      <OverlayHeader title={'Verification'} />
         <ScrollView
           contentContainerStyle={styles.scrollViewContent}
           refreshControl={
@@ -267,7 +268,6 @@ const AadharAndPanVerification = (props) => {
             />
           </View>
         </ScrollView>
-      </View>
     </SafeAreaView>
   )
 }
@@ -341,11 +341,12 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingHorizontal: '5%',
     paddingVertical: 20
   },
-  // nextButton: {
-  //   marginTop: 50,
-  // },
+  nextButton: {
+    marginTop: 50,
+  },
   nextButton: {
     justifyContent: 'flex-end',
     marginTop: 40

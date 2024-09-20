@@ -58,8 +58,8 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
             <View
                 style={{
                     justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '5%'
+                    // alignItems: 'center',
+                    marginVertical: 10
                 }}
             >
                 {loading && <Loader />}

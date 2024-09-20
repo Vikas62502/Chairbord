@@ -5,6 +5,7 @@ import SelectFieldSmall from '../../components/common/SelectFieldSmall'
 import { IssuanceTrackerData, bankName } from './IssuanceTrackerData'
 import ExcelButton from '../../components/ui/ExcelButton'
 import IssuanceCards from './IssuanceCards'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const IssuanceTracker = () => {
   const [showIssuanceModal, setShowIssuanceModal] = useState(false);
@@ -24,6 +25,10 @@ const IssuanceTracker = () => {
     <ScrollView refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
+      <OverlayHeader
+        title={'Issuance Tracker'}
+        showBackButton={true}
+      />
       <View style={{ padding: '5%' }}>
         <SearchBar setShowInventoryModal={setShowIssuanceModal} />
 

@@ -36,51 +36,27 @@ const DrawerNavigation = ({ }) => {
                 component={LogoutModal}
                 options={{ headerShown: false }}
             />
-            <Drawer.Screen
-                name="contactUs"
-                component={ContactUs}
-                options={{ header: () => <OverlayHeader title={'Contact us'} /> }}
-            />
+            
             <Drawer.Screen
                 name="dashboard"
                 component={Dashboard}
                 options={{ header: () => <DrawerHeader title={"home"} /> }}
             />
             <Drawer.Screen
-                name="wallet"
-                component={Wallet}
-                options={{ header: () => <OverlayHeader title={"Wallet"} /> }}
-            />
-            <Drawer.Screen
-                name="inventory"
-                component={Inventory}
-                options={{ header: () => <OverlayHeader title={"inventory"} /> }}
-            />
-            <Drawer.Screen
                 name="requests"
                 component={Request}
                 options={{ header: () => <OverlayHeader title={"Requests"} /> }}
             />
-            <Drawer.Screen
-                name="issuanceTracker"
-                component={IssuanceTracker}
-                options={{ header: () => <OverlayHeader title={"Issuance Tracker"} /> }}
-            />
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="orders"
                 component={Order}
                 options={{ header: () => <OverlayHeader title={"Order"}  /> }}
-            />
+            /> */}
             <Drawer.Screen
                 name="orderSummary"
                 component={OrderSummary}
                 options={{ header: () => <OverlayHeader title={"Order Summary"}  /> }}
             />
-            {/* <Drawer.Screen
-                name="wallet"
-                component={Wallet}
-                options={{ header: () => <OverlayHeader title={"Wallet"} /> }}
-            /> */}
         </Drawer.Navigator>
     )
 }

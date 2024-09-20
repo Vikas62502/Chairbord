@@ -36,7 +36,7 @@ const ConsentForm = (props: any) => {
   };
 
   const handleSendData = async () => {
-    if (!isChecked){
+    if (!isChecked) {
       Alert.alert('Success', 'Please check the checkbox f', [
         {
           text: 'Ok',
@@ -106,10 +106,14 @@ const ConsentForm = (props: any) => {
           {isExpanded && (
             <View style={styles.consentList}>
               {/* Consent items */}
-              <Text style={styles.consentItem}>
-                1. I affirm that all the information and authorizations provided by me are accurate.
-              </Text>
-              {/* Other consent items... */}
+              <Text style={styles.consentItem}>1. I affirm that all the information and authorizations provided by me are accurate.</Text>
+              <Text style={styles.consentItem}>2. I commit to performing my duties with integrity and accept full responsibility for any issues caused to customers due to my mistakes.</Text>
+              <Text style={styles.consentItem}>3. I shall provide accurate and truthful information and will ensure that all required documents are submitted appropriately throughout the work process for all products.</Text>
+              <Text style={styles.consentItem}>4. I accept full responsibility for any products distributed to me by the company and will compensate the company for any losses incurred due to damage or loss of products (with the office-issued voucher serving as proof).</Text>
+              <Text style={styles.consentItem}>5. I acknowledge that I am responsible for any unauthorized transactions and will bear the penalties imposed by the company.</Text>
+              <Text style={styles.consentItem}>6. I agree to follow the company’s commission plan and procedures. In the event of any discrepancies related to the commission plan, I understand that I may raise a formal complaint only within 15 days from the date of the commission issuance.</Text>
+              <Text style={styles.consentItem}>7. I understand that the company reserves the right to impose valid penalties on me at any time.</Text>
+              <Text style={styles.consentItem}>8. I will comply with all the company’s terms and conditions, as well as its privacy policy. Any breach on my part may result in strict legal actions being taken against me by the company.</Text>
             </View>
           )}
         </View>
@@ -167,13 +171,13 @@ const ConsentForm = (props: any) => {
             <Text style={styles.modalText}>Your profile is updated and under review</Text>
 
             <TouchableOpacity
-            onPress={() => props.navigation.navigate('home')}
-            style={styles.okButton}
-          >
-            <Text style={styles.okButtonText}>
-              {'OK'}
-            </Text>
-          </TouchableOpacity>
+              onPress={() => props.navigation.navigate('home')}
+              style={styles.okButton}
+            >
+              <Text style={styles.okButtonText}>
+                {'OK'}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -209,7 +213,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'black',
   },
- 
+
   heading: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -256,7 +260,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   modalContent: {
     width: '80%',
@@ -264,6 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     justifyContent: 'center',
+    textAlign: 'center',
     alignItems: 'center',
     position: 'relative',
   },
@@ -272,10 +277,12 @@ const styles = StyleSheet.create({
     height: 100,
   },
   modalText: {
-    fontWeight: '400',
-    fontSize: 16,
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 24,
+    textAlign: 'center',
     color: 'black',
-    margin: 20,
+    marginTop: 10,
   },
   closeButtonContainer: {
     position: 'absolute',
@@ -294,7 +301,7 @@ const styles = StyleSheet.create({
   okButton: {
     backgroundColor: '#02546D',
     borderRadius: 15,
-marginTop: 40,
+    marginTop: 60,
     paddingVertical: '4%',
     paddingHorizontal: '15%'
   },

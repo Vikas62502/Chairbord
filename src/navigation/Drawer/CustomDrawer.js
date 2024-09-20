@@ -61,21 +61,21 @@ const data = [
         icon: require('../../assets/DrawerNavigation/issuence.png'),
         screen: 'issuanceTracker'
     },
-    {
-        title: 'Vehicle Tracking',
-        icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),
-        screen: 'vehicleTracking'
-    },
+    // {
+    //     title: 'Vehicle Tracking',
+    //     icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),
+    //     screen: 'vehicleTracking'
+    // },
     {
         title: 'Requests',
         icon: require('../../assets/DrawerNavigation/requests.png'),
         screen: 'requests'
     },
-    {
-        title: 'Contact Us',
-        icon: require('../../assets/DrawerNavigation/contactUs.png'),
-        screen: 'contactUs'
-    },
+    // {
+    //     title: 'Contact Us',
+    //     icon: require('../../assets/DrawerNavigation/contactUs.png'),
+    //     screen: 'contactUs'
+    // },
     {
         title: 'Terms & Conditions',
         icon: require('../../assets/DrawerNavigation/termsAndCondition.png'),

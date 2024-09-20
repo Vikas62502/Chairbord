@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Image, RefreshControl, Pressable, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, RefreshControl,SafeAreaView, Pressable, ScrollView, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import WalletCards from './WalletCards';
 import walletCardData from './WalletCardData';
 import FilterTags from './FilterTags';
 import { client } from '../../client/Axios';
 import getDate from '../../utils/getDate';
+import OverlayHeader from '../../components/OverlayHeader';
 
 const Wallet = (props) => {
   const [searchText, setSearchText] = useState('');
@@ -54,26 +55,32 @@ const Wallet = (props) => {
   });
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader
+        title={'Wallet'}
+        showBackButton={true}
+      />
     <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+      
       <View style={{ padding: '5%' }}>
         <View style={styles.balanceCard}>
           <Text style={styles.balanceText}>Balance</Text>
           <Text style={styles.amountText}>
-            {walletDetails?.agent?.balance || 0}
+          &#x20B9;{walletDetails?.agent?.balance || 0}
           </Text>
 
           <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
             <Pressable
-              onPress={() =>
-                props.navigation.navigate('topupWallet', {
-                  walletBalance: walletDetails?.agent?.balance || 0
-                })
-              }
+              // onPress={() =>
+              //   props.navigation.navigate('topupWallet', {
+              //     walletBalance: walletDetails?.agent?.balance || 0
+              //   })
+              // }
             >
               <Image
                 source={require('../../assets/screens/wallet/topUp.png')}
@@ -162,6 +169,7 @@ const Wallet = (props) => {
       />
       
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

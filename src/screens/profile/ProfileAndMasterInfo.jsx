@@ -1,10 +1,25 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
-import React from 'react'
+import { View, Text, SafeAreaView, ScrollView, Image, RefreshControl, } from 'react-native'
+import React,{useState} from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import CardAccordian from '../../components/common/CardAccordian'
 import CustomInputText from '../../components/common/CustomInputText'
 
 const ProfileAndMasterInfo = () => {
+  const [refreshing, setRefreshing] = useState(false)
+
+
+  const onRefresh = async () => {
+    setRefreshing(true)
+    try {
+      // await getmasterDetailData()
+      // await getpersonalDetailData()
+    } catch (error) {
+      console.log(error, 'error')
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   const masterDetailData = [
     {
       title: 'Master name',
@@ -30,8 +45,12 @@ const ProfileAndMasterInfo = () => {
       value: '8178624530'
     },
     {
-      title: 'Pos Location',
-      value: 'Location name'
+      title: 'Date of Birth',
+      value: '30-09-2002'
+    },
+    {
+      title: "Father's Name",
+      value: 'XYZ'
     },
     {
       title: 'Aadhar no.',
@@ -42,28 +61,45 @@ const ProfileAndMasterInfo = () => {
       value: 'BEFASC8879K'
     },
     {
-      title: 'Address',
-      value: 'A-40, Kardhani kalwa'
-    }
+      title: 'Pos Location',
+      value: 'Location name'
+    },
+    {
+      title: 'Assigned RM',
+      value: 'XYZ'
+    },
+    {
+      title: 'Instant commission amount',
+      value: '645'
+    },
+    {
+      title: 'Tag cost amount',
+      value: '665'
+    },
+    // {
+    //   title: 'Address',
+    //   value: 'A-40, Kardhani kalwa'
+    // }
   ]
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <OverlayHeader
+    <SafeAreaView style={{ flex: 1, }}>
+      {/* <OverlayHeader
         title={'Profile & Master Info'}
         showBackButton={true}
-        navigateTo={'drawer'}
-      />
+      /> */}
 
-      <ScrollView style={{ padding: '5%' }} >
+      <ScrollView style={{padding: '5%' }} refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
         <CardAccordian
           title={'Master Details'}
           content={
             <View>
               {masterDetailData.map((data, index) => (
-                <View key={index}>
+                <View key={index} style={{marginBottom:5,marginTop:-8}} >
                   <InputSubText text={data.title} />
-                  <CustomInputText value={data.value} isEditable={false} />
+                  <CustomInputText value={data.value} isEditable={false} style={{backgroundColor:'red'}} />
                 </View>
               ))}
             </View>
@@ -71,15 +107,16 @@ const ProfileAndMasterInfo = () => {
         />
         <CardAccordian
           title={'Personal Details'}
+          
           content={
             <>
               <View
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 ,}}
               >
                 <Image
                   source={require('../../assets/screens/profilePic.png')}
                 />
-                <View style={{ width: '70%' }}>
+                <View style={{ width: '70%',marginTop:-18 }}>
                   <InputSubText text={personalDetailsData[0].title} />
                   <CustomInputText
                     value={personalDetailsData[0].value}
@@ -87,9 +124,9 @@ const ProfileAndMasterInfo = () => {
                   />
                 </View>
               </View>
-              <View>
+              <View >
                 {personalDetailsData.slice(1).map((data, index) => (
-                  <View key={index}>
+                  <View key={index} style={{marginBottom:5}}>
                     <InputSubText text={data.title} />
                     <CustomInputText value={data.value} isEditable={false} />
                   </View>
@@ -113,7 +150,7 @@ const InputSubText = ({ text }) => {
           color: '#828282',
           fontSize: 14,
           fontWeight: '400',
-          marginVertical: '3%',
+          marginVertical: 10,
           marginLeft: '2%'
         }}
       >

@@ -1,14 +1,26 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
+import { View, Text, ScrollView,StyleSheet,RefreshControl, Image, Pressable } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import DescriptionInputField from '../../components/common/DescriptionInputField'
 import DocumentUploadField from '../../components/common/UploadField'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import ContactUsModal from './ContactUsModal'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const ContactUs = () => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      // await getWalletDetails();
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const requestTypeDropdownData = [
     { title: 'card' },
     { title: 'upi' },
@@ -22,6 +34,13 @@ const ContactUs = () => {
   }
 
   return (
+    <ScrollView 
+     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+    {/* <OverlayHeader
+        title={'Contact Us'}
+        showBackButton={true}
+      /> */}
     <View style={styles.container}>
       <Text style={styles.dropdownLabel}>Request Type</Text>
 
@@ -78,6 +97,7 @@ const ContactUs = () => {
         onRequestClose={() => setModalVisible(false)}
       />
     </View>
+    </ScrollView>
   )
 }
 

@@ -7,6 +7,7 @@ import InventoryFilterModal from './InventoryFilterModal'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import ExcelButton from '../../components/ui/ExcelButton'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const Inventory = () => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
@@ -54,6 +55,10 @@ const Inventory = () => {
     <ScrollView style={styles.container} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
+      <OverlayHeader
+        title={'Inventory'}
+        showBackButton={true}
+      />
       <View style={{ padding: '5%' }}>
         <SearchBar setShowInventoryModal={setShowInventoryModal} />
 

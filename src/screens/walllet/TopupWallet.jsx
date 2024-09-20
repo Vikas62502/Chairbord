@@ -125,6 +125,17 @@ const TopupWallet = (props) => {
     }
   }
 
+  const verifyPayment = async () => {
+    try {
+      const res = await client.post('cashfree/web-hook-confirmPayment', {
+        order_id:''
+      })
+      console.log('Balance updated:', res)
+    } catch (e) {
+      console.error('Error updating balance:', e)
+    }
+  }
+  
   const topupBalanceBackend = async () => {
     try {
       const res = await client.post('/wallet/agent/own-wallet/transactions', {

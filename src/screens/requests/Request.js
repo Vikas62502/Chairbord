@@ -5,6 +5,7 @@ import SelectField from '../../components/common/SelectFieldSmall'
 import RequestModal from './RequestModal'
 import RequestFilter from './RequestFilter'
 import ExcelButton from '../../components/ui/ExcelButton'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const requestCardData = [
     {
@@ -77,6 +78,10 @@ const Request = () => {
         <ScrollView style={styles.container} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+            <OverlayHeader
+        title={'Request'}
+        showBackButton={true}
+      />
             <View style={{ padding: "5%" }}>
                 <View style={styles.searchAndfilter}>
                     <View style={styles.searchField}>

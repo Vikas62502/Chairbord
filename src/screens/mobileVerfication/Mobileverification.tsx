@@ -154,7 +154,7 @@ flex: 1,
   bottomContainer: {
     justifyContent: 'flex-end',
         padding: "5%",
-        height: "50%",
+        height: "40%",
     
 },
 })

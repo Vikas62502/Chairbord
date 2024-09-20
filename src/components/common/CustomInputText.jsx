@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: 20, 
     height: isTablet?80:60,
     paddingHorizontal: isTablet?30: 20,
-    backgroundColor: '#F3F3F3'
+    backgroundColor: 'white'
   }
 })
 

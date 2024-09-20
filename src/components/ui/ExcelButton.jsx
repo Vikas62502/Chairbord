@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   excelButtonText: {
     fontWeight: '500',
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 16,
     color: '#FFFFFF',
     // marginHorizontal:50,

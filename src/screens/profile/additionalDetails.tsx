@@ -5,6 +5,9 @@ import {
   StyleSheet,
   Alert,
   Dimensions,
+  RefreshControl,
+  ScrollView,
+
   Platform,
   Pressable,
   Image,
@@ -22,9 +25,12 @@ const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
 import { captureScreen } from 'react-native-view-shot';
 
+
 const AdditionalDetails = (props: any) => {
   const { adharResData } = props.route.params;
   console.log('adharResData', adharResData)
+  const [refreshing, setRefreshing] = useState(false)
+
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null)
   const [locationError, setLocationError] = useState<string | null>(null)
   const [contactPersonData, setContactPersonData] = useState<any>({
@@ -84,7 +90,16 @@ const AdditionalDetails = (props: any) => {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }
-
+  const onRefresh = async () => {
+    setRefreshing(true)
+    // try {
+    //   await getUserdata()
+    // } catch (error) {
+    //   console.log(error, 'error')
+    // } finally {
+    //   setRefreshing(false)
+    // }
+  }
   const fileUploadHandler = (key, source) => {
     if (key === 'POS Location') {
       setPosLocationImage(source)
@@ -130,6 +145,11 @@ const AdditionalDetails = (props: any) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader title={'Additional Details'} />
+      <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
       <View style={styles.container}>
         <View style={{ marginBottom: 2 }}>
           <InputText
@@ -187,9 +207,7 @@ const AdditionalDetails = (props: any) => {
             />
           )}
         </View>
-      </View>
-
-      <View style={styles.bottomContainer}>
+        <View style={styles.bottomContainer}>
         <PrimaryBtn
           title={'Next'}
           disabled={fieldvalidator}
@@ -202,6 +220,9 @@ const AdditionalDetails = (props: any) => {
           })}
         />
       </View>
+      </View>
+      </ScrollView>
+      
     </SafeAreaView>
   )
 }
@@ -225,8 +246,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     justifyContent: 'flex-end',
-    height: '40%',
-    padding: '5%'
+    paddingVertical:20
   }
 })
 

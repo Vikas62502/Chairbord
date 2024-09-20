@@ -6,6 +6,7 @@ import ExcelButton from '../../components/ui/ExcelButton'
 import CreateReturnModal from '../return/CreateReturnModal'
 import CreateButton from '../../components/ui/CreateButton'
 import OrderFilter from './OrderFilter'
+import OverlayHeader from '../../components/OverlayHeader'
 
 const orderCardData = [
   {
@@ -89,6 +90,10 @@ const Order = (props) => {
     <ScrollView style={styles.container} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
+      <OverlayHeader
+        title={'Order'}
+        showBackButton={true}
+      />
       <View style={{ padding: "5%" }}>
         <View style={styles.searchAndfilter}>
           <View style={styles.searchField}>

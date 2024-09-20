@@ -56,7 +56,7 @@ const CardAccordian = ({ title, content }) => {
       <Animated.View
         style={[
           styles.expandedContent,
-          { height: containerHeight, opacity: isExpanded ? 1 : 0 }
+          { height: containerHeight, opacity: isExpanded ? 1 : 0,  marginBottom: isExpanded?30:10, }
         ]}
       >
         <View
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
-    overflow: 'hidden'
+    overflow: 'hidden',
+
   },
   content: {
     padding: '5%',

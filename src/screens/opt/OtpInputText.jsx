@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { View, TextInput, StyleSheet } from 'react-native'
-
+import { View, TextInput, StyleSheet, Dimensions, } from 'react-native'
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const OtpInputText = ({ otp, setOtp }) => {
   const inputRefs = useRef([])
 
@@ -49,10 +51,10 @@ const styles = StyleSheet.create({
     marginHorizontal:10,
   },
   input: {
-    height: 50,
-    width: 45,
+    height: isSmallScreen?45:50,
+    width: isSmallScreen?40:45,
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: isSmallScreen?18:20,
     textAlign: 'center',
     fontSize: 26,
     marginHorizontal: 5,
