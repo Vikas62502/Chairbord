@@ -72,6 +72,7 @@ const TopupWallet = (props) => {
     const response = await client.post('/cashfree/create-order', {
       amount: topupAmount
     })
+    console.log(response.data, "response dataaaa");
     setOrder({
       payment_session_id: response.data.payment_session_id,
       order_id: response.data.order_id,
