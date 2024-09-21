@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView,StyleSheet,RefreshControl, Image, Pressable } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { client } from '../../client/Axios';
+import { getCache } from '../../helper/Storage';
 import DescriptionInputField from '../../components/common/DescriptionInputField'
 import DocumentUploadField from '../../components/common/UploadField'
 import SecondaryButton from '../../components/common/SecondaryButton'
@@ -10,6 +13,9 @@ import OverlayHeader from '../../components/OverlayHeader'
 const ContactUs = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation(); // Get navigation object
+  const route = useRoute(); // Get route object
+  const isPartOfBottomNavigator = route.name === 'ContactUs';
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -37,10 +43,12 @@ const ContactUs = () => {
     <ScrollView 
      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-    {/* <OverlayHeader
-        title={'Contact Us'}
-        showBackButton={true}
-      /> */}
+    {!isPartOfBottomNavigator && (
+        <OverlayHeader
+          title={'Contact Us'}
+          showBackButton={true}
+        />
+      )}
     <View style={styles.container}>
       <Text style={styles.dropdownLabel}>Request Type</Text>
 

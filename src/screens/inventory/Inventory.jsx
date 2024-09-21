@@ -1,5 +1,6 @@
 import { View, Text, ScrollView,RefreshControl, Pressable, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'; 
 import SearchBar from '../../components/common/SearchBar'
 import InventoryCards from './InventoryCards'
 import LinearGradient from 'react-native-linear-gradient'
@@ -9,12 +10,15 @@ import { getCache } from '../../helper/Storage'
 import ExcelButton from '../../components/ui/ExcelButton'
 import OverlayHeader from '../../components/OverlayHeader'
 
-const Inventory = () => {
+const Inventory = (props) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
   const [userData, setUserData] = useState()
   const [refreshing, setRefreshing] = useState(false);
-
+  const navigation = useNavigation(); // Get navigation object
+  const route = useRoute(); // Get route object
+  const isPartOfBottomNavigator = route.name === 'Inventory';
+  
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -55,10 +59,12 @@ const Inventory = () => {
     <ScrollView style={styles.container} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
-      <OverlayHeader
-        title={'Inventory'}
-        showBackButton={true}
-      />
+      {!isPartOfBottomNavigator && (
+        <OverlayHeader
+          title={'Inventory'}
+          showBackButton={true}
+        />
+      )}
       <View style={{ padding: '5%' }}>
         <SearchBar setShowInventoryModal={setShowInventoryModal} />
 

@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Image,RefreshControl, TextInput, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native'; 
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
@@ -54,6 +55,9 @@ const Order = (props) => {
   const [userData, setUserData] = useState()
   console.log(userData, 'userData')
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation(); // Get navigation object
+  const route = useRoute(); // Get route object
+  const isPartOfBottomNavigator = route.name === 'Order';
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -90,10 +94,13 @@ const Order = (props) => {
     <ScrollView style={styles.container} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }>
-      <OverlayHeader
-        title={'Order'}
-        showBackButton={true}
-      />
+       {!isPartOfBottomNavigator && (
+        <OverlayHeader
+          title={'Order'}
+          showBackButton={true}
+        />
+      )}
+
       <View style={{ padding: "5%" }}>
         <View style={styles.searchAndfilter}>
           <View style={styles.searchField}>

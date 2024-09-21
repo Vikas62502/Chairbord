@@ -128,6 +128,9 @@ const StackNavigation = () => {
             <Stack.Screen name="aadharAndPanVerification" component={AadharAndPanVerification} options={{
                 headerShown: false
             }} />
+            <Stack.Screen name="profileAndMasterInfo" component={ProfileAndMasterInfo} options={{
+                headerShown: false
+            }} />
             <Stack.Screen name="orderDetails" component={OrderDetails} options={{
                 headerShown: false
             }} />

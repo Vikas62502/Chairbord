@@ -48,7 +48,7 @@ const BottomNavigator = () => {
     if (profileStatus === 'under_review') {
       setModalVisible(true);
     } else if (profileStatus === 'verified') {
-      navigation.navigate('profileAndMasterInfo'); // Navigate to Profile page if verified
+      navigation.navigate('ProfileAndMasterInfo'); // Navigate to Profile page if verified
     } 
     else if (profileStatus === 'not_verified') {
       navigation.navigate('aadharAndPanVerification'); // Navigate to Profile page if verified
@@ -69,7 +69,7 @@ const BottomNavigator = () => {
         }}
       >
         <Bottom.Screen
-          name="inventory"
+          name="Inventory"
           component={Inventory}
           options={{
             headerShown: false,
@@ -79,7 +79,7 @@ const BottomNavigator = () => {
           }}
         />
         <Bottom.Screen
-          name="order"
+          name="Order"
           component={Orders}
           options={{
             headerShown: false,
@@ -99,7 +99,7 @@ const BottomNavigator = () => {
           }}
         />
         <Bottom.Screen
-          name="contactus"
+          name="ContactUs"
           component={ContactUs}
           options={{
             headerShown: false,
@@ -119,7 +119,7 @@ const BottomNavigator = () => {
         }}
       /> */}
         <Bottom.Screen
-          name="profileAndMasterInfo"
+          name="ProfileAndMasterInfo"
           component={ProfileAndMasterInfo}
           options={{
             headerShown: false,

@@ -1,12 +1,14 @@
 import { View, Text, SafeAreaView, ScrollView, Image, RefreshControl, } from 'react-native'
 import React,{useState} from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native';
 import OverlayHeader from '../../components/OverlayHeader'
 import CardAccordian from '../../components/common/CardAccordian'
 import CustomInputText from '../../components/common/CustomInputText'
 
 const ProfileAndMasterInfo = () => {
   const [refreshing, setRefreshing] = useState(false)
-
+  const route = useRoute(); // Get route object
+  const isPartOfBottomNavigator = route.name === 'ProfileAndMasterInfo';
 
   const onRefresh = async () => {
     setRefreshing(true)
@@ -84,10 +86,12 @@ const ProfileAndMasterInfo = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, }}>
-      {/* <OverlayHeader
-        title={'Profile & Master Info'}
-        showBackButton={true}
-      /> */}
+      {!isPartOfBottomNavigator && (
+        <OverlayHeader
+          title={'Profile'}
+          showBackButton={true}
+        />
+      )}
 
       <ScrollView style={{padding: '5%' }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
