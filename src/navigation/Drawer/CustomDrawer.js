@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient';
 import LogoutModal from '../../screens/logout/LogoutModal';
 import useUserData from '../../helper/useUserData';
-
+import profileIcon from '../../assets/DrawerNavigation/profile.png';
 // const profileData = [
 //     {
 //         title: "User",
@@ -22,9 +22,9 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
             <View style={{ backgroundColor: "#4C6470", paddingHorizontal: "5%" }}>
                 <Image source={require("../../assets/DrawerNavigation/borderBottom.png")} alt='borderBottom' />
                 <View style={styles.drawerItemStyle}>
-                    <Image source={icons} alt='profileLogo' />
-                    <View style={{ width: "70%" }}>
-                        <Text style={{ fontSize: 20, fontWeight: 700, color: "#FFFFFF", lineHeight: 24, }}>
+                    <Image source={profileIcon} alt='profileLogo' style={{width:40 ,height:40,marginRight:-7}}/>
+                    <View style={{ width: "80%", }}>
+                        <Text style={{ fontSize: 22, fontWeight: 600, color: "#FFFFFF", lineHeight: 24, }}>
                             {userData?.user?.name || 'User'}
                         </Text>
                     </View>

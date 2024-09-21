@@ -23,7 +23,7 @@ const DrawerHeader = () => {
           style={styles.userProfile}
           onPress={() => navigation.navigate('screen1')}
         >
-          <Image source={require('../assets/avatar.png')} />
+          {/* <Image source={require('../assets/avatar.png')} /> */}
           <Text style={styles.profileText}>{userData?.user?.name || 'User'}</Text>
         </TouchableOpacity>
       </View>
@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
     gap: 15
   },
   profileText: {
-    fontWeight: '700',
-    fontSize: 16,
-    lineHeight: 18,
+    fontWeight: '600',
+    fontSize: 18,
+    lineHeight: 20,
     color: '#FFFFFF'
   }
 })

@@ -114,7 +114,7 @@ const ProfileAndMasterInfo = () => {
           
           content={
             <>
-              <View
+              {/* <View
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 10 ,}}
               >
                 <Image
@@ -127,9 +127,9 @@ const ProfileAndMasterInfo = () => {
                     isEditable={false}
                   />
                 </View>
-              </View>
+              </View> */}
               <View >
-                {personalDetailsData.slice(1).map((data, index) => (
+                {personalDetailsData.map((data, index) => (
                   <View key={index} style={{marginBottom:5}}>
                     <InputSubText text={data.title} />
                     <CustomInputText value={data.value} isEditable={false} />
