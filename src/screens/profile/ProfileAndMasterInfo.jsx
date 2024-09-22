@@ -30,7 +30,7 @@ const ProfileAndMasterInfo = () => {
     setRefreshing(true)
     try {
       // await getmasterDetailData()
-      // await getpersonalDetailData()
+      await getUserDetails()
     } catch (error) {
       console.log(error, 'error')
     } finally {
@@ -41,15 +41,15 @@ const ProfileAndMasterInfo = () => {
   const masterDetailData = [
     {
       title: 'Master name',
-      value: 'Chairbord private limited'
+      value: userData?.master?.name || 'N/A'
     },
     {
       title: 'Mobile no.',
-      value: '926966646'
+      value: userData?.master?.mobile_number || 'N/A'
     },
     {
       title: 'Email ID',
-      value: 'ceo@chairbord.com'
+      value: userData?.master?.email_id || 'N/A'
     }
   ]
 
@@ -60,47 +60,47 @@ const ProfileAndMasterInfo = () => {
     },
     {
       title: 'Mobile No.',
-      value: userData?.user?.mobile_number || 'N/A'
+      value: userData?.mobile_number || 'N/A'
     },
     {
       title: 'Email ID',
-      value: userData?.user?.email_id || 'N/A'
+      value: userData?.email_id || 'N/A'
     },
     {
       title: 'Date of Birth',
-      value: userData?.user?.date_of_birth || 'N/A'
+      value: userData?.date_of_birth || 'N/A'
     },
     {
       title: "Father's Name",
-      value: userData?.user?.father_name || 'N/A'
+      value: userData?.father_name || 'N/A'
     },
     {
       title: 'Aadhar no.',
-      value: userData?.user?.id_proof_document_number || 'N/A'
+      value: userData?.id_proof_document_number || 'N/A'
     },
     {
       title: 'PAN no.',
-      value: userData?.user?.pan_card_number || 'N/A'
+      value: userData?.pan_card_number || 'N/A'
     },
     // {
     //   title: 'Address',
-    //   value: userData?.user?.address || 'N/A'
+    //   value: userData?.address || 'N/A'
     // },
     {
       title: 'Pos Location',
-      value: userData?.user?.pos_name || 'N/A'
+      value: userData?.pos_name || 'N/A'
     },
     {
       title: 'Assigned RM',
-      value: userData?.user?.regionalManager || 'N/A'
+      value: userData?.regionalManager || 'N/A'
     },
     {
       title: 'Instant commission amount',
-      value: 'N/A'
+      value: Array.isArray(userData?.TagCosts) && userData.TagCosts.length > 0 ? userData.TagCosts : 'N/A'
     },
     {
       title: 'Tag cost amount',
-      value: 'N/A'
+      value: Array.isArray(userData?.TagCosts) && userData.TagCosts.length > 0 ? userData.TagCosts : 'N/A'
     },
     
   ]
@@ -117,19 +117,19 @@ const ProfileAndMasterInfo = () => {
       <ScrollView style={{padding: '5%' }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-        {/* <CardAccordian
+        <CardAccordian
           title={'Master Details'}
           content={
             <View>
               {masterDetailData.map((data, index) => (
-                <View key={index} style={{marginBottom:5,marginTop:-8}} >
+                <View key={index} style={{marginBottom:5,marginTop:-8,}} >
                   <InputSubText text={data.title} />
-                  <CustomInputText value={data.value} isEditable={false} style={{backgroundColor:'red'}} />
+                  <CustomInputText value={data.value} isEditable={false}   />
                 </View>
               ))}
             </View>
           }
-        /> */}
+        />
         <CardAccordian
           title={'Personal Details'}
           
@@ -151,7 +151,7 @@ const ProfileAndMasterInfo = () => {
               </View> */}
               <View >
                 {personalDetailsData.map((data, index) => (
-                  <View key={index} style={{marginBottom:5}}>
+                  <View key={index} style={{marginBottom:5,marginTop:-8,}}>
                     <InputSubText text={data.title} />
                     <CustomInputText value={data.value} isEditable={false} />
                   </View>

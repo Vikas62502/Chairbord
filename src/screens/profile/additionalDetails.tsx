@@ -160,6 +160,8 @@ const AdditionalDetails = (props: any) => {
           </View>
           <View style={{ marginBottom: 2 }}>
             <InputText
+            
+            value={contactPersonData.contactPersonNumber}
               placeholder={'Enter contact person number'}
               onChangeText={(text: string) => formDataHandler('contactPersonNumber', text)}
               keyboardType="numeric"
