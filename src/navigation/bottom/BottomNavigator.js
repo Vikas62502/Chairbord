@@ -41,9 +41,9 @@ const BottomNavigator = () => {
     setLoading(true)
     try {
       const res = await client.get('/user/agent/mydata');
+      console.log('res', JSON.stringify(res))
       let profileStatus = res?.data?.verificationStatus;
-      console.log('profileStatus', profileStatus)
-      if (profileStatus === 'under_review') {
+      if (profileStatus === 'under-review') {
         setModalVisible(true)
       } else if (profileStatus === 'verified') {
         navigation.navigate('ProfileAndMasterInfo')

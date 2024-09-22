@@ -1,17 +1,31 @@
 import { View, Text, SafeAreaView, ScrollView, Image, RefreshControl, } from 'react-native'
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import OverlayHeader from '../../components/OverlayHeader'
 import CardAccordian from '../../components/common/CardAccordian'
 import CustomInputText from '../../components/common/CustomInputText'
 import useUserData from '../../helper/useUserData';
+import { client } from '../../client/Axios';
 
 const ProfileAndMasterInfo = () => {
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute(); // Get route object
   const isPartOfBottomNavigator = route.name === 'ProfileAndMasterInfo';
-  const userData = useUserData();
-console.log(userData,'User Data')
+  const [userData, setUserData] = useState();
+  console.log('userData', JSON.stringify(userData))
+
+  const getUserDetails = async () => {
+    try{
+      const res = await client.get('/user/agent/mydata');
+      setUserData(res.data)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  useEffect(() => {
+    getUserDetails()
+  }, [])
   const onRefresh = async () => {
     setRefreshing(true)
     try {
@@ -42,7 +56,7 @@ console.log(userData,'User Data')
   const personalDetailsData = [
     {
       title: 'Agent Name',
-      value: userData?.user?.name || 'N/A'
+      value: userData?.name || 'N/A'
     },
     {
       title: 'Mobile No.',
