@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
+const isSmallScreen =width<400;
 const OverlayHeader = ({ title, showBackButton = true }) => {
   const navigation = useNavigation()
   return (
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   chairBordLogo: {
     position: 'absolute',
-    left: isTablet?'38%':'33%',
+    left: isTablet?'38%':isSmallScreen?'31%':'33%',
     top: '10%',
     zIndex: 0
   }

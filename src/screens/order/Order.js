@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image,RefreshControl, TextInput, Pressable } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image,RefreshControl, TextInput, Pressable,Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'; 
 import OrderCards from './OrderCards'
@@ -8,7 +8,9 @@ import CreateReturnModal from '../return/CreateReturnModal'
 import CreateButton from '../../components/ui/CreateButton'
 import OrderFilter from './OrderFilter'
 import OverlayHeader from '../../components/OverlayHeader'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const orderCardData = [
   {
     id: "TRR:8844851",
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
   titleText: {
     color: "#000000",
     fontWeight: "500",
-    fontSize: 20,
+    fontSize: isSmallScreen?18:20,
   },
   searchAndfilter: {
     flexDirection: 'row',

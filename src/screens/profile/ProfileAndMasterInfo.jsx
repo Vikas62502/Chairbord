@@ -4,12 +4,14 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import OverlayHeader from '../../components/OverlayHeader'
 import CardAccordian from '../../components/common/CardAccordian'
 import CustomInputText from '../../components/common/CustomInputText'
+import useUserData from '../../helper/useUserData';
 
 const ProfileAndMasterInfo = () => {
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute(); // Get route object
   const isPartOfBottomNavigator = route.name === 'ProfileAndMasterInfo';
-
+  const userData = useUserData();
+console.log(userData,'User Data')
   const onRefresh = async () => {
     setRefreshing(true)
     try {
@@ -40,48 +42,53 @@ const ProfileAndMasterInfo = () => {
   const personalDetailsData = [
     {
       title: 'Agent Name',
-      value: 'Agent Name'
+      value: userData?.user?.name || 'N/A'
     },
     {
       title: 'Mobile No.',
-      value: '8178624530'
+      value: userData?.user?.mobile_number || 'N/A'
+    },
+    {
+      title: 'Email ID',
+      value: userData?.user?.email_id || 'N/A'
     },
     {
       title: 'Date of Birth',
-      value: '30-09-2002'
+      value: userData?.user?.date_of_birth || 'N/A'
     },
     {
       title: "Father's Name",
-      value: 'XYZ'
+      value: userData?.user?.father_name || 'N/A'
     },
     {
       title: 'Aadhar no.',
-      value: '8028-2224-2287'
+      value: userData?.user?.id_proof_document_number || 'N/A'
     },
     {
       title: 'PAN no.',
-      value: 'BEFASC8879K'
-    },
-    {
-      title: 'Pos Location',
-      value: 'Location name'
-    },
-    {
-      title: 'Assigned RM',
-      value: 'XYZ'
-    },
-    {
-      title: 'Instant commission amount',
-      value: '645'
-    },
-    {
-      title: 'Tag cost amount',
-      value: '665'
+      value: userData?.user?.pan_card_number || 'N/A'
     },
     // {
     //   title: 'Address',
-    //   value: 'A-40, Kardhani kalwa'
-    // }
+    //   value: userData?.user?.address || 'N/A'
+    // },
+    {
+      title: 'Pos Location',
+      value: userData?.user?.pos_name || 'N/A'
+    },
+    {
+      title: 'Assigned RM',
+      value: userData?.user?.regionalManager || 'N/A'
+    },
+    {
+      title: 'Instant commission amount',
+      value: 'N/A'
+    },
+    {
+      title: 'Tag cost amount',
+      value: 'N/A'
+    },
+    
   ]
 
   return (
@@ -96,7 +103,7 @@ const ProfileAndMasterInfo = () => {
       <ScrollView style={{padding: '5%' }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-        <CardAccordian
+        {/* <CardAccordian
           title={'Master Details'}
           content={
             <View>
@@ -108,7 +115,7 @@ const ProfileAndMasterInfo = () => {
               ))}
             </View>
           }
-        />
+        /> */}
         <CardAccordian
           title={'Personal Details'}
           

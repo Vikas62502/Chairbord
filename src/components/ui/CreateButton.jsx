@@ -1,7 +1,9 @@
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
+import { View, Text, Pressable, Image, StyleSheet,Dimensions } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const CreateButton = ({ title, onpressOperation }) => {
   return (
     <>
@@ -28,15 +30,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-  width:120,
-  height:40,
+  width:isSmallScreen?100:120,
+  height:isSmallScreen?35:40,
     color: 'white',
     borderRadius: 50,
     paddingHorizontal: '5%'
   },
   excelButtonText: {
-    fontWeight: '500',
-    fontSize: 14,
+    fontWeight: isSmallScreen?'400':'500',
+    fontSize: isSmallScreen?12:14,
     lineHeight: 16,
     color: '#FFFFFF',
     // marginHorizontal:50,

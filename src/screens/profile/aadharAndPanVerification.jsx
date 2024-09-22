@@ -252,7 +252,7 @@ const AadharAndPanVerification = (props) => {
               <SecondaryButton title={'Verify'} onPress={verifyPan} />
             </View>
           )}
-          <View style={styles.nextButton}>
+          {/* <View style={styles.nextButton}>
             <PrimaryBtn
               title={'Next'}
               onPress={() =>
@@ -266,7 +266,7 @@ const AadharAndPanVerification = (props) => {
                 })
               }
             />
-          </View>
+          </View> */}
         </ScrollView>
     </SafeAreaView>
   )
@@ -347,10 +347,10 @@ const styles = StyleSheet.create({
   nextButton: {
     marginTop: 50,
   },
-  nextButton: {
-    justifyContent: 'flex-end',
-    marginTop: 40
-  }
+  // nextButton: {
+  //   justifyContent: 'flex-end',
+  //   marginTop: 40
+  // }
 })
 
 export default AadharAndPanVerification

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView,RefreshControl, Pressable, Image } from 'react-native'
+import { View, Text, ScrollView,RefreshControl,Dimensions, Pressable, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'; 
 import SearchBar from '../../components/common/SearchBar'
@@ -9,7 +9,9 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import ExcelButton from '../../components/ui/ExcelButton'
 import OverlayHeader from '../../components/OverlayHeader'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const Inventory = (props) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
@@ -112,7 +114,7 @@ const styles = {
   titleText: {
     color: '#000000',
     fontWeight: '500',
-    fontSize: 20
+    fontSize: isSmallScreen?18:20
   },
   excelButton: {
     flexDirection: 'row',

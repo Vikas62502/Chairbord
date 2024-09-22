@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 'auto',
     marginHorizontal:10,
+    
   },
   input: {
     height: isSmallScreen?45:50,
@@ -56,13 +57,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: isSmallScreen?18:20,
     textAlign: 'center',
-    fontSize: 26,
+    fontSize: isSmallScreen?24:26,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignContent: 'center',
     fontWeight: '400',
     fontFamily: 'inter',
-    lineHeight: 30,
+    lineHeight: isSmallScreen?26:30,
     color: '#263238'
   }
 })
