@@ -48,6 +48,7 @@ const TopupWallet = (props) => {
       console.log('Payment Successful:', orderId)
       topupBalanceBackend()
       updateStatus(orderId)
+      props.navigation.navigate('wallet')
     }
 
     const onError = (error, orderId) => {

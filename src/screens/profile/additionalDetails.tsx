@@ -146,27 +146,27 @@ const AdditionalDetails = (props: any) => {
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader title={'Additional Details'} />
       <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-      <View style={styles.container}>
-        <View style={{ marginBottom: 2 }}>
-          <InputText
-            value={contactPersonData.contactPersonName}
-            placeholder={'Enter contact person name'}
-            onChangeText={(text: string) => formDataHandler('contactPersonName', text)}
-          />
-        </View>
-        <View style={{ marginBottom: 2 }}>
-          <InputText
-            placeholder={'Enter contact person number'}
-            onChangeText={(text: string) => formDataHandler('contactPersonNumber', text)}
-            keyboardType="numeric"
-          />
-        </View>
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.container}>
+          <View style={{ marginBottom: 2 }}>
+            <InputText
+              value={contactPersonData.contactPersonName}
+              placeholder={'Enter contact person name'}
+              onChangeText={(text: string) => formDataHandler('contactPersonName', text)}
+            />
+          </View>
+          <View style={{ marginBottom: 2 }}>
+            <InputText
+              placeholder={'Enter contact person number'}
+              onChangeText={(text: string) => formDataHandler('contactPersonNumber', text)}
+              keyboardType="numeric"
+            />
+          </View>
 
-        {/* <View style={{ margin: 5 }}>
+          {/* <View style={{ margin: 5 }}>
           <LocationBtn title={'Get POS Location'} onPress={requestLocationPermission} />
           {location && (
             <Text style={{ color: 'black', margin: 10 }}>
@@ -176,53 +176,53 @@ const AdditionalDetails = (props: any) => {
           {locationError && <Text style={styles.errorText}>{locationError}</Text>}
         </View> */}
 
-        {/* POS Location Image Upload */}
-        <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-          {posLocationImage ? (
-            <Pressable onPress={() => setPosLocationImage(null)}>
-              <Image source={{ uri: posLocationImage.uri }} style={{ height: 200, width: '100%' }} />
-            </Pressable>
-          ) : (
-            <UploadDoc
-              text={'Upload POS Location Image'}
-              setUploadFile={(source: any) => fileUploadHandler('POS Location', source)}
-              backgroundType={'POS'}
-              uploadDoc={true}
-            />
-          )}
-        </View>
+          {/* POS Location Image Upload */}
+          <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+            {posLocationImage ? (
+              <Pressable onPress={() => setPosLocationImage(null)}>
+                <Image source={{ uri: posLocationImage.uri }} style={{ height: 200, width: '100%' }} />
+              </Pressable>
+            ) : (
+              <UploadDoc
+                text={'Upload POS Location Image'}
+                setUploadFile={(source: any) => fileUploadHandler('POS Location', source)}
+                backgroundType={'POS'}
+                uploadDoc={true}
+              />
+            )}
+          </View>
 
-        {/* E-sign Image Upload */}
-        <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-          {eSign ? (
-            <Pressable onPress={() => setESign(null)}>
-              <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />
-            </Pressable>
-          ) : (
-            <UploadDoc
-              text={'Upload E-sign'}
-              setUploadFile={(source: any) => fileUploadHandler('E-Sign', source)}
-              backgroundType={'E-Sign'}
-              uploadDoc={true}
+          {/* E-sign Image Upload */}
+          <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+            {eSign ? (
+              <Pressable onPress={() => setESign(null)}>
+                <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />
+              </Pressable>
+            ) : (
+              <UploadDoc
+                text={'Upload E-sign'}
+                setUploadFile={(source: any) => fileUploadHandler('E-Sign', source)}
+                backgroundType={'E-Sign'}
+                uploadDoc={true}
+              />
+            )}
+          </View>
+          <View style={styles.bottomContainer}>
+            <PrimaryBtn
+              title={'Next'}
+              disabled={fieldvalidator}
+              onPress={() => props.navigation.navigate('consentForm', {
+                adharResData: adharResData,
+                contactPersonData: contactPersonData,
+                location: location,
+                posLocationImage: posLocationImage,
+                eSign: eSign
+              })}
             />
-          )}
+          </View>
         </View>
-        <View style={styles.bottomContainer}>
-        <PrimaryBtn
-          title={'Next'}
-          disabled={fieldvalidator}
-          onPress={() => props.navigation.navigate('consentForm', {
-            adharResData: adharResData,
-            contactPersonData: contactPersonData,
-            location: location,
-            posLocationImage: posLocationImage,
-            eSign: eSign
-          })}
-        />
-      </View>
-      </View>
       </ScrollView>
-      
+
     </SafeAreaView>
   )
 }
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     justifyContent: 'flex-end',
-    paddingVertical:20
+    paddingVertical: 20
   }
 })
 

@@ -15,7 +15,6 @@ import TermsAndCondition from '../../screens/termsAndCondition/TermsAndCondition
 import WalletDetails from '../../screens/walllet/WalletDetails';
 import TopupWallet from '../../screens/walllet/TopupWallet';
 import OrderSummary from '../../screens/order/OrderSummary';
-import ProfileAndMasterInfo from '../../screens/profile/profileAndMasterInfo';
 import Order from '../../screens/order/Order';
 import Acknowledgement from '../../screens/order/acknowledgement/Acknowledgement';
 import OrderDetails from '../../screens/order/OrderDetails';
@@ -34,6 +33,7 @@ import Inventory from '../../screens/inventory/Inventory';
 import Request from '../../screens/requests/Request';
 import ContactUs from '../../screens/contactUs/ContactUs';
 import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification';
+import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -113,7 +113,7 @@ const StackNavigation = () => {
             <Stack.Screen name="orders" component={Order} options={{
                 headerShown: false
             }} />
-             <Stack.Screen name="inventory" component={Inventory} options={{
+            <Stack.Screen name="inventory" component={Inventory} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="requests" component={Request} options={{

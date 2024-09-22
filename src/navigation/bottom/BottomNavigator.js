@@ -14,19 +14,18 @@ import {
 import Inventory from '../../screens/inventory/Inventory'
 import Orders from '../../screens/order/Order'
 import Home from '../../screens/home/Home'
-import Wallet from '../../screens/walllet/Wallet'
-import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification'
 import ContactUs from '../../screens/contactUs/ContactUs'
 
 // Import of tab navigation icons
-import inventoryIcon from '../../assets/tabNavigation/inventory.png'
-import ordersIcon from '../../assets/tabNavigation/orders.png'
-import homeIcon from '../../assets/tabNavigation/home.png'
-import contactusIcon from '../../assets/tabNavigation/contactUs.png'
-import walletIcon from '../../assets/tabNavigation/wallet.png'
-import profileIcon from '../../assets/tabNavigation/profile.png'
-import LinearGradient from 'react-native-linear-gradient'
-import ProfileAndMasterInfo from '../../screens/profile/profileAndMasterInfo'
+import inventoryIcon from '../../assets/tabNavigation/inventory.png';
+import ordersIcon from '../../assets/tabNavigation/orders.png';
+import homeIcon from '../../assets/tabNavigation/home.png';
+import contactusIcon from '../../assets/tabNavigation/contactUs.png';
+import profileIcon from '../../assets/tabNavigation/profile.png';
+import LinearGradient from 'react-native-linear-gradient';
+import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo'
+import { client } from '../../client/Axios'
+import Loader from '../../components/ui/Loader'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
@@ -34,51 +33,35 @@ const isSmallScreen = width <= 400
 
 const Bottom = createBottomTabNavigator()
 const BottomNavigator = () => {
-  const navigation = useNavigation() // Use the hook here
+  const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  // State to track profile status
-  const [profileStatus, setProfileStatus] = useState('') // Could be 'verified', 'under_review', etc.
-
-  const fetchProfileStatus = async () => {
+  const handleVerificationClick = async () => {
     setLoading(true)
     try {
-      let response = await client.post('/user/agent/mydata')
-      console.log(response.data)
+      const res = await client.get('/user/agent/mydata');
+      let profileStatus = res?.data?.verificationStatus;
+      console.log('profileStatus', profileStatus)
+      if (profileStatus === 'under_review') {
+        setModalVisible(true)
+      } else if (profileStatus === 'verified') {
+        navigation.navigate('ProfileAndMasterInfo')
+      } else if (profileStatus === 'not-verified') {
+        navigation.navigate('aadharAndPanVerification')
+      } else {
+        alert('Your profile status is unknown or not available.')
+      }
     } catch (error) {
-      Alert.alert('Something went wrong', 'Please try again later', [
-        {
-          text: 'OK',
-          style: 'cancel'
-        }
-      ])
+      console.log('error', error)
     } finally {
       setLoading(false)
-    }
-    const status = 'under_review'
-    setProfileStatus(status)
-  }
-
-  // Simulate fetching profile status from an API or state management
-  useEffect(() => {
-    fetchProfileStatus()
-  }, [])
-
-  // Function to handle click on "Aadhar and PAN Verification"
-  const handleVerificationClick = () => {
-    if (profileStatus === 'under_review') {
-      setModalVisible(true)
-    } else if (profileStatus === 'verified') {
-      navigation.navigate('ProfileAndMasterInfo') // Navigate to Profile page if verified
-    } else if (profileStatus === 'not_verified') {
-      navigation.navigate('aadharAndPanVerification') // Navigate to Profile page if verified
-    } else {
-      alert('Your profile status is unknown or not available.')
     }
   }
 
   return (
     <>
+      {loading && <Loader />}
       <Bottom.Navigator
         initialRouteName="home"
         screenOptions={{
@@ -128,28 +111,18 @@ const BottomNavigator = () => {
             )
           }}
         />
-        {/* <Bottom.Screen
-        name="wallet"
-        component={Wallet}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon={walletIcon} focused={focused} />
-          ),
-        }}
-      /> */}
         <Bottom.Screen
           name="ProfileAndMasterInfo"
           component={ProfileAndMasterInfo}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon icon={profileIcon} focused={focused} />
+              <TouchableOpacity
+                onPress={handleVerificationClick}
+              >
+                <TabIcon icon={profileIcon} focused={focused} />
+              </TouchableOpacity>
             ),
-            // Custom onPress to check profile status and trigger modal if needed
-            tabBarButton: (props) => (
-              <TouchableOpacity {...props} onPress={handleVerificationClick} />
-            )
           }}
         />
       </Bottom.Navigator>

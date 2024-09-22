@@ -25,15 +25,15 @@ const ProfileAndMasterInfo = () => {
   const masterDetailData = [
     {
       title: 'Master name',
-      value: 'Mahakal Bussiness Solution'
+      value: 'Chairbord private limited'
     },
     {
       title: 'Mobile no.',
-      value: '9988776655'
+      value: '926966646'
     },
     {
       title: 'Email ID',
-      value: 'master@gmail.com'
+      value: 'ceo@chairbord.com'
     }
   ]
 
