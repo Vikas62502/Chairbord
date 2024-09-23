@@ -97,13 +97,13 @@ const ProfileAndMasterInfo = () => {
     {
       title: 'Instant commission amount (VC4)',
       value: userData?.TagCommissions?.length > 0 
-        ? userData.TagCommissions[0]?.VC4 || 'N/A' 
+        ? JSON.stringify(userData.TagCommissions[0]?.VC4) || 'N/A' 
         : 'N/A'
     },
     {
       title: 'Tag cost amount (VC4)',
       value: userData?.TagCosts?.length > 0 
-        ? userData.TagCosts[0]?.VC4 || 'N/A' 
+        ? JSON.stringify(userData.TagCosts[0]?.VC4) || 'N/A' 
         : 'N/A'
     },
   ];

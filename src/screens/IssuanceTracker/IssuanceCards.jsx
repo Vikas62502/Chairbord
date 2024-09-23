@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet,ScrollView, Image, Modal, Pressable, TouchableOpacity, } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Modal,
+  Pressable,
+  TouchableOpacity
+} from 'react-native'
 import VerticalDivider from '../../components/common/VerticalDivider'
-import UploadDoc from '../../components/common/UploadDoc';
+import UploadDoc from '../../components/common/UploadDoc'
+import axios from 'axios'
 
 const IssuanceCards = ({ data }) => {
   // commision icons
-  const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [singleReportData, setSingleReportData] = useState(data)
 
   const pendingCommisionIcon = require('../../assets/commision/commissionPending.png')
   const commisionDeniedIcon = require('../../assets/commision/commissionDenied.png')
@@ -16,40 +27,143 @@ const IssuanceCards = ({ data }) => {
   // const handleReportdata=async()=>{
   //   setModalVisible(true);
   // }
+
   const reportDetailsData = [
     {
-      title: "Customer Name",
-      value: "Mohit Kumar"
+      title: 'Customer Name',
+      value: singleReportData?.customerName || 'N/A'
     },
     {
-      title: "Customer ID",
-      value: "AUFPN1153N"
+      title: 'Customer ID',
+      value: singleReportData?.BajajCustomerDetailId || 'N/A'
     },
     {
-      title: "Vehicle Number",
-      value: "GJ18BE7780"
+      title: 'Vehicle Number',
+      value: singleReportData?.BajajVehicleDetailsId || 'N/A'
     },
     {
-      title: "Tag Serial Number",
-      value: "608268-001-0426293"
+      title: 'Tag Serial Number',
+      value: singleReportData?.tagSerialNumber || 'N/A'
     },
     {
-      title: "Vehicle Class",
-      value: "VC 4"
+      title: 'Vehicle Class',
+      value: singleReportData?.vehicleClass || 'N/A'
     },
     {
-      title: "Engine Number",
-      value: "25522"
+      title: 'Engine Number',
+      value: singleReportData?.engineNumber || 'N/A'
     },
     {
-      title: "Commercial Status",
-      value: "false"
+      title: 'Commercial Status',
+      value: singleReportData?.commercialStatus || 'N/A'
     },
     {
-      title: "Chassis Number",
-      value: "MA3EUA61S00857712"
-    },
+      title: 'Chassis Number',
+      value: singleReportData?.chassisNumber || 'N/A'
+    }
   ]
+
+  async function modifyImage(imageURL) {
+    try {
+        // Fetch the image as an array buffer
+        const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
+        const fileBuffer = Buffer.from(response.data, 'binary');
+
+        // Convert to base64
+        let base64Data = fileBuffer.toString('base64');
+        base64Data = base64Data.replace("dataimage/jpegbase64", '');
+        // Construct the full data URL
+        const dataURL = `data:image/png;base64,${base64Data}`;
+        return dataURL;
+    } catch (error) {
+        console.error('Error processing the image:', error);
+        return null;
+    }
+}
+
+  const images = singleReportData?.customerDetail?.vehicles[0]?.fastTags[0];
+
+  console.log(images, "images here")
+
+  const processImages = async () => {
+    if (images.TAGaFixImage) {
+      images.TAGaFixImage = await modifyImage(images.TAGaFixImage);
+    }
+    
+    if (images.rcImageBack) {
+      images.rcImageBack = await modifyImage(images.rcImageBack);
+    }
+  
+    if (images.rcImageFront) {
+      images.rcImageFront = await modifyImage(images.rcImageFront);
+    }
+  
+    if (images.vehicleImageFront) {
+      images.vehicleImageFront = await modifyImage(images.vehicleImageFront);
+    }
+  
+    if (images.vehicleImageSide) {
+      images.vehicleImageSide = await modifyImage(images.vehicleImageSide);
+    }
+  };
+  
+  useEffect(() => {
+    if(data){
+      processImages();
+    }
+  },[data])
+
+  
+
+  // console.log(singleReportData, "here")
+
+  function formatDate(isoString) {
+    const date = new Date(isoString)
+
+    // Extract date components
+    const day = String(date.getDate()).padStart(2, '0') // Get day and pad with zero
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are zero-indexed
+    const year = String(date.getFullYear()).slice(-2) // Get last two digits of the year
+
+    // Return formatted date
+    return `${day}/${month}/${year}`
+  }
+
+  function formatTime(isoString) {
+    const date = new Date(isoString)
+
+    let hours = date.getHours()
+    const minutes = String(date.getMinutes()).padStart(2, '0') // Get minutes and pad with zero
+
+    // Determine AM/PM and convert hours to 12-hour format
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12 // Convert to 12-hour format
+    hours = hours ? String(hours).padStart(2, '0') : '12' // Convert 0 hour to 12
+
+    // Return formatted time
+    return `${hours}:${minutes} ${ampm}`
+  }
+
+  // console.log(singleReportData?.agent?.TagCommissions[0]?.VC4,"data here");
+
+  // console.log(images, "images here")
+
+  // let VehicleClass=singleReportData?.vehicleClass;
+
+  // VehicleClass="VC"+VehicleClass;
+
+  // console.log(VehicleClass,"vcccc");
+
+  if (singleReportData?.commercialStatus === true) {
+    console.log(singleReportData?.customerName)
+  }
+
+  // console.log(singleReportData?.status, "status here")
+
+  const tagComm = singleReportData?.agent?.TagCommissions[0]
+  const verificationStatus = singleReportData?.agent?.verificationStatus
+
+  // console.log(tagComm, "tag commison")
 
   return (
     <View style={styles.container}>
@@ -58,7 +172,9 @@ const IssuanceCards = ({ data }) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: `${data.ribbonBgColor}`,
+          // backgroundColor: `${data.ribbonBgColor}`,
+          backgroundColor:
+            singleReportData?.commercialStatus === true ? 'yellow' : 'white',
           padding: '4%',
           borderRadius: 10
         }}
@@ -66,7 +182,8 @@ const IssuanceCards = ({ data }) => {
         <View style={{ flexDirection: 'row' }}>
           <View
             style={{
-              backgroundColor: `${'data.color'}`,
+              // backgroundColor: `${'data.color'}`,
+              backgroundColor: '#ff5733', // Example custom color (hex value)
               borderRadius: 50,
               marginRight: '5%',
               alignItems: 'center',
@@ -83,21 +200,29 @@ const IssuanceCards = ({ data }) => {
                 lineHeight: 19
               }}
             >
-              {'data.number'}
+              {singleReportData?.vehicleClass}
             </Text>
           </View>
           <View>
-            <Text style={styles.idText}>607469-00B-258445</Text>
+            <Text style={styles.idText}>
+              {singleReportData?.tagSerialNumber}
+            </Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.dateAndTimeText}>{'20:19:36'}</Text>
+              <Text style={styles.dateAndTimeText}>
+                {formatDate(singleReportData?.createdAt)}
+              </Text>
               <VerticalDivider />
-              <Text style={styles.dateAndTimeText}>{'16-03-2024'}</Text>
+              <Text style={styles.dateAndTimeText}>
+                {formatTime(singleReportData?.createdAt)}
+              </Text>
             </View>
           </View>
         </View>
 
         <View>
-          <Text style={styles.amount}>₹50</Text>
+          <Text style={styles.amount}>
+            {verificationStatus === 'verified' ? `₹ ${tagComm.VC4}` : `₹ 0`}
+          </Text>
         </View>
       </View>
 
@@ -116,40 +241,46 @@ const IssuanceCards = ({ data }) => {
             justifyContent: 'flex-end'
           }}
         >
-          <View>
-            <Text style={styles.text}>Suresh Kumar Kumawat</Text>
+          <View style={{ gap: 2 }}>
+            <Text style={styles.nametext}>
+              {singleReportData?.customerName}
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: 5,
+                gap: 8,
                 borderWidth: 3,
                 borderColor: '#000000',
-                padding: '2%',
+                paddingHorizontal: 8,
+                paddingVertical: 4,
                 borderRadius: 10,
-                width: '80%',
                 marginTop: '3%',
-                backgroundColor: `${data.isCommercial ? '#FAFF00' : '#FFFFFF'}`
+                backgroundColor: `${data.isCommercial ? '#FAFF00' : '#FFFFFF'}`,
+                alignSelf: 'flex-start' // Allows the container to wrap around the content
               }}
             >
               <Image
                 source={require('../../assets/commision/indNamePlate.png')}
               />
-              <Text style={styles.text}>RJ14VD8878</Text>
+              <Text style={styles.vehicletext}>
+                {singleReportData?.BajajVehicleDetailsId}
+              </Text>
             </View>
           </View>
         </View>
-        <View>
-          <Text style={styles.text}>9158628546</Text>
+        <View style={{ gap: 12, justifyContent: 'flex-end' }}>
+          {/* <Text style={styles.mobiletext}>9158628546</Text> */}
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-end',
+              alignItems: 'center',
               marginTop: '3%'
             }}
           >
             <Image source={require('../../assets/bankIcon.png')} />
-            <Text style={styles.bankText}>KOTAK</Text>
+            <Text style={styles.bankText}> Bajaj </Text>
           </View>
         </View>
       </View>
@@ -165,64 +296,109 @@ const IssuanceCards = ({ data }) => {
         }}
       >
         <Pressable onPress={() => setModalVisible(true)}>
-          <Image source={require('../../assets/eyeIcon.png')} />
+          <Image
+            source={require('../../assets/eyeIcon.png')}
+            style={{ width: 25, height: 25 }}
+          />
         </Pressable>
 
         <Image
           source={
-            data.status === 'denied'
+            data.status === 'Declined'
               ? commisionDeniedIcon
-              : data.status === 'pending'
-                ? pendingCommisionIcon
-                : data.status === 'success'
-                  ? commisionApprovedIcon
-                  : commisionPartaillyPaidIcon
+              : data.status === 'Pending'
+              ? pendingCommisionIcon
+              : data.status === 'Approved'
+              ? commisionApprovedIcon
+              : commisionPartaillyPaidIcon
           }
         />
         <Image source={require('../../assets/dangerPalm.png')} />
       </View>
-      <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => setModalVisible(false)}>
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
             {/* Modal content */}
-            <Pressable style={styles.closeButtonContainer} onPress={() => setModalVisible(false)}>
-              <Image source={require('../../assets/close.png')} style={styles.closeButton} />
+            <Pressable
+              style={styles.closeButtonContainer}
+              onPress={() => setModalVisible(false)}
+            >
+              <Image
+                source={require('../../assets/close.png')}
+                style={styles.closeButton}
+              />
             </Pressable>
-            <ScrollView contentContainerStyle={{padding:5,alignItems: 'center',gap:10}}>
-            <View style={styles.detailsSection}>
-              <Text style={styles.label}>Report Details</Text>
+            <ScrollView
+              contentContainerStyle={{
+                padding: 5,
+                alignItems: 'center',
+                gap: 10
+              }}
+            >
+              <View style={styles.detailsSection}>
+                <Text style={styles.label}>Report Details</Text>
 
-              <View style={styles.dataContainer}>
-                {reportDetailsData && reportDetailsData.map((data, index) => (
-                  <View style={styles.reportDetailsContainer} key={index}>
-                    <Text style={styles.reportDetailsTitleText}>{data.title}</Text>
-                    <Text style={styles.reportDetailsValueText}>:  {data.value}</Text>
-                  </View>
-                ))}
+                <View style={styles.dataContainer}>
+                  {reportDetailsData &&
+                    reportDetailsData.map((data, index) => (
+                      <View style={styles.reportDetailsContainer} key={index}>
+                        <Text style={styles.reportDetailsTitleText}>
+                          {data.title}
+                        </Text>
+                        <Text style={styles.reportDetailsValueText}>
+                          : {data.value}
+                        </Text>
+                      </View>
+                    ))}
+                </View>
               </View>
-            </View >
-<View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Front</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Back</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Front</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Side</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Tag Image</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  
-  </ScrollView>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  RC Front
+                </Text>
+                <UploadDoc text={'RC copy (Front)'} />
+                {/* <Image source={images?.rcImageFront} /> */}
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  RC Back
+                </Text>
+                <UploadDoc text={'RC copy (Front)'} />
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Vehicle Front
+                </Text>
+                <UploadDoc text={'RC copy (Front)'} />
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Vehicle Side
+                </Text>
+                <UploadDoc text={'RC copy (Front)'} />
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Tag Image
+                </Text>
+                <UploadDoc text={'RC copy (Front)'} />
+              </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -260,7 +436,7 @@ const styles = StyleSheet.create({
   bankText: {
     color: '#000000',
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 19,
     marginLeft: '5%'
   },
@@ -284,7 +460,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19
   },
-  text: {
+  nametext: {
+    color: '#000000',
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 19
+  },
+  vehicletext: {
+    color: '#000000',
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 19
+  },
+  mobiletext: {
     color: '#000000',
     fontWeight: '600',
     fontSize: 16,
@@ -294,7 +482,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)'
   },
   modalContent: {
     width: '90%',
@@ -305,7 +493,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     position: 'relative',
-    gap:10
+    gap: 10
   },
   modalText: {
     fontWeight: '500',
@@ -313,41 +501,41 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     color: 'black',
-    marginTop: 10,
+    marginTop: 10
   },
-  
+
   label: {
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 20,
-    color: "#000000",
-    marginVertical: "4%"
+    color: '#000000',
+    marginVertical: '4%'
   },
   detailsSection: {
     alignItems: 'center',
-    marginTop: 3,
+    marginTop: 3
   },
   dataContainer: {
     borderWidth: 1,
-    borderColor: "#263238",
+    borderColor: '#263238',
     borderRadius: 20,
-    padding: "5%",
-    gap: 10,
+    padding: '5%',
+    gap: 10
   },
   reportDetailsTitleText: {
-    color: "grey",
+    color: 'grey',
     fontWeight: '400',
     fontSize: 14,
     lineHeight: 16
   },
   reportDetailsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: "1%"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: '1%'
   },
   reportDetailsValueText: {
-    color: "#000000",
-    width: "60%",
+    color: '#000000',
+    width: '60%',
     fontWeight: '400',
     fontSize: 14,
     lineHeight: 16
@@ -361,20 +549,20 @@ const styles = StyleSheet.create({
   // },
   closeButtonContainer: {
     position: 'absolute',
-    backgroundColor:'#E0E0E0',
-    justifyContent:'center',
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius:20,
-    height:30,
-    width:30,
+    borderRadius: 20,
+    height: 30,
+    width: 30,
     top: 15,
     right: 15,
-    zIndex:10
+    zIndex: 10
   },
   closeButton: {
     width: 15,
-   
-    height: 15,
-  },
+
+    height: 15
+  }
 })
 export default IssuanceCards
