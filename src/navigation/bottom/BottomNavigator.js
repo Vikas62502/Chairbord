@@ -26,6 +26,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
+import { getCache } from '../../helper/Storage'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
@@ -38,9 +39,15 @@ const BottomNavigator = () => {
   const [loading, setLoading] = useState(false)
 
   const handleVerificationClick = async () => {
+    const userData = await getCache('userData');
+    const agentId=userData.user.id;
+    console.log(userData, "user data");
+    console.log(agentId, "agent id");
     setLoading(true)
     try {
-      const res = await client.get('/user/agent/mydata');
+      const body={agentId:agentId};
+      console.log(body, "body data")
+      const res = await client.post('/user/agent/mydata',body);
       console.log('res', JSON.stringify(res))
       let profileStatus = res?.data?.verificationStatus;
       if (profileStatus === 'under-review') {
