@@ -37,7 +37,7 @@ const ConsentForm = (props: any) => {
 
   const handleSendData = async () => {
     if (!isChecked) {
-      Alert.alert('Success', 'Please check the checkbox f', [
+      Alert.alert('Success', 'Please check the checkbox ', [
         {
           text: 'Ok',
           onPress: () => console.log('OK Pressed')

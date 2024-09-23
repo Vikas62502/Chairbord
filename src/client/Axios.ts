@@ -2,8 +2,8 @@
 import axios from 'axios'
 import { setupInterceptorsTo } from './interceptor'
 
-const customBaseUrl = 'http://43.204.133.228'
-// const customBaseUrl = 'http://192.168.29.41'
+// const customBaseUrl = 'http://43.204.133.228'
+const customBaseUrl = 'http://192.168.29.41'
 
 // const customBaseUrl = 'http://192.168.31.51'
 

@@ -1,13 +1,56 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet,ScrollView, Image, Modal, Pressable, TouchableOpacity, } from 'react-native'
 import VerticalDivider from '../../components/common/VerticalDivider'
+import UploadDoc from '../../components/common/UploadDoc';
 
 const IssuanceCards = ({ data }) => {
   // commision icons
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const pendingCommisionIcon = require('../../assets/commision/commissionPending.png')
   const commisionDeniedIcon = require('../../assets/commision/commissionDenied.png')
   const commisionApprovedIcon = require('../../assets/commision/commsionApprove.png')
   const commisionPartaillyPaidIcon = require('../../assets/commision/partialCommission.png')
+
+  // const handleReportdata=async()=>{
+  //   setModalVisible(true);
+  // }
+  const reportDetailsData = [
+    {
+      title: "Customer Name",
+      value: "Mohit Kumar"
+    },
+    {
+      title: "Customer ID",
+      value: "AUFPN1153N"
+    },
+    {
+      title: "Vehicle Number",
+      value: "GJ18BE7780"
+    },
+    {
+      title: "Tag Serial Number",
+      value: "608268-001-0426293"
+    },
+    {
+      title: "Vehicle Class",
+      value: "VC 4"
+    },
+    {
+      title: "Engine Number",
+      value: "25522"
+    },
+    {
+      title: "Commercial Status",
+      value: "false"
+    },
+    {
+      title: "Chassis Number",
+      value: "MA3EUA61S00857712"
+    },
+  ]
+
   return (
     <View style={styles.container}>
       <View
@@ -121,20 +164,68 @@ const IssuanceCards = ({ data }) => {
           paddingTop: '4%'
         }}
       >
-        <Image source={require('../../assets/eyeIcon.png')} />
+        <Pressable onPress={() => setModalVisible(true)}>
+          <Image source={require('../../assets/eyeIcon.png')} />
+        </Pressable>
+
         <Image
           source={
             data.status === 'denied'
               ? commisionDeniedIcon
               : data.status === 'pending'
-              ? pendingCommisionIcon
-              : data.status === 'success'
-              ? commisionApprovedIcon
-              : commisionPartaillyPaidIcon
+                ? pendingCommisionIcon
+                : data.status === 'success'
+                  ? commisionApprovedIcon
+                  : commisionPartaillyPaidIcon
           }
         />
         <Image source={require('../../assets/dangerPalm.png')} />
       </View>
+      <Modal visible={modalVisible} transparent={true} animationType="fade" onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContent}>
+            {/* Modal content */}
+            <Pressable style={styles.closeButtonContainer} onPress={() => setModalVisible(false)}>
+              <Image source={require('../../assets/close.png')} style={styles.closeButton} />
+            </Pressable>
+            <ScrollView contentContainerStyle={{padding:5,alignItems: 'center',gap:10}}>
+            <View style={styles.detailsSection}>
+              <Text style={styles.label}>Report Details</Text>
+
+              <View style={styles.dataContainer}>
+                {reportDetailsData && reportDetailsData.map((data, index) => (
+                  <View style={styles.reportDetailsContainer} key={index}>
+                    <Text style={styles.reportDetailsTitleText}>{data.title}</Text>
+                    <Text style={styles.reportDetailsValueText}>:  {data.value}</Text>
+                  </View>
+                ))}
+              </View>
+            </View >
+<View style={{ height: 200, width: 345, gap:7}}>
+  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Front</Text>
+  <UploadDoc text={'RC copy (Front)'} />
+  </View>
+  <View style={{ height: 200, width: 345, gap:7}}>
+  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Back</Text>
+  <UploadDoc text={'RC copy (Front)'} />
+  </View>
+  <View style={{ height: 200, width: 345, gap:7}}>
+  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Front</Text>
+  <UploadDoc text={'RC copy (Front)'} />
+  </View>
+  <View style={{ height: 200, width: 345, gap:7}}>
+  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Side</Text>
+  <UploadDoc text={'RC copy (Front)'} />
+  </View>
+  <View style={{ height: 200, width: 345, gap:7}}>
+  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Tag Image</Text>
+  <UploadDoc text={'RC copy (Front)'} />
+  </View>
+  
+  </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
@@ -198,6 +289,92 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 19
-  }
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  modalContent: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    justifyContent: 'flex-start',
+    textAlign: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    gap:10
+  },
+  modalText: {
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: 'black',
+    marginTop: 10,
+  },
+  
+  label: {
+    fontWeight: '600',
+    fontSize: 20,
+    lineHeight: 20,
+    color: "#000000",
+    marginVertical: "4%"
+  },
+  detailsSection: {
+    alignItems: 'center',
+    marginTop: 3,
+  },
+  dataContainer: {
+    borderWidth: 1,
+    borderColor: "#263238",
+    borderRadius: 20,
+    padding: "5%",
+    gap: 10,
+  },
+  reportDetailsTitleText: {
+    color: "grey",
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 16
+  },
+  reportDetailsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "1%"
+  },
+  reportDetailsValueText: {
+    color: "#000000",
+    width: "60%",
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 16
+  },
+  // ValueText: {
+  //     color: "#000000",
+  //     width: "45%",
+  //     fontWeight: '400',
+  //     fontSize: 14,
+  //     lineHeight: 16
+  // },
+  closeButtonContainer: {
+    position: 'absolute',
+    backgroundColor:'#E0E0E0',
+    justifyContent:'center',
+    alignItems: 'center',
+    borderRadius:20,
+    height:30,
+    width:30,
+    top: 15,
+    right: 15,
+    zIndex:10
+  },
+  closeButton: {
+    width: 15,
+   
+    height: 15,
+  },
 })
 export default IssuanceCards
