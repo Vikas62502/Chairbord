@@ -7,11 +7,14 @@ import {
   Image,
   Modal,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from 'react-native'
 import VerticalDivider from '../../components/common/VerticalDivider'
-import UploadDoc from '../../components/common/UploadDoc'
 import axios from 'axios'
+import { Buffer } from 'buffer';
+import { PermissionsAndroid, Platform, Alert } from 'react-native';
+import RNFS from 'react-native-fs';
 
 const IssuanceCards = ({ data }) => {
   // commision icons
@@ -65,21 +68,21 @@ const IssuanceCards = ({ data }) => {
 
   async function modifyImage(imageURL) {
     try {
-        // Fetch the image as an array buffer
-        const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
-        const fileBuffer = Buffer.from(response.data, 'binary');
+      // Fetch the image as an array buffer
+      const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
+      const fileBuffer = Buffer.from(response.data, 'binary');
 
-        // Convert to base64
-        let base64Data = fileBuffer.toString('base64');
-        base64Data = base64Data.replace("dataimage/jpegbase64", '');
-        // Construct the full data URL
-        const dataURL = `data:image/png;base64,${base64Data}`;
-        return dataURL;
+      // Convert to base64
+      let base64Data = fileBuffer.toString('base64');
+      base64Data = base64Data.replace("dataimage/jpegbase64", '');
+      // Construct the full data URL
+      const dataURL = `data:image/png;base64,${base64Data}`;
+      return dataURL;
     } catch (error) {
-        console.error('Error processing the image:', error);
-        return null;
+      console.error('Error processing the image:', error);
+      return null;
     }
-}
+  }
 
   const images = singleReportData?.customerDetail?.vehicles[0]?.fastTags[0];
 
@@ -89,33 +92,90 @@ const IssuanceCards = ({ data }) => {
     if (images.TAGaFixImage) {
       images.TAGaFixImage = await modifyImage(images.TAGaFixImage);
     }
-    
+
     if (images.rcImageBack) {
       images.rcImageBack = await modifyImage(images.rcImageBack);
     }
-  
+
     if (images.rcImageFront) {
       images.rcImageFront = await modifyImage(images.rcImageFront);
     }
-  
+
     if (images.vehicleImageFront) {
       images.vehicleImageFront = await modifyImage(images.vehicleImageFront);
     }
-  
+
     if (images.vehicleImageSide) {
       images.vehicleImageSide = await modifyImage(images.vehicleImageSide);
     }
   };
-  
+
   useEffect(() => {
-    if(data){
+    if (data) {
+      console.log("data here")
       processImages();
     }
-  },[data])
+  }, [data])
 
-  
 
-  // console.log(singleReportData, "here")
+  const requestStoragePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to download images',
+          }
+        );
+        console.log(granted, "permission granted");
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        console.log("error in permission")
+        return false;
+      }
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    console.log("permisssion called _________")
+    requestStoragePermission();
+  }, []);
+
+  const downloadImage = async () => {
+
+    if (!hasPermission) {
+      Alert.alert('Error', 'Storage permission is required.');
+      return;
+    }
+
+    if (images?.rcImageFront) {
+      const imageURI = images.rcImageFront;
+      const fileName = imageURI.split('/').pop(); // Get the image name from the URI
+      const downloadDest = `${RNFS.DocumentDirectoryPath}/${fileName}`; // Path to save the image
+
+      try {
+        const result = await RNFS.downloadFile({
+          fromUrl: imageURI,
+          toFile: downloadDest,
+        }).promise;
+
+        if (result && result.statusCode === 200) {
+          Alert.alert('Success', 'Image downloaded successfully!');
+        } else {
+          Alert.alert('Error', 'Failed to download the image.');
+        }
+      } catch (error) {
+        console.log(error);
+        Alert.alert('Error', 'An error occurred while downloading the image.');
+      }
+    } else {
+      Alert.alert('Error', 'No image URI found.');
+    }
+  };
+
 
   function formatDate(isoString) {
     const date = new Date(isoString)
@@ -144,26 +204,13 @@ const IssuanceCards = ({ data }) => {
     return `${hours}:${minutes} ${ampm}`
   }
 
-  // console.log(singleReportData?.agent?.TagCommissions[0]?.VC4,"data here");
-
-  // console.log(images, "images here")
-
-  // let VehicleClass=singleReportData?.vehicleClass;
-
-  // VehicleClass="VC"+VehicleClass;
-
-  // console.log(VehicleClass,"vcccc");
-
   if (singleReportData?.commercialStatus === true) {
     console.log(singleReportData?.customerName)
   }
 
-  // console.log(singleReportData?.status, "status here")
 
   const tagComm = singleReportData?.agent?.TagCommissions[0]
   const verificationStatus = singleReportData?.agent?.verificationStatus
-
-  // console.log(tagComm, "tag commison")
 
   return (
     <View style={styles.container}>
@@ -203,6 +250,8 @@ const IssuanceCards = ({ data }) => {
               {singleReportData?.vehicleClass}
             </Text>
           </View>
+
+
           <View>
             <Text style={styles.idText}>
               {singleReportData?.tagSerialNumber}
@@ -307,10 +356,10 @@ const IssuanceCards = ({ data }) => {
             data.status === 'Declined'
               ? commisionDeniedIcon
               : data.status === 'Pending'
-              ? pendingCommisionIcon
-              : data.status === 'Approved'
-              ? commisionApprovedIcon
-              : commisionPartaillyPaidIcon
+                ? pendingCommisionIcon
+                : data.status === 'Approved'
+                  ? commisionApprovedIcon
+                  : commisionPartaillyPaidIcon
           }
         />
         <Image source={require('../../assets/dangerPalm.png')} />
@@ -363,8 +412,18 @@ const IssuanceCards = ({ data }) => {
                 >
                   RC Front
                 </Text>
-                <UploadDoc text={'RC copy (Front)'} />
-                {/* <Image source={images?.rcImageFront} /> */}
+                {
+                  images && images?.rcImageFront ? <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}>RC Front</Text>
+                {images && images.rcImageFront ? (
+                  <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} />
+                ) : (
+                  <Text>No Image</Text>
+                )}
+                <Button title="Download Image" onPress={downloadImage} />
               </View>
               <View style={{ height: 200, width: 345, gap: 7 }}>
                 <Text
@@ -372,7 +431,9 @@ const IssuanceCards = ({ data }) => {
                 >
                   RC Back
                 </Text>
-                <UploadDoc text={'RC copy (Front)'} />
+                {
+                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
               </View>
               <View style={{ height: 200, width: 345, gap: 7 }}>
                 <Text
@@ -380,7 +441,9 @@ const IssuanceCards = ({ data }) => {
                 >
                   Vehicle Front
                 </Text>
-                <UploadDoc text={'RC copy (Front)'} />
+                {
+                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
               </View>
               <View style={{ height: 200, width: 345, gap: 7 }}>
                 <Text
@@ -388,7 +451,9 @@ const IssuanceCards = ({ data }) => {
                 >
                   Vehicle Side
                 </Text>
-                <UploadDoc text={'RC copy (Front)'} />
+                {
+                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
               </View>
               <View style={{ height: 200, width: 345, gap: 7 }}>
                 <Text
@@ -396,7 +461,9 @@ const IssuanceCards = ({ data }) => {
                 >
                   Tag Image
                 </Text>
-                <UploadDoc text={'RC copy (Front)'} />
+                {
+                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: '100%', height: "100%" }} /> : <Text>No Image</Text>
+                }
               </View>
             </ScrollView>
           </View>
