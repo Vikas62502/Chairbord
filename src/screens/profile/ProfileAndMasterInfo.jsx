@@ -30,7 +30,11 @@ const ProfileAndMasterInfo = () => {
   useEffect(() => {
     getUserDetails();
   }, []);
-
+  
+  useEffect(() => {
+    console.log("UserData:", userData);
+  }, [userData]);
+  
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -105,7 +109,7 @@ const ProfileAndMasterInfo = () => {
       value: userData?.TagCosts?.length > 0 
         ? JSON.stringify(userData.TagCosts[0]?.VC4) || 'N/A' 
         : 'N/A'
-    },
+    }    
   ];
 
   return (
