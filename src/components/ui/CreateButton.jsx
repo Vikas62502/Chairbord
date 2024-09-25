@@ -18,6 +18,7 @@ const CreateButton = ({ title, onpressOperation }) => {
           <Text style={styles.excelButtonText}>{title}</Text>
           <Image
             source={require('../../assets/addIcon.png')}
+            style={{ height:12 ,width:12}}
           />
         </LinearGradient>
       </Pressable>

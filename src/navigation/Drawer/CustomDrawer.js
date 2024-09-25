@@ -58,7 +58,7 @@ const data = [
     },
     {
         title: 'Issuance Tracker',
-        icon: require('../../assets/DrawerNavigation/issuence.png'),
+        icon: require('../../assets/DrawerNavigation/issuance.png'),
         screen: 'issuanceTracker'
     },
     // {
@@ -107,7 +107,7 @@ const CustomDrawerItems = ({ title, icons, navigateTo }) => {
         <TouchableOpacity onPress={() => navigation.navigate(navigateTo)}>
             <View>
                 <View style={styles.drawerItemStyle}>
-                    <Image source={icons} alt={`${title}`} />
+                    <Image source={icons} alt={`${title}`} style={{width:32 ,height:32,marginRight:-2,marginLeft:-2}} />
                     <View style={{ width: "70%" }}>
                         <Text style={{ fontSize: 20, fontWeight: 500, color: "#FFFFFF", lineHeight: 24, }}>
                             {title}

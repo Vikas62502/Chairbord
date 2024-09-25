@@ -34,6 +34,7 @@ import Request from '../../screens/requests/Request';
 import ContactUs from '../../screens/contactUs/ContactUs';
 import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification';
 import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo';
+import Permissions from '../../components/permissions';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -45,6 +46,9 @@ const StackNavigation = () => {
                 headerShown: false
             }} />
             <Stack.Screen name="FastTagAndGPS" component={FastTagAndGps} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="permissions" component={Permissions} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="HistoricalData" component={HistoricalData} options={{

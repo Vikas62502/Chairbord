@@ -98,7 +98,7 @@ const Wallet = (props) => {
         <View style={styles.searchAndfilter}>
           <View style={styles.searchField}>
             <Image
-              source={require('../../assets/screens/wallet/searchLogo.png')}
+              source={require('../../assets/screens/wallet/search.png')}
               style={styles.searchIcon}
             />
             <TextInput
@@ -113,7 +113,7 @@ const Wallet = (props) => {
             onPress={() => setShowFilterModal(true)}
             style={styles.filterLogo}
           >
-            <Image source={require('../../assets/screens/wallet/filter.png')} />
+            <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height:30 ,width:30}} />
           </Pressable>
         </View>
       </View>
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#858585',
     borderRadius: 50,
-    padding: 15
+    padding: 14,
   },
   transactionContainer: {
     elevation: 2,

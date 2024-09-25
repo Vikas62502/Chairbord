@@ -20,7 +20,7 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
                    onPress={() => navigation.goBack()}
                   style={styles.backArrow}
                 >
-                  <Image source={require('../assets/backArrowButton.png')} />
+                  <Image source={require('../assets/back.png')} style={{width:40 ,height:40,}}  />
                 </TouchableOpacity>
               </View>
             )}
@@ -31,7 +31,7 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
           </View>
         </View>
         <View style={styles.chairBordLogo}>
-          <Image source={require('../assets/chairBordLogoWithoutName.png')} />
+          <Image source={require('../assets/chairbordLogoWithoutName.png')} style={{width:120 ,height:120,}}  />
         </View>
       </LinearGradient>
     </View>
@@ -83,9 +83,10 @@ const styles = StyleSheet.create({
   },
   chairBordLogo: {
     position: 'absolute',
-    left: isTablet?'38%':isSmallScreen?'31%':'33%',
-    top: '10%',
-    zIndex: 0
+    left: isTablet?'38%':isSmallScreen?'31%':'36%',
+    top: '15%',
+    zIndex: 0,
+    opacity:0.5
   }
 })
 

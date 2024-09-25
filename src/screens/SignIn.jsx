@@ -52,7 +52,7 @@ const SignIn = () => {
       let response = await client.post('/login/agent', bodyContent)
       await setCache('userData', response?.data)
       await setCache('token', response?.data?.token)
-      navigation.navigate('drawer')
+      navigation.navigate('permissions')
     } catch (error) {
       Alert.alert(
         'Either Id or password is Wrong !!',

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 28,
     color: '#03536D',
-    fontWeight: '600', 
+    fontWeight: '700', 
     fontFamily: 'inter',
     textAlign: 'center',
     marginVertical: 10, // Add vertical margin between image and text

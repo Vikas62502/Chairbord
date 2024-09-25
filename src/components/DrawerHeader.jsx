@@ -15,7 +15,7 @@ const DrawerHeader = () => {
         <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
         >
-          <Image source={require('../assets/DrawerTripleLine.png')} />
+          <Image source={require('../assets/ham_menu.png')} style={{width:25 ,height:20,}} />
         </TouchableOpacity>
       </View>
       <View>
@@ -29,7 +29,7 @@ const DrawerHeader = () => {
       </View>
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('Main')}>
-          <Image source={require('../assets/notificationBell.png')} />
+          <Image source={require('../assets/notification.png')} style={{width:25 ,height:25,}}  />
         </TouchableOpacity>
       </View>
     </LinearGradient>

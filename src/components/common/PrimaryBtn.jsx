@@ -35,7 +35,7 @@ const PrimaryBtn = ({ onPress, title, disabled }) => {
           }}
         >
           <Text style={styles.appButtonText}>{title}</Text>
-          <Image source={require('../../assets/rightArrow.png')} />
+          <Image source={require('../../assets/rightArrow.png')} style={{ height:30 ,width:32}}/>
         </View>
       </LinearGradient>
     </TouchableOpacity>
