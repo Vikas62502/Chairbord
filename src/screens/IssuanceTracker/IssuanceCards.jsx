@@ -15,7 +15,6 @@ import axios from 'axios'
 import { Buffer } from 'buffer';
 import { PermissionsAndroid, Platform, Alert } from 'react-native';
 import RNFS from 'react-native-fs';
-import UploadDoc from '../../components/common/UploadDoc';
 
 const IssuanceCards = ({ data }) => {
   // commision icons
@@ -271,7 +270,7 @@ const IssuanceCards = ({ data }) => {
 
         <View>
           <Text style={styles.amount}>
-            {verificationStatus === 'verified' ? `₹${tagComm?.VC4}` : `₹ 0`}
+            {verificationStatus === 'verified' ? `₹ ${tagComm.VC4}` : `₹ 0`}
           </Text>
         </View>
       </View>
@@ -291,8 +290,10 @@ const IssuanceCards = ({ data }) => {
             justifyContent: 'flex-end'
           }}
         >
-          <View>
-            <Text style={styles.text}>Suresh Kumar Kumawat</Text>
+          <View style={{ gap: 2 }}>
+            <Text style={styles.nametext}>
+              {singleReportData?.customerName}
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -300,7 +301,8 @@ const IssuanceCards = ({ data }) => {
                 gap: 8,
                 borderWidth: 3,
                 borderColor: '#000000',
-                padding: '2%',
+                paddingHorizontal: 8,
+                paddingVertical: 4,
                 borderRadius: 10,
                 marginTop: '3%',
                 backgroundColor: `${data.isCommercial ? '#FAFF00' : '#FFFFFF'}`,
@@ -310,16 +312,19 @@ const IssuanceCards = ({ data }) => {
               <Image
                 source={require('../../assets/commision/indNamePlate.png')}
               />
-              <Text style={styles.text}>RJ14VD8878</Text>
+              <Text style={styles.vehicletext}>
+                {singleReportData?.BajajVehicleDetailsId}
+              </Text>
             </View>
           </View>
         </View>
-        <View>
-          <Text style={styles.text}>9158628546</Text>
+        <View style={{ gap: 12, justifyContent: 'flex-end' }}>
+          {/* <Text style={styles.mobiletext}>9158628546</Text> */}
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-end',
+              alignItems: 'center',
               marginTop: '3%'
             }}
           >
@@ -340,7 +345,10 @@ const IssuanceCards = ({ data }) => {
         }}
       >
         <Pressable onPress={() => setModalVisible(true)}>
-          <Image source={require('../../assets/eyeIcon.png')} />
+          <Image
+            source={require('../../assets/eyeIcon.png')}
+            style={{ width: 25, height: 25 }}
+          />
         </Pressable>
 
         <Image
@@ -374,41 +382,90 @@ const IssuanceCards = ({ data }) => {
                 style={styles.closeButton}
               />
             </Pressable>
-            <ScrollView contentContainerStyle={{padding:5,alignItems: 'center',gap:10}}>
-            <View style={styles.detailsSection}>
-              <Text style={styles.label}>Report Details</Text>
+            <ScrollView
+              contentContainerStyle={{
+                padding: 5,
+                alignItems: 'center',
+                gap: 10
+              }}
+            >
+              <View style={styles.detailsSection}>
+                <Text style={styles.label}>Report Details</Text>
 
-              <View style={styles.dataContainer}>
-                {reportDetailsData && reportDetailsData.map((data, index) => (
-                  <View style={styles.reportDetailsContainer} key={index}>
-                    <Text style={styles.reportDetailsTitleText}>{data.title}</Text>
-                    <Text style={styles.reportDetailsValueText}>:  {data.value}</Text>
-                  </View>
-                ))}
+                <View style={styles.dataContainer}>
+                  {reportDetailsData &&
+                    reportDetailsData.map((data, index) => (
+                      <View style={styles.reportDetailsContainer} key={index}>
+                        <Text style={styles.reportDetailsTitleText}>
+                          {data.title}
+                        </Text>
+                        <Text style={styles.reportDetailsValueText}>
+                          : {data.value}
+                        </Text>
+                      </View>
+                    ))}
+                </View>
               </View>
-            </View >
-<View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Front</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>RC Back</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Front</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Vehicle Side</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  <View style={{ height: 200, width: 345, gap:7}}>
-  <Text style={{color:'grey',fontWeight:'400',fontSize:16}}>Tag Image</Text>
-  <UploadDoc text={'RC copy (Front)'} />
-  </View>
-  
-  </ScrollView>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  RC Front
+                </Text>
+                {
+                  images && images?.rcImageFront ? <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}>RC Front</Text>
+                {images && images.rcImageFront ? (
+                  <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} />
+                ) : (
+                  <Text>No Image</Text>
+                )}
+                <Button title="Download Image" onPress={downloadImage} />
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  RC Back
+                </Text>
+                {
+                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Vehicle Front
+                </Text>
+                {
+                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Vehicle Side
+                </Text>
+                {
+                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                }
+              </View>
+              <View style={{ height: 200, width: 345, gap: 7 }}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                >
+                  Tag Image
+                </Text>
+                {
+                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: '100%', height: "100%" }} /> : <Text>No Image</Text>
+                }
+              </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -470,7 +527,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19
   },
-  text: {
+  nametext: {
+    color: '#000000',
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 19
+  },
+  vehicletext: {
     color: '#000000',
     fontWeight: '600',
     fontSize: 16,
@@ -480,8 +543,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: '600',
     fontSize: 16,
-    lineHeight: 19,
-    
+    lineHeight: 19
   },
   modalBackground: {
     flex: 1,
@@ -566,8 +628,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     width: 15,
-   
-    height: 15,
-  },
+    height: 15
+  }
 })
 export default IssuanceCards
