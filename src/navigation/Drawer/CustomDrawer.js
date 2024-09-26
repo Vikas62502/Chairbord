@@ -42,6 +42,11 @@ const data = [
         screen: 'dashboard'
     },
     {
+        title: 'permissions',
+        icon: require('../../assets/DrawerNavigation/requests.png'),
+        screen: 'permissions'
+    },
+    {
         title: 'Wallet',
         icon: require('../../assets/DrawerNavigation/wallet.png'),
         screen: 'wallet'

@@ -1,11 +1,13 @@
-import { View, Text, SafeAreaView, StyleSheet, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Alert, ActivityIndicator,Dimensions  } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import InputText from '../../components/common/InputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 import { getCache, setCache } from '../../helper/Storage'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 
 const Mobileverification = (props: any) => {
   const [loading, setLoading] = useState(false)
@@ -121,23 +123,29 @@ const Mobileverification = (props: any) => {
           *Details not found Invalid mobile number, tag serial number or bank
           name
         </Text> */}
-
-        
-      </View>
-      <View style={styles.bottomContainer}>
+        <View style={styles.bottomContainer}>
           <PrimaryBtn
             title={'Sent OTP'}
             onPress={sendOTP}
             disabled={VerificationFormData?.mobile?.length < 10 || VerificationFormData?.vehicleNo?.length < 7 || VerificationFormData?.engineNo?.length < 5}
           />
         </View>
+
+      </View>
+      {/* <View style={styles.bottomContainer}>
+          <PrimaryBtn
+            title={'Sent OTP'}
+            onPress={sendOTP}
+            disabled={VerificationFormData?.mobile?.length < 10 || VerificationFormData?.vehicleNo?.length < 7 || VerificationFormData?.engineNo?.length < 5}
+          />
+        </View> */}
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-flex: 1,
+    flex: 1,
     padding: '5%',
   },
   errorText: {
@@ -153,10 +161,10 @@ flex: 1,
   },
   bottomContainer: {
     justifyContent: 'flex-end',
-        padding: "5%",
-        height: "40%",
-    
-},
+    // padding: "5%",
+    height: isSmallScreen?"50%":"60%",
+
+  },
 })
 
 export default Mobileverification

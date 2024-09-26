@@ -10,7 +10,7 @@ import SelectField from '../../components/common/SelectFieldBig'
 import InputText from '../../components/common/InputText'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
+const isSmallScreen =width<400;
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 const TagReplacement = (props: any) => {
@@ -110,11 +110,14 @@ const TagReplacement = (props: any) => {
                 {/* <Text style={styles.errorText}>*Details not found
                     Invalid mobile number, tag serial number or bank name
                 </Text> */}
-            </View>
-
-            <View style={styles.bottomContainer}>
+                <View style={styles.bottomContainer}>
                 <PrimaryBtn title={"Next"} onPress={sendOTP} />
             </View>
+            </View>
+
+            {/* <View style={styles.bottomContainer}>
+                <PrimaryBtn title={"Next"} onPress={sendOTP} />
+            </View> */}
         </SafeAreaView>
     )
 }
@@ -138,8 +141,8 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         justifyContent: 'flex-end',
-        height: "40%",
-        padding: "5%",
+        height: isSmallScreen?"50%":"60%",
+        // padding: "5%",
     
 
     },

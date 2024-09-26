@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   chairBordLogo: {
     position: 'absolute',
-    left: isTablet?'38%':isSmallScreen?'31%':'36%',
+    left: isTablet?'38%':isSmallScreen?'35%':'36%',
     top: '15%',
     zIndex: 0,
     opacity:0.5

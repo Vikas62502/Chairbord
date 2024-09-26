@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
       marginBottom:isTablet?12: 8, // space between icon and text
     },
     icon2: {
-      width: '55%',
+      width:'55%',
       height:'55%',
     },
     textContainer: {
@@ -349,16 +349,16 @@ const styles = StyleSheet.create({
   imageRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal:isTablet?30:15,
+    marginHorizontal:isTablet?30:isSmallScreen?12:15,
     alignItems: 'center',
     width:'auto',
-    gap:2,
+    gap:4,
     // backgroundColor:'red'
   },
   imageWrapper: {
     position: 'relative', // Required to layer text on top of image
-    width: 160, // Adjust based on your image size
-    height: 100, // Adjust based on your image size
+    width:isSmallScreen?170: 160, // Adjust based on your image size
+    height: isSmallScreen?80:100, // Adjust based on your image size
   },
   textOverlay: {
     position: 'absolute',
@@ -370,12 +370,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   numberText: {
-    fontSize: 36,
+    fontSize: isSmallScreen?32:36,
     color: '#fff', // White color for better contrast
     fontWeight: 'bold',
   },
   descriptionText: {
-    fontSize: 16,
+    fontSize: isSmallScreen?14:16,
     color: '#fff', // White color for better contrast
     fontWeight: '400',
   },
@@ -390,8 +390,8 @@ const styles = StyleSheet.create({
     marginHorizontal:isTablet?30: 15,
     marginVertical:20,
     borderRadius:25,
-    padding:10,
-    height:'auto',
+    padding:isSmallScreen?8:10,
+    height:isSmallScreen?110:'auto',
     width: 'auto',
     // backgroundColor:'#E7E7E7',
     backgroundColor:'#E0E0E0',
