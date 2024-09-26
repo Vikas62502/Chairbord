@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -11,74 +11,78 @@ import {
   TouchableOpacity,
   View,
   Platform,
-  Dimensions
-} from 'react-native'
-import InputText from '../components/common/InputText'
-import SecondaryButton from '../components/common/SecondaryButton'
-import DividerWithText from '../components/common/DividerWithText'
-import { useNavigation } from '@react-navigation/native'
-import OverlayHeader from '../components/OverlayHeader'
-import VerifyOTP from './opt/VerifyOTP'
-import Loader from '../components/ui/Loader'
-import { client } from '../client/Axios'
-import { setCache } from '../helper/Storage'
+  Dimensions,
+  Image // Import Image component
+} from 'react-native';
+import InputText from '../components/common/InputText';
+import SecondaryButton from '../components/common/SecondaryButton';
+import DividerWithText from '../components/common/DividerWithText';
+import { useNavigation } from '@react-navigation/native';
+import OverlayHeader from '../components/OverlayHeader';
+import VerifyOTP from './opt/VerifyOTP';
+import Loader from '../components/ui/Loader';
+import { client } from '../client/Axios';
+import { setCache } from '../helper/Storage';
 
-const { width, height } = Dimensions.get('window')
-const isTablet = width > 768
-const isSmallScreen = width <= 420
+// Import the custom icons from the access folder
+import EyeIcon from '../assets/eye.png'; // Path to eye icon
+import EyeOffIcon from '../assets/eye-off.png'; // Path to eye-off icon
+
+const { width, height } = Dimensions.get('window');
+const isTablet = width > 768;
+const isSmallScreen = width < 400;
+
 const SignIn = () => {
-  const [active, setActive] = useState('password')
-  const [showOtpField, setShowOtpField] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [active, setActive] = useState('password');
+  const [showOtpField, setShowOtpField] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     phoneNumber: ''
-  })
+  });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Manage password visibility
 
   const handleLinkPress = (url) => {
-    Linking.openURL(url)
-  }
-  const navigation = useNavigation()
+    Linking.openURL(url);
+  };
+
+  const navigation = useNavigation();
 
   const loginApi = async () => {
-    setLoading(true)
+    setLoading(true);
     let bodyContent = JSON.stringify({
       email: formData.email,
       password: formData.password
-    })
+    });
 
     try {
-      let response = await client.post('/login/agent', bodyContent)
-      await setCache('userData', response?.data)
-      await setCache('token', response?.data?.token)
-      navigation.navigate('permissions')
+      let response = await client.post('/login/agent', bodyContent);
+      await setCache('userData', response?.data);
+      await setCache('token', response?.data?.token);
+      navigation.navigate('drawer');
     } catch (error) {
-      Alert.alert(
-        'Either Id or password is Wrong !!',
-        'Please try again later',
-        [
-          {
-            text: 'OK',
-            style: 'cancel'
-          }
-        ]
-      )
+      Alert.alert('Either Id or password is Wrong !!', 'Please try again later', [
+        {
+          text: 'OK',
+          style: 'cancel'
+        }
+      ]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getOtpByPhoneNumber = async () => {
-    setLoading(true)
+    setLoading(true);
     let bodyContent = JSON.stringify({
       phoneNumber: formData.phoneNumber
-    })
+    });
 
     try {
-      let response = await client.post('/login/agent-mobile', bodyContent)
-      console.log(response)
-      setShowOtpField(true)
+      let response = await client.post('/login/agent-mobile', bodyContent);
+      console.log(response);
+      setShowOtpField(true);
     } catch (error) {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
@@ -86,12 +90,12 @@ const SignIn = () => {
           onPress: () => navigation?.navigate('SignIn'),
           style: 'cancel'
         }
-      ])
-      console.log(error, 'error')
+      ]);
+      console.log(error, 'error');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -116,48 +120,6 @@ const SignIn = () => {
               Please enter your account details here
             </Text>
           </View>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <View style={styles.tabContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.tabSection,
-                  active === 'password' && styles.activeState
-                ]}
-                onPress={() => setActive('password')}
-              >
-                <Text
-                  style={[
-                    styles.tabContent,
-                    active === 'password' && styles.activeContent
-                  ]}
-                >
-                  Password
-                </Text>
-              </TouchableOpacity>
-              <View style={styles.verticalDivider} />
-              <TouchableOpacity
-                onPress={() => setActive('otp')}
-                style={[
-                  styles.tabSection,
-                  active === 'otp' && styles.activeState
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.tabContent,
-                    active === 'otp' && styles.activeContent
-                  ]}
-                >
-                  OTP
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
 
           <View style={styles.container}>
             {active === 'password' ? (
@@ -170,14 +132,28 @@ const SignIn = () => {
                     setFormData({ ...formData, email: email.toLowerCase() })
                   }
                 />
-                <InputText
-                  value={formData.password}
-                  placeholder={'Password'}
-                  secure={true}
-                  onChangeText={(pass) =>
-                    setFormData({ ...formData, password: pass })
-                  }
-                />
+
+                {/* Password Input with Eye Icon */}
+                <View style={styles.passwordContainer}>
+                  <InputText
+                    value={formData.password}
+                    placeholder={'Password'}
+                    secure={!isPasswordVisible} // Hide/Show password based on isPasswordVisible
+                    onChangeText={(pass) =>
+                      setFormData({ ...formData, password: pass })
+                    }
+                    style={styles.passwordInput}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                    style={styles.eyeIconContainer}
+                  >
+                    <Image
+                      source={isPasswordVisible ? EyeOffIcon : EyeIcon} // Toggle between eye and eye-off icon
+                      style={[styles.eyeIcon, { tintColor: 'gray'  }]} // Change icon color based on focus
+                    />
+                  </TouchableOpacity>
+                </View>
 
                 <Pressable>
                   <Text
@@ -187,10 +163,11 @@ const SignIn = () => {
                     Forgot your Password?
                   </Text>
                 </Pressable>
-                <View style={{}}>
+
+                <View>
                   <SecondaryButton
                     title={'Sign In'}
-                    disable={true}
+                    disable={false}
                     onPress={() => loginApi()}
                   />
                 </View>
@@ -233,15 +210,10 @@ const SignIn = () => {
               <View>
                 <DividerWithText />
 
-                {/* <Text style={styles.text}>
-                  Dont't have an account?
-                </Text> */}
-                <View style={{}}>
-                  <SecondaryButton
-                    title={'Sign Up'}
-                    onPress={() => navigation.navigate('register')}
-                  />
-                </View>
+                <SecondaryButton
+                  title={'Sign Up'}
+                  onPress={() => navigation.navigate('register')}
+                />
                 <View style={styles.termsContainer}>
                   <Text style={styles.termsText}>
                     By signing up you accept the {'\n'}
@@ -272,85 +244,66 @@ const SignIn = () => {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     padding: '5%',
-    paddingVertical: isSmallScreen ? '1%' : '0%'
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    width: isSmallScreen ? '70%' : '80%',
-    marginTop: isSmallScreen ? 6 : 10
-  },
-  verticalDivider: {
-    height: '100%',
-    width: 2,
-    backgroundColor: '#CCCCCC'
-  },
-  text: {
-    color: '#263238',
-    marginBottom: isSmallScreen ? '3%' : '5%',
-    textAlign: 'center'
+    paddingVertical: 20
   },
   heading: {
     color: '#000000',
     fontWeight: '600',
     fontSize: isSmallScreen ? 26 : 32,
     lineHeight: isSmallScreen ? 32 : 38,
-    marginTop: 10
-  },
-  tabSection: {
-    width: '50%'
-  },
-  activeState: {
-    borderBottomColor: '#000000',
-    borderBottomWidth: 2
-  },
-  tabContent: {
-    fontWeight: '400',
-    fontSize: isSmallScreen ? 16 : 20,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: '#A6A6A6'
-  },
-  activeContent: {
-    color: '#000000'
+    marginTop: 10,
   },
   content: {
     fontWeight: '400',
     fontSize: 12,
     color: '#263238',
-    fontFamily: 'inter'
+  },
+  text: {
+    color: '#263238',
+    marginBottom: isSmallScreen ? '3%' : '5%',
+    textAlign: 'center',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  eyeIconContainer: {
+    position: 'absolute',
+    right: 10,
+    padding: 10,
+    justifyContent:'center',
+  },
+  eyeIcon: {
+    width: 20,
+    marginBottom:4,
+    height: 18, // Adjust size based on your icon's dimensions
   },
   termsContainer: {
     marginTop: '2%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   termsText: {
     color: '#263238',
-    fontFamily: 'inter',
     fontSize: 12,
     lineHeight: 16,
     textAlign: 'center',
-    justifyContent: 'center'
   },
   link: {
     color: '#0693D9',
-    textDecorationLine: 'none',
-    lineHeight: 16,
-    fontFamily: 'inter',
-    fontWeight: '400',
     fontSize: 12,
     textAlign: 'center',
-    justifyContent: 'center'
-  }
-})
+  },
+});
 
-export default SignIn
+export default SignIn;

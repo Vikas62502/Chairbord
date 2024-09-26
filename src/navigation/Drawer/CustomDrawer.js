@@ -41,11 +41,11 @@ const data = [
         icon: require('../../assets/DrawerNavigation/dashboard.png'),
         screen: 'dashboard'
     },
-    {
-        title: 'permissions',
-        icon: require('../../assets/DrawerNavigation/requests.png'),
-        screen: 'permissions'
-    },
+    // {
+    //     title: 'permissions',
+    //     icon: require('../../assets/DrawerNavigation/requests.png'),
+    //     screen: 'permissions'
+    // },
     {
         title: 'Wallet',
         icon: require('../../assets/DrawerNavigation/wallet.png'),

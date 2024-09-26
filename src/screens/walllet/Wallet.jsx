@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, RefreshControl,SafeAreaView, Pressable, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, RefreshControl,SafeAreaView, Pressable, ScrollView, TextInput,Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import WalletCards from './WalletCards';
 import walletCardData from './WalletCardData';
@@ -6,7 +6,9 @@ import FilterTags from './FilterTags';
 import { client } from '../../client/Axios';
 import getDate from '../../utils/getDate';
 import OverlayHeader from '../../components/OverlayHeader';
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const Wallet = (props) => {
   const [searchText, setSearchText] = useState('');
   const [activeTag, setActiveTag] = useState('All');
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 22,
     borderWidth: 1,
-    width:'80%',
+    width:isSmallScreen?'78%':'80%',
     borderColor: '#858585',
     paddingHorizontal: 20,
     paddingVertical: 5
