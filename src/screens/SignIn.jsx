@@ -23,7 +23,7 @@ import VerifyOTP from './opt/VerifyOTP';
 import Loader from '../components/ui/Loader';
 import { client } from '../client/Axios';
 import { setCache } from '../helper/Storage';
-
+import { request, PERMISSIONS, check } from 'react-native-permissions';
 // Import the custom icons from the access folder
 import EyeIcon from '../assets/eye.png'; // Path to eye icon
 import EyeOffIcon from '../assets/eye-off.png'; // Path to eye-off icon
@@ -48,25 +48,48 @@ const SignIn = () => {
   };
 
   const navigation = useNavigation();
+  const checkAllPermissions = async () => {
+    const permissionsToCheck = [
+      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      PERMISSIONS.ANDROID.CAMERA,
+      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+      PERMISSIONS.ANDROID.READ_CONTACTS,
+      PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+    ];
 
+    for (const permission of permissionsToCheck) {
+      const result = await check(permission);
+      if (result !== 'granted') {
+        return false; // If any permission is not granted, return false
+      }
+    }
+    return true; // All permissions are granted
+  };
   const loginApi = async () => {
     setLoading(true);
     let bodyContent = JSON.stringify({
       email: formData.email,
-      password: formData.password
+      password: formData.password,
     });
 
     try {
       let response = await client.post('/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
-      navigation.navigate('drawer');
+
+      // Check permissions before navigating
+      const allPermissionsGranted = await checkAllPermissions();
+      if (allPermissionsGranted) {
+        navigation.navigate('drawer'); // Navigate directly to the drawer if permissions are granted
+      } else {
+        navigation.navigate('permissions'); // Otherwise, navigate to permissions
+      }
     } catch (error) {
       Alert.alert('Either Id or password is Wrong !!', 'Please try again later', [
         {
           text: 'OK',
-          style: 'cancel'
-        }
+          style: 'cancel',
+        },
       ]);
     } finally {
       setLoading(false);
@@ -120,6 +143,49 @@ const SignIn = () => {
               Please enter your account details here
             </Text>
           </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.tabSection,
+                  active === 'password' && styles.activeState
+                ]}
+                onPress={() => setActive('password')}
+              >
+                <Text
+                  style={[
+                    styles.tabContent,
+                    active === 'password' && styles.activeContent
+                  ]}
+                >
+                  Password
+                </Text>
+              </TouchableOpacity>
+              <View style={styles.verticalDivider} />
+              <TouchableOpacity
+                onPress={() => setActive('otp')}
+                style={[
+                  styles.tabSection,
+                  active === 'otp' && styles.activeState
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.tabContent,
+                    active === 'otp' && styles.activeContent
+                  ]}
+                >
+                  OTP
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
 
           <View style={styles.container}>
             {active === 'password' ? (
@@ -258,6 +324,36 @@ const styles = StyleSheet.create({
     fontSize: isSmallScreen ? 26 : 32,
     lineHeight: isSmallScreen ? 32 : 38,
     marginTop: 10,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    width: isSmallScreen ? '70%' : '80%',
+    marginTop: isSmallScreen ? 6 : 10
+  },
+  verticalDivider: {
+    height: '100%',
+    width: 2,
+    backgroundColor: '#CCCCCC'
+  },
+  tabSection: {
+    width: '50%'
+  },
+  activeState: {
+    borderBottomColor: '#000000',
+    borderBottomWidth: 2
+  },
+  activeContent: {
+    color: '#000000'
+  },
+  tabContent: {
+    fontWeight: '400',
+    fontSize: isSmallScreen ? 16 : 20,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: '#A6A6A6'
   },
   content: {
     fontWeight: '400',
