@@ -423,7 +423,6 @@ const IssuanceCards = ({ data }) => {
                 ) : (
                   <Text>No Image</Text>
                 )}
-                <Button title="Download Image" onPress={downloadImage} />
               </View>
               <View style={{ height: 200, width: 345, gap: 7 }}>
                 <Text

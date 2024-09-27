@@ -49,9 +49,10 @@ const replacementReason = [
 
 const TagReplacementForm = (props: any) => {
   const { response, customerId, userData, sessionId: _sessionId } = props?.route?.params
+  console.log(props.route.params, 'props.route.params')
 
   console.log(response, customerId, userData, _sessionId, 'logged!')
-  console.log(response.vrnDetails)
+  console.log(response, "request id")
 
   const { mobileNo, walletId } = response.custDetails
 
@@ -77,8 +78,10 @@ const TagReplacementForm = (props: any) => {
   const [stateOfRegistration, setStateOfRegistration] = useState(response.vrnDetails.stateOfRegistration)
   const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
   const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
+  const [selectNationPermit, setSelectNationPermit] = useState(nationalPermit)
 
-  console.log(response, 'response')
+  console.log(selectNationPermit, 'selectNationPermit')
+
   console.log(vehicleDescriptor, 'vehicleDescriptor')
   console.log(stateOfRegistration, 'stateOfRegistration')
 
@@ -108,14 +111,14 @@ const TagReplacementForm = (props: any) => {
         agentId: parseInt(userInfo.user.id),
         masterId: parseInt(userInfo.user.master_id) || '',
         debitAmt: debitAmt,
-        requestId: parseInt(response.requestId),
+        requestId: response?.requestId,
         sessionId: _sessionId,
         serialNo: '608268-001-' + tagSerialNumber,
         reason: reasonOfReplacement,
         reasonDesc: description || '',
         chassisNo: chassisNo,
         engineNo: engineNo,
-        isNationalPermit: nationalPermit || '2',
+        isNationalPermit: selectNationPermit || '2',
         permitExpiryDate: permitExpiryDate || '',
         stateOfRegistration: stateOfRegistration || '',
         vehicleDescriptor: vehicleDescriptor || '',
@@ -242,7 +245,22 @@ const TagReplacementForm = (props: any) => {
               />
             </View>
           </View>
-          {nationalPermit === "1" && <View>
+
+          {nationalPermit === "0" && <View style={{ marginVertical: "5%" }}>
+            <CustomLabelText label={"National Permit"} />
+            <SelectField
+              dataToRender={[
+                { id: 1, title: 'Yes', code: '1' },
+                { id: 2, title: 'No', code: '2' }
+              ]}
+              title={'Select National Permit'}
+              selectedValue={(value: any) => setSelectNationPermit(value.code)}
+              borderColor={selectNationPermit === '0' ? "red" : "black"}
+            />
+          </View>}
+
+
+          {selectNationPermit === "1" && <View>
             <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
             <CustomInputText
               placeholder='DD-MM-YYYY'
@@ -252,6 +270,7 @@ const TagReplacementForm = (props: any) => {
               onChangeText={(text: string) => handleDateChange(text)}
               keyboardType='numeric'
               maxLength={10}
+              borderColor={!permitExpiryDate ? "red" : "black"}
             />
           </View>}
           {

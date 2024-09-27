@@ -50,6 +50,7 @@ const CustomerRegistration = (props: any) => {
     { title: 'Pancard', docType: 1 },
     { title: 'Driving License', docType: 2 },
     { title: 'Voter Id Card', docType: 3 },
+    { title: 'Passport', docType: 4 },
   ];
 
   const setDocumentDetails = (newDocType: number) => {
@@ -90,6 +91,7 @@ const CustomerRegistration = (props: any) => {
         udf5: "Sample UDF5"
       }
     }
+    console.log(`[request body] [${JSON.stringify(requestBodyData)}]`)
 
     try {
       const res = await client.post('/bajaj/createWallet', requestBodyData);

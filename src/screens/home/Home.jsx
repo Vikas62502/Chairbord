@@ -7,17 +7,17 @@ import {
   RefreshControl,
   ScrollView,
   Dimensions,
-  BackHandler, 
-  Alert 
+  BackHandler,
+  Alert
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SwipperComponent from './SwipperComponent'
-import { useNavigation, useFocusEffect  } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<400;
+const isSmallScreen = width < 400;
 // const DashboardCards = ({ title, subTitle, icon, router }) => {
 //   const navigation = useNavigation()
 
@@ -68,7 +68,7 @@ const DashboardCards2 = ({ title, subTitle, icon, router }) => {
       <View style={styles.iconContainer2}>
         <Image style={styles.icon2} source={icon} />
       </View>
-      
+
       <View style={styles.textContainer}>
         <Text style={styles.dashbordCardText2}>{title}</Text>
         <Text style={styles.dashbordCardText2}>{subTitle}</Text>
@@ -274,39 +274,39 @@ const styles = StyleSheet.create({
   //   width:'60%',
   //   height:isTablet?'60%':isSmallScreen?'55%':'50%'
   // },
-    dashboardCard2: {
-      width: width * 0.20, // responsive width
-      height:height * 0.12, // adjusted height for better spacing
-      // backgroundColor:'red',
-      alignItems: 'center', // center the content horizontally
-      justifyContent: 'flex-start', // center the content vertically
-    },
-    dashbordCardText2: {
-      fontWeight: '400',
-      fontSize: isTablet ? 24 :isSmallScreen?12: 14, // responsive font size
-      lineHeight: isTablet?28:18,
-      color: 'black',
-      textAlign: 'center', // center the text horizontally
-    },
-    iconContainer2: {
-      backgroundColor: '#02546D',
-      height: isTablet ? 80 : 50, // responsive height
-      width:isTablet?80: 50, // responsive width
-      borderRadius: 50,
-      alignItems: 'center', // center the icon within the container
-      justifyContent: 'center', // center the icon within the container
-      marginBottom:isTablet?12: 8, // space between icon and text
-    },
-    icon2: {
-      width:'55%',
-      height:'55%',
-    },
-    textContainer: {
-      alignItems: 'center', // center text container horizontally
-    },
-  
+  dashboardCard2: {
+    width: width * 0.20, // responsive width
+    height: height * 0.12, // adjusted height for better spacing
+    // backgroundColor:'red',
+    alignItems: 'center', // center the content horizontally
+    justifyContent: 'flex-start', // center the content vertically
+  },
+  dashbordCardText2: {
+    fontWeight: '400',
+    fontSize: isTablet ? 24 : isSmallScreen ? 12 : 14, // responsive font size
+    lineHeight: isTablet ? 28 : 18,
+    color: 'black',
+    textAlign: 'center', // center the text horizontally
+  },
+  iconContainer2: {
+    backgroundColor: '#02546D',
+    height: isTablet ? 80 : 50, // responsive height
+    width: isTablet ? 80 : 50, // responsive width
+    borderRadius: 50,
+    alignItems: 'center', // center the icon within the container
+    justifyContent: 'center', // center the icon within the container
+    marginBottom: isTablet ? 12 : 8, // space between icon and text
+  },
+  icon2: {
+    width: '55%',
+    height: '55%',
+  },
+  textContainer: {
+    alignItems: 'center', // center text container horizontally
+  },
+
   dividerContainer: {
-    alignItems: 'center', 
+    alignItems: 'center',
     marginTop: '1%'
   },
   divider: {
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: 'white',
     marginTop: '5%',
-    marginHorizontal: isTablet?25:10,
-    padding: isTablet?12:4
+    marginHorizontal: isTablet ? 25 : 10,
+    padding: isTablet ? 12 : 4
   },
   timeFields: {
     flex: 1,
@@ -331,34 +331,34 @@ const styles = StyleSheet.create({
 
   },
   gradient: {
-    borderRadius: isTablet?50: 25
+    borderRadius: isTablet ? 50 : 25
   },
   timeText: {
     color: '#000000',
-    fontSize: isTablet?28:16, // responsive font size
-    lineHeight:isTablet?32: 19,
+    fontSize: isTablet ? 28 : 16, // responsive font size
+    lineHeight: isTablet ? 32 : 19,
     fontWeight: '600',
-    margin: isTablet?20:15,
+    margin: isTablet ? 20 : 15,
   },
   activeTimeText: {
     color: 'white',
-    paddingHorizontal: isTablet?'22%':'15%',
+    paddingHorizontal: isTablet ? '22%' : '15%',
     borderRadius: 50,
     fontFamily: 'Proxima Nova'
   },
   imageRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal:isTablet?30:isSmallScreen?12:15,
+    marginHorizontal: isTablet ? 30 : isSmallScreen ? 12 : 15,
     alignItems: 'center',
-    width:'auto',
-    gap:4,
+    width: 'auto',
+    gap: 4,
     // backgroundColor:'red'
   },
   imageWrapper: {
     position: 'relative', // Required to layer text on top of image
-    width:isSmallScreen?170: 160, // Adjust based on your image size
-    height: isSmallScreen?80:100, // Adjust based on your image size
+    width: isSmallScreen ? 170 : 160, // Adjust based on your image size
+    height: isSmallScreen ? 80 : 100, // Adjust based on your image size
   },
   textOverlay: {
     position: 'absolute',
@@ -370,31 +370,31 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   numberText: {
-    fontSize: isSmallScreen?32:36,
+    fontSize: isSmallScreen ? 32 : 36,
     color: '#fff', // White color for better contrast
     fontWeight: 'bold',
   },
   descriptionText: {
-    fontSize: isSmallScreen?14:16,
+    fontSize: isSmallScreen ? 14 : 16,
     color: '#fff', // White color for better contrast
     fontWeight: '400',
   },
   image: {
-    width: isTablet ? width * 0.42:width*0.39, // responsive width
-    height:isTablet ? height * 0.2 : height * 0.12, // responsive height
+    width: isTablet ? width * 0.42 : width * 0.39, // responsive width
+    height: isTablet ? height * 0.2 : height * 0.12, // responsive height
     resizeMode: 'contain',
   },
   cardsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal:isTablet?30: 15,
-    marginVertical:20,
-    borderRadius:25,
-    padding:isSmallScreen?8:10,
-    height:isSmallScreen?110:'auto',
+    marginHorizontal: isTablet ? 30 : 15,
+    marginVertical: 20,
+    borderRadius: 25,
+    padding: isSmallScreen ? 8 : 10,
+    height: isSmallScreen ? 110 : 'auto',
     width: 'auto',
     // backgroundColor:'#E7E7E7',
-    backgroundColor:'#E0E0E0',
+    backgroundColor: '#E0E0E0',
     justifyContent: 'space-between'
   },
 })

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, RefreshControl,SafeAreaView, Pressable, ScrollView, TextInput,Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, RefreshControl, SafeAreaView, Pressable, ScrollView, TextInput, Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import WalletCards from './WalletCards';
 import walletCardData from './WalletCardData';
@@ -8,7 +8,7 @@ import getDate from '../../utils/getDate';
 import OverlayHeader from '../../components/OverlayHeader';
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<400;
+const isSmallScreen = width < 400;
 const Wallet = (props) => {
   const [searchText, setSearchText] = useState('');
   const [activeTag, setActiveTag] = useState('All');
@@ -62,115 +62,115 @@ const Wallet = (props) => {
         title={'Wallet'}
         showBackButton={true}
       />
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      
-      <View style={{ padding: '5%' }}>
-        <View style={styles.balanceCard}>
-          <Text style={styles.balanceText}>Balance</Text>
-          <Text style={styles.amountText}>
-          &#x20B9;{walletDetails?.agent?.balance || 0}
-          </Text>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
 
-          <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
-            <Pressable
-              onPress={() =>
-                props.navigation.navigate('topupWallet', {
-                  walletBalance: walletDetails?.agent?.balance || 0
-                })
-              }
-            >
-              <Image
-                source={require('../../assets/screens/wallet/topUp.png')}
-              />
-              <Text style={styles.tagText}>Top up</Text>
-            </Pressable>
+        <View style={{ padding: '5%' }}>
+          <View style={styles.balanceCard}>
+            <Text style={styles.balanceText}>Balance</Text>
+            <Text style={styles.amountText}>
+              &#x20B9;{walletDetails?.agent?.balance || 0}
+            </Text>
 
-            <View>
-              <Image source={require('../../assets/screens/wallet/dowload.png')} />
-              <Text style={styles.tagText}>Statement</Text>
+            <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
+              <Pressable
+                onPress={() =>
+                  props.navigation.navigate('topupWallet', {
+                    walletBalance: walletDetails?.agent?.balance || 0
+                  })
+                }
+              >
+                <Image
+                  source={require('../../assets/screens/wallet/topUp.png')}
+                />
+                <Text style={styles.tagText}>Top up</Text>
+              </Pressable>
+
+              <View>
+                <Image source={require('../../assets/screens/wallet/dowload.png')} />
+                <Text style={styles.tagText}>Statement</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.searchAndfilter}>
-          <View style={styles.searchField}>
-            <Image
-              source={require('../../assets/screens/wallet/search.png')}
-              style={styles.searchIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Search"
-              placeholderTextColor={'#9A9A9A'}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
-          </View>
-          <Pressable
-            onPress={() => setShowFilterModal(true)}
-            style={styles.filterLogo}
-          >
-            <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height:30 ,width:30}} />
-          </Pressable>
-        </View>
-      </View>
-
-      <View style={styles.transactionContainer}>
-        <Text style={styles.transactionText}>Transaction</Text>
-
-        <ScrollView horizontal={true}>
-          {tagsData.map((data, index) => (
+          <View style={styles.searchAndfilter}>
+            <View style={styles.searchField}>
+              <Image
+                source={require('../../assets/screens/wallet/search.png')}
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Search"
+                placeholderTextColor={'#9A9A9A'}
+                value={searchText}
+                onChangeText={setSearchText}
+              />
+            </View>
             <Pressable
-              style={[
-                styles.tags,
-                activeTag === data ? styles.activeTag : null
-              ]}
-              key={index}
-              onPress={() => setActiveTag(data)}
+              onPress={() => setShowFilterModal(true)}
+              style={styles.filterLogo}
             >
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: activeTag === data ? 'white' : '#263238',
-                  textAlignVertical: 'center'
-                }}
-              >
-                {data}
-              </Text>
+              <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height: 30, width: 30 }} />
             </Pressable>
-          ))}
-        </ScrollView>
-
-        <View>
-          {filteredTransactions?.map((data, index) => (
-            <WalletCards
-              key={index}
-              logo={data.logo}
-              title={data.reason}
-              reason={data.reason}
-              amountValue={data.amount}
-              type={data.type}
-              ID={data.transactionId}
-              RefNo={data.RefNo}
-              date={data.updatedAt}
-              time={data.updatedAt}
-            />
-          ))}
+          </View>
         </View>
-      </View>
 
-      {/* Filter modal */}
-      <FilterTags
-        visible={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
-      />
-      
-    </ScrollView>
+        <View style={styles.transactionContainer}>
+          <Text style={styles.transactionText}>Transaction</Text>
+
+          <ScrollView horizontal={true}>
+            {tagsData.map((data, index) => (
+              <Pressable
+                style={[
+                  styles.tags,
+                  activeTag === data ? styles.activeTag : null
+                ]}
+                key={index}
+                onPress={() => setActiveTag(data)}
+              >
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: activeTag === data ? 'white' : '#263238',
+                    textAlignVertical: 'center'
+                  }}
+                >
+                  {data}
+                </Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+
+          <View>
+            {filteredTransactions?.map((data, index) => (
+              <WalletCards
+                key={index}
+                logo={data.logo}
+                title={data.reason}
+                reason={data.reason}
+                amountValue={data.amount}
+                type={data.type}
+                ID={data.transactionId}
+                RefNo={data.RefNo}
+                date={data.updatedAt}
+                time={data.updatedAt}
+              />
+            ))}
+          </View>
+        </View>
+
+        {/* Filter modal */}
+        <FilterTags
+          visible={showFilterModal}
+          onClose={() => setShowFilterModal(false)}
+        />
+
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 22,
     borderWidth: 1,
-    width:isSmallScreen?'78%':'80%',
+    width: isSmallScreen ? '78%' : '80%',
     borderColor: '#858585',
     paddingHorizontal: 20,
     paddingVertical: 5
