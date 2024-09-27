@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  PermissionsAndroid,
-  Platform,
   Alert,
-  Linking,
+  TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import SecondaryButton from './common/SecondaryButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  request,
+  check,
+  PERMISSIONS,
+  RESULTS,
+  requestNotifications
+} from 'react-native-permissions';
 
 const Permissions = () => {
   const navigation = useNavigation();
@@ -23,89 +30,95 @@ const Permissions = () => {
   const [notificationChecked, setNotificationChecked] = useState(false);
   const [storageChecked, setStorageChecked] = useState(false);
   const [contactChecked, setContactChecked] = useState(false);
-  const [allPermissionsGranted, setAllPermissionsGranted] = useState(false);
+  const [currentPermissionIndex, setCurrentPermissionIndex] = useState(0); // Track the current permission index
 
-  // Function to request a specific permission and update its state
-  const requestPermission = async (permission, setChecked) => {
-    try {
-      const granted = await PermissionsAndroid.request(permission);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+
+  // Function to request permission and set state based on result
+  const permissions = [
+    { name: 'Location access', permission: Platform.OS === 'android' ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, setChecked: setLocationChecked },
+    { name: 'Camera access', permission: Platform.OS === 'android' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.IOS.CAMERA, setChecked: setCameraChecked },
+    { name: 'Storage access', permission: Platform.OS === 'android' ? (Platform.Version >= 33 ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE) : PERMISSIONS.IOS.PHOTO_LIBRARY, setChecked: setStorageChecked },
+    { name: 'Contact access', permission: Platform.OS === 'android' ? PERMISSIONS.ANDROID.READ_CONTACTS : PERMISSIONS.IOS.CONTACTS, setChecked: setContactChecked },
+    { name: 'Notification access', permission: PERMISSIONS.ANDROID.POST_NOTIFICATIONS, setChecked: setNotificationChecked },
+  ];
+
+  // Function to request permission and set state based on result
+  const askPermission = async (index) => {
+    const { permission, setChecked } = permissions[index];
+    const result = await request(permission);
+    if (result === RESULTS.GRANTED) {
+      console.log(`Permission granted for: ${permission}`);
+      setChecked(true);
+    } else {
+      console.log(`Permission denied for: ${permission}`);
+      setChecked(false);
+    }
+    // Move to the next permission if granted
+    if (result === RESULTS.GRANTED && index + 1 < permissions.length) {
+      setCurrentPermissionIndex(index + 1);
+      askPermission(index + 1); // Request next permission
+    }
+  };
+
+  
+  // Function to handle manual permission requests
+  const requestSpecificPermission = (index) => {
+    const { permission, setChecked } = permissions[index];
+    request(permission).then((result) => {
+      if (result === RESULTS.GRANTED) {
+        console.log(`Permission granted for: ${permission}`);
         setChecked(true);
       } else {
+        console.log(`Permission denied for: ${permission}`);
         setChecked(false);
-        Alert.alert(
-          'Permission Denied',
-          'To enable this permission, go to settings and allow it.',
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Go to Settings', onPress: () => Linking.openSettings() },
-          ]
-        );
       }
-    } catch (err) {
-      console.warn(err);
-    }
+    }).catch((error) => {
+      console.error(`Error requesting permission: ${permission}`, error);
+    });
   };
 
-  // Function to check if the permission is already granted
-  const checkPermissionStatus = async (permission, setChecked) => {
-    try {
-      const granted = await PermissionsAndroid.check(permission);
-      setChecked(granted);
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+  useEffect(() => {
+    const checkStoredPermissions = async () => {
+      const storedPermissions = await AsyncStorage.getItem('permissions');
+      if (storedPermissions) {
+        const { location, camera, notification, storage, contact } = JSON.parse(storedPermissions);
+        setLocationChecked(location);
+        setCameraChecked(camera);
+        setNotificationChecked(notification);
+        setStorageChecked(storage);
+        setContactChecked(contact);
+      } else {
+        askPermission(currentPermissionIndex);
+      }
+    };
+    checkStoredPermissions();
+  }, []);
 
-  // Function to check if all required permissions are granted
-  const checkAllPermissionsGranted = () => {
+
+  const handleGrantPermissions =async () => {
     if (
       locationChecked &&
       cameraChecked &&
+      notificationChecked &&
       storageChecked &&
-      contactChecked &&
-      notificationChecked
+      contactChecked
     ) {
-      setAllPermissionsGranted(true);
-    } else {
-      setAllPermissionsGranted(false);
-    }
-  };
-
-  // Use effect to check permissions status on component mount
-  useEffect(() => {
-    if (Platform.OS === 'android') {
-      checkPermissionStatus(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        setLocationChecked
-      );
-      checkPermissionStatus(PermissionsAndroid.PERMISSIONS.CAMERA, setCameraChecked);
-      checkPermissionStatus(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        setStorageChecked
-      );
-      checkPermissionStatus(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-        setContactChecked
-      );
-      // Assume notifications are granted by default here
-      setNotificationChecked(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    checkAllPermissionsGranted();
-  }, [locationChecked, cameraChecked, storageChecked, contactChecked, notificationChecked]);
-
-  const handleGrantPermissions = () => {
-    if (!allPermissionsGranted) {
-      requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, setLocationChecked);
-      requestPermission(PermissionsAndroid.PERMISSIONS.CAMERA, setCameraChecked);
-      requestPermission(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, setStorageChecked);
-      requestPermission(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, setContactChecked);
-      // Handle notifications permission differently if needed
-    } else {
+      await AsyncStorage.setItem('permissions', JSON.stringify({
+        location: true,
+        camera: true,
+        notification: true,
+        storage: true,
+        contact: true,
+      }));
       navigation.navigate('drawer');
+      // Navigate if all permissions are granted
+    } else {
+      Alert.alert(
+        "Permissions Required",
+        "Please grant all permissions to continue.",
+        [{ text: "OK" }]
+      );
     }
   };
 
@@ -116,73 +129,34 @@ const Permissions = () => {
           source={require('../assets/homeScreen/permissions.png')}
           style={styles.image}
         />
-        <Text style={styles.heading}>To get started, we need your permissions:</Text>
+        <Text style={styles.heading}>
+          To get started, we need your permissions:
+        </Text>
         <View style={{ justifyContent: 'flex-start', marginVertical: 10 }}>
-          <View style={styles.permissionItem}>
-            <CheckBox
-              value={locationChecked}
-              onValueChange={() =>
-                requestPermission(
-                  PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                  setLocationChecked
-                )
-              }
-              tintColors={{ true: '#02546D', false: 'grey' }}
-            />
-            <Text style={styles.font}>Location access</Text>
-          </View>
-
-          <View style={styles.permissionItem}>
-            <CheckBox
-              value={cameraChecked}
-              onValueChange={() =>
-                requestPermission(PermissionsAndroid.PERMISSIONS.CAMERA, setCameraChecked)
-              }
-              tintColors={{ true: '#02546D', false: 'grey' }}
-            />
-            <Text style={styles.font}>Camera access</Text>
-          </View>
-
-          <View style={styles.permissionItem}>
-            <CheckBox
-              value={storageChecked}
-              onValueChange={() =>
-                requestPermission(
-                  PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                  setStorageChecked
-                )
-              }
-              tintColors={{ true: '#02546D', false: 'grey' }}
-            />
-            <Text style={styles.font}>Storage access</Text>
-          </View>
-
-          <View style={styles.permissionItem}>
-            <CheckBox
-              value={contactChecked}
-              onValueChange={() =>
-                requestPermission(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, setContactChecked)
-              }
-              tintColors={{ true: '#02546D', false: 'grey' }}
-            />
-            <Text style={styles.font}>Contact access</Text>
-          </View>
-
-          <View style={styles.permissionItem}>
-            <CheckBox
-              value={notificationChecked}
-              onValueChange={() => setNotificationChecked(!notificationChecked)} // Assuming notifications are enabled by default
-              tintColors={{ true: '#02546D', false: 'grey' }}
-            />
-            <Text style={styles.font}>Notification access</Text>
-          </View>
+          {permissions.map((perm, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.permissionItem}
+              onPress={() => requestSpecificPermission(index)} // Request specific permission on click
+            >
+              <CheckBox
+                value={index === 0 ? locationChecked : (index === 1 ? cameraChecked : (index === 2 ? storageChecked : (index === 3 ? contactChecked : notificationChecked)))}
+                tintColors={{ true: '#02546D', false: 'grey' }}
+                disabled={false} // Enable direct clicking
+              />
+              <Text style={styles.font}>{perm.name}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
         <SecondaryButton
           onPress={handleGrantPermissions}
-          title={allPermissionsGranted ? 'Start' : 'Grant Permissions'}
+          title={'Start'}
+          disabled={
+            !(locationChecked && cameraChecked && notificationChecked && storageChecked && contactChecked)
+          }
         />
       </View>
     </SafeAreaView>
@@ -232,7 +206,8 @@ const styles = StyleSheet.create({
     padding: 20, // Add padding around the button
     width: '100%',
     alignItems: 'center', // Center button horizontally
-  },
-});
+  }
+})
 
-export default Permissions;
+export default Permissions
+
