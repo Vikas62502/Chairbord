@@ -22,6 +22,7 @@ import {
   CFThemeBuilder
 } from 'cashfree-pg-api-contract'
 import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
+import { getCache } from '../../helper/Storage'
 
 const TopupWallet = (props) => {
   const walletBalance = props?.route?.params?.walletBalance
@@ -46,7 +47,7 @@ const TopupWallet = (props) => {
 
     const onVerify = (orderId) => {
       console.log('Payment Successful:', orderId)
-      topupBalanceBackend()
+      // topupBalanceBackend()
       updateStatus(orderId)
       props.navigation.navigate('wallet')
     }
@@ -79,6 +80,7 @@ const TopupWallet = (props) => {
       order_id: response.data.order_id,
       order_expiry_time: response.data.order_expiry_time
     })
+    await savingUserAndOrderInfo(response.data.order_id);
   }
 
   const topUpApi = async () => {
@@ -135,6 +137,21 @@ const TopupWallet = (props) => {
       console.log('Balance updated:', res)
     } catch (e) {
       console.error('Error updating balance:', e)
+    }
+  }
+
+  const savingUserAndOrderInfo = async (orderId) => {
+    try {
+      const userData = await getCache('userData');
+      const agentId = userData.user.id;
+      console.log("orderId is ", orderId);
+      const res = await client.post('cashfree/save-user-and-order-info', {
+        order_id : orderId,
+        user_id : agentId
+      })
+      console.log('Info updated in backend: ', res)
+    } catch (e) {
+      console.error('Error updating info in backend:', e)
     }
   }
   
