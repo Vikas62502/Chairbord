@@ -78,7 +78,8 @@ const SignIn = () => {
       await setCache('token', response?.data?.token);
 
       // Check permissions before navigating
-      const allPermissionsGranted = await checkAllPermissions();
+      // const allPermissionsGranted = await checkAllPermissions();
+      const allPermissionsGranted = true;
       if (allPermissionsGranted) {
         navigation.navigate('drawer'); // Navigate directly to the drawer if permissions are granted
       } else {
