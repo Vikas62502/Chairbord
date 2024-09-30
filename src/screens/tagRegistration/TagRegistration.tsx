@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -44,7 +44,8 @@ const TagRegistration = (props: any) => {
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
     const [errors, setErrors] = useState<any>({})
-    console.log(vehicleIscommercial, "commerical status")
+    const [stateCode, setStateCode] = useState("")
+    console.log(stateOfRegistration, "stateOfRegistration")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -91,14 +92,14 @@ const TagRegistration = (props: any) => {
             title: "Wallet balance",
             value: `: ₹${vrnDetails?.rechargeAmount}`
         },
-        {
-            title: "First time load balance",
-            value: `: ₹${vrnDetails?.rechargeAmount}`
-        },
-        {
-            title: "Total cost",
-            value: `: ₹${vrnDetails?.rechargeAmount}`
-        }
+        // {
+        //     title: "First time load balance",
+        //     value: `: ₹${vrnDetails?.rechargeAmount}`
+        // },
+        // {
+        //     title: "Total cost",
+        //     value: `: ₹${vrnDetails?.rechargeAmount}`
+        // }
     ]
 
     const customerDetailsData = [
@@ -190,7 +191,7 @@ const TagRegistration = (props: any) => {
                     "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
                     "isNationalPermit": nationalpermit || vrnDetails?.isNationalPermit || "2",
                     "permitExpiryDate": permitExpiryDate || vrnDetails?.permitExpiryDate,
-                    "stateOfRegistration": vrnDetails?.stateOfRegistration || stateOfRegistration,
+                    "stateOfRegistration": stateCode || vrnDetails?.stateOfRegistration || stateOfRegistration,
                 },
                 "custDetails": {
                     "name": custDetails?.name || CustomerRegData?.name,
@@ -207,6 +208,7 @@ const TagRegistration = (props: any) => {
                     "udf5": ""
                 }
             })
+            console.log(bodyData, "bodyData")
 
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
@@ -410,6 +412,13 @@ const TagRegistration = (props: any) => {
                             dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
                     </View>
 
+                }
+                {
+                    stateOfRegistration === 'TELANGANA' && <View style={{ marginVertical: "5%" }}>
+                        <CustomLabelText label={"Select State Code"} />
+                        <SelectField
+                            dataToRender={telanganaStateCode} title={'Select Vehicle State'} selectedValue={(value: any) => setStateCode(value.code)} borderColor={!stateCode ? "red" : "black"} />
+                    </View>
                 }
 
                 <View style={styles.dataDetailContainer}>

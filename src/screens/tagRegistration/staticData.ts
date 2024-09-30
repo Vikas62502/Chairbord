@@ -155,7 +155,7 @@ export const stateData = [
     { id: 21, title: "Rajasthan", code: "RJ" },
     { id: 22, title: "Sikkim", code: "SK" },
     { id: 23, title: "Tamil Nadu", code: "TN" },
-    { id: 24, title: "Telangana", code: "TG" },
+    { id: 24, title: "Telangana", code: "TELANGANA" },
     { id: 25, title: "Tripura", code: "TR" },
     { id: 26, title: "Uttar Pradesh", code: "UP" },
     { id: 27, title: "Uttarakhand", code: "UK" },
@@ -170,3 +170,9 @@ export const stateData = [
     { id: 36, title: "Lakshadweep", code: "LD" },
     { id: 37, title: "Puducherry", code: "PY" },
 ];
+
+
+export const telanganaStateCode = [
+    { id: 1, title: "TG", code: "TG" },
+    { id: 2, title: 'TL', code: 'TL' },
+]
