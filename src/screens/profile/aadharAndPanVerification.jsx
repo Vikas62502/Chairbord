@@ -154,7 +154,7 @@ const AadharAndPanVerification = (props) => {
                 >
                   <Image
                     source={{ uri: files.aadharFront.uri }}
-                    style={{ height: 200, width: '100%' }}
+                    style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                   />
                 </Pressable>
               ) : (
@@ -176,7 +176,7 @@ const AadharAndPanVerification = (props) => {
                 >
                   <Image
                     source={{ uri: files.aadharBack.uri }}
-                    style={{ height: 200, width: '100%' }}
+                    style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                   />
                 </Pressable>
               ) : (
@@ -227,7 +227,7 @@ const AadharAndPanVerification = (props) => {
                   >
                     <Image
                       source={{ uri: files.panCardPhoto.uri }}
-                      style={{ height: 200, width: '100%' }}
+                      style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                     />
                   </Pressable>
                 ) : (
@@ -252,7 +252,7 @@ const AadharAndPanVerification = (props) => {
               <SecondaryButton title={'Verify'} onPress={verifyPan} />
             </View>
           )}
-          {/* <View style={styles.nextButton}>
+          <View style={styles.nextButton}>
             <PrimaryBtn
               title={'Next'}
               onPress={() =>
@@ -266,7 +266,7 @@ const AadharAndPanVerification = (props) => {
                 })
               }
             />
-          </View> */}
+          </View>
         </ScrollView>
     </SafeAreaView>
   )

@@ -138,12 +138,12 @@ const ConsentForm = (props: any) => {
 
         {/* Show screenshot if taken */}
         {screenShotImage && (
-          <Image source={{ uri: screenShotImage.uri }} style={{ height: 200, width: '100%' }} />
+          <Image source={{ uri: screenShotImage.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
         )}
 
         {/* E-sign image */}
         <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-          {eSign && <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />}
+          {eSign && <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />}
         </View>
       </View>
 

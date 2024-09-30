@@ -20,6 +20,7 @@ import ContactUs from '../../screens/contactUs/ContactUs'
 import inventoryIcon from '../../assets/tabNavigation/inventory.png';
 import ordersIcon from '../../assets/tabNavigation/orders.png';
 import homeIcon from '../../assets/tabNavigation/home.png';
+import walletIcon from '../../assets/tabNavigation/wallet.png';
 import contactusIcon from '../../assets/tabNavigation/contactUs.png';
 import profileIcon from '../../assets/tabNavigation/profile.png';
 import LinearGradient from 'react-native-linear-gradient';
@@ -27,6 +28,7 @@ import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import { getCache } from '../../helper/Storage'
+import Wallet from '../../screens/walllet/Wallet'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
@@ -73,12 +75,12 @@ const BottomNavigator = () => {
         initialRouteName="home"
         screenOptions={{
           tabBarStyle: {
-            height: isTablet ? 110 : 83
+            height: isTablet ? 100 : 60
           },
           tabBarShowLabel: false
         }}
       >
-        <Bottom.Screen
+        {/* <Bottom.Screen
           name="Inventory"
           component={Inventory}
           options={{
@@ -87,14 +89,24 @@ const BottomNavigator = () => {
               <TabIcon icon={inventoryIcon} focused={focused} />
             )
           }}
-        />
-        <Bottom.Screen
+        /> */}
+        {/* <Bottom.Screen
           name="Order"
           component={Orders}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
               <TabIcon icon={ordersIcon} focused={focused} />
+            )
+          }}
+        /> */}
+         <Bottom.Screen
+          name="wallet"
+          component={Wallet}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon={walletIcon} focused={focused} />
             )
           }}
         />
@@ -108,7 +120,7 @@ const BottomNavigator = () => {
             )
           }}
         />
-        <Bottom.Screen
+        {/* <Bottom.Screen
           name="ContactUs"
           component={ContactUs}
           options={{
@@ -117,7 +129,7 @@ const BottomNavigator = () => {
               <TabIcon icon={contactusIcon} focused={focused} />
             )
           }}
-        />
+        /> */}
         <Bottom.Screen
           name="ProfileAndMasterInfo"
           component={ProfileAndMasterInfo}
@@ -204,18 +216,19 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   gradientOverlay: {
-    padding: isTablet ? 20 : 15, // Add padding around the icon
-    borderRadius: 50, // Adjust the border radius if needed
+    padding: isTablet ? 20 : 10, // Add padding around the icon
+    borderRadius: 50,
+    width:80, // Adjust the border radius if needed
     alignItems: 'center', // Center the icon within the gradient
     justifyContent: 'center'
   },
   tabIcon: {
-    width: isTablet ? 45 : 30,
-    height: isTablet ? 45 : 30,
+    width: isTablet ? 40 : 25,
+    height: isTablet ? 40 : 25,
     tintColor: 'black' // Default color for unfocused icons
   },
   focusedIcon: {
-    tintColor: 'white' // Make the tint color white for focused icons
+  tintColor: 'white' // Make the tint color white for focused icons
   },
   modalBackground: {
     flex: 1,
@@ -239,8 +252,8 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontWeight: '500',
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: isSmallScreen?16:18,
+    lineHeight: isSmallScreen?20:24,
     textAlign: 'center',
     color: 'black',
     marginTop: 10

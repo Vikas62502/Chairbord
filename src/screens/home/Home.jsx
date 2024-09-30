@@ -18,46 +18,7 @@ import { getCache } from '../../helper/Storage'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
-// const DashboardCards = ({ title, subTitle, icon, router }) => {
-//   const navigation = useNavigation()
 
-//   const getUserData = async () => {
-//     try {
-//       const value = await getCache('userData')
-//       console.log(value, 'userData')
-//       if (value !== null) {
-//         return JSON.parse(value)
-//       }
-//     } catch (e) {
-//       console.log('error', e)
-//     }
-//   }
-
-//   useEffect(() => {
-//     getUserData()
-//   }, [])
-//   return (
-//     <Pressable
-//       style={styles.dashboardCard}
-//       onPress={() => navigation.navigate(router)}
-//     >
-//       <View style={{ position: 'relative' }}>
-//         <View style={{ alignItems: 'center', width: '80%' }}>
-//           <Text style={styles.dashbordCardText}>{title}</Text>
-//           <Text style={styles.dashbordCardText}>{subTitle}</Text>
-//         </View>
-//         <View
-//           style={styles.iconContainer}
-//         >
-//           <Image
-//             style={styles.icon}
-//             source={icon}
-//           />
-//         </View>
-//       </View>
-//     </Pressable>
-//   )
-// }
 const DashboardCards2 = ({ title, subTitle, icon, router }) => {
   const navigation = useNavigation()
   return (
@@ -150,31 +111,7 @@ const Home = () => {
         </View>
       </View>
       <View style={styles.cardsContainer}>
-        {/* <DashboardCards
-          title={'Tag'}
-          subTitle={'Registration'}
-          icon={require('../../assets/dashboard/tagRegistration.png')}
-          router={'mobileVerification'}
-        />
-        <DashboardCards
-          title={'Tag'}
-          subTitle={'Replacement'}
-          icon={require('../../assets/dashboard/tagReplacement.png')}
-          router={'tagReplacement'}
-        />
-        <DashboardCards
-          title={'Tag'}
-          subTitle={'Registration'}
-          icon={require('../../assets/dashboard/tagRegistration.png')}
-          router={'mobileVerification'}
-          // router={'tagRegistration'}
-        />
-        <DashboardCards
-          title={'Tag'}
-          subTitle={'Replacement'}
-          icon={require('../../assets/dashboard/tagReplacement.png')}
-          router={'tagReplacement'}
-        /> */}
+        
         <DashboardCards2
           title={'Tag'}
           subTitle={'Registration'}
@@ -242,38 +179,7 @@ const styles = StyleSheet.create({
     padding: '5%',
     // borderRadius:20
   },
-  // dashboardCard: {
-  //   borderWidth: isTablet?2:1,
-  //   borderColor: '#000000',
-  //   width:isTablet?width*0.43: width * 0.40, // responsive width
-  //   height:isTablet?height*0.08: height * 0.07, // responsive height
-  //   borderRadius: isTablet?30:isSmallScreen?15:20,
-  //   margin:isTablet?20:10,
-  //   padding: 5,
-  // },
-  // dashbordCardText: {
-  //   fontWeight: '600',
-  //   fontSize: isTablet?28:16, // responsive font size
-  //   lineHeight: isTablet?32:20,
-  //   color: 'black'
-  // },
-  // iconContainer: {
-  //   position: 'absolute',
-  //   right: -8,
-  //   top: -6,
-  //   backgroundColor: '#02546D',
-  //   height:isTablet?height*0.08: height * 0.07, // responsive height
-  //   borderRadius: isTablet?30:isSmallScreen?15: 20,
-  //   width: width * 0.12 // responsive width
-  // },
-  // icon: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   left: isTablet?20:10,
-  //   top: isTablet?16:isSmallScreen?10:12,
-  //   width:'60%',
-  //   height:isTablet?'60%':isSmallScreen?'55%':'50%'
-  // },
+ 
   dashboardCard2: {
     width: width * 0.20, // responsive width
     height: height * 0.12, // adjusted height for better spacing

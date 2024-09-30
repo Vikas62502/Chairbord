@@ -142,10 +142,11 @@ const styles = StyleSheet.create({
   },
   otpDescription: {
     color: '#4D4D4DC4',
-    fontSize: 16,
-    lineHeight: 19,
+    fontSize: 14,
+    lineHeight: 16,
     fontFamily: 'Inter',
-    fontWeight: '400'
+    fontWeight: '400',
+    marginBottom:15
   }
 })
 

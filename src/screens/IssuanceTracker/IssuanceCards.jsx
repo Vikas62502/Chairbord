@@ -8,14 +8,17 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
-  Button
+  Button,
+  Dimensions
 } from 'react-native'
 import VerticalDivider from '../../components/common/VerticalDivider'
 import axios from 'axios'
 import { Buffer } from 'buffer';
 import { PermissionsAndroid, Platform, Alert } from 'react-native';
 import RNFS from 'react-native-fs';
-
+const { width, height } = Dimensions.get('window');
+const isTablet = width > 768;
+const isSmallScreen = width < 400;
 const IssuanceCards = ({ data }) => {
   // commision icons
   const [modalVisible, setModalVisible] = useState(false)
@@ -267,12 +270,12 @@ const IssuanceCards = ({ data }) => {
             </View>
           </View>
         </View>
-
+{/* 
         <View>
           <Text style={styles.amount}>
-            {verificationStatus === 'verified' ? `₹ ${tagComm.VC4}` : `₹ 0`}
+            {verificationStatus === 'verified' ? `₹ ${tagComm?.VC4}` : `₹0`}
           </Text>
-        </View>
+        </View> */}
       </View>
 
       <View
@@ -406,62 +409,53 @@ const IssuanceCards = ({ data }) => {
                     ))}
                 </View>
               </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
-                <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
-                >
-                  RC Front
-                </Text>
-                {
-                  images && images?.rcImageFront ? <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
-                }
-              </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
-                <Text style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}>RC Front</Text>
+              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
+                <Text style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}>RC Front</Text>
                 {images && images.rcImageFront ? (
-                  <Image source={{ uri: images.rcImageFront }} style={{ width: 345, height: 150 }} />
+                  <Image source={{ uri: images.rcImageFront }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
                 ) : (
                   <Text>No Image</Text>
                 )}
+                {/* <Button title="Download Image" onPress={downloadImage} /> */}
               </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen?290:345,  gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}
                 >
                   RC Back
                 </Text>
                 {
-                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16  }}
                 >
                   Vehicle Front
                 </Text>
                 {
-                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: isSmallScreen?290:345,height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16  }}
                 >
                   Vehicle Side
                 </Text>
                 {
-                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: 345, height: 150 }} /> : <Text>No Image</Text>
+                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: isSmallScreen?290:345,height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 200, width: 345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7, marginBottom:2 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: 16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}
                 >
                   Tag Image
                 </Text>
                 {
-                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: '100%', height: "100%" }} /> : <Text>No Image</Text>
+                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
             </ScrollView>
@@ -555,7 +549,7 @@ const styles = StyleSheet.create({
     height: '80%',
     backgroundColor: 'white',
     borderRadius: 15,
-    justifyContent: 'flex-start',
+    justifyContent:  'flex-start',
     textAlign: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -579,19 +573,20 @@ const styles = StyleSheet.create({
   },
   detailsSection: {
     alignItems: 'center',
-    marginTop: 3
+    marginTop: 3,
+   
   },
   dataContainer: {
     borderWidth: 1,
     borderColor: '#263238',
     borderRadius: 20,
     padding: '5%',
-    gap: 10
+    gap: 10,
   },
   reportDetailsTitleText: {
     color: 'grey',
     fontWeight: '400',
-    fontSize: 14,
+    fontSize: isSmallScreen?12:14,
     lineHeight: 16
   },
   reportDetailsContainer: {
@@ -601,9 +596,9 @@ const styles = StyleSheet.create({
   },
   reportDetailsValueText: {
     color: '#000000',
-    width: '60%',
+    width: isSmallScreen?'60%':'60%',
     fontWeight: '400',
-    fontSize: 14,
+    fontSize: isSmallScreen?12:14,
     lineHeight: 16
   },
   // ValueText: {

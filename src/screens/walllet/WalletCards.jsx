@@ -24,8 +24,8 @@ const WalletCards = ({
   reason,
   type,
   date, // Assuming this is in ISO 8601 format
-  ID,
-  RefNo
+  transactionId,
+  referenceId
 }) => {
   const navigation = useNavigation()
   const amountColor = type=== 'credit' ? '#25B73C' : '#FF0000'
@@ -41,8 +41,8 @@ const WalletCards = ({
           date: formattedDate,
           type,
           time: formattedTime,
-          ID,
-          RefNo
+          transactionId,
+          referenceId
         })
       }
     >
@@ -59,7 +59,7 @@ const WalletCards = ({
               {/* <View style={styles.ImageStyles}>
                 <Image source={logo} />
               </View> */}
-              <Text style={styles.heading}>{title}</Text>
+              <Text style={styles.heading}>{type.toUpperCase()}</Text>
             </View>
             <Text style={styles.reasonText}>{reason}</Text>
           </View>
@@ -95,11 +95,11 @@ const WalletCards = ({
           >
             <View style={styles.IdAndRefValues}>
               <Text style={styles.title}>ID:</Text>
-              <Text style={styles.value}>{ID}</Text>
+              <Text style={styles.value}>{transactionId}</Text>
             </View>
             <View style={styles.IdAndRefValues}>
               <Text style={styles.title}>Ref no:</Text>
-              <Text style={styles.value}>{RefNo}</Text>
+              <Text style={styles.value}>{referenceId ? referenceId : 'N/A'}</Text>
             </View>
           </View>
         </View>

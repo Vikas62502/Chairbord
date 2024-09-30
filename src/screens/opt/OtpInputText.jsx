@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
     
   },
   input: {
-    height: isSmallScreen?45:50,
+    height: isSmallScreen?50:50,
     width: isSmallScreen?40:45,
     borderWidth: 1,
     borderRadius: isSmallScreen?18:20,
     textAlign: 'center',
-    fontSize: isSmallScreen?24:26,
+    fontSize: isSmallScreen?22:26,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignContent: 'center',

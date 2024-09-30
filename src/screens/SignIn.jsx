@@ -23,7 +23,7 @@ import VerifyOTP from './opt/VerifyOTP';
 import Loader from '../components/ui/Loader';
 import { client } from '../client/Axios';
 import { setCache } from '../helper/Storage';
-import { request, PERMISSIONS, check } from 'react-native-permissions';
+// import { request, PERMISSIONS, check } from 'react-native-permissions';
 // Import the custom icons from the access folder
 import EyeIcon from '../assets/eye.png'; // Path to eye icon
 import EyeOffIcon from '../assets/eye-off.png'; // Path to eye-off icon
@@ -48,23 +48,23 @@ const SignIn = () => {
   };
 
   const navigation = useNavigation();
-  const checkAllPermissions = async () => {
-    const permissionsToCheck = [
-      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      PERMISSIONS.ANDROID.CAMERA,
-      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-      PERMISSIONS.ANDROID.READ_CONTACTS,
-      PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
-    ];
+  // const checkAllPermissions = async () => {
+  //   const permissionsToCheck = [
+  //     PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  //     PERMISSIONS.ANDROID.CAMERA,
+  //     PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+  //     PERMISSIONS.ANDROID.READ_CONTACTS,
+  //     PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+  //   ];
 
-    for (const permission of permissionsToCheck) {
-      const result = await check(permission);
-      if (result !== 'granted') {
-        return false; // If any permission is not granted, return false
-      }
-    }
-    return true; // All permissions are granted
-  };
+  //   for (const permission of permissionsToCheck) {
+  //     const result = await check(permission);
+  //     if (result !== 'granted') {
+  //       return false; // If any permission is not granted, return false
+  //     }
+  //   }
+  //   return true; // All permissions are granted
+  // };
   const loginApi = async () => {
     setLoading(true);
     let bodyContent = JSON.stringify({
@@ -79,12 +79,12 @@ const SignIn = () => {
 
       // Check permissions before navigating
       // const allPermissionsGranted = await checkAllPermissions();
-      const allPermissionsGranted = true;
-      if (allPermissionsGranted) {
-        navigation.navigate('drawer'); // Navigate directly to the drawer if permissions are granted
-      } else {
-        navigation.navigate('permissions'); // Otherwise, navigate to permissions
-      }
+      // if (allPermissionsGranted) {
+      //   navigation.navigate('drawer'); // Navigate directly to the drawer if permissions are granted
+      // } else {
+      //   navigation.navigate('permissions'); // Otherwise, navigate to permissions
+      // }
+      navigation.navigate('drawer');
     } catch (error) {
       Alert.alert('Either Id or password is Wrong !!', 'Please try again later', [
         {
@@ -317,7 +317,7 @@ const SignIn = () => {
 const styles = StyleSheet.create({
   container: {
     padding: '5%',
-    paddingVertical: 20
+    paddingVertical: 10
   },
   heading: {
     color: '#000000',

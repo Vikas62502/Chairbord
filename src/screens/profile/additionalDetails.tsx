@@ -182,7 +182,7 @@ const AdditionalDetails = (props: any) => {
           <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
             {posLocationImage ? (
               <Pressable onPress={() => setPosLocationImage(null)}>
-                <Image source={{ uri: posLocationImage.uri }} style={{ height: 200, width: '100%' }} />
+                <Image source={{ uri: posLocationImage.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
               </Pressable>
             ) : (
               <UploadDoc
@@ -198,7 +198,7 @@ const AdditionalDetails = (props: any) => {
           <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
             {eSign ? (
               <Pressable onPress={() => setESign(null)}>
-                <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%' }} />
+                <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
               </Pressable>
             ) : (
               <UploadDoc

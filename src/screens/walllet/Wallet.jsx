@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, RefreshControl, SafeAreaView, Pressable, ScrollView, TextInput, Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import WalletCards from './WalletCards';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import walletCardData from './WalletCardData';
 import FilterTags from './FilterTags';
 import { client } from '../../client/Axios';
@@ -16,6 +17,8 @@ const Wallet = (props) => {
   const [walletDetails, setWalletDetails] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
+  const route = useRoute(); // Get route object
+  const isPartOfBottomNavigator = route.name === 'wallet';
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -51,17 +54,19 @@ const Wallet = (props) => {
     return (
       transaction.reason.toLowerCase().includes(searchLower) ||
       transaction.transactionId.toLowerCase().includes(searchLower) ||
-      transaction.RefNo?.toLowerCase().includes(searchLower) ||
+      transaction.referenceId?.toLowerCase().includes(searchLower) || 'NA' ,
       transaction.amount.toString().includes(searchLower)
     );
   });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <OverlayHeader
-        title={'Wallet'}
-        showBackButton={true}
-      />
+      {!isPartOfBottomNavigator && (
+        <OverlayHeader
+          title={'Wallet'}
+          showBackButton={true}
+        />
+      )}
       <ScrollView
         style={styles.container}
         refreshControl={
@@ -76,19 +81,19 @@ const Wallet = (props) => {
               &#x20B9;{walletDetails?.agent?.balance || 0}
             </Text>
 
-            <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
-              <Pressable
-                onPress={() =>
-                  props.navigation.navigate('topupWallet', {
-                    walletBalance: walletDetails?.agent?.balance || 0
-                  })
-                }
-              >
-                <Image
-                  source={require('../../assets/screens/wallet/topUp.png')}
-                />
-                <Text style={styles.tagText}>Top up</Text>
-              </Pressable>
+          <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('topupWallet', {
+                  walletBalance: walletDetails?.agent?.balance || 0
+                })
+              }
+            >
+              <Image
+                source={require('../../assets/screens/wallet/topUp.png')}
+              />
+              <Text style={styles.tagText}>Top up</Text>
+            </Pressable>
 
               <View>
                 <Image source={require('../../assets/screens/wallet/dowload.png')} />
@@ -155,8 +160,8 @@ const Wallet = (props) => {
                 reason={data.reason}
                 amountValue={data.amount}
                 type={data.type}
-                ID={data.transactionId}
-                RefNo={data.RefNo}
+                transactionId={data.transactionId}
+                referenceId={data.referenceId}
                 date={data.updatedAt}
                 time={data.updatedAt}
               />

@@ -1,11 +1,13 @@
-import { View, Text, SafeAreaView, ScrollView, Image, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, Pressable,Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import UploadDoc from '../../components/common/UploadDoc'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen =width<400;
 const ImageCollection = (props: any) => {
   const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
   const [loading, setLoading] = useState(false)
@@ -65,25 +67,25 @@ const ImageCollection = (props: any) => {
         <View style={{  padding: "5%" }}>
           <Text style={{ color: "#000000", fontSize: 16, fontWeight: "400", marginBottom: "3%" }}>RC copy photo</Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <View style={{ height: 200, width: 180, }}>
+            <View style={{ height: isSmallScreen?160:180, width:  isSmallScreen?150:180, }}>
               {imageGallaryData && imageGallaryData?.RCFRONT ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, RCFRONT: null })}>
                 <Image
                   source={{ uri: imageGallaryData?.RCFRONT?.image }}
-                  style={{ height: 150, width: '100%' }}
+                  style={{ height:isSmallScreen?160:180, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload RC copy (Front)'} setUploadFile={(value: any) => handleImageSelected('RCFRONT', value)} backgroundType={"RC"} />}
             </View>
-            <View style={{ height: 200, width: 180, }}>
+            <View style={{ height:isSmallScreen?160:180, width: isSmallScreen?150:180, }}>
               {imageGallaryData && imageGallaryData?.RCBACK ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, RCBACK: null })}>
                 <Image
                   source={{ uri: imageGallaryData?.RCBACK?.image }}
-                  style={{ height: 150, width: '100%' }}
+                  style={{ height:isSmallScreen?160:180, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload RC copy (Back)'} setUploadFile={(value: any) => handleImageSelected('RCBACK', value)} backgroundType={"RC"} />}
             </View>
           </View>
 
-          <View style={{ marginTop: "8%" }}>
+          <View style={{ marginTop: "5%" }}>
             <Text style={{ color: "#000000", fontSize: 16, fontWeight: "400", marginBottom: "3%" }}>Vehicle image</Text>
             {/* <View style={{ flexDirection: "row", justifyContent: "space-between" }}> */}
             <View style={{ height: 200, width: "100%", marginBottom: "5%" }}>
@@ -91,17 +93,17 @@ const ImageCollection = (props: any) => {
               {imageGallaryData && imageGallaryData?.VEHICLEFRONT ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, VEHICLEFRONT: null })}>
                 <Image
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image }}
-                  style={{ height: 150, width: '100%' }}
+                  style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1  }}
                 />
               </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"}/>}
             </View>
 
-            <View style={{ height: 200, width: "100%" }}>
+            <View style={{ height: 200, width: "100%",borderRadius:20  }}>
 
               {imageGallaryData && imageGallaryData?.VEHICLESIDE ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, VEHICLESIDE: null })}>
                 <Image
                   source={{ uri: imageGallaryData?.VEHICLESIDE?.image }}
-                  style={{ height: 150, width: '100%' }}
+                  style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1  }}
                 />
               </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} />}
             </View>
@@ -109,14 +111,14 @@ const ImageCollection = (props: any) => {
           </View>
 
 
-          <View style={{ marginTop: "8%" }}>
+          <View style={{ marginTop: "5%" }}>
             <Text style={{ color: "#000000", fontSize: 16, fontWeight: "400", marginBottom: "3%" }}>Tag image</Text>
 
             <View style={{ height: 200, width: "100%", }}>
               {imageGallaryData && imageGallaryData?.TAGAFFIX ? <Pressable onPress={() => setImageGallaryData({ ...imageGallaryData, TAGAFFIX: null })}>
                 <Image
                   source={{ uri: imageGallaryData?.TAGAFFIX?.image }}
-                  style={{ height: 150, width: '100%' }}
+                  style={{ height: 200, width: '100%' ,borderRadius:20,borderColor: 'black',borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} />}
 
