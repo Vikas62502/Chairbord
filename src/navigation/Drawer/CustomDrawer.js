@@ -127,11 +127,11 @@ const data = [
         icon: require('../../assets/DrawerNavigation/wallet.png'),
         screen: 'wallet'
     },
-    // {
-    //     title: 'Inventory',
-    //     icon: require('../../assets/DrawerNavigation/inventory.png'),
-    //     screen: 'inventory'
-    // },
+    {
+        title: 'Inventory',
+        icon: require('../../assets/DrawerNavigation/inventory.png'),
+        screen: 'inventory'
+    },
     // {
     //     title: 'Orders',
     //     icon: require('../../assets/DrawerNavigation/orders.png'),

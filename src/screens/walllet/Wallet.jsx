@@ -16,9 +16,10 @@ const Wallet = (props) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [walletDetails, setWalletDetails] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
+  // const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
+  const tagsData = ['All', 'Credit','Debit'];
   const route = useRoute(); // Get route object
-  const isPartOfBottomNavigator = route.name === 'wallet';
+  const isPartOfBottomNavigator = route.name === 'Wallet';
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -49,15 +50,17 @@ const Wallet = (props) => {
   });
 
   // Filter transactions based on searchText
-  const filteredTransactions = sortedTransactions?.filter((transaction) => {
-    const searchLower = searchText.toLowerCase();
-    return (
-      transaction.reason.toLowerCase().includes(searchLower) ||
-      transaction.transactionId.toLowerCase().includes(searchLower) ||
-      transaction.referenceId?.toLowerCase().includes(searchLower) || 'NA' ,
-      transaction.amount.toString().includes(searchLower)
-    );
-  });
+ const filteredTransactions = sortedTransactions?.filter((transaction) => {
+  const searchLower = searchText.toLowerCase();
+  return (
+    transaction.type.toLowerCase().includes(searchLower) ||
+    transaction.reason.toLowerCase().includes(searchLower) ||
+    transaction.transactionId.toLowerCase().includes(searchLower) ||
+    (transaction.referenceId?.toLowerCase().includes(searchLower) || 'NA'.includes(searchLower)) ||
+    transaction.amount.toString().includes(searchLower)
+  );
+});
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -81,7 +84,7 @@ const Wallet = (props) => {
               &#x20B9;{walletDetails?.agent?.balance || 0}
             </Text>
 
-          <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%' }}>
+          <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%',alignItems:'center' }}>
             <Pressable
               onPress={() =>
                 props.navigation.navigate('topupWallet', {
@@ -91,12 +94,13 @@ const Wallet = (props) => {
             >
               <Image
                 source={require('../../assets/screens/wallet/topUp.png')}
+                style={{width:40,height:40}}
               />
               <Text style={styles.tagText}>Top up</Text>
             </Pressable>
 
-              <View>
-                <Image source={require('../../assets/screens/wallet/dowload.png')} />
+              <View style={{alignItems:'center'}}>
+                <Image source={require('../../assets/screens/wallet/download.png')} style={{width:40,height:40}} />
                 <Text style={styles.tagText}>Statement</Text>
               </View>
             </View>
@@ -120,7 +124,7 @@ const Wallet = (props) => {
               onPress={() => setShowFilterModal(true)}
               style={styles.filterLogo}
             >
-              <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height: 30, width: 30 }} />
+              <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height: 25, width: 25 }} />
             </Pressable>
           </View>
         </View>
@@ -206,7 +210,7 @@ const styles = StyleSheet.create({
     lineHeight: 48,
     textAlign: 'center',
     marginBottom: '2%',
-    color: '#000000'
+    color: '#000000',
   },
   tagText: {
     color: '#808080',
@@ -222,22 +226,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     // width: '80%',
     gap: 10,
-    marginTop: '5%'
+    marginTop: '5%',
+    paddingVertical:1
   },
   searchField: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 22,
+    // backgroundColor: 'white',
+    borderRadius: 50,
     borderWidth: 1,
-    width: isSmallScreen ? '78%' : '80%',
+    width: isSmallScreen ? '78%' : '82%',
     borderColor: '#858585',
     paddingHorizontal: 20,
-    paddingVertical: 5
+    paddingVertical: 0
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     marginRight: 10
   },
   input: {
@@ -249,7 +254,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#858585',
     borderRadius: 50,
-    padding: 14,
+    padding: 12,
   },
   transactionContainer: {
     elevation: 2,

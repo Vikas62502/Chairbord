@@ -3,10 +3,12 @@ import {
   Image,
   TextInput,
   Pressable,
-  StyleSheet
+  StyleSheet,Dimensions
 } from 'react-native'
 import React from 'react'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen = width < 400;
 const SearchBar = ({ setShowInventoryModal }) => {
   return (
     <>
@@ -28,7 +30,7 @@ const SearchBar = ({ setShowInventoryModal }) => {
           onPress={() => setShowInventoryModal(true)}
           style={styles.filterLogo}
         >
-          <Image source={require('../../assets/screens/wallet/filter.png')} />
+          <Image source={require('../../assets/screens/wallet/filter.png')} style={{ height: 25, width: 25 }} />
         </Pressable>
       </View>
       <View style={styles.divider}></View>
@@ -41,61 +43,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '80%',
-    gap: 20,
-    marginTop: '5%'
+    // width: '80%',
+    gap: 10,
+    marginTop: '5%',
+    paddingVertical:1
   },
   searchField: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10
-  },
-  searchIcon: {
-    width: 20,
-    height: 20
-  },
-  input: {
-    width: '80%',
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: '#9A9A9A',
-    color: '#9A9A9A'
-  },
-  filterLogo: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#F3F3F3',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#9A9A9A',
-    marginTop: '5%'
-  },
-  searchAndfilter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '80%',
-    gap: 20,
-    marginTop: '5%'
-  },
-  searchField: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 22,
+    // backgroundColor: 'white',
+    borderRadius: 50,
     borderWidth: 1,
+    width: isSmallScreen ? '78%' : '82%',
     borderColor: '#858585',
-    paddingHorizontal: 10,
-    paddingVertical: 5
+    paddingHorizontal: 20,
+    paddingVertical: 0
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     marginRight: 10
   },
   input: {
@@ -107,7 +73,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#858585',
     borderRadius: 50,
-    padding: 15
+    padding: 12,
   },
   divider: {
     height: 0.7,

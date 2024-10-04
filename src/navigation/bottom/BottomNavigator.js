@@ -101,7 +101,7 @@ const BottomNavigator = () => {
           }}
         /> */}
          <Bottom.Screen
-          name="wallet"
+          name="Wallet"
           component={Wallet}
           options={{
             headerShown: false,

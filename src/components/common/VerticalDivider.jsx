@@ -7,10 +7,11 @@ const VerticalDivider = () => {
 
 const styles = StyleSheet.create({
   verticalDividerStyles: {
-    height: 20,
+    height: 16,
     width: 0.5,
     backgroundColor: '#848484',
-    marginHorizontal: 10
+    marginHorizontal: 6,
+    marginBottom:-4
   }
 })
 

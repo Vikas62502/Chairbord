@@ -331,7 +331,7 @@ const IssuanceCards = ({ data }) => {
               marginTop: '3%'
             }}
           >
-            <Image source={require('../../assets/bankIcon.png')} />
+            <Image source={require('../../assets/bankIcon.png')} style={{width:24,height:22}} />
             <Text style={styles.bankText}> Bajaj </Text>
           </View>
         </View>
@@ -365,7 +365,7 @@ const IssuanceCards = ({ data }) => {
                   : commisionPartaillyPaidIcon
           }
         />
-        <Image source={require('../../assets/dangerPalm.png')} />
+        <Image source={require('../../assets/dangerPalm.png')} style={{width:25,height:25}}/>
       </View>
       <Modal
         visible={modalVisible}
@@ -479,7 +479,8 @@ const styles = StyleSheet.create({
     color: '#848484',
     fontWeight: '400',
     fontSize: 12,
-    lineHeight: 14
+    lineHeight: 14,
+    marginBottom:-4
   },
   idText: {
     color: '#000000',

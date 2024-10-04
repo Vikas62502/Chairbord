@@ -3,6 +3,7 @@ import React from 'react'
 import VerticalDivider from '../../components/common/VerticalDivider'
 
 const InventoryCards = ({ data }) => {
+  console.log(data, 'Inventory card data');
   return (
     <View style={styles.container}>
       <View
@@ -35,21 +36,21 @@ const InventoryCards = ({ data }) => {
                 lineHeight: 19
               }}
             >
-              {data.number}
+              {data?.vc_no}
             </Text>
           </View>
           <View>
-            <Text style={styles.idText}>607469-00B-258445</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.dateAndTimeText}>{'20:19:36'}</Text>
+            <Text style={styles.idText}>{data?.Tag_sr_no}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center',marginTop:2}}>
+              <Text style={styles.dateAndTimeText}>{data.time}</Text>
               <VerticalDivider />
-              <Text style={styles.dateAndTimeText}>{'16-03-2024'}</Text>
+              <Text style={styles.dateAndTimeText}>{data.date}</Text>
             </View>
           </View>
         </View>
 
         <View>
-          <Text style={styles.amount}>₹50</Text>
+          <Text style={styles.amount}>₹{data.amount}</Text>
         </View>
       </View>
 
@@ -58,7 +59,7 @@ const InventoryCards = ({ data }) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginVertical: '5%'
+          marginTop: '5%'
         }}
       >
         <View>
@@ -68,44 +69,40 @@ const InventoryCards = ({ data }) => {
               alignItems: 'center'
             }}
           >
-            <Image source={require('../../assets/bankIcon.png')} />
-            <Text style={styles.bankText}>KOTAK</Text>
+            <Image source={require('../../assets/bankIcon.png')} style={{width:24,height:22}}/>
+            <Text style={styles.bankText}>{data.bankName}</Text>
           </View>
-          <Text style={styles.orderIdText}>ORFID-998754631</Text>
+          <Text style={styles.orderIdText}>{data.orderId}</Text>
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end'
+            // flexDirection: 'row',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+
+            gap:10,
+            
           }}
         >
+          <View style={{flexDirection: 'row',alignItems: 'center',gap:5,}}>
           <View
             style={{
-              backgroundColor: '#00C142',
-              padding: '5%',
+              backgroundColor: data.inStock ? '#00C142' : '#FF0000' ,
               borderRadius: 20,
-              height: 5,
-              width: 5
+              height: 6,
+              width: 6,
             }}
           ></View>
-          <Text style={styles.stockText}>In Stock</Text>
+           <Text style={[styles.stockText, { color: data.inStock ? '#00C142' : '#FF0000' }]}>
+            {data.inStock ? 'In Stock' : 'Out of Stock'}
+          </Text>
+          </View>
+          <Text style={styles.vcText}>{data.vehicleClass}</Text>
         </View>
+
       </View>
-      <View
-        style={{ height: '0.3%', width: '100%', backgroundColor: '#959595' }}
-      ></View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingTop: '4%'
-        }}
-      >
-        <Text style={styles.vcText}>VC-4</Text>
-        <Image source={require('../../assets/eyeIcon.png')} />
-      </View>
+
+
     </View>
   )
 }
@@ -123,7 +120,8 @@ const styles = StyleSheet.create({
     color: '#848484',
     fontWeight: '400',
     fontSize: 12,
-    lineHeight: 14
+    lineHeight: 14,
+    marginBottom:-4
   },
   idText: {
     color: '#000000',
@@ -156,13 +154,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 16,
-    marginLeft: '5%'
+   
   },
   vcText: {
     color: '#000000',
     fontWeight: '500',
     fontSize: 16,
-    lineHeight: 19
+    lineHeight: 19,
+   
+   
   }
 })
 

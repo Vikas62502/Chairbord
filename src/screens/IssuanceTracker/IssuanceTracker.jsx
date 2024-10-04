@@ -1,9 +1,13 @@
 import {
   View,
   Text,
+  Image,
+  TextInput,
   ScrollView,
+  Pressable,
   RefreshControl,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SearchBar from '../../components/common/SearchBar'
@@ -15,13 +19,16 @@ import OverlayHeader from '../../components/OverlayHeader'
 import { getCache } from '../../helper/Storage'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
-
+const { width, height } = Dimensions.get('window')
+const isTablet = width > 768;
+const isSmallScreen = width < 400;
 const IssuanceTracker = () => {
   const [showIssuanceModal, setShowIssuanceModal] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [agentId, setAgentId] = useState(null)
   const [loading, setLoading] = useState(false)
   const [issuanceData, setIssuanceData] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   const onRefresh = async () => {
     setRefreshing(true)
@@ -50,7 +57,7 @@ const IssuanceTracker = () => {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     const getUserDataFromCache = async () => {
@@ -80,9 +87,29 @@ const IssuanceTracker = () => {
         }
       >
         <OverlayHeader title={'Issuance Tracker'} showBackButton={true} />
-        <View style={{ padding: '5%' }}>
-          <SearchBar setShowInventoryModal={setShowIssuanceModal} />
-
+        <View style={{ paddingHorizontal: '5%' ,paddingVertical:'1%'}}>
+          <View style={styles.searchAndfilter}>
+            <View style={styles.searchField}>
+              <Image
+                source={require('../../assets/screens/wallet/search.png')}
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Search"
+                placeholderTextColor={'#9A9A9A'}
+                value={searchText}
+                onChangeText={setSearchText}
+              />
+            </View>
+            <Pressable
+              onPress={() => setShowIssuanceModal(true)}
+              style={styles.filterLogo}
+            >
+              <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height: 25, width: 25 }} />
+            </Pressable>
+          </View>
+          <View style={styles.divider}></View>
           <View
             style={{
               flexDirection: 'row',
@@ -90,7 +117,7 @@ const IssuanceTracker = () => {
               alignItems: 'center'
             }}
           >
-            <View style={{ width: '65%', marginEnd: '5%' }}>
+            <View style={{ width: '70%', marginEnd: '2%' }}>
               <SelectFieldSmall title={'Select Bank'} dataToRender={bankName} />
             </View>
             <ExcelButton
@@ -113,7 +140,48 @@ const IssuanceTracker = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  }
+  },
+  searchAndfilter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // width: '80%',
+    gap: 10,
+    marginTop: '5%',
+    paddingVertical: 1
+  },
+  searchField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // backgroundColor: 'white',
+    borderRadius: 50,
+    borderWidth: 1,
+    width: isSmallScreen ? '78%' : '82%',
+    borderColor: '#858585',
+    paddingHorizontal: 20,
+    paddingVertical: 0
+  },
+  searchIcon: {
+    width: 18,
+    height: 18,
+    marginRight: 10
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000000'
+  },
+  filterLogo: {
+    borderWidth: 1,
+    borderColor: '#858585',
+    borderRadius: 50,
+    padding: 12,
+  },
+  divider: {
+    height: 0.7,
+    backgroundColor: '#4C6470',
+    marginVertical: '5%'
+  },
 })
 
 export default IssuanceTracker

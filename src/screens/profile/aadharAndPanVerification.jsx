@@ -252,7 +252,7 @@ const AadharAndPanVerification = (props) => {
               <SecondaryButton title={'Verify'} onPress={verifyPan} />
             </View>
           )}
-          <View style={styles.nextButton}>
+          {/* <View style={styles.nextButton}>
             <PrimaryBtn
               title={'Next'}
               onPress={() =>
@@ -266,7 +266,7 @@ const AadharAndPanVerification = (props) => {
                 })
               }
             />
-          </View>
+          </View> */}
         </ScrollView>
     </SafeAreaView>
   )
