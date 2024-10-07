@@ -123,6 +123,16 @@ const data = [
     //     screen: 'permissions'
     // },
     {
+      title: 'SBI',
+      icon: require('../../assets/DrawerNavigation/wallet.png'),
+      screen: 'sbi'
+  },
+  {
+    title: 'SBI',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi2'
+},
+    {
         title: 'Wallet',
         icon: require('../../assets/DrawerNavigation/wallet.png'),
         screen: 'wallet'

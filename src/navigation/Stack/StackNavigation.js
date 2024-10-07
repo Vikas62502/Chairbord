@@ -35,6 +35,11 @@ import ContactUs from '../../screens/contactUs/ContactUs';
 import AadharAndPanVerification from '../../screens/profile/aadharAndPanVerification';
 import ProfileAndMasterInfo from '../../screens/profile/ProfileAndMasterInfo';
 import Permissions from '../../components/permissions';
+import SbiFastagRegistration from '../../screens/sbi/SbiFastagRegistration';
+import SbiFastagRegistration2 from '../../screens/sbi/SbiFastagRegistration2';
+import SbiImageCollection from '../../screens/sbi/SbiImageCollection';
+import SbiProcessing from '../../screens/sbi/SbiProcessing';
+import SbiResult from '../../screens/sbi/SbiResult';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -43,6 +48,21 @@ const StackNavigation = () => {
     return (
         <Stack.Navigator initialRouteName="dashboard" >
             <Stack.Screen name="Home" component={HomeScreen} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="sbi" component={SbiFastagRegistration} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="sbi2" component={SbiFastagRegistration2} options={{
+                headerShown: false
+            }} />
+             <Stack.Screen name="sbi3" component={SbiImageCollection} options={{
+                headerShown: false
+            }} />
+             <Stack.Screen name="sbi4" component={SbiProcessing} options={{
+                headerShown: false
+            }} />
+             <Stack.Screen name="sbi5" component={SbiResult} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="FastTagAndGPS" component={FastTagAndGps} options={{
@@ -66,6 +86,7 @@ const StackNavigation = () => {
             <Stack.Screen name="OTP" component={OTP} options={{
                 headerShown: false
             }} />
+
             <Stack.Screen name="register" component={Register} options={{
                 headerShown: false
             }} />
