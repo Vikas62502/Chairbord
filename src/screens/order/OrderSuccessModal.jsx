@@ -122,14 +122,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginTop: 20
+    marginTop: 20,
   },
   button: {
     borderWidth: 1,
     borderColor: '#02546D',
-    borderRadius: 20,
-    paddingVertical: 20,
-    paddingHorizontal: 20
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    textAlign:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: '#02546D',

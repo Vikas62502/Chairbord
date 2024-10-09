@@ -26,19 +26,21 @@ const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
     borderRadius: 25,
-    height: 68,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-end'
   },
   disableAppButtonContainer: {
-    marginTop: 120,
+ 
     elevation: 8,
     borderRadius: 25,
-    height: 75,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
     overflow: 'hidden', // Ensure the gradient follows the button's shape
-    alignSelf: 'flex-start' // Align the button to the start of the parent container
+    alignSelf: 'flex-end' // Align the button to the start of the parent container
   },
   linearGradient: {
     flex: 1,

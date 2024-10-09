@@ -65,6 +65,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 <Image
                   source={require('../../assets/DrawerNavigation/closeLogout.png')}
                   alt="closeBtn"
+                  style={{width:20,height:20}}
                 />
               </Pressable>
             </View>
@@ -83,18 +84,24 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
               }}
             />
           </View>
-          <InputText
-            placeholder={'Tag cost'}
-            inputStyle={{
-              width: '100%'
-            }}
-          />
+          
+          <View style={{ width: '100%', marginTop:'4%' }}>
+              <InputText
+                placeholder={'Enter quantity'}
+                inputStyle={{
+                  width: '100%'
+                }}
+                onChangeText={(value) => {
+                  formDataHandler('quantity', value)
+                }}
+              />
+            </View>
 
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: '5%'
+             
             }}
           >
             <View style={{ width: '45%' }}>
@@ -155,6 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
+    width:'90%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
@@ -200,7 +208,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: '7%'
+    marginTop: '5%'
   },
   button: {
     flex: 1,
@@ -211,7 +219,7 @@ const styles = StyleSheet.create({
     borderColor: '#263238'
   },
   applyButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     marginLeft: 10
   },
   applyButtonText: {

@@ -142,11 +142,11 @@ const data = [
         icon: require('../../assets/DrawerNavigation/inventory.png'),
         screen: 'inventory'
     },
-    // {
-    //     title: 'Orders',
-    //     icon: require('../../assets/DrawerNavigation/orders.png'),
-    //     screen: 'orders'
-    // },
+    {
+        title: 'Orders',
+        icon: require('../../assets/DrawerNavigation/orders.png'),
+        screen: 'orders'
+    },
     {
         title: 'Issuance Tracker',
         icon: require('../../assets/DrawerNavigation/issuance.png'),

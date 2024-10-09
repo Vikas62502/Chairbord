@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet
 } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import DisplayDetailsCard from '../../components/common/DisplayDetailsCard'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
@@ -15,6 +15,7 @@ import AddBtn from '../../components/ui/AddBtn'
 import VerticalDivider from '../../components/common/VerticalDivider'
 import OrderSuccessModal from './OrderSuccessModal'
 import OrderFaildModal from './OrderFaildModal'
+import CreateOrderModal from './CreateOrderModal'
 
 const customerDetailsData = [
   {
@@ -32,6 +33,7 @@ const customerDetailsData = [
 ]
 
 const OrderDetails = () => {
+  const [createOrderModal, setCreateOrderModal] = useState(false);
   const [isOrderSuccess, setIsOrderSuccess] = React.useState(false)
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -80,7 +82,7 @@ const OrderDetails = () => {
 
       {/* buttons */}
       <View style={{ paddingHorizontal: '5%' }}>
-        <AddBtn title={'Add +'} />
+        <AddBtn title={'Add +'} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
       </View>
       <View style={{ padding: '5%', paddingBottom: 20 }}>
         <LinearButton
@@ -91,6 +93,10 @@ const OrderDetails = () => {
 
       <OrderSuccessModal visible={isOrderSuccess} onClose={setIsOrderSuccess} />
       <OrderFaildModal />
+      <CreateOrderModal
+        visible={createOrderModal}
+        onClose={() => setCreateOrderModal(false)}
+      />
     </SafeAreaView>
   )
 }
