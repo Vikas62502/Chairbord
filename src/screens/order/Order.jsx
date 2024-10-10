@@ -1,6 +1,16 @@
-import { View, Text, StyleSheet, ScrollView, Image,RefreshControl, TextInput, Pressable,Dimensions } from 'react-native'
-import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native'; 
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  RefreshControl,
+  TextInput,
+  Pressable,
+  Dimensions
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
@@ -9,101 +19,100 @@ import CreateButton from '../../components/ui/CreateButton'
 import OrderFilter from './OrderFilter'
 import OverlayHeader from '../../components/OverlayHeader'
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen =width<400;
+const isTablet = width > 768
+const isSmallScreen = width < 400
 const orderCardData = [
   {
-    id: "TRR:8844851",
-    date: "16-03-2024",
-    time: "20:19:36",
-    amount: "₹200",
-    status: "pending"
+    id: 'TRR:8844851',
+    date: '16-03-2024',
+    time: '20:19:36',
+    amount: '₹200',
+    status: 'pending'
   },
   {
-    id: "TRR:8844851",
-    date: "16-03-2024",
-    time: "20:19:36",
-    amount: "₹800",
-    status: "return"
+    id: 'TRR:8844851',
+    date: '16-03-2024',
+    time: '20:19:36',
+    amount: '₹800',
+    status: 'return'
   },
   {
-    id: "TRR:8844851",
-    date: "16-03-2024",
-    time: "20:19:36",
-    amount: "₹400",
-    status: "confirm"
+    id: 'TRR:8844851',
+    date: '16-03-2024',
+    time: '20:19:36',
+    amount: '₹400',
+    status: 'confirm'
   },
   {
-    id: "TRR:8844851",
-    date: "16-03-2024",
-    time: "20:19:36",
-    amount: "₹1200",
-    status: "pending"
+    id: 'TRR:8844851',
+    date: '16-03-2024',
+    time: '20:19:36',
+    amount: '₹1200',
+    status: 'pending'
   },
   {
-    id: "TRR:8844851",
-    date: "16-03-2024",
-    time: "20:19:36",
-    amount: "₹400",
-    status: "acknowledge"
-  },
+    id: 'TRR:8844851',
+    date: '16-03-2024',
+    time: '20:19:36',
+    amount: '₹400',
+    status: 'acknowledge'
+  }
 ]
 
 const Order = (props) => {
   const [searchText, setSearchText] = useState('')
   const [showFilterModal, setShowFilterModal] = useState(false)
-  const [createOrderModal, setCreateOrderModal] = useState(false);
-  const [createReturnModal, setCreateReturnModal] = useState(false);
+  const [createOrderModal, setCreateOrderModal] = useState(false)
+  const [createReturnModal, setCreateReturnModal] = useState(false)
   const [userData, setUserData] = useState()
-  console.log(userData, 'userData')
-  const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation(); // Get navigation object
-  const route = useRoute(); // Get route object
-  const isPartOfBottomNavigator = route.name === 'Order';
+  const [refreshing, setRefreshing] = useState(false)
+  const navigation = useNavigation() // Get navigation object
+  const route = useRoute() // Get route object
+  const isPartOfBottomNavigator = route.name === 'Order'
 
   const onRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     try {
-      await getUserData();
+      await getUserData()
     } catch (error) {
-      console.log(error, 'error');
+      console.log(error, 'error')
     } finally {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  };
+  }
 
   const getUserData = async () => {
     let userData = await getCache('userData')
     setUserData(userData)
   }
 
-
   const getAllFastagByAgent = async () => {
     try {
-      const response = await client.get(`/inventory/fastag/agent/${userData?.user?.id}`)
+      const response = await client.get(
+        `/inventory/fastag/agent/${userData?.user?.id}`
+      )
       setInventoryCardData(response?.data?.data)
     } catch (error) {
       console.log(error, 'error')
     }
   }
 
-
   useEffect(() => {
     getUserData()
   }, [])
 
   return (
-    <ScrollView style={styles.container} refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
-       {!isPartOfBottomNavigator && (
-        <OverlayHeader
-          title={'Order'}
-          showBackButton={true}
-        />
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {!isPartOfBottomNavigator && (
+        <OverlayHeader title={'Order'} showBackButton={true} />
       )}
 
-      <View style={{ padding: "5%" }}>
+      <View style={{ padding: '5%' }}>
         <View style={styles.searchAndfilter}>
           <View style={styles.searchField}>
             <Image
@@ -127,28 +136,39 @@ const Order = (props) => {
         </View>
         <View style={styles.divider}></View>
 
-        <View >
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <View >
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <View>
               <Text style={styles.titleText}>Order history</Text>
             </View>
-            <CreateButton title={"Create order"} onpressOperation={() => setCreateOrderModal(!createOrderModal)} />
-            <CreateButton title={"Create return"} onpressOperation={() => setCreateReturnModal(!createReturnModal)} />
-
+            <CreateButton
+              title={'Create order'}
+              onpressOperation={() => setCreateOrderModal(!createOrderModal)}
+            />
+            <CreateButton
+              title={'Create return'}
+              onpressOperation={() => setCreateReturnModal(!createReturnModal)}
+            />
           </View>
         </View>
 
-        <View style={{ marginTop: "4%" }}>
+        <View style={{ marginTop: '4%' }}>
           {orderCardData.map((data, index) => (
-            <Pressable onPress={() => props.navigation.navigate("orderDescription")} key={index}>
-              <OrderCards
-                data={data}
-              />
+            <Pressable
+              onPress={() => props.navigation.navigate('orderDescription')}
+              key={index}
+            >
+              <OrderCards data={data} />
             </Pressable>
           ))}
         </View>
       </View>
-
 
       {/* filter modal */}
       {/* <RequestFilter
@@ -156,7 +176,7 @@ const Order = (props) => {
         onClose={() => setShowFilterModal(false)}
       /> */}
 
-<OrderFilter
+      <OrderFilter
         visible={showFilterModal}
         onClose={() => setShowFilterModal(false)}
       />
@@ -169,20 +189,18 @@ const Order = (props) => {
         visible={createReturnModal}
         onClose={() => setCreateReturnModal(false)}
       />
-
-
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   titleText: {
-    color: "#000000",
-    fontWeight: "500",
-    fontSize: isSmallScreen?18:20,
+    color: '#000000',
+    fontWeight: '500',
+    fontSize: isSmallScreen ? 18 : 20
   },
   searchAndfilter: {
     flexDirection: 'row',
@@ -220,19 +238,18 @@ const styles = StyleSheet.create({
   divider: {
     height: 0.7,
     backgroundColor: '#4C6470',
-    marginVertical: "5%"
+    marginVertical: '5%'
   },
   excelButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: "space-between",
-    backgroundColor: "#263238",
-    color: "white",
-    paddingVertical: "3%",
-    paddingHorizontal: "5%",
-    borderRadius: 12,
+    justifyContent: 'space-between',
+    backgroundColor: '#263238',
+    color: 'white',
+    paddingVertical: '3%',
+    paddingHorizontal: '5%',
+    borderRadius: 12
   }
-});
-
+})
 
 export default Order

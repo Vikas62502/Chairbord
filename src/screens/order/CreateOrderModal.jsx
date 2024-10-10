@@ -1,158 +1,177 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  Pressable,
-  Image,
-} from 'react-native'
-import React from 'react'
-import InputText from '../../components/common/InputText'
-import SelectField from '../../components/common/SelectFieldBig'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, Image } from 'react-native';
+import InputText from '../../components/common/InputText';
+import SelectField from '../../components/common/SelectFieldBig';
+import { useNavigation } from '@react-navigation/native';
+import Loader from '../../components/ui/Loader';
+import { client } from '../../client/Axios';
+import { getCache } from '../../helper/Storage';
+import { useOrders } from '../../orderContext/OrderContext';
 
 const CreateOrderModal = ({ visible, onClose, onApply }) => {
-  const navigation = useNavigation()
-  const [orderBodyData, setOrderBodyData] = React.useState({
-    bankName: '',
-    vehicleClass: '',
-    tagCost: '',
-    quantity: '',
-    amount: ''
-  })
-  console.log(orderBodyData)
+  const navigation = useNavigation();
+
+  // Access the ordersArray and setOrdersArray from context
+  const { ordersArray, setOrdersArray } = useOrders();
+
+  const [orderBodyData, setOrderBodyData] = useState({
+    bankId: 0,
+    vehicleClass: 0,
+    tagCost: 0,
+    quantity: 0,
+    amount: 0
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [tagCost, setTagCost] = useState('');
 
   const formDataHandler = (key, value) => {
-    setOrderBodyData({ ...orderBodyData, [key]: value })
-  }
+    setOrderBodyData({ ...orderBodyData, [key]: value });
+  };
+
   const setBank = (selectedItem, index) => {
-    formDataHandler('bankName', selectedItem.id)
-  }
+    formDataHandler('bankId', selectedItem.id);
+  };
+
   const bankNameData = [
     { title: 'Bajaj', id: 1 },
     { title: 'SBI', id: 2 },
     { title: 'PNB', id: 3 },
     { title: 'KOTAK', id: 4 }
-  ]
+  ];
 
   const vehicleClassData = [
-    { title: '2 Wheeler' },
-    { title: '4 Wheeler' },
-    { title: '6 Wheeler' }
-  ]
+    { title: 'VC 4', id: 'VC4' },
+    { title: 'VC 5', id: 'VC5' }
+  ];
+
+  const getUserData = async () => {
+    let userData = await getCache('userData');
+    setUserData(userData);
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  const handleTagCost = async () => {
+    setLoading(true);
+    try {
+      const response = await client.post('/order/fastag/get-tag-cost', {
+        agentId: userData?.user?.id,
+        bankId: orderBodyData.bankId,
+        vehicleClass: orderBodyData.vehicleClass
+      });
+      setTagCost(JSON.stringify(response.data.cost));
+      setOrderBodyData({ ...orderBodyData, tagCost: response.data.cost });
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (orderBodyData.bankId !== 0 && orderBodyData.vehicleClass !== 0) {
+      handleTagCost();
+    }
+  }, [orderBodyData.bankId, orderBodyData.vehicleClass]);
+
+  useEffect(() => {
+    setOrderBodyData({
+      ...orderBodyData,
+      amount: orderBodyData.quantity * orderBodyData.tagCost
+    });
+  }, [orderBodyData.quantity]);
+
+  const handleNext = () => {
+    setOrdersArray((prevOrdersArray) => {
+      const updatedOrders = [...prevOrdersArray, { ...orderBodyData }];
+      console.log(updatedOrders, 'Updated array with new order');
+      handleClose();
+      navigation.navigate('orderDetails');
+      return updatedOrders;
+    });
+  };
+
+  const handleClose = () => {
+    setOrderBodyData({
+      bankId: 0,
+      vehicleClass: 0,
+      tagCost: 0,
+      quantity: 0,
+      amount: 0
+    });
+    setTagCost('');
+    onClose();
+  };
+
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContent}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: '5%'
-            }}
-          >
-            <View>
-              <Text style={styles.titleText}>Create Order</Text>
+    <>
+      {loading && <Loader />}
+      <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContent}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
+              <View>
+                <Text style={styles.titleText}>Create Order</Text>
+              </View>
+              <View>
+                <Pressable onPress={onClose}>
+                  <Image
+                    source={require('../../assets/DrawerNavigation/closeLogout.png')}
+                    alt="closeBtn"
+                    style={{ width: 20, height: 20 }}
+                  />
+                </Pressable>
+              </View>
             </View>
-            <View>
-              <Pressable onPress={onClose}>
-                <Image
-                  source={require('../../assets/DrawerNavigation/closeLogout.png')}
-                  alt="closeBtn"
-                  style={{width:20,height:20}}
+            <SelectField dataToRender={bankNameData} title={'Select bank name'} selectedValue={setBank} />
+            <View style={{ marginTop: '5%' }}>
+              <SelectField
+                dataToRender={vehicleClassData}
+                title={'Select vehicle class'}
+                selectedValue={(selectedItem, index) => {
+                  formDataHandler('vehicleClass', selectedItem.id);
+                }}
+              />
+            </View>
+
+            <View style={{ width: '100%', marginTop: '4%' }}>
+              <InputText value={tagCost} placeholder="Tag Cost" secure={false} />
+            </View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ width: '45%' }}>
+                <InputText
+                  placeholder={'Enter quantity'}
+                  inputStyle={{ width: '100%' }}
+                  value={orderBodyData.quantity}
+                  onChangeText={(value) => {
+                    formDataHandler('quantity', value);
+                  }}
                 />
-              </Pressable>
-            </View>
-          </View>
-          <SelectField
-            dataToRender={bankNameData}
-            title={'Select bank name'}
-            selectedValue={setBank}
-          />
-          <View style={{ marginTop: '5%' }}>
-            <SelectField
-              dataToRender={vehicleClassData}
-              title={'Select vehicle'}
-              selectedValue={(selectedItem, index) => {
-                formDataHandler('vehicleClass', selectedItem.title)
-              }}
-            />
-          </View>
-          
-          <View style={{ width: '100%', marginTop:'4%' }}>
-              <InputText
-                placeholder={'Enter quantity'}
-                inputStyle={{
-                  width: '100%'
-                }}
-                onChangeText={(value) => {
-                  formDataHandler('quantity', value)
-                }}
-              />
+              </View>
+              <View style={{ width: '45%' }}>
+                <InputText placeholder={'Enter amount'} inputStyle={{ width: '100%' }} value={JSON.stringify(orderBodyData.amount)} />
+              </View>
             </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-             
-            }}
-          >
-            <View style={{ width: '45%' }}>
-              <InputText
-                placeholder={'Enter quantity'}
-                inputStyle={{
-                  width: '100%'
-                }}
-                onChangeText={(value) => {
-                  formDataHandler('quantity', value)
-                }}
-              />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleClose} style={styles.button}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleNext()} style={[styles.button, styles.applyButton]}>
+                <Text style={[styles.buttonText, styles.applyButtonText]}>Submit</Text>
+              </TouchableOpacity>
             </View>
-            <View style={{ width: '45%' }}>
-              <InputText
-                placeholder={'Enter amount'}
-                inputStyle={{
-                  width: '100%'
-                }}
-                onChangeText={(value) => {
-                  formDataHandler('amount', value)
-                }}
-              />
-            </View>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={onClose} style={styles.button}>
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('orderDetails', {
-                  orderBodyData: {
-                    bankName: 'Bajaj',
-                    vehicleClass: '2 Wheeler'
-                  }
-                })
-              }
-              style={[styles.button, styles.applyButton]}
-            >
-              <Text style={[styles.buttonText, styles.applyButtonText]}>
-                Submit
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </Modal>
-  )
-}
+      </Modal>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   modalBackground: {
@@ -162,43 +181,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
-    width:'90%',
+    width: '90%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     elevation: 5
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '400',
-    textAlign: 'center',
-    marginVertical: '10%',
-    lineHeight: 24,
-    color: '#000000'
-  },
-  description: {
-    textAlign: 'center',
-    marginBottom: '6%',
-    fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 16,
-    color: '#000000'
-  },
-  backButton: {
-    backgroundColor: '#263238',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20
-  },
-  backButtonText: {
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  bolderText: {
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 16,
-    color: '#000000'
   },
   titleText: {
     fontSize: 20,
@@ -219,19 +206,17 @@ const styles = StyleSheet.create({
     borderColor: '#263238'
   },
   applyButton: {
-    backgroundColor: '#02546D',
-    marginLeft: 10
-  },
-  applyButtonText: {
-    color: 'white'
+    backgroundColor: '#263238',
+    marginLeft: '5%'
   },
   buttonText: {
-    color: '#263238',
+    fontSize: 15,
     fontWeight: '400',
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: 'center'
+    color: '#263238'
+  },
+  applyButtonText: {
+    color: '#fff'
   }
-})
+});
 
-export default CreateOrderModal
+export default CreateOrderModal;

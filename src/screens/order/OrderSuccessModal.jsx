@@ -11,7 +11,8 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AddBtn from '../../components/ui/AddBtn'
 
-const OrderSuccessModal = ({ visible, onClose, onApply }) => {
+const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,totalOrderAmount,orderId }) => {
+  console.log(transactionId, totalOrderAmount, orderId, "in the success model");
   const navigation = useNavigation()
   return (
     <Modal
@@ -39,15 +40,15 @@ const OrderSuccessModal = ({ visible, onClose, onApply }) => {
             <View style={styles.orderDetails}>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Order ID</Text>
-                <Text style={styles.detailValue}>: RET145665654</Text>
+                <Text style={styles.detailValue}>: {orderId}</Text>
               </View>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Amount Paid</Text>
-                <Text style={styles.detailValue}>: 1200.00</Text>
+                <Text style={styles.detailValue}>: {totalOrderAmount}</Text>
               </View>
               <View style={styles.orderDetailRow}>
-                <Text style={styles.detailLabel}>Payment Reff No.</Text>
-                <Text style={styles.detailValue}>: 5565467878</Text>
+                <Text style={styles.detailLabel}>Transaction Id.</Text>
+                <Text style={styles.detailValue}>: {transactionId}</Text>
               </View>
             </View>
           </View>
