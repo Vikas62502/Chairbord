@@ -48,24 +48,24 @@ const Home = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      const checkToken = async () => {
-        try {
-          const response = await client.get('/user/token-expired-check'); // Replace with your actual API endpoint
-          if (response.status === 200) {
-            console.log('Token is valid:', response.data);
-          }
-        } catch (error) {
-          console.error(
-            'Token verification failed:',
-            error.response?.data || error.message
-          );
-          // Handle logout logic here
-          await AsyncStorage.clear();
-          navigation.navigate('SignIn');
-        }
-      };
+      // const checkToken = async () => {
+      //   try {
+      //     const response = await client.get('/user/token-expired-check'); // Replace with your actual API endpoint
+      //     if (response.status === 200) {
+      //       console.log('Token is valid:', response.data);
+      //     }
+      //   } catch (error) {
+      //     console.error(
+      //       'Token verification failed:',
+      //       error.response?.data || error.message
+      //     );
+      //     // Handle logout logic here
+      //     await AsyncStorage.clear();
+      //     navigation.navigate('SignIn');
+      //   }
+      // };
 
-      checkToken();
+      // checkToken();
 
       const onBackPress = () => {
         Alert.alert('Confirm exit', 'Do you want to exit the app?', [
