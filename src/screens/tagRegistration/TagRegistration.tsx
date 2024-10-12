@@ -1,10 +1,9 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable, Button } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
-import { useNavigation } from '@react-navigation/native'
 import { horizontalScale, verticalScale } from '../../helper/Metrics'
 import CustomInputText from '../../components/common/CustomInputText'
 import SelectField from '../../components/common/SelectFieldBig'
@@ -12,17 +11,12 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 import InputText from '../../components/common/InputText'
-import BottomNavigator from '../../navigation/bottom/BottomNavigator'
 import showAlert from '../../utils/showAlert'
 
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params.response;
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
-    console.log(custDetails, "custDetails")
-    console.log(vrnDetails, "vrnDetails")
-    console.log(CustomerRegData, "CustomerRegData")
-    console.log(otpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
@@ -43,9 +37,13 @@ const TagRegistration = (props: any) => {
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
+    const [typeOfVehicle, setTypeOfVehicle] = useState(vrnDetails?.type)
+    const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType)
     const [errors, setErrors] = useState<any>({})
     const [stateCode, setStateCode] = useState("")
-    console.log(stateOfRegistration, "stateOfRegistration")
+
+
+    console.log(vrnDetails, "userData")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -168,7 +166,7 @@ const TagRegistration = (props: any) => {
                     "sessionId": props.route.params?.sessionId
                 },
                 "agentId": Number(userData?.user?.id),
-                "masterId": "",
+                "masterId": Number(userData?.user?.master_id) || "",
                 "agentName": userData?.user?.name || CustomerRegData?.name || "",
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase(),
@@ -177,13 +175,13 @@ const TagRegistration = (props: any) => {
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
                     "model": vrnDetails?.model || vehicleModelValue,
                     "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
-                    "type": vrnDetails?.type || "Motor Car",
+                    "type": typeOfVehicle,
                     "status": "Active",
                     "npciStatus": "Active",
                     "isCommercial": vehicleIscommercial,
                     "tagVehicleClassID": "4",
                     "npciVehicleClassID": npciIdData || "4",
-                    "vehicleType": vrnDetails?.vehicleType,
+                    "vehicleType": vehicleType,
                     "rechargeAmount": vrnDetails?.rechargeAmount,
                     "securityDeposit": vrnDetails?.securityDeposit,
                     "tagCost": vrnDetails?.tagCost,
@@ -201,7 +199,7 @@ const TagRegistration = (props: any) => {
                 "fasTagDetails": {
                     "serialNo": `${tagSerialNumber1}-${tagSerialNumber2}-${tagSerialNumber3}`,
                     "tid": "",
-                    "udf1": "",
+                    "udf1": Number(userData?.user?.id),
                     "udf2": "",
                     "udf3": "",
                     "udf4": "",
@@ -264,6 +262,24 @@ const TagRegistration = (props: any) => {
 
         setPermitExpiryDate(cleaned);
     };
+
+    const onVechileTypeSelect = (type: string) => {
+        console.log(type, "type")
+
+        setTypeOfVehicle(type)
+        if (vehicleIscommercial === "false" && type === "LPV") {
+            setVehicleType("Maxi Cab")
+        } if (vehicleIscommercial === "false" && type === "LGV") {
+            setVehicleType("Goods Carrier")
+        }
+        if (vehicleIscommercial === "true" && type === "LPV") {
+            setVehicleType("Maxi Cab")
+        }
+        if (vehicleIscommercial === "true" && type === "LGV") {
+            setVehicleType("Goods Carrier")
+        }
+        console.log(vehicleType, "vehicleType")
+    }
 
 
     return (
@@ -368,6 +384,15 @@ const TagRegistration = (props: any) => {
                     <View style={{ flex: 1 }}>
                         <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
                     </View>
+                </View>
+
+                <View style={{ marginBottom: "5%" }}>
+                    <CustomLabelText label={"Vehicle Type"} />
+                    <SelectField
+                        dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'}
+                        selectedValue={(value) => onVechileTypeSelect(value.value)}
+                    // borderColor={!vehicleIscommercial ? "red" : "black"}
+                    />
                 </View>
 
                 <View style={{ marginBottom: "5%" }}>
