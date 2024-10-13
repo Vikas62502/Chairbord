@@ -4,7 +4,7 @@ import React from 'react'
 const Status = ({ status }) => {
   const getStatusComponent = (status) => {
     switch (status) {
-      case 'pending':
+      case 'Pending':
         return <PendingStatus />
       case 'return':
         return <ReturnStatus />

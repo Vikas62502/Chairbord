@@ -9,8 +9,12 @@ import {
   Pressable,
   Dimensions
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import OrderCards from './OrderCards'
 import CreateOrderModal from './CreateOrderModal'
 import ExcelButton from '../../components/ui/ExcelButton'
@@ -18,6 +22,9 @@ import CreateReturnModal from '../return/CreateReturnModal'
 import CreateButton from '../../components/ui/CreateButton'
 import OrderFilter from './OrderFilter'
 import OverlayHeader from '../../components/OverlayHeader'
+import { client } from '../../client/Axios'
+import { getCache } from '../../helper/Storage'
+import Loader from '../../components/ui/Loader'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
 const isSmallScreen = width < 400
@@ -65,10 +72,13 @@ const Order = (props) => {
   const [createOrderModal, setCreateOrderModal] = useState(false)
   const [createReturnModal, setCreateReturnModal] = useState(false)
   const [userData, setUserData] = useState()
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(0)
   const [refreshing, setRefreshing] = useState(false)
   const navigation = useNavigation() // Get navigation object
   const route = useRoute() // Get route object
   const isPartOfBottomNavigator = route.name === 'Order'
+  const [orderData, setOrderData] = useState([])
 
   const onRefresh = async () => {
     setRefreshing(true)
@@ -84,112 +94,133 @@ const Order = (props) => {
   const getUserData = async () => {
     let userData = await getCache('userData')
     setUserData(userData)
+    setUserId(userData.user.id)
   }
 
-  const getAllFastagByAgent = async () => {
+  const getOrderDetails = async () => {
+    setLoading(true);
     try {
-      const response = await client.get(
-        `/inventory/fastag/agent/${userData?.user?.id}`
-      )
-      setInventoryCardData(response?.data?.data)
+      const response = await client.get(`/order/fastag/order-request/${userId}`)
+      console.log(response.data.orders)
+      setOrderData(response.data.orders)
     } catch (error) {
-      console.log(error, 'error')
+      console.log(error.message, "idhr 1")
+    } finally{
+      setLoading(false);
     }
   }
 
-  useEffect(() => {
-    getUserData()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      getUserData()
+    }, [])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      getOrderDetails()
+    }, [userId])
+  )
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      {!isPartOfBottomNavigator && (
-        <OverlayHeader title={'Order'} showBackButton={true} />
-      )}
+    <>
+      {loading && <Loader />}
 
-      <View style={{ padding: '5%' }}>
-        <View style={styles.searchAndfilter}>
-          <View style={styles.searchField}>
-            <Image
-              source={require('../../assets/screens/wallet/searchLogo.png')}
-              style={styles.searchIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Search"
-              placeholderTextColor={'#9A9A9A'}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
-          </View>
-          <Pressable
-            onPress={() => setShowFilterModal(true)}
-            style={styles.filterLogo}
-          >
-            <Image source={require('../../assets/screens/wallet/filter.png')} />
-          </Pressable>
-        </View>
-        <View style={styles.divider}></View>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {!isPartOfBottomNavigator && (
+          <OverlayHeader title={'Order'} showBackButton={true} />
+        )}
 
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <View>
-              <Text style={styles.titleText}>Order history</Text>
+        <View style={{ padding: '5%' }}>
+          <View style={styles.searchAndfilter}>
+            <View style={styles.searchField}>
+              <Image
+                source={require('../../assets/screens/wallet/searchLogo.png')}
+                style={styles.searchIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Search"
+                placeholderTextColor={'#9A9A9A'}
+                value={searchText}
+                onChangeText={setSearchText}
+              />
             </View>
-            <CreateButton
-              title={'Create order'}
-              onpressOperation={() => setCreateOrderModal(!createOrderModal)}
-            />
-            <CreateButton
-              title={'Create return'}
-              onpressOperation={() => setCreateReturnModal(!createReturnModal)}
-            />
+            <Pressable
+              onPress={() => setShowFilterModal(true)}
+              style={styles.filterLogo}
+            >
+              <Image
+                source={require('../../assets/screens/wallet/filter.png')}
+              />
+            </Pressable>
+          </View>
+          <View style={styles.divider}></View>
+
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <View>
+                <Text style={styles.titleText}>Order history</Text>
+              </View>
+              <CreateButton
+                title={'Create order'}
+                onpressOperation={() => setCreateOrderModal(!createOrderModal)}
+              />
+              <CreateButton
+                title={'Create return'}
+                onpressOperation={() =>
+                  setCreateReturnModal(!createReturnModal)
+                }
+              />
+            </View>
+          </View>
+
+          <View style={{ marginTop: '4%' }}>
+            {orderData.map((data, index) => (
+              <Pressable
+                onPress={() => props.navigation.navigate('orderDescription',{
+                  orderData:data
+                })}
+                key={index}
+              >
+                <OrderCards data={data} />
+              </Pressable>
+            ))}
           </View>
         </View>
 
-        <View style={{ marginTop: '4%' }}>
-          {orderCardData.map((data, index) => (
-            <Pressable
-              onPress={() => props.navigation.navigate('orderDescription')}
-              key={index}
-            >
-              <OrderCards data={data} />
-            </Pressable>
-          ))}
-        </View>
-      </View>
-
-      {/* filter modal */}
-      {/* <RequestFilter
+        {/* filter modal */}
+        {/* <RequestFilter
         visible={showFilterModal}
         onClose={() => setShowFilterModal(false)}
       /> */}
 
-      <OrderFilter
-        visible={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
-      />
-      <CreateOrderModal
-        visible={createOrderModal}
-        onClose={() => setCreateOrderModal(false)}
-      />
+        <OrderFilter
+          visible={showFilterModal}
+          onClose={() => setShowFilterModal(false)}
+        />
+        <CreateOrderModal
+          visible={createOrderModal}
+          onClose={() => setCreateOrderModal(false)}
+        />
 
-      <CreateReturnModal
-        visible={createReturnModal}
-        onClose={() => setCreateReturnModal(false)}
-      />
-    </ScrollView>
+        <CreateReturnModal
+          visible={createReturnModal}
+          onClose={() => setCreateReturnModal(false)}
+        />
+      </ScrollView>
+    </>
   )
 }
 
