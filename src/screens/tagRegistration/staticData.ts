@@ -175,6 +175,7 @@ export const stateData = [
 export const telanganaStateCode = [
     { id: 1, title: "TG", code: "TG" },
     { id: 2, title: 'TL', code: 'TL' },
+    { id: 3, title: 'TS', code: 'TS' },
 ]
 
 export const vehicleTypeDropdown = [

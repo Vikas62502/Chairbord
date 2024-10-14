@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button, Vibration } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
@@ -208,11 +208,11 @@ const TagRegistration = (props: any) => {
             })
             console.log(bodyData, "bodyData")
 
-            const res = await client.post("/bajaj/registerFastag",
-                bodyData
-            )
-            console.log(res, "registration res")
-            successResponse()
+            // const res = await client.post("/bajaj/registerFastag",
+            //     bodyData
+            // )
+            // console.log(res, "registration res")
+            // successResponse()
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
             // failureResponse()
@@ -264,7 +264,6 @@ const TagRegistration = (props: any) => {
     };
 
     const onVechileTypeSelect = (type: string) => {
-        console.log(type, "type")
 
         setTypeOfVehicle(type)
         if (vehicleIscommercial === "false" && type === "LPV") {
@@ -360,10 +359,16 @@ const TagRegistration = (props: any) => {
                         /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
                     </View>
 
-                    <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"NPCI Class"} />
-                        <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
-                    </View>
+                    {vrnDetails && vrnDetails?.npciVehicleClassID ? <View style={{ marginTop: "5%" }}>
+                        <CustomLabelText label={"NPCI Vehicle Class ID"} />
+                        <CustomInputText placeholder={"NPCI Vehicle Class ID"} value={vrnDetails?.npciVehicleClassID} isEditable={false} />
+                    </View> :
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"NPCI Class"} />
+                            <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
+                        </View>
+                    }
+
                 </>
 
                 <Text style={styles.label}>Tag serial number</Text>
@@ -387,12 +392,15 @@ const TagRegistration = (props: any) => {
                 </View>
 
                 <View style={{ marginBottom: "5%" }}>
-                    <CustomLabelText label={"Vehicle Type"} />
-                    <SelectField
-                        dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'}
-                        selectedValue={(value) => onVechileTypeSelect(value.value)}
-                    // borderColor={!vehicleIscommercial ? "red" : "black"}
-                    />
+                    {vrnDetails && vrnDetails?.vehicleType ? <View style={{ marginTop: "5%" }}>
+                        <CustomLabelText label={"Vehicle Type"} />
+                        <CustomInputText placeholder={"Vehicle Type"} value={vrnDetails?.vehicleType} isEditable={false} />
+                    </View> :
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"Vehicle Type"} />
+                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value) => onVechileTypeSelect(value.value)} borderColor={!vehicleFuelType ? "red" : "black"} />
+                        </View>
+                    }
                 </View>
 
                 <View style={{ marginBottom: "5%" }}>
