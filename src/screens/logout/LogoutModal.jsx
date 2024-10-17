@@ -23,7 +23,7 @@ const LogoutModal = (props) => {
 
   const handleCancel = () => {
     setModalVisible(false) // Close the modal
-    props.navigation.navigate('dashboard') // Navigate back to dashboard
+    props.navigation.navigate('drawer') // Navigate back to dashboard
   }
 
   // white screen bug solved
