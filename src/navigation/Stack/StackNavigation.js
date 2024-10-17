@@ -40,6 +40,9 @@ import SbiFastagRegistration2 from '../../screens/sbi/SbiFastagRegistration2';
 import SbiImageCollection from '../../screens/sbi/SbiImageCollection';
 import SbiProcessing from '../../screens/sbi/SbiProcessing';
 import SbiResult from '../../screens/sbi/SbiResult';
+import Dashboard from '../../screens/dashboard/Dashboard';
+import DrawerHeader from '../../components/DrawerHeader';
+import LogoutModal from '../../screens/logout/LogoutModal';
 // import TagRegistration from '../../screens/tagRegistration/TagRegistration';
 // import TagReplacement from '../../screens/tagReplacement/TagReplacement';
 
@@ -117,8 +120,8 @@ const StackNavigation = () => {
             <Stack.Screen name="forgetYourPassword" component={ForgetYourPassword} options={{
                 headerShown: false
             }} />
-            <Stack.Screen name="drawer" component={MainDrawer} options={{
-                headerShown: false
+            <Stack.Screen name="drawer" component={Dashboard} options={{
+                 header: () => <DrawerHeader /> 
             }} />
             <Stack.Screen name="customerRegistration" component={CustomerRegistration} options={{
                 headerShown: false
@@ -168,8 +171,48 @@ const StackNavigation = () => {
             <Stack.Screen name="registerVerifyOtp" component={RegisterVerifyOtp} options={{
                 headerShown: false
             }} />
+            <Stack.Screen name="logoutModal" component={LogoutModal} options={{
+                headerShown: false
+            }} />
         </Stack.Navigator>
     )
 }
 
 export default StackNavigation
+
+const AppNavigation = () => {
+    return (
+        <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
+            {/* Embedding StackNavigator inside Drawer */}
+            <Drawer.Screen name="HomeStack" component={StackNavigation} options={{ headerShown: false }} />
+            <Drawer.Screen
+                name="logoutModal"
+                component={LogoutModal}
+                options={{ headerShown: false }}
+            />
+            
+            {/* <Drawer.Screen
+                name="dashboard"
+                component={Dashboard}
+                options={{ header: () => <DrawerHeader title={"home"} />  }}
+            drawerContent={props => <CustomDrawer {...props} />}
+                
+            /> */}
+            <Drawer.Screen
+                name="requests"
+                component={Request}
+                options={{ header: () => <OverlayHeader title={"Requests"} /> }}
+            />
+            {/* <Drawer.Screen
+                name="orders"
+                component={Order}
+                options={{ header: () => <OverlayHeader title={"Order"}  /> }}
+            /> */}
+            <Drawer.Screen
+                name="orderSummary"
+                component={OrderSummary}
+                options={{ header: () => <OverlayHeader title={"Order Summary"}  /> }}
+            />
+        </Drawer.Navigator>
+    );
+};

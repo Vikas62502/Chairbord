@@ -2,6 +2,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import StackNavigation from "./src/navigation/Stack/StackNavigation";
 import { OrdersProvider } from './src/orderContext/OrderContext';
+import DrawerNavigation from './src/navigation/Drawer/DrawerNavigation';
 
 
 function App({ }): React.JSX.Element {
@@ -9,7 +10,7 @@ function App({ }): React.JSX.Element {
   return (
     <OrdersProvider>
     <NavigationContainer>
-      <StackNavigation />
+      <DrawerNavigation />
     </NavigationContainer >
     </OrdersProvider>
   );
