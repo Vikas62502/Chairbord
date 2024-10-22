@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-const AckModal = ({ visible, onClose, title, isSuccess }) => {
+const AckModal = ({ visible, onClose, title, isSuccess, setAckModalData }) => {
   const navigation = useNavigation()
   return (
     <Modal
@@ -48,7 +48,10 @@ const AckModal = ({ visible, onClose, title, isSuccess }) => {
               : 'Please ask customer to contact NHAI FASTag Toll free no. 1033'}
           </Text> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('Dashboard')}
+            onPress={() => {
+              setAckModalData({ visible: false, isSuccess: true })
+              navigation.navigate('acknowledgement')
+            }}
             style={styles.okButton}
           >
             <Text style={styles.okButtonText}>

@@ -4,10 +4,12 @@ import Status from '../../../components/common/Status'
 import HorizontalDivider from '../../../components/common/HorizontalDivider'
 import { RadioButton } from 'react-native-paper'
 
-const AcknowlegementCard = () => {
+const AcknowlegementCard = ({ data }) => {
   const [acknowledgementRadioCheck, setAcknowledgementRadioCheck] = useState('')
   const acknowledgementCheckboxData = ['Missing', 'Damaged', 'Received']
-  const kotakLogo = require('../../../assets/screens/kotakLogo.png')
+  // const kotakLogo = require('../../../assets/screens/kotakLogo.png')
+  const bankMap = { 1: 'Bajaj', 2: 'SBI' }
+  // console.log(data, 'tags data')
   return (
     <View
       style={{
@@ -26,7 +28,7 @@ const AcknowlegementCard = () => {
         }}
       >
         <View>
-          <Image source={kotakLogo} />
+          {/* <Image source={kotakLogo} /> */}
           <Text
             style={{
               fontSize: 13,
@@ -35,17 +37,22 @@ const AcknowlegementCard = () => {
               marginVertical: '5%'
             }}
           >
-            ORFID-998754631
+            {data?.serialNumber}
           </Text>
         </View>
         <View>
-          <Status status={'new'} />
+          <Status status={data?.status} />
         </View>
       </View>
 
       <HorizontalDivider />
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{ marginRight: 15 }}>{data?.vehicleClass}</Text>
+        <Text>{bankMap[data?.bankId]}</Text>
+      </View>
+
+      {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {acknowledgementCheckboxData.map((data, index) => (
           <Pressable
             key={index}
@@ -62,7 +69,7 @@ const AcknowlegementCard = () => {
             <Text style={styles.label}>{data}</Text>
           </Pressable>
         ))}
-      </View>
+      </View> */}
     </View>
   )
 }

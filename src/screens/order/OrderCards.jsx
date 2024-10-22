@@ -27,6 +27,7 @@ function formatDateTime(dateTimeString) {
 
 const OrderCards = ({ data, key }) => {
   const [loading, setLoading] = useState(false)
+  // console.log(data);
   return (
     <>
       {loading && <Loader />}

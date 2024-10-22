@@ -8,7 +8,7 @@ import CardAccordian from '../../components/common/CardAccordian'
 
 const OrderSummary = (props) => {
   const data = props.route.params.orderData;
-  // console.log(props.route.params.orderData, "milgya?")
+  console.log(props.route.params.orderData, "milgya?")
 
 
   const customerDetailsData = [
@@ -68,7 +68,7 @@ const OrderSummary = (props) => {
             </View>
             <LinearButton
               title={'Acknowledgement'}
-              onPress={() => props.navigation.navigate('acknowledgement')}
+              onPress={() => props.navigation.navigate('acknowledgement', { orderId: data.orderId })}
             />
           </View>
 

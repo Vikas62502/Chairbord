@@ -8,11 +8,11 @@ const LinearButton = ({ onPress, title, disabled }) => {
     : styles.appButtonContainer
 
   const gradientColors = disabled
-    ? ['#AFACAC', '#AFACAC']
+    ? ['#AFACAC', '#AFACAC'] // Disable color gradient
     : ['#02546D', '#142D40']
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonContainerStyle}>
+    <TouchableOpacity onPress={disabled ? null : onPress} style={buttonContainerStyle}>
       <LinearGradient colors={gradientColors} style={styles.linearGradient}>
         <View
           style={{
@@ -41,14 +41,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
-    marginTop: 120,
     elevation: 8,
     borderRadius: 25,
-    height: 75,
-    width: 310,
+    height: 68, // Match the height of the enabled button
+    width: '100%', // Set to 100% width
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#AFACAC', // Solid color for disabled state
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   linearGradient: {

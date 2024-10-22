@@ -10,10 +10,14 @@ const Status = ({ status }) => {
         return <ReturnStatus />
       case 'confirm':
         return <ConfirmStatus />
-      case 'acknowledge':
+      case 'Acknowledge':
         return <AcknowledgeStatus />
+      case 'Acknowledged':
+        return <AcknowledgeStatus />  
       case 'new':
         return <NewStatus />
+      case 'Dispatched':
+        return <DispatchedStatus />
       default:
         return <Text style={styles.defaultText}>Unknown Status</Text>
     }
@@ -26,6 +30,14 @@ const PendingStatus = () => {
   return (
     <View style={styles.pendingContainer}>
       <Text style={styles.pendingText}>Pending</Text>
+    </View>
+  )
+}
+
+const DispatchedStatus = () => {
+  return (
+    <View style={styles.dispatchedContainer}>
+      <Text style={styles.dispatchedText}>Dispatched</Text>
     </View>
   )
 }
@@ -49,7 +61,7 @@ const ConfirmStatus = () => {
 const AcknowledgeStatus = () => {
   return (
     <View style={styles.acknowledgeContainer}>
-      <Text style={styles.acknowledgeText}>Acknowledge</Text>
+      <Text style={styles.acknowledgeText}>Acknowledged</Text>
     </View>
   )
 }
@@ -115,6 +127,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     paddingVertical: '2%',
     backgroundColor: '#146CBE33',
+    borderRadius: 20
+  },
+  // New styling for dispatched status
+  dispatchedText: {
+    color: '#008080', // Teal color for dispatched text
+    fontSize: 12,
+    fontWeight: '600',
+    lineHeight: 14
+  },
+  dispatchedContainer: {
+    paddingHorizontal: '5%',
+    paddingVertical: '2%',
+    backgroundColor: '#E0FFFF', // Light cyan background for a fresh look
     borderRadius: 20
   }
 })
