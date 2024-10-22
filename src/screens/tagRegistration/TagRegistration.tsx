@@ -1,10 +1,9 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Pressable, Button } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button, Vibration } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
-import { useNavigation } from '@react-navigation/native'
 import { horizontalScale, verticalScale } from '../../helper/Metrics'
 import CustomInputText from '../../components/common/CustomInputText'
 import SelectField from '../../components/common/SelectFieldBig'
@@ -12,21 +11,16 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 import InputText from '../../components/common/InputText'
-import BottomNavigator from '../../navigation/bottom/BottomNavigator'
 import showAlert from '../../utils/showAlert'
 
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params.response;
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
-    console.log(custDetails, "custDetails")
-    console.log(vrnDetails, "vrnDetails")
-    console.log(CustomerRegData, "CustomerRegData")
-    console.log(otpData, "otpData")
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
-    const [modalVisible, setModalVisible] = useState<null | boolean>(null)
+    const [modalVisible, setModalVisible] = useState<null | boolean>(false)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
@@ -39,13 +33,39 @@ const TagRegistration = (props: any) => {
     const [vehicleFuelType, setVehicleFuelType] = useState("")
     const [listOfMakers, setListOfMakers] = useState(["Toyota", "Honda", "Ford"])
     const [vehicleModelValue, setVehicleModelValue] = useState("")
-    const [npciIdData, setNpciIdData] = useState("")
+    const [npciIdData, setNpciIdData] = useState(vrnDetails?.npciVehicleClassID || "")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
+    const [typeOfVehicle, setTypeOfVehicle] = useState(vrnDetails?.type)
+    const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType)
     const [errors, setErrors] = useState<any>({})
     const [stateCode, setStateCode] = useState("")
-    console.log(stateOfRegistration, "stateOfRegistration")
+
+    const updatevehicleType = (value: string) => {
+        if (value === 'LMV' && vrnDetails?.tagVehicleClassID === '4' && vehicleIscommercial === 'false') {
+            setVehicleType('Motor Car')
+
+        } else if (value === 'LMV' && vrnDetails?.tagVehicleClassID === '4' && vehicleIscommercial === 'true') {
+            setVehicleType('Maxi Cab')
+        }
+    }
+
+    const onVechileTypeSelect = (type: string) => {
+
+        setTypeOfVehicle(type)
+        if (vehicleIscommercial === "false" && type === "LPV") {
+            setVehicleType("Maxi Cab")
+        } if (vehicleIscommercial === "false" && type === "LGV") {
+            setVehicleType("Goods Carrier")
+        }
+        if (vehicleIscommercial === "true" && type === "LPV") {
+            setVehicleType("Maxi Cab")
+        }
+        if (vehicleIscommercial === "true" && type === "LGV") {
+            setVehicleType("Goods Carrier")
+        }
+    }
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -152,7 +172,6 @@ const TagRegistration = (props: any) => {
             showAlert('Please fill in all required fields');
             return false;
         }
-
         return true;
     }
 
@@ -161,6 +180,13 @@ const TagRegistration = (props: any) => {
             return;
         }
         setLoading(true)
+        if (vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4') {
+            updatevehicleType(vrnDetails?.type)
+        }
+
+        if (vrnDetails?.type && vrnDetails?.npciVehicleClassID === '20' && !vehicleType) {
+            onVechileTypeSelect(vrnDetails?.type)
+        }
         const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
         try {
             const bodyData = JSON.stringify({
@@ -168,7 +194,7 @@ const TagRegistration = (props: any) => {
                     "sessionId": props.route.params?.sessionId
                 },
                 "agentId": Number(userData?.user?.id),
-                "masterId": "",
+                "masterId": Number(userData?.user?.master_id) || "",
                 "agentName": userData?.user?.name || CustomerRegData?.name || "",
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase(),
@@ -177,20 +203,20 @@ const TagRegistration = (props: any) => {
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
                     "model": vrnDetails?.model || vehicleModelValue,
                     "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
-                    "type": vrnDetails?.type || "Motor Car",
+                    "type": typeOfVehicle,
                     "status": "Active",
                     "npciStatus": "Active",
                     "isCommercial": vehicleIscommercial,
                     "tagVehicleClassID": "4",
                     "npciVehicleClassID": npciIdData || "4",
-                    "vehicleType": vrnDetails?.vehicleType,
+                    "vehicleType": vehicleType,
                     "rechargeAmount": vrnDetails?.rechargeAmount,
                     "securityDeposit": vrnDetails?.securityDeposit,
                     "tagCost": vrnDetails?.tagCost,
                     "debitAmt": dynamicDebitAmount.toString(),
                     "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
                     "isNationalPermit": nationalpermit || vrnDetails?.isNationalPermit || "2",
-                    "permitExpiryDate": permitExpiryDate || vrnDetails?.permitExpiryDate,
+                    "permitExpiryDate": permitExpiryDate || vrnDetails?.permitExpiryDate || "",
                     "stateOfRegistration": stateCode || vrnDetails?.stateOfRegistration || stateOfRegistration,
                 },
                 "custDetails": {
@@ -201,20 +227,18 @@ const TagRegistration = (props: any) => {
                 "fasTagDetails": {
                     "serialNo": `${tagSerialNumber1}-${tagSerialNumber2}-${tagSerialNumber3}`,
                     "tid": "",
-                    "udf1": "",
+                    "udf1": Number(userData?.user?.id),
                     "udf2": "",
                     "udf3": "",
                     "udf4": "",
                     "udf5": ""
                 }
             })
-            console.log(bodyData, "bodyData")
-
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
             )
-            console.log(res, "registration res")
             successResponse()
+            console.log(res, "response")
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
             // failureResponse()
@@ -305,7 +329,7 @@ const TagRegistration = (props: any) => {
                 <View style={{ marginTop: "5%" }}>
                     <CustomLabelText label={"Enter Engine number"} />
                     {vrnDetails && vrnDetails?.engineNo?.length > 2 ?
-                        <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.engineNo}
+                        <InputText placeholder={"Engine number"} value={vrnDetails?.engineNo}
                             isEditable={false}
                         /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
                             onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
@@ -344,10 +368,16 @@ const TagRegistration = (props: any) => {
                         /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
                     </View>
 
-                    <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"NPCI Class"} />
-                        <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
-                    </View>
+                    {vrnDetails && vrnDetails?.npciVehicleClassID ? <View style={{ marginTop: "5%" }}>
+                        <CustomLabelText label={"NPCI Vehicle Class ID"} />
+                        <CustomInputText placeholder={"NPCI Vehicle Class ID"} value={vrnDetails?.npciVehicleClassID} isEditable={false} />
+                    </View> :
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"NPCI Class"} />
+                            <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
+                        </View>
+                    }
+
                 </>
 
                 <Text style={styles.label}>Tag serial number</Text>
@@ -368,6 +398,18 @@ const TagRegistration = (props: any) => {
                     <View style={{ flex: 1 }}>
                         <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
                     </View>
+                </View>
+
+                <View style={{ marginBottom: "5%" }}>
+                    {vrnDetails && vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4' ? <View style={{ marginTop: "5%" }}>
+                        <CustomLabelText label={"Vehicle Type"} />
+                        <CustomInputText placeholder={"Vehicle Type"} value={vrnDetails?.type} isEditable={false} />
+                    </View> :
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"Vehicle Type"} />
+                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value) => onVechileTypeSelect(value.value)} borderColor={!vehicleFuelType ? "red" : "black"} />
+                        </View>
+                    }
                 </View>
 
                 <View style={{ marginBottom: "5%" }}>

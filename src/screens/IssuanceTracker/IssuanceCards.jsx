@@ -73,10 +73,11 @@ const IssuanceCards = ({ data }) => {
     try {
       // Fetch the image as an array buffer
       const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
-      const fileBuffer = Buffer.from(response.data, 'binary');
+      console.log(response, "response here")
+      const fileBuffer = Buffer.from(response && response?.data, 'binary');
 
       // Convert to base64
-      let base64Data = fileBuffer.toString('base64');
+      let base64Data = fileBuffer?.toString('base64');
       base64Data = base64Data.replace("dataimage/jpegbase64", '');
       // Construct the full data URL
       const dataURL = `data:image/png;base64,${base64Data}`;
@@ -270,7 +271,7 @@ const IssuanceCards = ({ data }) => {
             </View>
           </View>
         </View>
-{/* 
+        {/* 
         <View>
           <Text style={styles.amount}>
             {verificationStatus === 'verified' ? `₹ ${tagComm?.VC4}` : `₹0`}
@@ -331,7 +332,7 @@ const IssuanceCards = ({ data }) => {
               marginTop: '3%'
             }}
           >
-            <Image source={require('../../assets/bankIcon.png')} style={{width:24,height:22}} />
+            <Image source={require('../../assets/bankIcon.png')} style={{ width: 24, height: 22 }} />
             <Text style={styles.bankText}> Bajaj </Text>
           </View>
         </View>
@@ -365,7 +366,7 @@ const IssuanceCards = ({ data }) => {
                   : commisionPartaillyPaidIcon
           }
         />
-        <Image source={require('../../assets/dangerPalm.png')} style={{width:25,height:25}}/>
+        <Image source={require('../../assets/dangerPalm.png')} style={{ width: 25, height: 25 }} />
       </View>
       <Modal
         visible={modalVisible}
@@ -409,53 +410,53 @@ const IssuanceCards = ({ data }) => {
                     ))}
                 </View>
               </View>
-              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
-                <Text style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}>RC Front</Text>
+              <View style={{ height: 220, width: isSmallScreen ? 290 : 345, gap: 7 }}>
+                <Text style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen ? 14 : 16 }}>RC Front</Text>
                 {images && images.rcImageFront ? (
-                  <Image source={{ uri: images.rcImageFront }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
+                  <Image source={{ uri: images.rcImageFront }} style={{ width: isSmallScreen ? 290 : 345, height: 200, borderRadius: 20, borderColor: 'black', borderWidth: 1 }} />
                 ) : (
                   <Text>No Image</Text>
                 )}
                 {/* <Button title="Download Image" onPress={downloadImage} /> */}
               </View>
-              <View style={{ height: 220, width: isSmallScreen?290:345,  gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen ? 290 : 345, gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen ? 14 : 16 }}
                 >
                   RC Back
                 </Text>
                 {
-                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
+                  images && images?.rcImageBack ? <Image source={{ uri: images.rcImageBack }} style={{ width: isSmallScreen ? 290 : 345, height: 200, borderRadius: 20, borderColor: 'black', borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen ? 290 : 345, gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16  }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen ? 14 : 16 }}
                 >
                   Vehicle Front
                 </Text>
                 {
-                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: isSmallScreen?290:345,height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
+                  images && images?.vehicleImageFront ? <Image source={{ uri: images.vehicleImageFront }} style={{ width: isSmallScreen ? 290 : 345, height: 200, borderRadius: 20, borderColor: 'black', borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7 }}>
+              <View style={{ height: 220, width: isSmallScreen ? 290 : 345, gap: 7 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16  }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen ? 14 : 16 }}
                 >
                   Vehicle Side
                 </Text>
                 {
-                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: isSmallScreen?290:345,height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
+                  images && images?.vehicleImageSide ? <Image source={{ uri: images.vehicleImageSide }} style={{ width: isSmallScreen ? 290 : 345, height: 200, borderRadius: 20, borderColor: 'black', borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
-              <View style={{ height: 220, width: isSmallScreen?290:345, gap: 7, marginBottom:2 }}>
+              <View style={{ height: 220, width: isSmallScreen ? 290 : 345, gap: 7, marginBottom: 2 }}>
                 <Text
-                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen?14:16 }}
+                  style={{ color: 'grey', fontWeight: '400', fontSize: isSmallScreen ? 14 : 16 }}
                 >
                   Tag Image
                 </Text>
                 {
-                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: isSmallScreen?290:345, height: 200,borderRadius:20,borderColor: 'black',borderWidth: 1 }} /> : <Text>No Image</Text>
+                  images && images?.TAGaFixImage ? <Image source={{ uri: images.TAGaFixImage }} style={{ width: isSmallScreen ? 290 : 345, height: 200, borderRadius: 20, borderColor: 'black', borderWidth: 1 }} /> : <Text>No Image</Text>
                 }
               </View>
             </ScrollView>
@@ -480,7 +481,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 14,
-    marginBottom:-4
+    marginBottom: -4
   },
   idText: {
     color: '#000000',
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
     height: '80%',
     backgroundColor: 'white',
     borderRadius: 15,
-    justifyContent:  'flex-start',
+    justifyContent: 'flex-start',
     textAlign: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
   detailsSection: {
     alignItems: 'center',
     marginTop: 3,
-   
+
   },
   dataContainer: {
     borderWidth: 1,
@@ -587,7 +588,7 @@ const styles = StyleSheet.create({
   reportDetailsTitleText: {
     color: 'grey',
     fontWeight: '400',
-    fontSize: isSmallScreen?12:14,
+    fontSize: isSmallScreen ? 12 : 14,
     lineHeight: 16
   },
   reportDetailsContainer: {
@@ -597,9 +598,9 @@ const styles = StyleSheet.create({
   },
   reportDetailsValueText: {
     color: '#000000',
-    width: isSmallScreen?'60%':'60%',
+    width: isSmallScreen ? '60%' : '60%',
     fontWeight: '400',
-    fontSize: isSmallScreen?12:14,
+    fontSize: isSmallScreen ? 12 : 14,
     lineHeight: 16
   },
   // ValueText: {

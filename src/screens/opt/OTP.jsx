@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import OtpInputText from './OtpInputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, validatePathConfig } from '@react-navigation/native'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import showAlert from '../../utils/showAlert'
@@ -32,6 +32,7 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: sessionId
       })
+      console.log(response, "validate otp")
 
       if (otpType === 'tagReplacement') {
         return props.navigation.navigate('tagReplacementForm', {
@@ -97,24 +98,23 @@ const OTP = (props) => {
           <Text style={styles.OtpVerificationText}>OTP Verification</Text>
           <Text style={styles.otpDescription}>
             Enter the OTP sent to{' '}
-            <Text style={{ color: '#000000' }}>{`+91${
-              userData?.mobile || userData?.mobileNumber
-            }`}</Text>
+            <Text style={{ color: '#000000' }}>{`+91${userData?.mobile || userData?.mobileNumber
+              }`}</Text>
           </Text>
 
           <View style={{ flexDirection: 'row', marginVertical: '5%' }}>
             <OtpInputText otp={otp} setOtp={setOtp} />
           </View>
-           <View style={{ justifyContent: 'flex-end' , alignItems:'center'  }}>
-          <Text style={styles.otpDescription}>
-            Didn’t you recieve the OTP?
-            <Text style={{ color: '#085AF8' }}> Resend OTP</Text>
-          </Text>
-          <PrimaryBtn
-             title={'Verify'}
-            disabled={loading}
-            onPress={() => verifyOtp()}
-          />
+          <View style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Text style={styles.otpDescription}>
+              Didn’t you recieve the OTP?
+              <Text style={{ color: '#085AF8' }}> Resend OTP</Text>
+            </Text>
+            <PrimaryBtn
+              title={'Verify'}
+              disabled={loading}
+              onPress={() => verifyOtp()}
+            />
           </View>
         </View>
       </View>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: 'Inter',
     fontWeight: '400',
-    marginBottom:15
+    marginBottom: 15
   }
 })
 

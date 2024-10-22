@@ -9,6 +9,7 @@ import Loader from '../../components/ui/Loader';
 
 const ConsentForm = (props: any) => {
   const { adharResData, contactPersonData, location, posLocationImage, eSign } = props.route.params;
+  console.log(eSign, "eSign");
   const [isExpanded, setIsExpanded] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +37,7 @@ const ConsentForm = (props: any) => {
   };
 
   const handleSendData = async () => {
+    console.log('handleSendData stated');
     if (!isChecked) {
       Alert.alert('Success', 'Please check the checkbox ', [
         {
@@ -49,8 +51,10 @@ const ConsentForm = (props: any) => {
 
     setLoading(true);
     const consentScreenShot = await takeScreenShot();
+    console.log('consentScreenShot', consentScreenShot);
     try {
       const form = new FormData();
+      console.log(form, "form");
 
       form.append('contact_person_name', contactPersonData?.contactPersonName);
       form.append('contact_person_mobile_number', contactPersonData?.contactPersonNumber);
@@ -138,12 +142,12 @@ const ConsentForm = (props: any) => {
 
         {/* Show screenshot if taken */}
         {screenShotImage && (
-          <Image source={{ uri: screenShotImage.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />
+          <Image source={{ uri: screenShotImage.uri }} style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }} />
         )}
 
         {/* E-sign image */}
         <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-          {eSign && <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }} />}
+          {eSign && <Image source={{ uri: eSign.uri }} style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }} />}
         </View>
       </View>
 

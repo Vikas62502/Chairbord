@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -217,7 +217,7 @@ const SignIn = () => {
                   >
                     <Image
                       source={isPasswordVisible ? EyeOffIcon : EyeIcon} // Toggle between eye and eye-off icon
-                      style={[styles.eyeIcon, { tintColor: 'gray'  }]} // Change icon color based on focus
+                      style={[styles.eyeIcon, { tintColor: 'gray' }]} // Change icon color based on focus
                     />
                   </TouchableOpacity>
                 </View>
@@ -378,11 +378,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     padding: 10,
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   eyeIcon: {
     width: 20,
-    marginBottom:4,
+    marginBottom: 4,
     height: 18, // Adjust size based on your icon's dimensions
   },
   termsContainer: {

@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet,Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient'
 
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<400;
+const isSmallScreen = width < 400;
 const OverlayHeader = ({ title, showBackButton = true }) => {
   const navigation = useNavigation()
   return (
@@ -17,10 +17,10 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
             {showBackButton && (
               <View>
                 <TouchableOpacity
-                   onPress={() => navigation.goBack()}
+                  onPress={() => navigation.goBack()}
                   style={styles.backArrow}
                 >
-                  <Image source={require('../assets/back.png')} style={{width:40 ,height:40,}}  />
+                  <Image source={require('../assets/back.png')} style={{ width: 40, height: 40, }} />
                 </TouchableOpacity>
               </View>
             )}
@@ -31,7 +31,7 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
           </View>
         </View>
         <View style={styles.chairBordLogo}>
-          <Image source={require('../assets/chairBordLogoWithoutName.png')} style={{width:120 ,height:120,}}  />
+          <Image source={require('../assets/chairbordLogoWithoutName.png')} style={{ width: 120, height: 120, }} />
         </View>
       </LinearGradient>
     </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   overlayText: {
     fontWeight: '700',
-    fontSize: isTablet?28:24,
+    fontSize: isTablet ? 28 : 24,
     lineHeight: 29,
     color: 'white'
   },
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
   },
   chairBordLogo: {
     position: 'absolute',
-    left: isTablet?'38%':isSmallScreen?'35%':'36%',
+    left: isTablet ? '38%' : isSmallScreen ? '35%' : '36%',
     top: '15%',
     zIndex: 0,
-    opacity:0.5
+    opacity: 0.5
   }
 })
 

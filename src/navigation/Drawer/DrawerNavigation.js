@@ -17,8 +17,10 @@ import Request from '../../screens/requests/Request';
 import IssuanceTracker from '../../screens/IssuanceTracker/IssuanceTracker';
 import Order from '../../screens/order/Order';
 import OrderSummary from '../../screens/order/OrderSummary';
+import StackNavigation from '../Stack/StackNavigation';
 
 const DrawerNavigation = ({ }) => {
+    console.log("Rendering DrawerNavigation"); 
     const Drawer = createDrawerNavigator();
     const navigation = useNavigation()
     return (
@@ -26,6 +28,7 @@ const DrawerNavigation = ({ }) => {
             initialRouteName='dashboard'
             drawerContent={props => <CustomDrawer {...props} />}
         >
+            <Drawer.Screen name="HomeStack" component={StackNavigation} options={{ headerShown: false }} />
             {/* <Drawer.Screen
                 name="Main"
                 component={Main}
@@ -38,7 +41,7 @@ const DrawerNavigation = ({ }) => {
             />
             
             <Drawer.Screen
-                name="dashboard"
+                name="drawer"
                 component={Dashboard}
                 options={{ header: () => <DrawerHeader title={"home"} /> }}
             />

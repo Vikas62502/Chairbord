@@ -76,8 +76,8 @@ export const npciVehicleClassIDData = [
 ]
 
 export const commercialOptions = [
-    { id: 1, title: "True", value: "true" },
-    { id: 2, title: "False", value: "false" }
+    { id: 1, title: "Yes", value: "true" },
+    { id: 2, title: "No", value: "false" }
 ];
 
 export const isNationalPermitOptions = [
@@ -175,4 +175,10 @@ export const stateData = [
 export const telanganaStateCode = [
     { id: 1, title: "TG", code: "TG" },
     { id: 2, title: 'TL', code: 'TL' },
+    { id: 3, title: 'TS', code: 'TS' },
+]
+
+export const vehicleTypeDropdown = [
+    { id: 1, title: "Passenger Vehicle", value: "LPV" },
+    { id: 2, title: "Goods Vehicle", value: "LGV" },
 ]
