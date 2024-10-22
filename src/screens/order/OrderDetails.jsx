@@ -50,10 +50,11 @@ const OrderDetails = (props) => {
 
   const [createOrderModal, setCreateOrderModal] = useState(false)
   const [isOrderSuccess, setIsOrderSuccess] = useState(false)
-  const [transactionId, setTransactionId] = useState('');
-  const [userData, setUserData] = useState(null);
-  const [orderId, setOrderId] = useState('');
-  const [userId, setUserId] = useState(0);
+  const [isOrderFailed, setIsOrderFailed] = useState(false)
+  const [transactionId, setTransactionId] = useState('')
+  const [userData, setUserData] = useState(null)
+  const [orderId, setOrderId] = useState('')
+  const [userId, setUserId] = useState(0)
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -62,18 +63,19 @@ const OrderDetails = (props) => {
 
   const getUserData = async () => {
     let userData = await getCache('userData')
-    // console.log(userData.user.id, "here");
     setUserId(userData.user.id)
   }
 
   useEffect(() => {
     getUserData()
-    console.log(userData, "here");
   }, [])
 
-  let TransactionID, OrderID;
+  let TransactionID, OrderID
 
   const handleSubmit = async () => {
+    if(!ordersArray || ordersArray.length === 0){
+      return;
+    }
     setLoading(true)
     try {
       const response = await client.post('/order/fastag/request-complete', {
@@ -85,13 +87,13 @@ const OrderDetails = (props) => {
       })
 
       if (response.status === 201) {
-        console.log('Order created successfully:', response.data)
-        setTransactionId(response.data.transactionId);
+        // console.log('Order created successfully:', response.data)
+        setTransactionId(response.data.transactionId)
         TransactionID = response.data.transactionId
-        setOrderId(response.data.orderId);
+        setOrderId(response.data.orderId)
         OrderID = response.data.orderId
-        setOrdersArray([]);
-        console.log(TransactionID, totalOrderAmount, OrderID, "in order creation");
+        setOrdersArray([])
+        setIsOrderSuccess(true)
       }
     } catch (error) {
       console.error(
@@ -99,11 +101,17 @@ const OrderDetails = (props) => {
         error.response ? error.response.data : error.message
       )
       // Handle error, e.g., show an error message to the user
+      setIsOrderFailed(true);
     } finally {
       setLoading(false)
-      setIsOrderSuccess(true);
     }
   }
+
+  useEffect(() => {
+    if(transactionId && orderId){
+      setIsOrderSuccess(true)
+    }
+  }, [transactionId, orderId])
 
   return (
     <>
@@ -191,8 +199,13 @@ const OrderDetails = (props) => {
         <OrderSuccessModal
           visible={isOrderSuccess}
           onClose={setIsOrderSuccess}
+          transactionId={transactionId}
+          orderId={orderId}
         />
-        {/* <OrderFaildModal /> */}
+        <OrderFaildModal
+          visible={isOrderFailed}
+          onClose={setIsOrderFailed}
+        />
         <CreateOrderModal
           visible={createOrderModal}
           onClose={() => setCreateOrderModal(false)}

@@ -6,30 +6,34 @@ import ExcelButton from '../../components/ui/ExcelButton'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
 import CardAccordian from '../../components/common/CardAccordian'
 
-const customerDetailsData = [
-  {
-    title: 'Order Quantity',
-    value: ':  50'
-  },
-  {
-    title: 'Dispatced Quantity',
-    value: ':  40'
-  },
-  {
-    title: 'Returned Quantity',
-    value: ':  10'
-  },
-  {
-    title: 'Acknowledge Quantity',
-    value: ':  20'
-  },
-  {
-    title: 'Pending',
-    value: ':  10'
-  }
-]
-
 const OrderSummary = (props) => {
+  const data = props.route.params.orderData;
+  console.log(props.route.params.orderData, "milgya?")
+
+
+  const customerDetailsData = [
+    {
+      title: 'Order Quantity',
+      value: `:  ${data.tagsOrdered}`
+    },
+    {
+      title: 'Dispatced Quantity',
+      value: `:  ${data.tagsDispatched}`
+    },
+    {
+      title: 'Returned Quantity',
+      value: `:  ${data.tagsReturned}`
+    },
+    {
+      title: 'Acknowledge Quantity',
+      value: `:  ${data.tagsAcknowledged}`
+    },
+    {
+      title: 'Pending',
+      value: `:  ${data.tagsPending}`
+    }
+  ]
+
   return (
     <>
       <OverlayHeader title={'Order Summary'} navigateTo={'drawer'} />
@@ -44,7 +48,7 @@ const OrderSummary = (props) => {
                 marginBottom: '6%'
               }}
             >
-              <Text style={styles.headingText}>Order ID: TRR:8844851</Text>
+              <Text style={styles.headingText}>Order ID: {data.orderId}</Text>
               <ExcelButton title={'Excel'} />
             </View>
 
@@ -64,13 +68,13 @@ const OrderSummary = (props) => {
             </View>
             <LinearButton
               title={'Acknowledgement'}
-              onPress={() => props.navigation.navigate('acknowledgement')}
+              onPress={() => props.navigation.navigate('acknowledgement', { orderId: data.orderId })}
             />
           </View>
 
-          <HorizontalDivider />
+          {/* <HorizontalDivider /> */}
 
-          <CardAccordian
+          {/* <CardAccordian
             title={'Kotak Bank'}
             content={
               <View>
@@ -100,7 +104,7 @@ const OrderSummary = (props) => {
                 </View>
               </View>
             }
-          />
+          /> */}
         </View>
       </ScrollView>
     </>

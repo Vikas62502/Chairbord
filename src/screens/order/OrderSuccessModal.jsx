@@ -11,8 +11,8 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AddBtn from '../../components/ui/AddBtn'
 
-const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,totalOrderAmount,orderId }) => {
-  console.log(transactionId, totalOrderAmount, orderId, "in the success model");
+const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,orderId }) => {
+  // console.log(transactionId, totalOrderAmount, orderId, "in the success model");
   const navigation = useNavigation()
   return (
     <Modal
@@ -44,7 +44,7 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,totalOrder
               </View>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Amount Paid</Text>
-                <Text style={styles.detailValue}>: {totalOrderAmount}</Text>
+                <Text style={styles.detailValue}>: 100</Text>
               </View>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Transaction Id.</Text>
@@ -58,7 +58,7 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,totalOrder
             </TouchableOpacity>
             <AddBtn
               title={'Order History'}
-              onPress={() => navigation.navigate('OrderHistory')}
+              onPress={() => navigation.navigate('Order')}
             />
           </View>
         </View>
