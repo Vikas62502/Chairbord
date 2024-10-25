@@ -4,6 +4,7 @@ import { setupInterceptorsTo } from './interceptor'
 
 const customBaseUrl = 'https://cbpl.chairbord.in/v1/api'
 
+
 export const client = axios.create({
   baseURL: `${customBaseUrl}`,
   // timeout: 20000,

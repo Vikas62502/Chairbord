@@ -49,11 +49,6 @@ const replacementReason = [
 
 const TagReplacementForm = (props: any) => {
   const { response, customerId, userData, sessionId: _sessionId } = props?.route?.params
-  console.log(props.route.params, 'props.route.params')
-
-  console.log(response, customerId, userData, _sessionId, 'logged!')
-  console.log(response, "request id")
-
   const { mobileNo, walletId } = response.custDetails
 
   const {
@@ -67,10 +62,12 @@ const TagReplacementForm = (props: any) => {
     // vehicleDescriptor
   } = response?.vrnDetails
 
+  console.log(response?.vrnDetails, "response?.vrnDetails");
+
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
   const [tagSerialNumber, setTagSerialNumber] = useState('')
-  const [sessionId, setSessionId] = React.useState('dummySessionId')
+  const [sessionId, setSessionId] = React.useState()
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
@@ -79,11 +76,6 @@ const TagReplacementForm = (props: any) => {
   const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
   const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
   const [selectNationPermit, setSelectNationPermit] = useState(nationalPermit)
-
-  console.log(selectNationPermit, 'selectNationPermit')
-
-  console.log(vehicleDescriptor, 'vehicleDescriptor')
-  console.log(stateOfRegistration, 'stateOfRegistration')
 
   const getUserData = async () => {
     try {
@@ -130,7 +122,6 @@ const TagReplacementForm = (props: any) => {
       }
       console.log(body, "body data");
       const res = await client.post(`/bajaj/replaceFastag`, body);
-      console.log(res, "response");
       setModelIsSuccess(true);
       setModalShow(true);
     } catch (err: any) {

@@ -1,0 +1,45 @@
+const data = {
+    "regDetails": {
+        "sessionId": "0edcbdc8e8bd4eaa916990f5a44889fa"
+    },
+    "agentId": 166,
+    "masterId": 589,
+    "agentName": "Vikas Yadav",
+    "vrnDetails": {
+        "vrn": "UK07DW0020",
+        "chassis": "MA1UJ4YC2L2J37552",
+        "engine": "YCL4J35768",
+        "vehicleManuf": "MAHINDRA & MAHINDRA LIMITED",
+        "model": "THAR LX D MT 4WD 4S HT",
+        "vehicleColour": "NEPOLI BLACK",
+        "type": "LMV",
+        "status": "Active",
+        "npciStatus": "Active",
+        "isCommercial": "false",
+        "tagVehicleClassID": "4",
+        "npciVehicleClassID": "4",
+        "vehicleType": "Motor Car",
+        "rechargeAmount": "100.0",
+        "securityDeposit": "200.0",
+        "tagCost": "100.0",
+        "debitAmt": "400",
+        "vehicleDescriptor": "Diesel",
+        "isNationalPermit": "2",
+        "permitExpiryDate": "",
+        "stateOfRegistration": "UK"
+    },
+    "custDetails": {
+        "name": "MOHIT KUMAR",
+        "mobileNo": "9560611324",
+        "walletId": ""
+    },
+    "fasTagDetails": {
+        "serialNo": "608268-001-12345678",
+        "tid": "",
+        "udf1": 166,
+        "udf2": "",
+        "udf3": "",
+        "udf4": "",
+        "udf5": ""
+    }
+}
