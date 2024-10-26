@@ -1,13 +1,14 @@
-import { View, Text, SafeAreaView, StyleSheet, Alert, ActivityIndicator,Dimensions  } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Alert, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import InputText from '../../components/common/InputText'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 import { getCache, setCache } from '../../helper/Storage'
+import { getSocket } from '../../utils/socket'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<400;
+const isSmallScreen = width < 400;
 
 const Mobileverification = (props: any) => {
   const [loading, setLoading] = useState(false)
@@ -86,6 +87,9 @@ const Mobileverification = (props: any) => {
     getUserData()
   }, [])
 
+  const socket = getSocket();
+  console.log(socket, "socket")
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     justifyContent: 'flex-end',
     // padding: "5%",
-    height: isSmallScreen?"50%":"60%",
+    height: isSmallScreen ? "50%" : "60%",
 
   },
 })

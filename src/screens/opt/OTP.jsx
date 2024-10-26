@@ -31,7 +31,7 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: sessionId
       })
-
+      console.log(response, "validate otp ress")
       if (otpType === 'tagReplacement') {
         return props.navigation.navigate('tagReplacementForm', {
           sessionId: _sessionId,
