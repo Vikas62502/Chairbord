@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, Modal, ScrollView, TouchableOpacity, Pressable, Image } from 'react-native';
 import InputText from '../../components/common/InputText';
 import SelectField from '../../components/common/SelectFieldBig';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +21,14 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
     quantity: 0,
     amount: 0
   });
+  const [deliveryAddress, setDeliveryAddress] = useState({
+    address: '',
+    state: '',
+    pincode: '',
+    phone: '',
+    alternate_m: ''
+  });
+
 
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -28,6 +36,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
 
   const formDataHandler = (key, value) => {
     setOrderBodyData({ ...orderBodyData, [key]: value });
+    setDeliveryAddress({ ...deliveryAddress, [key]: value });
   };
 
   const setBank = (selectedItem, index) => {
@@ -113,7 +122,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
       <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%', }}>
               <View>
                 <Text style={styles.titleText}>Create Order</Text>
               </View>
@@ -127,45 +136,85 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 </Pressable>
               </View>
             </View>
-            <SelectField dataToRender={bankNameData} title={'Select bank name'} selectedValue={setBank} />
-            <View style={{ marginTop: '5%' }}>
-              <SelectField
-                dataToRender={vehicleClassData}
-                title={'Select vehicle class'}
-                selectedValue={(selectedItem, index) => {
-                  formDataHandler('vehicleClass', selectedItem.id);
-                }}
-              />
-            </View>
-
-            <View style={{ width: '100%', marginTop: '4%' }}>
-              <InputText value={tagCost} placeholder="Tag Cost" secure={false} />
-            </View>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View style={{ width: '45%' }}>
-                <InputText
-                  placeholder={'Enter quantity'}
-                  inputStyle={{ width: '100%' }}
-                  value={orderBodyData.quantity}
-                  onChangeText={(value) => {
-                    formDataHandler('quantity', value);
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+              <SelectField dataToRender={bankNameData} title={'Select bank name'} selectedValue={setBank} />
+              <View style={{ marginTop: '5%' }}>
+                <SelectField
+                  dataToRender={vehicleClassData}
+                  title={'Select vehicle class'}
+                  selectedValue={(selectedItem, index) => {
+                    formDataHandler('vehicleClass', selectedItem.id);
                   }}
                 />
               </View>
-              <View style={{ width: '45%' }}>
-                <InputText placeholder={'Enter amount'} inputStyle={{ width: '100%' }} value={JSON.stringify(orderBodyData.amount)} />
-              </View>
-            </View>
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={handleClose} style={styles.button}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleNext()} style={[styles.button, styles.applyButton]}>
-                <Text style={[styles.buttonText, styles.applyButtonText]}>Submit</Text>
-              </TouchableOpacity>
-            </View>
+              <View style={{ width: '100%', marginTop: '4%' }}>
+                <InputText value={orderBodyData?.tagCost}
+                  placeholder="Tag Cost"
+                  secure={false}
+                  onChangeText={(value) => {
+                    formDataHandler('tagcost', value);
+                  }} />
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ width: '45%' }}>
+                  <InputText
+                    placeholder={'Quantity'}
+                    inputStyle={{ width: '100%' }}
+                    value={orderBodyData.quantity}
+                    onChangeText={(value) => {
+                      formDataHandler('quantity', value);
+                    }}
+                  />
+                </View>
+                <View style={{ width: '45%' }}>
+                  <InputText placeholder={'Amount'} inputStyle={{ width: '100%' }} value={JSON.stringify(orderBodyData.amount)} />
+                </View>
+              </View>
+              <View style={{ width: '100%' }}>
+                <InputText value={deliveryAddress?.address} placeholder="Address" secure={false} onChangeText={(value) => {
+                  formDataHandler('address', value);
+                }} />
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ width: '45%' }}>
+                  <InputText
+                    placeholder={'State'}
+                    inputStyle={{ width: '100%' }}
+                    value={deliveryAddress?.state}
+                    onChangeText={(value) => {
+                      formDataHandler('state', value);
+                    }}
+                  />
+                </View>
+                <View style={{ width: '45%' }}>
+                  <InputText placeholder={'Pincode'} inputStyle={{ width: '100%' }} value={deliveryAddress?.pincode}  onChangeText={(value) => {
+                      formDataHandler('pincode', value);
+                    }}/>
+                </View>
+              </View>
+
+
+              <View style={{ width: '100%'}}>
+                <InputText value={deliveryAddress?.phone} placeholder="Mobile number" secure={false} onChangeText={(value) => {
+                  formDataHandler('phone', value);
+                }} />
+              </View>
+              <View style={{ width: '100%'}}>
+                <InputText value={deliveryAddress?.alternate_m} placeholder="Alternate mobile number" secure={false} onChangeText={(value) => {
+                  formDataHandler('alternate', value);
+                }} />
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleClose} style={styles.button}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleNext()} style={[styles.button, styles.applyButton]}>
+                  <Text style={[styles.buttonText, styles.applyButtonText]}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -182,6 +231,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
+    height: '80%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
