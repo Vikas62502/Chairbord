@@ -65,4 +65,5 @@ yarn-error.log
 # testing
 /coverage
 
+android
 src/client/Axios.ts

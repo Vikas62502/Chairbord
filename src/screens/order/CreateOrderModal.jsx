@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  ScrollView,
-  TouchableOpacity,
-  Pressable,
-  Image
-} from 'react-native'
-import InputText from '../../components/common/InputText'
-import SelectField from '../../components/common/SelectFieldBig'
-import { useNavigation } from '@react-navigation/native'
-import Loader from '../../components/ui/Loader'
-import { client } from '../../client/Axios'
-import { getCache } from '../../helper/Storage'
-import { useOrders } from '../../orderContext/OrderContext'
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, Image } from 'react-native';
+import InputText from '../../components/common/InputText';
+import SelectField from '../../components/common/SelectFieldBig';
+import { useNavigation } from '@react-navigation/native';
+import Loader from '../../components/ui/Loader';
+import { client } from '../../client/Axios';
+import { getCache } from '../../helper/Storage';
+import { useOrders } from '../../orderContext/OrderContext';
 
 const CreateOrderModal = ({ visible, onClose, onApply }) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   // Access the ordersArray and setOrdersArray from context
-  const { ordersArray, setOrdersArray } = useOrders()
+  const { ordersArray, setOrdersArray } = useOrders();
 
   const [orderBodyData, setOrderBodyData] = useState({
     bankId: 0,
@@ -29,99 +20,80 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
     tagCost: 0,
     quantity: 0,
     amount: 0
-  })
+  });
 
-  const [loading, setLoading] = useState(false)
-  const [userData, setUserData] = useState(null)
-  const [tagCost, setTagCost] = useState('')
-
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [tagCost, setTagCost] = useState('');
 
   const formDataHandler = (key, value) => {
-    setOrderBodyData({ ...orderBodyData, [key]: value })
-  }
+    setOrderBodyData({ ...orderBodyData, [key]: value });
+  };
 
   const setBank = (selectedItem, index) => {
-    formDataHandler('bankId', selectedItem.id)
-  }
+    formDataHandler('bankId', selectedItem.id);
+  };
 
   const bankNameData = [
     { title: 'Bajaj', id: 1 },
     { title: 'SBI', id: 2 },
-    // { title: 'PNB', id: 3 },
-    // { title: 'KOTAK', id: 4 }
-  ]
+    { title: 'PNB', id: 3 },
+    { title: 'KOTAK', id: 4 }
+  ];
 
   const vehicleClassData = [
     { title: 'VC 4', id: 'VC4' },
     { title: 'VC 5', id: 'VC5' }
-  ]
+  ];
 
   const getUserData = async () => {
-    let userData = await getCache('userData')
-    setUserData(userData)
-  }
+    let userData = await getCache('userData');
+    setUserData(userData);
+  };
 
   useEffect(() => {
-    getUserData()
-  }, [])
+    getUserData();
+  }, []);
 
   const handleTagCost = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await client.post('/order/fastag/get-tag-cost', {
         agentId: userData?.user?.id,
         bankId: orderBodyData.bankId,
         vehicleClass: orderBodyData.vehicleClass
-      })
-      setTagCost(JSON.stringify(response.data.cost))
-      setOrderBodyData({ ...orderBodyData, tagCost: response.data.cost })
+      });
+      setTagCost(JSON.stringify(response.data.cost));
+      setOrderBodyData({ ...orderBodyData, tagCost: response.data.cost });
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (orderBodyData.bankId !== 0 && orderBodyData.vehicleClass !== 0) {
-      handleTagCost()
+      handleTagCost();
     }
-  }, [orderBodyData.bankId, orderBodyData.vehicleClass])
+  }, [orderBodyData.bankId, orderBodyData.vehicleClass]);
 
   useEffect(() => {
     setOrderBodyData({
       ...orderBodyData,
       amount: orderBodyData.quantity * orderBodyData.tagCost
-    })
-  }, [orderBodyData.quantity])
+    });
+  }, [orderBodyData.quantity]);
 
   const handleNext = () => {
-    if (isButtonEnabled) {
-      setOrdersArray((prevOrdersArray) => {
-        const updatedOrders = [...prevOrdersArray, { ...orderBodyData }]
-        console.log(updatedOrders, 'Updated array with new order')
-        handleClose()
-        navigation.navigate('orderDetails')
-        return updatedOrders
-      })
-    }
-  }
-
-  const allFieldsFilled = () => {
-    // Combine both objects into one array of values
-    const allValues = [
-      ...Object.values(orderBodyData)
-    ]
-
-    // Check if all fields are filled (i.e., non-empty and non-zero)
-    return allValues.every((value) => value !== 0)
-  }
-
-  useEffect(() => {
-    // Update button state whenever `orderBodyData` or `deliveryAddress` changes
-    setIsButtonEnabled(allFieldsFilled())
-  }, [orderBodyData])
+    setOrdersArray((prevOrdersArray) => {
+      const updatedOrders = [...prevOrdersArray, { ...orderBodyData }];
+      console.log(updatedOrders, 'Updated array with new order');
+      handleClose();
+      navigation.navigate('orderDetails');
+      return updatedOrders;
+    });
+  };
 
   const handleClose = () => {
     setOrderBodyData({
@@ -130,29 +102,18 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
       tagCost: 0,
       quantity: 0,
       amount: 0
-    })
-    setTagCost('')
-    onClose()
-  }
+    });
+    setTagCost('');
+    onClose();
+  };
 
   return (
     <>
-      <Modal
-        visible={visible}
-        transparent
-        animationType="fade"
-        onRequestClose={onClose}
-      >
+      {loading && <Loader />}
+      <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            {loading && <Loader />}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: '5%'
-              }}
-            >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
               <View>
                 <Text style={styles.titleText}>Create Order</Text>
               </View>
@@ -166,83 +127,51 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 </Pressable>
               </View>
             </View>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <SelectField dataToRender={bankNameData} title={'Select bank name'} selectedValue={setBank} />
+            <View style={{ marginTop: '5%' }}>
               <SelectField
-                dataToRender={bankNameData}
-                title={'Select bank name'}
-                selectedValue={setBank}
-              />
-              <View style={{ marginTop: '5%' }}>
-                <SelectField
-                  dataToRender={vehicleClassData}
-                  title={'Select vehicle class'}
-                  selectedValue={(selectedItem, index) => {
-                    formDataHandler('vehicleClass', selectedItem.id)
-                  }}
-                />
-              </View>
-
-              <View style={{ width: '100%', marginTop: '4%' }}>
-                <InputText
-                  value={tagCost}
-                  placeholder="Tag Cost"
-                  secure={false}
-                  onChangeText={(value) => {
-                    formDataHandler('tagcost', value)
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
+                dataToRender={vehicleClassData}
+                title={'Select vehicle class'}
+                selectedValue={(selectedItem, index) => {
+                  formDataHandler('vehicleClass', selectedItem.id);
                 }}
-              >
-                <View style={{ width: '45%' }}>
-                  <InputText
-                    placeholder={'Quantity'}
-                    inputStyle={{ width: '100%' }}
-                    value={orderBodyData.quantity}
-                    onChangeText={(value) => {
-                      formDataHandler('quantity', value)
-                    }}
-                  />
-                </View>
-                <View style={{ width: '45%' }}>
-                  <InputText
-                    placeholder={'Amount'}
-                    inputStyle={{ width: '100%' }}
-                    value={JSON.stringify(orderBodyData.amount)}
-                  />
-                </View>
-              </View>
+              />
+            </View>
 
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleClose} style={styles.button}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleNext}
-                  style={[
-                    styles.button,
-                    styles.applyButton,
-                    isButtonEnabled ? {} : { opacity: 0.5 } // Dim the button when disabled
-                  ]}
-                  disabled={!isButtonEnabled} // Disable button if fields are not filled
-                >
-                  <Text style={[styles.buttonText, styles.applyButtonText]}>
-                    Submit
-                  </Text>
-                </TouchableOpacity>
+            <View style={{ width: '100%', marginTop: '4%' }}>
+              <InputText value={tagCost} placeholder="Tag Cost" secure={false} />
+            </View>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ width: '45%' }}>
+                <InputText
+                  placeholder={'Enter quantity'}
+                  inputStyle={{ width: '100%' }}
+                  value={orderBodyData.quantity}
+                  onChangeText={(value) => {
+                    formDataHandler('quantity', value);
+                  }}
+                />
               </View>
-            </ScrollView>
+              <View style={{ width: '45%' }}>
+                <InputText placeholder={'Enter amount'} inputStyle={{ width: '100%' }} value={JSON.stringify(orderBodyData.amount)} />
+              </View>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleClose} style={styles.button}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleNext()} style={[styles.button, styles.applyButton]}>
+                <Text style={[styles.buttonText, styles.applyButtonText]}>Submit</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   modalBackground: {
@@ -253,7 +182,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
-    height: '80%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
@@ -289,6 +217,6 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: '#fff'
   }
-})
+});
 
-export default CreateOrderModal
+export default CreateOrderModal;

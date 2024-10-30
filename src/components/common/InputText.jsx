@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: isTablet ? 30 : 20,
     zIndex: 1,
-    transition: '0.3s',
     backgroundColor: '#F3F3F3', // Updated background to match input container for smooth transition
     paddingHorizontal: 4 // Optional padding for better visual
   }
