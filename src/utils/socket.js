@@ -1,16 +1,15 @@
 import io from 'socket.io-client'
 
 let socket;
-
 export const serverURL = 'http://192.168.31.51:3001'
 
 export const initializeSocket = (serverUrl, userId) => {
+    console.log(serverURL, userId)
     socket = io(serverUrl, {
         query: {
             userId: userId
         }
     })
-    console.log(socket, "socket")
     return socket;
 }
 
