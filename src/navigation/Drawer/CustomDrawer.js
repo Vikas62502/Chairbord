@@ -122,31 +122,31 @@ const data = [
     //     icon: require('../../assets/DrawerNavigation/requests.png'),
     //     screen: 'permissions'
     // },
-//     {
-//       title: 'SBI',
-//       icon: require('../../assets/DrawerNavigation/wallet.png'),
-//       screen: 'sbi'
-//   },
-//   {
-//     title: 'SBI',
-//     icon: require('../../assets/DrawerNavigation/wallet.png'),
-//     screen: 'sbi2'
-// },
+    {
+      title: 'SBI',
+      icon: require('../../assets/DrawerNavigation/wallet.png'),
+      screen: 'sbi'
+  },
+  {
+    title: 'SBI',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi2'
+},
     {
         title: 'Wallet',
         icon: require('../../assets/DrawerNavigation/wallet.png'),
         screen: 'wallet'
     },
-    // {
-    //     title: 'Inventory',
-    //     icon: require('../../assets/DrawerNavigation/inventory.png'),
-    //     screen: 'inventory'
-    // },
-    // {
-    //     title: 'Orders',
-    //     icon: require('../../assets/DrawerNavigation/orders.png'),
-    //     screen: 'orders'
-    // },
+    {
+        title: 'Inventory',
+        icon: require('../../assets/DrawerNavigation/inventory.png'),
+        screen: 'inventory'
+    },
+    {
+        title: 'Orders',
+        icon: require('../../assets/DrawerNavigation/orders.png'),
+        screen: 'orders'
+    },
     {
         title: 'Issuance Tracker',
         icon: require('../../assets/DrawerNavigation/issuance.png'),
