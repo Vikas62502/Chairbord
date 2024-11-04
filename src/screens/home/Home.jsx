@@ -102,23 +102,25 @@ const Home = () => {
     }
   };
 
-  const [socket, setSocket] = useState(null);
-  const [userData, setUserData] = useState()
+  // const [socket, setSocket] = useState(null);
+  // const [userData, setUserData] = useState()
+  // console.log(userData, "userData")
+  // console.log(userData?.user?.id, "uid")
 
-  const getUserData = async () => {
-    let userData = await getCache('userData')
-    setUserData(userData)
-  }
+  // const getUserData = async () => {
+  //   let userData = await getCache('userData')
+  //   setUserData(userData)
+  // }
 
-  useEffect(() => {
-    getUserData()
-  }, [])
+  // useEffect(() => {
+  //   getUserData()
+  // }, [])
 
-  useEffect(() => {
-    const socket = initializeSocket(serverURL, userData?.user?.id)
-    setSocket(socket);
-    return () => disconnectSocket()
-  }, []);
+  // useEffect(() => {
+  //   const socket = initializeSocket(serverURL, userData?.user?.id)
+  //   setSocket(socket);
+  //   return () => disconnectSocket()
+  // }, [userData]);
 
   return (
     <ScrollView

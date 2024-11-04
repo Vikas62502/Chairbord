@@ -39,7 +39,7 @@ const OverlayHeader = ({ title, showBackButton = true, isorderSection = false, h
           </View>
         </View>
         <View style={styles.chairBordLogo}>
-          <Image source={require('../assets/chairBordLogoWithoutName.png')} style={{ width: 120, height: 120, }} />
+          <Image source={require('../assets/chairbordLogoWithoutName.png')} style={{ width: 120, height: 120, }} />
         </View>
       </LinearGradient>
     </View>
