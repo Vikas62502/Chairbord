@@ -5,6 +5,7 @@ import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
+import useUserData from '../../hooks/useUserData';
 
 interface RegistrationFormDataType {
   mobileNumber: string;
@@ -17,6 +18,7 @@ interface RegistrationFormDataType {
 
 const SbiFastagRegistration = (props: any) => {
   const [loading, setLoading] = useState<boolean>(false)
+  const { userData }: any = useUserData();
   const [RegistrationFormData, setRegistrationFormData] = useState<RegistrationFormDataType>({
     mobileNumber: "",
     panNumber: "",
@@ -56,20 +58,42 @@ const SbiFastagRegistration = (props: any) => {
   const isFormComplete = Object.values(RegistrationFormData).every((field) => field !== "" && field !== null);
 
   const handleGetVehcileDetails = async () => {
-    setLoading(true)
+    setLoading(true);
+
+    // Create a new FormData instance
+    const formData = new FormData();
+
+    // Append each field to formData
+    formData.append('mobileNumber', RegistrationFormData.mobileNumber);
+    formData.append('panNumber', RegistrationFormData.panNumber);
+    formData.append('customerName', RegistrationFormData.customerName);
+    formData.append('dob', RegistrationFormData.dob);
+    formData.append('vehicleNumber', RegistrationFormData.vehicleNumber);
+    formData.append('pan-image', RegistrationFormData.panImage);
+    formData.append('agentId', userData.user.id)
+
+
     try {
-      const res = await client.post('/sbi/get-rc-details', RegistrationFormData)
-      console.log(res)
+      // Send formData using Axios
+      const res: any = await client.post('/sbi/validate-rc-pan', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(res?.data?.vehicleDetails, "data");
+
+      // Navigate with vehicle and customer details
       props.navigation.navigate('sbi2', {
-        vehicleDetails: res,
-        customerDetails: RegistrationFormData
-      })
-    } catch (error) {
-      console.log(error)
+        vehicleDetails: res?.data?.vehicleDetails,
+        customerDetails: RegistrationFormData,
+      });
+    } catch (error: any) {
+      console.log(error.response);
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>

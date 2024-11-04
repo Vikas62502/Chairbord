@@ -7,7 +7,7 @@ import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 
 const SbiFastagRegistration2 = (props) => {
-    const vehiclePropData = props.route.params.vehicleDetails.data.data.data;
+    const vehiclePropData = props.route.params?.vehicleDetails?.data
 
     // State declarations
     const [pincode, setPincode] = useState('');
