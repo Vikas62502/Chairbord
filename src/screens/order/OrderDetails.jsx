@@ -4,7 +4,8 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-  StyleSheet
+  StyleSheet,
+  Pressable
 } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
@@ -22,10 +23,12 @@ import { client } from '../../client/Axios'
 import { useOrders } from '../../orderContext/OrderContext'
 import Loader from '../../components/ui/Loader'
 import { getCache } from '../../helper/Storage'
+import DeliveryAddressModal from './DeliveryAddressModal'
 
 const OrderDetails = (props) => {
   const [walletDetails, setWalletDetails] = useState([])
   const { ordersArray, setOrdersArray } = useOrders()
+
   const [loading, setLoading] = useState(false)
 
   const getWalletDetails = async () => {
@@ -41,7 +44,11 @@ const OrderDetails = (props) => {
     return ordersArray.reduce((total, order) => total + order.amount, 0)
   }
 
+  const responseAmount = calculateTotalAmount(ordersArray);
+  console.log(responseAmount)
+
   const [totalOrderAmount, setTotalAmountCost] = useState(0)
+  const [totalValue, setTotalValue] = useState(0)
 
   useEffect(() => {
     getWalletDetails()
@@ -49,6 +56,7 @@ const OrderDetails = (props) => {
   }, [ordersArray])
 
   const [createOrderModal, setCreateOrderModal] = useState(false)
+  const [deliveryAddressModal, setDeliveryAddressModal] = useState(false)
   const [isOrderSuccess, setIsOrderSuccess] = useState(false)
   const [isOrderFailed, setIsOrderFailed] = useState(false)
   const [transactionId, setTransactionId] = useState('')
@@ -60,6 +68,13 @@ const OrderDetails = (props) => {
     setOrdersArray([])
     setTotalAmountCost(0)
   }
+
+  const bankNameData = [
+    { title: 'Bajaj', id: 1 },
+    { title: 'SBI', id: 2 },
+    // { title: 'PNB', id: 3 },
+    // { title: 'KOTAK', id: 4 }
+  ]
 
   const getUserData = async () => {
     let userData = await getCache('userData')
@@ -73,51 +88,18 @@ const OrderDetails = (props) => {
   let TransactionID, OrderID
 
   const handleSubmit = async () => {
-    if(!ordersArray || ordersArray.length === 0){
-      return;
-    }
-    setLoading(true)
-    try {
-      const response = await client.post('/order/fastag/request-complete', {
-        fromUserId: userId, // Agent's user ID
-        toUserId: 1, // Admin user ID (default)
-        fromUserType: 'agent', // User type (default is agent)
-        toUserType: 'admin', // User type (default is admin)
-        orders: ordersArray
-      })
-
-      if (response.status === 201) {
-        // console.log('Order created successfully:', response.data)
-        setTransactionId(response.data.transactionId)
-        TransactionID = response.data.transactionId
-        setOrderId(response.data.orderId)
-        OrderID = response.data.orderId
-        setOrdersArray([])
-        setIsOrderSuccess(true)
-      }
-    } catch (error) {
-      console.error(
-        'Error creating order:',
-        error.response ? error.response.data : error.message
-      )
-      // Handle error, e.g., show an error message to the user
-      setIsOrderFailed(true);
-    } finally {
-      setLoading(false)
-    }
+    setDeliveryAddressModal(true)
   }
 
-  useEffect(() => {
-    if(transactionId && orderId){
-      setIsOrderSuccess(true)
-    }
-  }, [transactionId, orderId])
-
+  console.log(ordersArray, "orderdara")
   return (
     <>
       {loading && <Loader />}
       <SafeAreaView style={{ flex: 1 }}>
-        <OverlayHeader title={'Order Summary'} />
+        <Pressable>
+
+        </Pressable>
+        <OverlayHeader title={'Order Summary'} isorderSection={true} handleDeleteOrder={handleDeleteOrder} />
         <ScrollView style={{ flex: 1, padding: '5%' }}>
           <DisplayDetailsCard
             cardData={[
@@ -132,9 +114,8 @@ const OrderDetails = (props) => {
               },
               {
                 title: 'Remaining Balance',
-                value: `: ₹${
-                  (walletDetails?.agent?.balance || 0) - (totalOrderAmount || 0)
-                }`
+                value: `: ₹${(walletDetails?.agent?.balance || 0) - (totalOrderAmount || 0)
+                  }`
                 // value: `: ₹0`
               }
             ]}
@@ -148,9 +129,13 @@ const OrderDetails = (props) => {
                 {/* Order content */}
                 <View style={styles.orderContainer}>
                   <View>
-                    <Image
+                    <Text style={{ fontWeight: 'bold', color: 'black' }}>
+                      {bankNameData.find(item => item.id === order.bankId)?.title || 'Bank Not Found'}
+                    </Text>
+
+                    {/* <Image
                       source={require('../../assets/screens/kotakLogo.png')}
-                    />
+                    /> */}
                     <View style={styles.costQtyContainer}>
                       <Text style={styles.constAndQtyContainerText}>
                         Cost: {order.tagCost || 'N/A'}
@@ -193,7 +178,7 @@ const OrderDetails = (props) => {
         </View>
 
         <View style={{ padding: '5%', paddingBottom: 20 }}>
-          <LinearButton title={'Place order'} onPress={handleSubmit} />
+          <LinearButton title={'Add Devlivery Address'} onPress={handleSubmit} />
         </View>
 
         <OrderSuccessModal
@@ -201,6 +186,9 @@ const OrderDetails = (props) => {
           onClose={setIsOrderSuccess}
           transactionId={transactionId}
           orderId={orderId}
+          responseAmount={responseAmount}
+          orders={ordersArray}
+          totalOrderAmount={calculateTotalAmount(ordersArray)}
         />
         <OrderFaildModal
           visible={isOrderFailed}
@@ -210,8 +198,22 @@ const OrderDetails = (props) => {
           visible={createOrderModal}
           onClose={() => setCreateOrderModal(false)}
           transactionId={TransactionID}
-          totalOrderAmount={totalOrderAmount}
+          totalOrderAmount={totalValue}
           orderId={OrderID}
+        />
+
+        <DeliveryAddressModal
+          visible={deliveryAddressModal}
+          onClose={() => setDeliveryAddressModal(false)}
+          orders={ordersArray}
+          userId={userId}
+          handleDeleteOrder={handleDeleteOrder}
+          setTransactionId={setTransactionId}
+          setOrderId={setOrderId}
+          setIsOrderSuccess={setIsOrderSuccess}
+          setIsOrderFailed={setIsOrderFailed}
+          setTotalValue={setTotalValue}
+          totalOrderAmount={totalOrderAmount}
         />
       </SafeAreaView>
     </>
