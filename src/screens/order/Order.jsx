@@ -187,7 +187,7 @@ const Order = (props) => {
           </View>
 
           <View style={{ marginTop: '4%' }}>
-            {orderData?.map((data, index) => (
+            {orderData.map((data, index) => (
               <Pressable
                 onPress={() => props.navigation.navigate('orderDescription',{
                   orderData:data

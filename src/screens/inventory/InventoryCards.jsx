@@ -1,169 +1,155 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
-import VerticalDivider from '../../components/common/VerticalDivider'
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import VerticalDivider from '../../components/common/VerticalDivider';
 
-const InventoryCards = ({ data }) => {
-  console.log(data, 'Inventory card data');
+const InventoryCards = ({ data, tagCost }) => {
+  const mapping = {
+    'VC 4': 'VC4',
+    'VC 5': 'VC5',
+    'VC 6': 'VC6',
+    'VC 7': 'VC7',
+    'VC 12': 'VC12',
+    'VC 15': 'VC15',
+    'VC 16': 'VC16'
+  };
+
+  const bankMap = { 1: 'Bajaj', 2: 'SBI' };
+
+  function extractDateTime(isoString) {
+    if (!isoString) return { date: '', time: '' };
+    const dateObj = new Date(isoString);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+    return {
+      date: `${day}-${month}-${year}`,
+      time: `${hours}:${minutes}`
+    };
+  }
+
+  const { date, time } = extractDateTime(data?.updatedAt);
+  const vehicleCost = tagCost[mapping[data?.vehicleClass]] || '';
+
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#F5F5F5',
-          padding: '4%',
-          borderRadius: 10
-        }}
-      >
-        <View style={{ flexDirection: 'row' }}>
+      <View style={styles.headerContainer}>
+        <View style={styles.headerLeft}>
           <View
-            style={{
-              backgroundColor: `${data.color}`,
-              borderRadius: 50,
-              marginRight: '5%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 30,
-              width: 30
-            }}
+            style={[
+              styles.bankIconContainer,
+              { backgroundColor: data?.color || '#5D9CEC' }
+            ]}
           >
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontWeight: '700',
-                fontSize: 16,
-                lineHeight: 19
-              }}
-            >
-              {data?.vc_no}
-            </Text>
+            <Text style={styles.bankText}>{bankMap[data?.bankId]}</Text>
           </View>
           <View>
-            <Text style={styles.idText}>{data?.Tag_sr_no}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center',marginTop:2}}>
-              <Text style={styles.dateAndTimeText}>{data.time}</Text>
+            <Text style={styles.idText}>{data?.serialNumber || 'N/A'}</Text>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateAndTimeText}>{time}</Text>
               <VerticalDivider />
-              <Text style={styles.dateAndTimeText}>{data.date}</Text>
+              <Text style={styles.dateAndTimeText}>{date}</Text>
             </View>
           </View>
         </View>
-
-        <View>
-          <Text style={styles.amount}>₹{data.amount}</Text>
-        </View>
+        <Text style={styles.amount}>₹{vehicleCost}</Text>
       </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: '5%'
-        }}
-      >
+      <View style={styles.footerContainer}>
         <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-          >
-            <Image source={require('../../assets/bankIcon.png')} style={{width:24,height:22}}/>
-            <Text style={styles.bankText}>{data.bankName}</Text>
-          </View>
-          <Text style={styles.orderIdText}>{data.orderId}</Text>
+          <Text style={styles.orderIdText}>{data?.orderId || 'N/A'}</Text>
         </View>
-        <View
-          style={{
-            // flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-
-            gap:10,
-            
-          }}
-        >
-          <View style={{flexDirection: 'row',alignItems: 'center',gap:5,}}>
-          <View
-            style={{
-              backgroundColor: data.inStock ? '#00C142' : '#FF0000' ,
-              borderRadius: 20,
-              height: 6,
-              width: 6,
-            }}
-          ></View>
-           <Text style={[styles.stockText, { color: data.inStock ? '#00C142' : '#FF0000' }]}>
-            {data.inStock ? 'In Stock' : 'Out of Stock'}
-          </Text>
-          </View>
-          <Text style={styles.vcText}>{data.vehicleClass}</Text>
-        </View>
-
+        <Text style={styles.vcText}>{data?.vehicleClass || 'N/A'}</Text>
       </View>
-
-
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     padding: '5%',
-    borderWidth: 0.7,
-    borderColor: 'black',
-    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E1E1E1',
+    borderRadius: 15,
     backgroundColor: '#FFFFFF',
-    marginBottom: '5%'
+    marginBottom: '5%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5
   },
-  dateAndTimeText: {
-    color: '#848484',
-    fontWeight: '400',
-    fontSize: 12,
-    lineHeight: 14,
-    marginBottom:-4
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    padding: '4%',
+    borderRadius: 10,
+    marginBottom: 10,
+    elevation: 1
   },
-  idText: {
-    color: '#000000',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 16
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  amount: {
-    color: '#000000',
-    fontWeight: '600',
-    fontSize: 20,
-    lineHeight: 24
+  bankIconContainer: {
+    borderRadius: 50,
+    marginRight: '5%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 35,
+    width: 35
   },
   bankText: {
-    color: '#000000',
+    color: '#ffffff',
+    fontWeight: '700',
+    fontSize: 14,
+    lineHeight: 20
+  },
+  idText: {
+    color: '#343A40',
     fontWeight: '600',
     fontSize: 16,
-    lineHeight: 19,
-    marginLeft: '5%'
+    lineHeight: 22
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2
+  },
+  dateAndTimeText: {
+    color: '#6C757D',
+    fontWeight: '400',
+    fontSize: 12,
+    lineHeight: 14
+  },
+  amount: {
+    color: '#28A745',
+    fontWeight: '700',
+    fontSize: 22,
+    lineHeight: 28
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '5%'
   },
   orderIdText: {
-    color: '#F0AC5C',
-    fontWeight: '400',
+    color: '#FFC107',
+    fontWeight: '500',
     fontSize: 14,
     lineHeight: 16,
-    marginTop: '10%'
-  },
-  stockText: {
-    color: '#00C142',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 16,
-   
+    marginTop: '5%'
   },
   vcText: {
-    color: '#000000',
+    color: '#343A40',
     fontWeight: '500',
     fontSize: 16,
-    lineHeight: 19,
-   
-   
+    lineHeight: 19
   }
-})
+});
 
-export default InventoryCards
+export default InventoryCards;
