@@ -46,7 +46,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
 
   const formDataHandler = (key, value) => {
     setOrderBodyData({ ...orderBodyData, [key]: value })
-    setDeliveryAddress({ ...deliveryAddress, [key]: value })
+    // setDeliveryAddress({ ...deliveryAddress, [key]: value })
   }
 
   const setBank = (selectedItem, index) => {
@@ -120,7 +120,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
     // Combine both objects into one array of values
     const allValues = [
       ...Object.values(orderBodyData),
-      ...Object.values(deliveryAddress)
+      // ...Object.values(deliveryAddress)
     ]
 
     // Check if all fields are filled (i.e., non-empty and non-zero)
@@ -226,7 +226,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                   />
                 </View>
               </View>
-              <View style={{ width: '100%' }}>
+              {/* <View style={{ width: '100%' }}>
                 <InputText
                   value={deliveryAddress?.address}
                   placeholder="Address"
@@ -283,7 +283,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                     formDataHandler('alternate_m', value)
                   }}
                 />
-              </View>
+              </View> */}
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleClose} style={styles.button}>
                   <Text style={styles.buttonText}>Cancel</Text>

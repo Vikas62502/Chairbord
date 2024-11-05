@@ -7,82 +7,105 @@ import { RadioButton } from 'react-native-paper'
 const AcknowlegementCard = ({ data }) => {
   const [acknowledgementRadioCheck, setAcknowledgementRadioCheck] = useState('')
   const acknowledgementCheckboxData = ['Missing', 'Damaged', 'Received']
-  // const kotakLogo = require('../../../assets/screens/kotakLogo.png')
   const bankMap = { 1: 'Bajaj', 2: 'SBI' }
-  // console.log(data, 'tags data')
+
   return (
-    <View
-      style={{
-        borderWidth: 0.5,
-        borderColor: '#00000080',
-        borderRadius: 20,
-        padding: '5%',
-        marginBottom: '5%'
-      }}
-    >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
+    <View style={styles.cardContainer}>
+      <View style={styles.headerContainer}>
         <View>
-          {/* <Image source={kotakLogo} /> */}
-          <Text
-            style={{
-              fontSize: 13,
-              fontWeight: '400',
-              color: '#000000',
-              marginVertical: '5%'
-            }}
-          >
-            {data?.serialNumber}
-          </Text>
+          {/* Replace with actual image source */}
+          {/* <Image source={kotakLogo} style={styles.logo} /> */}
+          <Text style={styles.serialNumber}>{data?.serialNumber}</Text>
         </View>
         <View>
           <Status status={data?.status} />
         </View>
       </View>
 
-      <HorizontalDivider />
+      <HorizontalDivider style={styles.divider} />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={{ marginRight: 15 }}>{data?.vehicleClass}</Text>
-        <Text>{bankMap[data?.bankId]}</Text>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.vehicleClassText}>{data?.vehicleClass}</Text>
+        <Text style={styles.bankText}>{bankMap[data?.bankId]}</Text>
       </View>
 
-      {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {acknowledgementCheckboxData.map((data, index) => (
+      <View style={styles.radioGroup}>
+        {acknowledgementCheckboxData.map((item, index) => (
           <Pressable
             key={index}
             style={styles.radioButtonContainer}
-            onPress={() => setAcknowledgementRadioCheck(data)}
+            onPress={() => setAcknowledgementRadioCheck(item)}
           >
-            <RadioButton
+            {/* <RadioButton
               color={'#02546D'}
-              value={data}
-              status={
-                acknowledgementRadioCheck === data ? 'checked' : 'unchecked'
-              }
-            />
-            <Text style={styles.label}>{data}</Text>
+              value={item}
+              status={acknowledgementRadioCheck === item ? 'checked' : 'unchecked'}
+            /> */}
+            {/* <Text style={styles.label}>{item}</Text> */}
           </Pressable>
         ))}
-      </View> */}
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  cardContainer: {
+    borderWidth: 0.5,
+    borderColor: '#00000080',
+    borderRadius: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  serialNumber: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#000000',
+    marginVertical: 8,
+  },
+  divider: {
+    marginVertical: 10,
+  },
+  detailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  vehicleClassText: {
+    marginRight: 15,
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#000000',
+  },
+  bankText: {
+    fontSize: 14,
+    color: '#000000',
+  },
+  radioGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
   radioButtonContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   label: {
-    fontSize: 16,
-    color: '#000000'
-  }
+    fontSize: 14,
+    color: '#000000',
+  },
 })
 
 export default AcknowlegementCard
