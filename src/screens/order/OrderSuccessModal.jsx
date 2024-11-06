@@ -32,6 +32,7 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId, orderId, 
             <Image
               source={require('../../assets/DrawerNavigation/closeLogout.png')}
               alt="closeBtn"
+              style={{ width: 20, height: 20 }}
             />
           </Pressable>
           <View style={styles.contentContainer}>
@@ -58,13 +59,16 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId, orderId, 
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={onClose} style={styles.button}>
+            <TouchableOpacity onPress={() => navigation.navigate('drawer')} style={styles.button}>
               <Text style={styles.buttonText}>Dashboard</Text>
             </TouchableOpacity>
-            <AddBtn
+            <TouchableOpacity onPress={() => navigation.navigate('orders')} style={styles.historybutton} >
+              <Text style={styles.historybuttonText}>Order history</Text>
+            </TouchableOpacity>
+            {/* <AddBtn
               title={'Order History'}
               onPress={() => navigation.navigate('Order')}
-            />
+            /> */}
           </View>
         </View>
       </View>
@@ -104,7 +108,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20
+    color: 'black',
+    marginVertical: 10
   },
   orderDetails: {
     width: '100%',
@@ -117,25 +122,28 @@ const styles = StyleSheet.create({
     marginVertical: 5
   },
   detailLabel: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#000000'
   },
   detailValue: {
-    fontSize: 16,
-    color: '#000000'
+    fontSize: 14,
+    color: '#000000',
+    justifyContent:'flex-start',
+    width:'70%',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
     marginTop: 20,
+    gap:10
   },
   button: {
     borderWidth: 1,
     borderColor: '#02546D',
     borderRadius: 25,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -143,7 +151,23 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#02546D',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 14,
+    fontWeight: '600'
+  },
+  historybutton: {
+    borderWidth: 1,
+    backgroundColor: '#02546D',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  historybuttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 14,
     fontWeight: '600'
   }
 })

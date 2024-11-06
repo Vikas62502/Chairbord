@@ -99,7 +99,7 @@ const OrderDetails = (props) => {
         <Pressable>
 
         </Pressable>
-        <OverlayHeader title={'Order Summary'} isorderSection={true} handleDeleteOrder={handleDeleteOrder} />
+        <OverlayHeader title={'Order Details'} isorderSection={true} handleDeleteOrder={handleDeleteOrder} />
         <ScrollView style={{ flex: 1, padding: '5%' }}>
           <DisplayDetailsCard
             cardData={[
