@@ -65,12 +65,13 @@ const Inventory = (props) => {
   //   }
   // };
 
-  const fetchInventory = async () => {
+  const fetchInventory = async (id) => {
+    console.log(id, "called")
     setLoading(true)
     try {
       console.log(agentId)
       const response = await client.get(
-        `/inventory/fastag/agent/acknowledged-tags/${agentId}`
+        `/inventory/fastag/agent/acknowledged-tags/${id}`
       )
       setInventoryCardData(response.data.tags)
       setTag_Cost(response.data.tagCost);
@@ -83,17 +84,8 @@ const Inventory = (props) => {
   }
 
   useEffect(() => {
-    // console.log(agentId, "coming here");
-    if (agentId) {
-      fetchInventory()
-    }
-  }, [agentId])
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     getInventory(userData?.user?.id)
-  //   }
-  // }, [userData])
+    fetchInventory(id)
+  }, [])
 
   return (
     <>
@@ -131,7 +123,7 @@ const Inventory = (props) => {
             </View>
             <View style={{ marginTop: '5%' }}>
               {inventoryCardData.map((data, index) => (
-                <InventoryCards key={index} data={data} tagCost = {tag_cost} />
+                <InventoryCards key={index} data={data} tagCost={tag_cost} />
               ))}
             </View>
           </View>

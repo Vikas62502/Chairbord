@@ -10,6 +10,11 @@ const { width } = Dimensions.get('window');
 const isSmallScreen = width < 400;
 
 const SbiImageCollection = (props: any) => {
+    const customerData = props.route.params?.customerData
+    const serialNo = props.route.params?.serialNo
+    const vehicledata = props.route.params?.vehicleData
+
+    console.log(customerData, serialNo, vehicledata, "<-----params data")
     const [rcFront, setRcFront] = useState(null);
     const [rcBack, setRcBack] = useState(null);
     const [vehicleFront, setVehicleFront] = useState(null);
@@ -37,11 +42,20 @@ const SbiImageCollection = (props: any) => {
         formData.append('rc_front', rcFront);
         formData.append('rc_back', rcBack);
         formData.append('vehicle_front', vehicleFront);
-        formData.append('vehicle_side', vehicleSide);
+        formData.append('vehicle_back', vehicleSide);
         formData.append('tag_image', tagImage);
+        formData.append('vehicleId', vehicledata.id);
+        formData.append('customerId', customerData.id);
+        formData.append('serialNo', serialNo)
+
+        console.log(formData, "formdata")
         try {
-            const uploadDocRes = await client.post('/sbi/validate-rc-pan', formData)
-            console.log(uploadDocRes)
+            const uploadDocRes = await client.post('/sbi/upload-docs', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            console.log(uploadDocRes, "updaload doc res")
             props.navigation.navigate('sbi4')
         } catch (error: any) {
             console.log(error)

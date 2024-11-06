@@ -5,10 +5,14 @@ import InputTextSbi from './InputTextSbi';
 import SelectFieldSbi from './SelectFieldSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
+import { client } from '../../client/Axios';
+import useUserData from '../../hooks/useUserData';
 
 const SbiFastagRegistration2 = (props) => {
     const vehiclePropData = props.route.params?.vehicleDetails?.data
-
+    const reportPropsData = props.route.params?.reportsData
+    const customerPropData = props.route.params?.customer
+    const { userId } = useUserData();
     // State declarations
     const [pincode, setPincode] = useState('');
     const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasi_number || '');
@@ -16,15 +20,15 @@ const SbiFastagRegistration2 = (props) => {
     const [engineNumber, setEngineNumber] = useState(vehiclePropData.vehicle_engine_number || '');
     const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData.rc_number || '');
     const [selectedFuel, setSelectedFuel] = useState(vehiclePropData.fuel_type || null);
-    const [selectedState, setSelectedState] = useState(null);
+    const [selectedState, setSelectedState] = useState(vehiclePropData.registered_at || null);
     const [selectedTagsrno, setSelectedTagsrno] = useState(null);
     const [isDisabled, setIsDisabled] = useState(true);
+    // models
+    const [tagSerialNumber, setTagSerialNumber] = useState({})
     const [otpModalVisible, setOtpModalVisible] = useState(false);
-    const [otp, setOtp] = useState('');
     const [panModalVisible, setPanModalVisible] = useState(false);
-    const [pan, setPan] = useState('');
     const [mobileModalVisible, setMobileModalVisible] = useState(false);
-    const [mobile, setMobile] = useState('');
+    console.log(tagSerialNumber, "<--- tag serial number")
 
     // Dropdown data
     const fuelData = [
@@ -40,13 +44,6 @@ const SbiFastagRegistration2 = (props) => {
         { title: 'Kerala' },
     ];
 
-    const tagData = [
-        { title: '242424' },
-        { title: '42422' },
-        { title: '242424' },
-        { title: '1131313' },
-    ];
-
     // Check if all fields are filled to enable/disable the button
     useEffect(() => {
         const allFieldsFilled = [
@@ -56,29 +53,54 @@ const SbiFastagRegistration2 = (props) => {
         setIsDisabled(!allFieldsFilled);
     }, [pincode, chasisNumber, ownername, engineNumber, vehicleNumber, selectedFuel, selectedState, selectedTagsrno]);
 
-    // Handle OTP submission
-    const handleOtpSubmit = () => {
-        if (otp) {
-            setOtpModalVisible(false);
-            setPanModalVisible(true);
-        }
-    };
 
-    // Handle PAN submission
-    const handlePanSubmit = () => {
-        if (pan) {
-            setPanModalVisible(false);
-            setMobileModalVisible(true);
-        }
-    };
 
-    // Handle mobile number submission
-    const handleMobileSubmit = () => {
-        if (mobile) {
-            setMobileModalVisible(false);
-            // Next steps after mobile number submission can be handled here
+    const fetchSerialNumber = async (agentId: number) => {
+        try {
+            const res = await client.get(`/inventory/fastag/agent/acknowledged-tags/${agentId}`, {
+                params: {
+                    serialNumber: true,
+                    bankId: 1
+                }
+            });
+            console.log(res.data.tags, "tag data")
+            setTagSerialNumber(res?.data?.tags)
+        } catch (error) {
+            console.log(error)
         }
-    };
+    }
+
+    const handleDetailsSubmit = async () => {
+        try {
+            const data = {
+                "pincode": pincode,
+                "vehicleNo": vehicleNumber,
+                "chassisNo": chasisNumber,
+                "engineNo": engineNumber,
+                "ownerName": ownername,
+                "fuel_type": selectedFuel,
+                "state_of_registration": selectedState,
+                "tag_serial_number": selectedTagsrno,
+                "reportId": reportPropsData.id,
+                "customerId": customerPropData.id
+            }
+            console.log(data, "<<-----body data")
+            const res = await client.post('/sbi/create_vehicle_details', data)
+            props.navigation.navigate('sbi3', {
+                agentId: userId,
+                vehicleData: vehiclePropData,
+                customerData: customerPropData,
+                serialNo: selectedTagsrno
+            })
+            console.log(res, "response")
+        } catch (error: any) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchSerialNumber(userId);
+    }, [])
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
@@ -144,7 +166,7 @@ const SbiFastagRegistration2 = (props) => {
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightorange.png')} style={styles.icon} />
                     <SelectFieldSbi
-                        dataToRender={tagData}
+                        dataToRender={tagSerialNumber}
                         title={'Tag Serial Number'}
                         selectedValue={setSelectedTagsrno}
                         borderColor={selectedTagsrno ? '#0A74DA' : '#D3D3D3'}
@@ -153,99 +175,8 @@ const SbiFastagRegistration2 = (props) => {
             </View>
 
             <View style={styles.buttonContainer}>
-                <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi3')} disabled={isDisabled} />
+                <NextButton title={"Next"} onPress={() => handleDetailsSubmit()} disabled={false} />
             </View>
-
-            {/* OTP Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={otpModalVisible}
-                onRequestClose={() => setOtpModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalView}>
-                        <View style={styles.logoContainer}>
-                            <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo} />
-                            <Image source={require('../../assets/sbi/cbpllogo.png')} style={styles.logo} />
-                        </View>
-                        <View style={styles.container}>
-                            <Text style={styles.modalText}>Please Insert Customer OTP</Text>
-                            <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                onPress={handleOtpSubmit}
-                                disabled={!otp}
-                                style={[styles.appButtonContainer, { backgroundColor: otp ? '#5ECD4C' : '#EFE6F7' }]}
-                            >
-                                <Text style={styles.appButtonText}>Submit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* PAN Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={panModalVisible}
-                onRequestClose={() => setPanModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalView}>
-                        <View style={styles.logoContainer}>
-                            <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo} />
-                            <Image source={require('../../assets/sbi/cbpllogo.png')} style={styles.logo} />
-                        </View>
-                        <View style={styles.container}>
-                            <Text style={styles.modalText}>Please change Customer PAN</Text>
-                            <InputTextSbi placeholder="Enter Pan number" value={pan} onChangeText={setPan} />
-                            <UploadDoc />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                onPress={handlePanSubmit}
-                                disabled={!pan}
-                                style={[styles.appButtonContainer, { backgroundColor: pan ? '#5ECD4C' : '#EFE6F7' }]}
-                            >
-                                <Text style={styles.appButtonText}>Submit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Mobile Number Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={mobileModalVisible}
-                onRequestClose={() => setMobileModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalView}>
-                        <View style={styles.logoContainer}>
-                            <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo} />
-                            <Image source={require('../../assets/sbi/cbpllogo.png')} style={styles.logo} />
-                        </View>
-                        <View style={styles.container}>
-                            <Text style={styles.modalText}>Please change Customer Mobile Number</Text>
-                            <InputTextSbi placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType="numeric" />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity
-                                onPress={handleMobileSubmit}
-                                disabled={!mobile}
-                                style={[styles.appButtonContainer, { backgroundColor: mobile ? '#5ECD4C' : '#EFE6F7' }]}
-                            >
-                                <Text style={styles.appButtonText}>Submit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
         </ScrollView>
     );
 };

@@ -64,9 +64,9 @@ const SbiFastagRegistration = (props: any) => {
     const formData = new FormData();
 
     // Append each field to formData
-    formData.append('mobileNumber', RegistrationFormData.mobileNumber);
+    formData.append('mobileNo', RegistrationFormData.mobileNumber);
     formData.append('panNumber', RegistrationFormData.panNumber);
-    formData.append('customerName', RegistrationFormData.customerName);
+    formData.append('name', RegistrationFormData.customerName);
     formData.append('dob', RegistrationFormData.dob);
     formData.append('vehicleNumber', RegistrationFormData.vehicleNumber);
     formData.append('pan-image', RegistrationFormData.panImage);
@@ -80,12 +80,15 @@ const SbiFastagRegistration = (props: any) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(res?.data?.vehicleDetails, "data");
-
+      console.log(res?.data.customer, "customer data");
+      console.log(res.data.vehicleDetails, "vehicle details")
+      console.log(res.data.reportData, "reports data")
       // Navigate with vehicle and customer details
       props.navigation.navigate('sbi2', {
         vehicleDetails: res?.data?.vehicleDetails,
         customerDetails: RegistrationFormData,
+        customer: res?.data.customer,
+        reportsData: res.data.reportData
       });
     } catch (error: any) {
       console.log(error.response);
