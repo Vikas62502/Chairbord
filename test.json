@@ -1,163 +1,61 @@
 const data =  {
-    "config": {
-        "adapter": [
-            "xhr",
-            "http",
-            "fetch"
-        ],
-        "baseURL": "http://192.168.31.51:3001/v1/api",
-        "data": {
-            "_parts": [Array
-            ]
-        },
-        "env": {
-            "Blob": [Function Blob
-            ],
-            "FormData": [Function FormData
-            ]
-        },
-        "headers": [Object
-        ],
-        "maxBodyLength": -1,
-        "maxContentLength": -1,
-        "method": "post",
-        "timeout": 0,
-        "transformRequest": [
-            [Function transformRequest
-            ]
-        ],
-        "transformResponse": [
-            [Function transformResponse
-            ]
-        ],
-        "transitional": {
-            "clarifyTimeoutError": false,
-            "forcedJSONParsing": true,
-            "silentJSONParsing": true
-        },
-        "url": "/sbi/validate-rc-pan",
-        "validateStatus": [Function validateStatus
-        ],
-        "xsrfCookieName": "XSRF-TOKEN",
-        "xsrfHeaderName": "X-XSRF-TOKEN"
-    },
-    "data": {
-        "assignedExecutive": 9,
-        "customer": {
-            "agentId": 166,
-            "createdAt": "2024-11-02T20:23:20.619Z",
-            "dob": "30/09/2002",
-            "id": 7,
-            "mobileNo": null,
-            "name": null,
-            "panImage": "photos/1730578998748_temp\\order\\5344dda8c0db8535a16a0204da1e6d81",
-            "panNumber": "Nskaa",
-            "updatedAt": "2024-11-02T20:23:20.619Z",
-            "vehicleNumber": "Rj14cu6635"
-        },
-        "message": "OTP sent and customer created successfully",
-        "reportData": {
-            "SbiCustomerDetailsId": 7,
-            "agentId": 166,
-            "agentName": "Vikas Yadav",
-            "createdAt": "2024-11-02T20:23:20.691Z",
-            "customerMobile": null,
-            "customerName": null,
-            "fastagCost": 0,
-            "id": 6,
-            "otpExecutiveId": 9,
-            "registrationExecutive": null,
-            "requestTime": "2024-11-02T20:23:20.691Z",
-            "sbiVehicleDetailsId": null,
-            "status": "Pending",
-            "tagSerialNumber": null,
-            "typeOfReport": "Registered",
-            "updatedAt": "2024-11-02T20:23:20.691Z"
-        },
-        "success": true,
-        "vehicleDetails": {
-            "data": [Object
-            ],
-            "message": "Success",
-            "reference_id": 20327460,
-            "status": true,
-            "statuscode": 200
-        }
-    },
-    "headers": {
-        "access-control-allow-origin": "*",
-        "connection": "keep-alive",
-        "content-length": "2588",
-        "content-type": "application/json; charset=utf-8",
-        "date": "Sat, 02 Nov 2024 20:23:20 GMT",
-        "etag": "W/\"a1c-oeTTqxbyoN8mNs/hu3lToHVg+jI\"",
-        "keep-alive": "timeout=5",
-        "x-powered-by": "Express"
-    },
-    "request": {
-        "DONE": 4,
-        "HEADERS_RECEIVED": 2,
-        "LOADING": 3,
-        "OPENED": 1,
-        "UNSENT": 0,
-        "_aborted": false,
-        "_cachedResponse": undefined,
-        "_hasError": false,
-        "_headers": {
-            "accept": "application/json, text/plain, */*",
-            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJpZCI6MTY2LCJzb2NrZXRJZCI6bnVsbCwibmFtZSI6IlZpa2FzIFlhZGF2IiwicGFzc3dvcmQiOiIkMmEkMTAkWEppZjR2MmU4YUxZaDJIUUZ4eHd4T2tQZGd0dWtrUWNUS1Y1Y3VIYnpiazUyMWhubEZTNUsiLCJlbWFpbF9pZCI6InZpa2FzeWFkYXY2MjUwMkBnbWFpbC5jb20iLCJtb2JpbGVfbnVtYmVyIjoiODE3ODYyNDUzMSIsInByb2ZpbGVfcGljIjpudWxsLCJmYXRoZXJfbmFtZSI6IlNhYmhhaml0IFlhZGF2IiwibW90aGVyX25hbWUiOm51bGwsImNvbXBhbnlfaWQiOiJBR0UwMDAxNjMiLCJtYXN0ZXJfaWQiOjU4OSwiY29udGFjdF9wZXJzb25fbmFtZSI6IlZpa2FzIiwiY29udGFjdF9wZXJzb25fbW9iaWxlX251bWJlciI6Ijk4MTEwNDg4MTIiLCJyZWxhdGlvbnNoaXBfc3RhdHVzIjpudWxsLCJhZGRyZXNzIjoiSG91c2Ugbm8uIDMxNCwgR2FsaSBuby4gOCwgR2FuZ2EgcmFtIGNvbG9ueSwgU2hyaSB2aW5heWFrIGhvc3BpdGFsLCBBZ3dhbnB1ciwgQW1hcm5hZ2FyLCBGYXJpZGFiYWQsIEFtYXJuYWdhciwgSGFyeWFuYSwgSW5kaWEsIDEyMTAwMyIsImFkZHJlc3MyIjpudWxsLCJwaW5jb2RlIjoiMTIxMDAzIiwiY2l0eSI6bnVsbCwic3RhdGUiOiJIYXJ5YW5hIiwicGFuX2NhcmRfbnVtYmVyIjoiQkZOUFU5MjA1QSIsInBhbl9jYXJkX3Bob3RvIjoicGhvdG9zLzE3MjgwMjk4NjYzOTBfMzg5MjZlZjFiNjBjOWIxZDI2OGU0YTUzOTIxMzdlZDIiLCJpZF9wcm9vZl9kb2N1bWVudF90eXBlIjpudWxsLCJpZF9wcm9vZl9kb2N1bWVudF9udW1iZXIiOiIiLCJpZF9wcm9vZl9mcm9udF9waG90byI6InBob3Rvcy8xNzI4OTMwMTgyODE5XzlmNjM5ZGJjODNmMWI5YjE0Y2NmYjdkZDYzNDc3NWY1IiwiaWRfcHJvb2ZfYmFja19waG90byI6InBob3Rvcy8xNzI4OTMwMTgyODY5Xzc5NDM0OTNhNjlmMzc3ZTdlYmZlZjMyZjY0MmZhN2MyIiwicG9zX25hbWUiOm51bGwsInBvc19wcm9vZl9waG90byI6InBob3Rvcy8xNzI4MDI5ODgyMjAwX2U3ZGQwYTcyZjFlNDRhYmMxNjQyZDBmYmY0ZDkyN2UzIiwiZV9zaWduX3Bob3RvIjoicGhvdG9zLzE3MjgwMjk4ODIwMDlfNWYxYmU3OWFmZjAyMTdlMjJhYmQ4ZDM1ZWY4ZmJmMjciLCJjb25zZW50X2Zvcm0iOiJwaG90b3MvMTcyODAyOTg4MjI3NF9iMTI1ZjBkZTk5Yzg4YWY0ZmU5YjQwMWMwYWMwMTVlNyIsImxvY2F0aW9uX2RhdGEiOnsibGF0aXR1ZGUiOiJ1bmRlZmluZWQiLCJsb25naXR1ZGUiOiJ1bmRlZmluZWQifSwicm9sZSI6ImFnZW50Iiwic2VydmljZXNfYWNjZXNzIjpbXSwidmVyaWZpZWRCeUFkbWluIjpmYWxzZSwidmVyaWZpY2F0aW9uU3RhdHVzIjoibm90LXZlcmlmaWVkIiwiRW1haWxQaG9uZVZlcmlmaWVkIjp0cnVlLCJpc0FjdGl2ZSI6dHJ1ZSwiQ29tcGxldGVSZWdpc3RlcmVkIjpmYWxzZSwicmVnaW9uYWxNYW5hZ2VyIjoiUk06Ml9ORUhBIiwiY2FzaGZyZWVPcmRlcklkIjoiNDQ1MTczYzQ0NjVjIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNlQxNjoyNjo1Ni4yMzhaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0yOVQxOTozMzozMy45NDhaIn0sImlhdCI6MTczMDI4Nzg0NCwiZXhwIjoxNzMwMzc0MjQ0fQ.a6gJ4AG4E58LwnKZGMZvSv3sWzpCPb9BFS2-AKued1k",
-            "content-type": "multipart/form-data"
-        },
-        "_incrementalEvents": false,
-        "_lowerCaseResponseHeaders": {
-            "access-control-allow-origin": "*",
-            "connection": "keep-alive",
-            "content-length": "2588",
-            "content-type": "application/json; charset=utf-8",
-            "date": "Sat, 02 Nov 2024 20:23:20 GMT",
-            "etag": "W/\"a1c-oeTTqxbyoN8mNs/hu3lToHVg+jI\"",
-            "keep-alive": "timeout=5",
-            "x-powered-by": "Express"
-        },
-        "_method": "POST",
-        "_perfKey": "network_XMLHttpRequest_http://192.168.31.51:3001/v1/api/sbi/validate-rc-pan",
-        "_performanceLogger": {
-            "_closed": false,
-            "_extras": [Object
-            ],
-            "_isGlobalLogger": true,
-            "_pointExtras": [Object
-            ],
-            "_points": [Object
-            ],
-            "_timespans": [Object
-            ]
-        },
-        "_requestId": null,
-        "_response": "{\"success\":true,\"message\":\"OTP sent and customer created successfully\",\"customer\":{\"id\":7,\"name\":null,\"mobileNo\":null,\"dob\":\"30/09/2002\",\"panNumber\":\"Nskaa\",\"panImage\":\"photos/1730578998748_temp\\\\order\\\\5344dda8c0db8535a16a0204da1e6d81\",\"vehicleNumber\":\"Rj14cu6635\",\"agentId\":166,\"updatedAt\":\"2024-11-02T20:23:20.619Z\",\"createdAt\":\"2024-11-02T20:23:20.619Z\"},\"assignedExecutive\":9,\"reportData\":{\"createdAt\":\"2024-11-02T20:23:20.691Z\",\"updatedAt\":\"2024-11-02T20:23:20.691Z\",\"requestTime\":\"2024-11-02T20:23:20.691Z\",\"status\":\"Pending\",\"fastagCost\":0,\"id\":6,\"agentName\":\"Vikas Yadav\",\"customerName\":null,\"customerMobile\":null,\"typeOfReport\":\"Registered\",\"SbiCustomerDetailsId\":7,\"agentId\":166,\"otpExecutiveId\":9,\"tagSerialNumber\":null,\"sbiVehicleDetailsId\":null,\"registrationExecutive\":null},\"vehicleDetails\":{\"statuscode\":200,\"status\":true,\"message\":\"Success\",\"reference_id\":20327460,\"data\":{\"client_id\":\"rc_925c46a29b139472\",\"rc_number\":\"Rj14cu6635\",\"registration_date\":\"2015-12-16\",\"owner_name\":\"ABHINAV JAIN\",\"father_name\":\"ABHEY JAIN\",\"present_address\":\"A-0903, THE RESIDENCE, SECTOR 33, Gurgaon-122001\",\"permanent_address\":\"A-0903, THE RESIDENCE, SECTOR 33, Gurgaon-122001\",\"mobile_number\":\"\",\"vehicle_category\":\"LMV\",\"vehicle_chasi_number\":\"MA1YU2HHUF6K12744\",\"vehicle_engine_number\":\"HHF4K21436\",\"maker_description\":\"MAHINDRA & MAHINDRA LIMITED\",\"maker_model\":\"XUV500\",\"body_type\":\"SALOON\",\"fuel_type\":\"DIESEL\",\"color\":\"NPERLWHT\",\"norms_type\":\"EURO 4\",\"fit_up_to\":\"2030-12-15\",\"financer\":\"\",\"financed\":null,\"insurance_company\":\"The New India Assurance Company Limited\",\"insurance_policy_number\":\"31030031220100290326\",\"insurance_upto\":\"2023-12-18\",\"manufacturing_date\":\"10/2015\",\"manufacturing_date_formatted\":\"2015-10\",\"registered_at\":\"SDM GURUGRAM, Haryana\",\"latest_by\":\"2023-04-13\",\"less_info\":true,\"tax_upto\":\"1900-01-01\",\"tax_paid_upto\":\"1900-01-01\",\"cubic_capacity\":\"0.00\",\"vehicle_gross_weight\":\"2510\",\"no_cylinders\":\"4\",\"seat_capacity\":\"7\",\"sleeper_capacity\":\"0\",\"standing_capacity\":\"\",\"wheelbase\":\"0\",\"unladen_weight\":\"1850\",\"vehicle_category_description\":\"Motor Car(LMV)\",\"pucc_number\":\"DL00300410001347\",\"pucc_upto\":\"2023-11-10\",\"permit_number\":\"\",\"permit_issue_date\":\"1900-01-01\",\"permit_valid_from\":\"1900-01-01\",\"permit_valid_upto\":\"1900-01-01\",\"permit_type\":\"\",\"national_permit_number\":\"\",\"national_permit_upto\":\"1900-01-01\",\"national_permit_issued_by\":\"\",\"non_use_status\":\"\",\"non_use_from\":\"1900-01-01\",\"non_use_to\":\"1900-01-01\",\"blacklist_status\":\"\",\"noc_details\":\"\",\"owner_number\":\"2\",\"rc_status\":\"ACTIVE\",\"masked_name\":false,\"challan_details\":null,\"variant\":null}}}",
-        "_responseType": "",
-        "_sent": true,
-        "_subscriptions": [],
-        "_timedOut": false,
-        "_trackingName": "unknown",
-        "_url": "http://192.168.31.51:3001/v1/api/sbi/validate-rc-pan",
-        "readyState": 4,
-        "responseHeaders": {
-            "Access-Control-Allow-Origin": "*",
-            "Connection": "keep-alive",
-            "Content-Length": "2588",
-            "Content-Type": "application/json; charset=utf-8",
-            "Date": "Sat, 02 Nov 2024 20:23:20 GMT",
-            "ETag": "W/\"a1c-oeTTqxbyoN8mNs/hu3lToHVg+jI\"",
-            "Keep-Alive": "timeout=5",
-            "X-Powered-By": "Express"
-        },
-        "responseURL": "http://192.168.31.51:3001/v1/api/sbi/validate-rc-pan",
-        "status": 201,
-        "timeout": 0,
-        "upload": {},
-        "withCredentials": true
-    },
-    "status": 201,
-    "statusText": undefined
+    "blacklist_status": "",
+    "body_type": "SALOON",
+    "challan_details": null,
+    "client_id": "rc_c1873f1a2c57a4ef",
+    "color": "NPERLWHT",
+    "cubic_capacity": "0.00",
+    "father_name": "ABHEY JAIN",
+    "financed": null,
+    "financer": "",
+    "fit_up_to": "2030-12-15",
+    "fuel_type": "DIESEL",
+    "insurance_company": "The New India Assurance Company Limited",
+    "insurance_policy_number": "31030031220100290326",
+    "insurance_upto": "2023-12-18",
+    "latest_by": "2023-04-13",
+    "less_info": true,
+    "maker_description": "MAHINDRA & MAHINDRA LIMITED",
+    "maker_model": "XUV500",
+    "manufacturing_date": "10/2015",
+    "manufacturing_date_formatted": "2015-10",
+    "masked_name": false,
+    "mobile_number": "",
+    "national_permit_issued_by": "",
+    "national_permit_number": "",
+    "national_permit_upto": "1900-01-01",
+    "no_cylinders": "4",
+    "noc_details": "",
+    "non_use_from": "1900-01-01",
+    "non_use_status": "",
+    "non_use_to": "1900-01-01",
+    "norms_type": "EURO 4",
+    "owner_name": "ABHINAV JAIN",
+    "owner_number": "2",
+    "permanent_address": "A-0903, THE RESIDENCE, SECTOR 33, Gurgaon-122001",
+    "permit_issue_date": "1900-01-01",
+    "permit_number": "",
+    "permit_type": "",
+    "permit_valid_from": "1900-01-01",
+    "permit_valid_upto": "1900-01-01",
+    "present_address": "A-0903, THE RESIDENCE, SECTOR 33, Gurgaon-122001",
+    "pucc_number": "DL00300410001347",
+    "pucc_upto": "2023-11-10",
+    "rc_number": "Rj14cu6635",
+    "rc_status": "ACTIVE",
+    "registered_at": "SDM GURUGRAM, Haryana",
+    "registration_date": "2015-12-16",
+    "seat_capacity": "7",
+    "sleeper_capacity": "0",
+    "standing_capacity": "",
+    "tax_paid_upto": "1900-01-01",
+    "tax_upto": "1900-01-01",
+    "unladen_weight": "1850",
+    "variant": null,
+    "vehicle_category": "LMV",
+    "vehicle_category_description": "Motor Car(LMV)",
+    "vehicle_chasi_number": "MA1YU2HHUF6K12744",
+    "vehicle_engine_number": "HHF4K21436",
+    "vehicle_gross_weight": "2510",
+    "wheelbase": "0"
 }

@@ -56,11 +56,12 @@ const SbiFastagRegistration2 = (props) => {
 
 
     const fetchSerialNumber = async (agentId: number) => {
+        console.log(agentId, "called")
         try {
             const res = await client.get(`/inventory/fastag/agent/acknowledged-tags/${agentId}`, {
                 params: {
                     serialNumber: true,
-                    bankId: 1
+                    bankId: 2
                 }
             });
             console.log(res.data.tags, "tag data")
@@ -90,7 +91,8 @@ const SbiFastagRegistration2 = (props) => {
                 agentId: userId,
                 vehicleData: vehiclePropData,
                 customerData: customerPropData,
-                serialNo: selectedTagsrno
+                serialNo: selectedTagsrno,
+                reportData: reportPropsData
             })
             console.log(res, "response")
         } catch (error: any) {

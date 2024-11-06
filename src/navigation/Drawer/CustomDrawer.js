@@ -130,7 +130,7 @@ const data = [
   {
     title: 'SBI',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
-    screen: 'sbi2'
+    screen: 'sbi4'
 },
     {
         title: 'Wallet',

@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
-import InputTextSbi from './InputTextSbi';
-import SelectFieldSbi from './SelectFieldSbi';
-import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
+import MobileNumberModal from './MobileNumberModal';
+import PanModal from './PanModal';
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
+
+
 const SbiProcessing = (props: any) => {
+    const customerData = props.route.params?.customerData;
+    const serialNo = props.route.params?.serialNo;
+    const vehicledata = props.route.params?.vehicledata;
+    const reportPropData = props.route.params?.reportPropData;
+    const uploadDocRes = props.route.params?.uploadDocRes;
+
+    console.log(customerData, "cusdera")
+    console.log(serialNo, "serial no")
+    console.log(vehicledata, "vehicle data")
+    console.log(reportPropData, "reportdara")
+    console.log(uploadDocRes, "<<-- upload doc res")
     const [pincode, setPincode] = useState('');
     const [chasisNumber, setChasisNumber] = useState('');
     const [ownername, setOwnerName] = useState('');
@@ -21,6 +33,9 @@ const SbiProcessing = (props: any) => {
 
     // Data for the dropdowns
 
+    // models
+    const [pancardModal, setPancardModal] = useState(true);
+    const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
@@ -44,12 +59,21 @@ const SbiProcessing = (props: any) => {
                 </View>
 
             </View>
-            <Text style={{textAlign:'center',color:'black', fontSize: 16,fontWeight: '600',}}>Get...Set...Go...</Text>
+            <Text style={{ textAlign: 'center', color: 'black', fontSize: 16, fontWeight: '600', }}>Get...Set...Go...</Text>
 
             {/* Updated buttonContainer with a title */}
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
+
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
+            <PanModal setPanModalVisible={pancardModal} panModalVisible={setPancardModal} />
+            <TouchableOpacity onPress={() => setPancardModal(true)}>
+                <Text>Open mobile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setMobileNumberUpdateModal(true)}>
+                <Text>Open mobile</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -114,7 +138,7 @@ const styles = StyleSheet.create({
         elevation: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        
+
         marginVertical: 10
     },
     Textcontainer2: {

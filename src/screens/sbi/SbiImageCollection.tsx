@@ -12,7 +12,8 @@ const isSmallScreen = width < 400;
 const SbiImageCollection = (props: any) => {
     const customerData = props.route.params?.customerData
     const serialNo = props.route.params?.serialNo
-    const vehicledata = props.route.params?.vehicleData
+    const vehicledata = props.route.params?.vehicleData;
+    const reportPropData = props.route.params?.reportData
 
     console.log(customerData, serialNo, vehicledata, "<-----params data")
     const [rcFront, setRcFront] = useState(null);
@@ -47,6 +48,7 @@ const SbiImageCollection = (props: any) => {
         formData.append('vehicleId', vehicledata.id);
         formData.append('customerId', customerData.id);
         formData.append('serialNo', serialNo)
+        formData.append('reportId', reportPropData)
 
         console.log(formData, "formdata")
         try {
@@ -56,7 +58,13 @@ const SbiImageCollection = (props: any) => {
                 },
             })
             console.log(uploadDocRes, "updaload doc res")
-            props.navigation.navigate('sbi4')
+            props.navigation.navigate('sbi4', {
+                customerData: customerData,
+                serialNo: serialNo,
+                vehicledata: vehicledata,
+                reportPropData: reportPropData,
+                uploadDocRes: uploadDocRes
+            })
         } catch (error: any) {
             console.log(error)
             showAlert(error.response.data.message || error.response.data?.error || 'Tag registration failed');
