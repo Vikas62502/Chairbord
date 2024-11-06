@@ -31,7 +31,7 @@ const LinearButton = ({ onPress, title, disabled }) => {
 
 const styles = StyleSheet.create({
   appButtonContainer: {
-    elevation: 8,
+    // elevation: 8,
     borderRadius: 25,
     height: 68,
     width: '100%',
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden' // Ensure the gradient follows the button's shape
   },
   disableAppButtonContainer: {
-    elevation: 8,
+    // elevation: 8,
     borderRadius: 25,
     height: 68, // Match the height of the enabled button
     width: '100%', // Set to 100% width

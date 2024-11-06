@@ -79,17 +79,21 @@ const DeliveryAddressModal = ({ setIsOrderFailed, setTransactionId, setOrderId, 
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContent}>
                         {loading && <Loader />}
-                        <View style={styles.header}>
+                        <View  style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: '5%'
+              }}>
                             <Text style={styles.titleText}>Delivery Address</Text>
                             <Pressable onPress={onClose}>
                                 <Image
                                     source={require('../../assets/DrawerNavigation/closeLogout.png')}
                                     alt="closeBtn"
-                                    style={styles.closeIcon}
+                                    style={{ width: 20, height: 20 }}
                                 />
                             </Pressable>
                         </View>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 ,marginVertical:5}}>
                             {/* Address Field */}
                             <InputText
                                 value={deliveryAddress.address}
@@ -122,7 +126,7 @@ const DeliveryAddressModal = ({ setIsOrderFailed, setTransactionId, setOrderId, 
 
                             {/* Alternate Mobile Field */}
                             <InputText
-                                value={deliveryAddress.alternate_mobile}
+                                value={deliveryAddress.alternate_mobile_number}
                                 placeholder="Alternate Mobile"
                                 keyboardType="numeric"
                                 onChangeText={(value) => formDataHandler('alternate_mobile_number', value)}
@@ -158,8 +162,9 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '90%',
-        height: '80%',
-        backgroundColor: 'white',
+        height: 'auto',
+        maxHeight:'80%',
+        backgroundColor: '#F3F3F3',
         borderRadius: 10,
         padding: 20,
         elevation: 5
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
         borderColor: '#263238'
     },
     applyButton: {
-        backgroundColor: '#263238',
+        backgroundColor: '#02546D',
         marginLeft: '5%'
     },
     buttonText: {
