@@ -24,7 +24,6 @@ const OTP = (props) => {
   const [otp, setOtp] = useState(sixStringArray)
 
   const verifyOtp = async () => {
-    console.log('validate otp')
     setLoading(true)
     try {
       const sessionId = await getCache('session')
@@ -32,8 +31,7 @@ const OTP = (props) => {
         otp: otp.join(''),
         sessionId: sessionId
       })
-      console.log(response, "validate otp")
-
+      console.log(response, "validate otp ress")
       if (otpType === 'tagReplacement') {
         return props.navigation.navigate('tagReplacementForm', {
           sessionId: _sessionId,
@@ -63,11 +61,6 @@ const OTP = (props) => {
       }
     } catch (error) {
       if (error.response) {
-        // Server responded with a status other than 2xx
-        console.log('Error Data:', error.response.data)
-        console.log('Error Status:', error.response.status)
-        console.log('Error Headers:', error.response.headers)
-
         // Handle specific error codes or messages from the server
         if (error.response.status === 400 && error.response.data?.error) {
           showAlert(

@@ -49,11 +49,6 @@ const replacementReason = [
 
 const TagReplacementForm = (props: any) => {
   const { response, customerId, userData, sessionId: _sessionId } = props?.route?.params
-  console.log(props.route.params, 'props.route.params')
-
-  console.log(response, customerId, userData, _sessionId, 'logged!')
-  console.log(response, "request id")
-
   const { mobileNo, walletId } = response.custDetails
 
   const {
@@ -67,10 +62,12 @@ const TagReplacementForm = (props: any) => {
     // vehicleDescriptor
   } = response?.vrnDetails
 
+  console.log(response?.vrnDetails, "response?.vrnDetails");
+
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
   const [tagSerialNumber, setTagSerialNumber] = useState('')
-  const [sessionId, setSessionId] = React.useState('dummySessionId')
+  const [sessionId, setSessionId] = React.useState()
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
@@ -79,11 +76,8 @@ const TagReplacementForm = (props: any) => {
   const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
   const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
   const [selectNationPermit, setSelectNationPermit] = useState(nationalPermit)
-
-  console.log(selectNationPermit, 'selectNationPermit')
-
-  console.log(vehicleDescriptor, 'vehicleDescriptor')
-  console.log(stateOfRegistration, 'stateOfRegistration')
+  const [chassisNumber, setChasisNumber] = useState(chassisNo);
+  const [engineNumber, setEngineNumber] = useState(engineNo)
 
   const getUserData = async () => {
     try {
@@ -116,8 +110,8 @@ const TagReplacementForm = (props: any) => {
         serialNo: '608268-001-' + tagSerialNumber,
         reason: reasonOfReplacement,
         reasonDesc: description || '',
-        chassisNo: chassisNo,
-        engineNo: engineNo,
+        chassisNo: chassisNumber,
+        engineNo: engineNumber,
         isNationalPermit: selectNationPermit || '2',
         permitExpiryDate: permitExpiryDate || '',
         stateOfRegistration: stateOfRegistration || '',
@@ -130,7 +124,6 @@ const TagReplacementForm = (props: any) => {
       }
       console.log(body, "body data");
       const res = await client.post(`/bajaj/replaceFastag`, body);
-      console.log(res, "response");
       setModelIsSuccess(true);
       setModalShow(true);
     } catch (err: any) {
@@ -213,6 +206,25 @@ const TagReplacementForm = (props: any) => {
             <InputText placeholder={''} value={vehicleNo} isEditable={false} />
           </View>
 
+          <View style={{ marginTop: "5%" }}>
+            <CustomLabelText label={"Chasis Number"} />
+            {response?.vrnDetails && response?.vrnDetails?.chassisNo?.length > 2 ?
+              <InputText placeholder={"Enter Chasis number"} value={response?.vrnDetails?.chassisNo}
+                isEditable={false}
+              /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNumber}
+                onChangeText={(text: string) => setChasisNumber(text?.toUpperCase())} borderColor={chassisNumber?.length < 2 ? "red" : "#263238"}
+              />}
+          </View>
+          <View style={{ marginTop: "5%" }}>
+            <CustomLabelText label={"Engine Number"} />
+            {response?.vrnDetails && response?.vrnDetails?.engineNo?.length > 2 ?
+              <InputText placeholder={"Enter Engine number"} value={response?.vrnDetails?.engineNo}
+                isEditable={false}
+              /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
+                onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
+              />}
+          </View>
+
           <CustomerDetailsCard
             customerDetailsData={existingTagDetailData}
             title="Existing tag details"
@@ -239,6 +251,7 @@ const TagReplacementForm = (props: any) => {
             </View>
             <View style={{ flex: 1 }}>
               <InputText
+                borderColor={tagSerialNumber.length < 2 ? "red" : "#263238"}
                 placeholder={'xxxxxx'}
                 onChangeText={(text: string) => setTagSerialNumber(text)}
                 value={tagSerialNumber}

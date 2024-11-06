@@ -1,10 +1,10 @@
-import { View, Text, Image, StyleSheet, Pressable,Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable, Dimensions } from 'react-native'
 import React, { useRef, useState } from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
-const SelectFieldSbi = ({ dataToRender, title, selectedValue,borderColor }) => {
+const isSmallScreen = width <= 420;
+const SelectFieldSbi = ({ dataToRender, title, selectedValue, borderColor }) => {
   const dropdownRef = useRef(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggleDropdown = () => {
@@ -22,13 +22,14 @@ const SelectFieldSbi = ({ dataToRender, title, selectedValue,borderColor }) => {
         ref={dropdownRef}
         data={dataToRender}
         onSelect={(selectedItem, index) => {
-          selectedValue(selectedItem, index)
+          console.log(selectedItem, "drop down selection <----")
+          selectedValue(selectedItem.serialNumber, index)
         }}
         renderButton={(selectedItem, isOpened) => {
           return (
             <View style={styles.dropdownButtonStyle}>
               <Text style={styles.dropdownButtonTxtStyle}>
-                {(selectedItem && selectedItem.title) || title}
+                {(selectedItem && selectedItem.serialNumber) || title}
               </Text>
             </View>
           )
@@ -42,7 +43,7 @@ const SelectFieldSbi = ({ dataToRender, title, selectedValue,borderColor }) => {
                 ...(isSelected && { backgroundColor: '#D2D9DF' })
               }}
             >
-              <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
+              <Text style={styles.dropdownItemTxtStyle}>{item.serialNumber}</Text>
             </View>
           )
         }}
@@ -66,17 +67,17 @@ const styles = StyleSheet.create({
   },
   dropdownButtonStyle: {
     width: '80%',
-    height: isTablet?80:60,
+    height: isTablet ? 80 : 60,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: isTablet?10:20,
+    paddingHorizontal: isTablet ? 10 : 20,
     // backgroundColor:'red'
   },
   dropdownButtonTxtStyle: {
     flex: 1,
-    fontSize: isTablet?20:16,
+    fontSize: isTablet ? 20 : 16,
     fontWeight: '400',
     color: 'gray',
   },
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 8,
-    
+
 
   },
   dropdownItemTxtStyle: {
@@ -108,14 +109,14 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dropdownStyle: {
-    borderWidth: isTablet?2:1,
-    borderRadius: isTablet?25:20,
+    borderWidth: isTablet ? 2 : 1,
+    borderRadius: isTablet ? 25 : 20,
     // marginRight:-10,
     // backgroundColor:'red',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    
+
   }
 })
 

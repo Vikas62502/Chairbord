@@ -6,7 +6,8 @@ import LinearGradient from 'react-native-linear-gradient'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
-const OverlayHeader = ({ title, showBackButton = true }) => {
+const OverlayHeader = ({ title, showBackButton = true, isorderSection = false, handleDeleteOrder }) => {
+
   const navigation = useNavigation()
   return (
     <View style={styles.container}>
@@ -17,7 +18,14 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
             {showBackButton && (
               <View>
                 <TouchableOpacity
-                  onPress={() => navigation.goBack()}
+                  onPress={() => {
+                    if (isorderSection) {
+                      handleDeleteOrder();
+                      navigation.goBack();
+                    } else {
+                      navigation.goBack();
+                    }
+                  }}
                   style={styles.backArrow}
                 >
                   <Image source={require('../assets/back.png')} style={{ width: 40, height: 40, }} />
@@ -31,7 +39,7 @@ const OverlayHeader = ({ title, showBackButton = true }) => {
           </View>
         </View>
         <View style={styles.chairBordLogo}>
-          <Image source={require('../assets/chairbordLogoWithoutName.png')} style={{ width: 120, height: 120, }} />
+          <Image source={require('../assets/chairBoardLogochairbordLogoWithoutName.png')} style={{ width: 120, height: 120, }} />
         </View>
       </LinearGradient>
     </View>

@@ -1,6 +1,14 @@
-import { View, Text, ScrollView, RefreshControl, Dimensions, Pressable, Image } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  RefreshControl,
+  Dimensions,
+  Pressable,
+  Image
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native'
 import SearchBar from '../../components/common/SearchBar'
 import InventoryCards from './InventoryCards'
 import InventoryCardData from './InventoryCardData'
@@ -10,20 +18,30 @@ import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import ExcelButton from '../../components/ui/ExcelButton'
 import OverlayHeader from '../../components/OverlayHeader'
+import useUserData from '../../helper/useUserData'
+import Loader from '../../components/ui/Loader'
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen = width < 400;
+const isTablet = width > 768
+const isSmallScreen = width < 400
 const Inventory = (props) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
-  const [userData, setUserData] = useState()
-  const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation(); // Get navigation object
-  const route = useRoute(); // Get route object
-  const isPartOfBottomNavigator = route.name === 'Inventory';
-  console.log(inventoryCardData, 'inventoryCardData');
+  // const [userData, setUserData] = useState()
+  const [refreshing, setRefreshing] = useState(false)
+  const navigation = useNavigation() // Get navigation object
+  const route = useRoute() // Get route object
+
+  const [loading, setLoading] = useState(false)
+  const [tag_cost, setTag_Cost] = useState(null);
+
+  const userData = useUserData()
+  // console.log(userData?.user?.id, "user data")
+  const agentId = userData?.user?.id
+
+  const isPartOfBottomNavigator = route.name === 'Inventory'
+  // console.log(inventoryCardData, 'inventoryCardData')
   const onRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     // try {
     //   await getWalletDetails();
     // } catch (error) {
@@ -31,7 +49,7 @@ const Inventory = (props) => {
     // } finally {
     //   setRefreshing(false);
     // }
-  };
+  }
   // const getUserData = async () => {
   //   let userData = await getCache('userData')
   //   setUserData(userData, 'userData')
@@ -47,52 +65,77 @@ const Inventory = (props) => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   getUserData()
-  // }, [])
+  const fetchInventory = async (id) => {
+    console.log(id, "called")
+    setLoading(true)
+    try {
+      console.log(agentId)
+      const response = await client.get(
+        `/inventory/fastag/agent/acknowledged-tags/${id}`
+      )
+      setInventoryCardData(response.data.tags)
+      setTag_Cost(response.data.tagCost);
+      // console.log(response.data, 'inventory here')
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     getInventory(userData?.user?.id)
-  //   }
-  // }, [userData])
+  useEffect(() => {
+    fetchInventory(id)
+  }, [])
 
   return (
-    <ScrollView style={styles.container} refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
-      {!isPartOfBottomNavigator && (
-        <OverlayHeader
-          title={'Inventory'}
-          showBackButton={true}
-        />
-      )}
-      <View style={{ padding: '5%' }}>
-        <SearchBar setShowInventoryModal={setShowInventoryModal} />
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <ScrollView
+          style={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {!isPartOfBottomNavigator && (
+            <OverlayHeader title={'Inventory'} showBackButton={true} />
+          )}
+          <View style={{ padding: '5%' }}>
+            <SearchBar setShowInventoryModal={setShowInventoryModal} />
 
-        <View>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center",  }}
-          >
             <View>
-              <Text style={styles.titleText}>Inventory</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <View>
+                  <Text style={styles.titleText}>Inventory</Text>
+                </View>
+                <ExcelButton
+                  title={'Excel'}
+                  style={{ justifyContent: 'center', padding: 10 }}
+                />
+              </View>
             </View>
-            <ExcelButton title={"Excel"} style={{ justifyContent: 'center', padding: 10 }} />
+            <View style={{ marginTop: '5%' }}>
+              {inventoryCardData.map((data, index) => (
+                <InventoryCards key={index} data={data} tagCost={tag_cost} />
+              ))}
+            </View>
           </View>
-        </View>
-        <View style={{ marginTop: '5%' }}>
-          {InventoryCardData.map((data, index) => (
-            <InventoryCards key={index} data={data} />
-          ))}
-        </View>
-      </View>
 
-      {/* Filter modal */}
-      <InventoryFilterModal
-        visible={showInventoryModal}
-        onClose={() => setShowInventoryModal(false)}
-      />
-    </ScrollView>
+          {/* Filter modal */}
+          <InventoryFilterModal
+            visible={showInventoryModal}
+            onClose={() => setShowInventoryModal(false)}
+          />
+        </ScrollView>
+      )}
+    </>
   )
 }
 

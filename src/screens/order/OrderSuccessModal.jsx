@@ -7,12 +7,17 @@ import {
   Pressable,
   Image
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AddBtn from '../../components/ui/AddBtn'
 
-const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,orderId }) => {
-  // console.log(transactionId, totalOrderAmount, orderId, "in the success model");
+const OrderSuccessModal = ({ visible, onClose, onApply, transactionId, orderId, totalOrderAmount, responseAmount, orders }) => {
+  function calculateTotalAmount() {
+    return orders.reduce((total, order) => total + order.amount, 0)
+  }
+
+  const [amountToBeDisplay, setAmountToBeDisplay] = useState(calculateTotalAmount)
+  console.log(amountToBeDisplay, "amint")
   const navigation = useNavigation()
   return (
     <Modal
@@ -44,7 +49,7 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId,orderId })
               </View>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Amount Paid</Text>
-                <Text style={styles.detailValue}>: 100</Text>
+                <Text style={styles.detailValue}>: {amountToBeDisplay}</Text>
               </View>
               <View style={styles.orderDetailRow}>
                 <Text style={styles.detailLabel}>Transaction Id.</Text>
@@ -131,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    textAlign:'center',
+    textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },

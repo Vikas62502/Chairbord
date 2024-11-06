@@ -3,8 +3,6 @@ import OverlayHeader from '../../components/OverlayHeader'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import LinearButton from '../../components/common/LinearButton'
 import ExcelButton from '../../components/ui/ExcelButton'
-import HorizontalDivider from '../../components/common/HorizontalDivider'
-import CardAccordian from '../../components/common/CardAccordian'
 
 const OrderSummary = (props) => {
   const data = props.route.params.orderData;

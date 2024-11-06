@@ -8,15 +8,17 @@ import {
   ScrollView,
   Dimensions,
   BackHandler,
-  Alert
+  Alert,
+  FlatList,
+  TextInput,
+  Button
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import SwipperComponent from './SwipperComponent';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
+import io from 'socket.io-client';
 import { getCache } from '../../helper/Storage';
-import { client } from '../../client/Axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { disconnectSocket, initializeSocket, serverURL } from '../../utils/socket';
 
 const { width, height } = Dimensions.get('window');
 const isTablet = width > 768;
@@ -100,6 +102,26 @@ const Home = () => {
     }
   };
 
+  // const [socket, setSocket] = useState(null);
+  // const [userData, setUserData] = useState()
+  // console.log(userData, "userData")
+  // console.log(userData?.user?.id, "uid")
+
+  // const getUserData = async () => {
+  //   let userData = await getCache('userData')
+  //   setUserData(userData)
+  // }
+
+  // useEffect(() => {
+  //   getUserData()
+  // }, [])
+
+  // useEffect(() => {
+  //   const socket = initializeSocket(serverURL, userData?.user?.id)
+  //   setSocket(socket);
+  //   return () => disconnectSocket()
+  // }, [userData]);
+
   return (
     <ScrollView
       style={styles.container}
@@ -107,6 +129,7 @@ const Home = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+
       <View style={styles.swipperContainer}>
         <SwipperComponent />
       </View>
