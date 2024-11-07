@@ -4,6 +4,8 @@ import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
 import NextButton from './NextButton';
 import MobileNumberModal from './MobileNumberModal';
 import PanModal from './PanModal';
+import OtpModal from './OtpModal';
+import { getSocket } from '../../utils/socket';
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
@@ -21,21 +23,35 @@ const SbiProcessing = (props: any) => {
     console.log(vehicledata, "vehicle data")
     console.log(reportPropData, "reportdara")
     console.log(uploadDocRes, "<<-- upload doc res")
-    const [pincode, setPincode] = useState('');
-    const [chasisNumber, setChasisNumber] = useState('');
-    const [ownername, setOwnerName] = useState('');
-    const [engineNumber, setEngineNumber] = useState('');
-    const [vehicleNumber, setVehicleNumber] = useState('');
-    const [selectedFuel, setSelectedFuel] = useState(null);
-    const [selectedState, setSelectedState] = useState(null);
-    const [selectedtagsrno, setSelectedTagsrno] = useState(null);
-    const [isDisabled, setIsDisabled] = useState(false); // Manage button disabled state
-
-    // Data for the dropdowns
 
     // models
     const [pancardModal, setPancardModal] = useState(false);
     const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
+    const [otpModal, setOtpModal] = useState(false)
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const handleOpenModal = (data: any) => {
+            if (data && data.modalType === "OTP") {
+                console.log("OTP Modal Triggered:", data.modalType);
+                setOtpModal(true)
+            } else if (data && data.modalType === "PAN") {
+                console.log("PAN Modal Triggered:", data.modalType);
+                setPancardModal(true)
+            } else if (data && data.modalType === "MOBILE") {
+                console.log("Mobile Modal Triggered:", data.modalType);
+                setMobileNumberUpdateModal(true)
+            }
+        };
+
+        socket.on('openModal', handleOpenModal);
+
+        return () => {
+            socket.off('openModal', handleOpenModal);
+        };
+    }, []);
+
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
@@ -63,17 +79,12 @@ const SbiProcessing = (props: any) => {
 
             {/* Updated buttonContainer with a title */}
             <View style={styles.buttonContainer}>
-                <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
+                <NextButton  title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
 
             <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
             <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} />
-            <TouchableOpacity onPress={() => setPancardModal(true)}>
-                <Text>Open pan</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setMobileNumberUpdateModal(true)}>
-                <Text>Open mobile</Text>
-            </TouchableOpacity>
+            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} />
         </ScrollView>
     );
 };

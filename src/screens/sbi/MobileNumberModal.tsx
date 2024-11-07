@@ -1,16 +1,33 @@
-import { View, Text, Modal, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Modal, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import React, { FC, useState } from 'react'
 import InputTextSbi from './InputTextSbi'
+import { client } from '../../client/Axios'
 
-const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) => {
+interface mobileNoModalInterface {
+    setMobileModalVisible: (visible: boolean) => void,
+    mobileModalVisible: boolean,
+    customerId: string | number
+}
+
+const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {
     const [mobile, setMobile] = useState('');
     // Handle mobile number submission
-    const handleMobileSubmit = () => {
-        if (mobile) {
-            setMobileModalVisible(false);
-            // Next steps after mobile number submission can be handled here
+    const handleMobileSubmit = async () => {
+        try {
+            const res = await client.post('/sbi/update-customer-mobile', {
+                mobileNumber: mobile,
+                customerId: customerId
+            });
+
+            if (res.data.status === 200) {
+                console.log('Mobile updated successfully');
+            }
+        } catch (error: any) {
+            console.log('Error while updating mobile:', error);
+            Alert.alert(error.response.data.message || 'Error while updating mobile');
         }
     };
+
     return (
         <Modal
             animationType="slide"
@@ -26,11 +43,11 @@ const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) =
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please change Mobile Number</Text>
-                        <InputTextSbi placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType="numeric" />
+                        <InputTextSbi maxLength={10} placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType='numeric' />
                     </View>
                     <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                            // onPress={handlePanSubmit}
+                        <TouchableOpacity
+                            onPress={() => setMobileModalVisible(false)}
                             // disabled={!pan}
                             style={styles.closeButtonContainer}
                         >
@@ -38,8 +55,10 @@ const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) =
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={handleMobileSubmit}
-                            disabled={!mobile}
-                            style={[styles.appButtonContainer, { backgroundColor: mobile ? '#5ECD4C' : '#EFE6F7' }]}
+                            disabled={
+                                mobile.length < 10
+                            }
+                            style={[styles.appButtonContainer, { backgroundColor: mobile.length >= 10 ? '#5ECD4C' : '#EFE6F7' }]}
                         >
                             <Text style={styles.appButtonText}>Submit</Text>
                         </TouchableOpacity>
@@ -127,38 +146,38 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
     },
-    buttonContainer:{
-        display:'flex',
-        gap:22,
-        flexDirection:'row'
-            },
-            appButtonContainer: {
-                elevation: 8,
-                borderRadius: 10,
-                paddingVertical: 10,
-                // paddingHorizontal: 20,
-                width: '46%',
-                alignItems: 'center',
-            },
-            appButtonText: {
-                color: 'black',
-                fontSize: 18,
-                fontWeight: 'bold',
-            },
-            closeButtonContainer: {
-                elevation: 8,
-                backgroundColor:'white',
-                borderRadius: 10,
-                paddingVertical: 10,
-                paddingHorizontal: 20,
-                width: '46%',
-                alignItems: 'center',
-            },
-            closeButtonText: {
-                color: 'black',
-                fontSize: 18,
-                fontWeight: 'bold',
-            },
+    buttonContainer: {
+        display: 'flex',
+        gap: 22,
+        flexDirection: 'row'
+    },
+    appButtonContainer: {
+        elevation: 8,
+        borderRadius: 10,
+        paddingVertical: 10,
+        // paddingHorizontal: 20,
+        width: '46%',
+        alignItems: 'center',
+    },
+    appButtonText: {
+        color: 'black',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    closeButtonContainer: {
+        elevation: 8,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        width: '46%',
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: 'black',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });
 
 
