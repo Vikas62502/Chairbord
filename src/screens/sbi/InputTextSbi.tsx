@@ -61,7 +61,7 @@ const InputTextSbi = ({
   }
 
   return (
-    <View style={{ width: '80%', marginVertical: isSmallScreen ? 8 : 10 }}>
+    <View style={{ width: '85%', marginVertical: isSmallScreen ? 8 : 10 }}>
       <View
         style={[
           styles.inputContainer,

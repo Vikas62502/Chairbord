@@ -165,7 +165,7 @@ const SbiFastagRegistration2 = (props) => {
                     )}
 
                 </View>
-                <View style={styles.inputContainer}>
+                <View style={styles.selectContainer}>
                     <Image source={require('../../assets/sbi/rightorange.png')} style={styles.icon} />
                     <SelectFieldSbi
                         dataToRender={tagSerialNumber}
@@ -198,6 +198,12 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginBottom: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    selectContainer: {
+        marginBottom: 15,
+        marginRight:30,
         flexDirection: 'row',
         alignItems: 'center',
     },

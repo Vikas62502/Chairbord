@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: isTablet ? 30 : 15,
     height: isTablet ? 90 : 50,
-    width: '40%', // Adjust width for more space
+    width: '50%', // Adjust width for more space
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden'
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: isTablet ? 30 : 15,
     height: isTablet ? 90 : 50,
-    width: '40%', // Adjust width for more space
+    width: '50%', // Adjust width for more space
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden'

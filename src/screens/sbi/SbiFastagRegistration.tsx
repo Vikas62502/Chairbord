@@ -128,7 +128,7 @@ const SbiFastagRegistration = (props: any) => {
         <View style={styles.inputContainer}>
           <Image source={require('../../assets/sbi/user.png')} style={{ width: 40, height: 40 }} />
           <InputTextSbi
-            placeholder="Enter name (Pan Holder)"
+            placeholder="Enter name (Pan)"
             value={RegistrationFormData.customerName}
             onChangeText={(value) => handleInputChange("customerName", value)}
           />

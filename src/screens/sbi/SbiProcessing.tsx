@@ -34,7 +34,7 @@ const SbiProcessing = (props: any) => {
     // Data for the dropdowns
 
     // models
-    const [pancardModal, setPancardModal] = useState(true);
+    const [pancardModal, setPancardModal] = useState(false);
     const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
 
     return (
@@ -67,9 +67,9 @@ const SbiProcessing = (props: any) => {
             </View>
 
             <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
-            <PanModal setPanModalVisible={pancardModal} panModalVisible={setPancardModal} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} />
             <TouchableOpacity onPress={() => setPancardModal(true)}>
-                <Text>Open mobile</Text>
+                <Text>Open pan</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setMobileNumberUpdateModal(true)}>
                 <Text>Open mobile</Text>
