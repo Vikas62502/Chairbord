@@ -1,25 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
-import InputTextSbi from './InputTextSbi';
-import SelectFieldSbi from './SelectFieldSbi';
-import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
+import MobileNumberModal from './MobileNumberModal';
+import PanModal from './PanModal';
+import OtpModal from './OtpModal';
+import { getSocket } from '../../utils/socket';
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
-const SbiProcessing = (props: any) => {
-    const [pincode, setPincode] = useState('');
-    const [chasisNumber, setChasisNumber] = useState('');
-    const [ownername, setOwnerName] = useState('');
-    const [engineNumber, setEngineNumber] = useState('');
-    const [vehicleNumber, setVehicleNumber] = useState('');
-    const [selectedFuel, setSelectedFuel] = useState(null);
-    const [selectedState, setSelectedState] = useState(null);
-    const [selectedtagsrno, setSelectedTagsrno] = useState(null);
-    const [isDisabled, setIsDisabled] = useState(false); // Manage button disabled state
 
-    // Data for the dropdowns
+
+const SbiProcessing = (props: any) => {
+    const customerData = props.route.params?.customerData;
+    const serialNo = props.route.params?.serialNo;
+    const vehicledata = props.route.params?.vehicledata;
+    const reportPropData = props.route.params?.reportPropData;
+    const uploadDocRes = props.route.params?.uploadDocRes;
+
+    console.log(customerData, "cusdera")
+    console.log(serialNo, "serial no")
+    console.log(vehicledata, "vehicle data")
+    console.log(reportPropData, "reportdara")
+    console.log(uploadDocRes, "<<-- upload doc res")
+
+    // models
+    const [pancardModal, setPancardModal] = useState(false);
+    const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
+    const [otpModal, setOtpModal] = useState(false)
+    const [data, setData] = useState<any>(null);
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const handleOpenModal = (data: any) => {
+            if (data && data.modalType === "OTP") {
+                console.log("OTP Modal Triggered:", data.modalType);
+                setData(data.data);
+                setOtpModal(true)
+            } else if (data && data.modalType === "PAN") {
+                console.log("PAN Modal Triggered:", data.modalType);
+                setData(data.data);
+                setPancardModal(true)
+            } else if (data && data.modalType === "MOBILE") {
+                console.log("Mobile Modal Triggered:", data.modalType);
+                setData(data.data);
+                setMobileNumberUpdateModal(true)
+            }
+        };
+
+        socket.on('openModal', handleOpenModal);
+
+        return () => {
+            socket.off('openModal', handleOpenModal);
+        };
+    }, []);
 
 
     return (
@@ -44,12 +79,16 @@ const SbiProcessing = (props: any) => {
                 </View>
 
             </View>
-            <Text style={{textAlign:'center',color:'black', fontSize: 16,fontWeight: '600',}}>Get...Set...Go...</Text>
+            <Text style={{ textAlign: 'center', color: 'black', fontSize: 16, fontWeight: '600', }}>Get...Set...Go...</Text>
 
             {/* Updated buttonContainer with a title */}
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
+
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} />
+            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
         </ScrollView>
     );
 };
@@ -114,7 +153,7 @@ const styles = StyleSheet.create({
         elevation: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        
+
         marginVertical: 10
     },
     Textcontainer2: {

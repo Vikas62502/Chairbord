@@ -319,8 +319,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
-    height: '80%',
-    backgroundColor: 'white',
+    maxHeight: '80%',
+    height:'auto',
+    backgroundColor: '#F3F3F3',
     borderRadius: 10,
     padding: 20,
     elevation: 5
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     borderColor: '#263238'
   },
   applyButton: {
-    backgroundColor: '#263238',
+    backgroundColor: '#02546D',
     marginLeft: '5%'
   },
   buttonText: {

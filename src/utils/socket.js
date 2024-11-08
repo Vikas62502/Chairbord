@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 let socket;
-export const serverURL = 'http://192.168.178.165:3001'
+export const serverURL = 'http://192.168.0.65:3001'
 
 export const initializeSocket = (serverUrl, userId) => {
     console.log(serverURL, userId)

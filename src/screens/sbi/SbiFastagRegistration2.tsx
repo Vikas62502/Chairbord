@@ -7,8 +7,11 @@ import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
 import useUserData from '../../hooks/useUserData';
+import OtpModal from './OtpModal';
+import { getSocket } from '../../utils/socket';
+import Loader from '../../components/ui/Loader';
 
-const SbiFastagRegistration2 = (props) => {
+const SbiFastagRegistration2 = (props: any) => {
     const vehiclePropData = props.route.params?.vehicleDetails?.data
     const reportPropsData = props.route.params?.reportsData
     const customerPropData = props.route.params?.customer
@@ -26,9 +29,8 @@ const SbiFastagRegistration2 = (props) => {
     // models
     const [tagSerialNumber, setTagSerialNumber] = useState({})
     const [otpModalVisible, setOtpModalVisible] = useState(false);
-    const [panModalVisible, setPanModalVisible] = useState(false);
-    const [mobileModalVisible, setMobileModalVisible] = useState(false);
-    console.log(tagSerialNumber, "<--- tag serial number")
+    const [otpModalData, setOtpModalData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     // Dropdown data
     const fuelData = [
@@ -56,11 +58,12 @@ const SbiFastagRegistration2 = (props) => {
 
 
     const fetchSerialNumber = async (agentId: number) => {
+        console.log(agentId, "called")
         try {
             const res = await client.get(`/inventory/fastag/agent/acknowledged-tags/${agentId}`, {
                 params: {
                     serialNumber: true,
-                    bankId: 1
+                    bankId: 2
                 }
             });
             console.log(res.data.tags, "tag data")
@@ -71,6 +74,7 @@ const SbiFastagRegistration2 = (props) => {
     }
 
     const handleDetailsSubmit = async () => {
+        setLoading(true);
         try {
             const data = {
                 "pincode": pincode,
@@ -90,22 +94,45 @@ const SbiFastagRegistration2 = (props) => {
                 agentId: userId,
                 vehicleData: vehiclePropData,
                 customerData: customerPropData,
-                serialNo: selectedTagsrno
+                serialNo: selectedTagsrno,
+                reportData: reportPropsData
             })
             console.log(res, "response")
         } catch (error: any) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchSerialNumber(userId);
-    }, [])
+        if (userId) {
+            fetchSerialNumber(userId);
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const handleOpenModal = (data: any) => {
+            if (data && data.modalType === "OTP") {
+                console.log("OTP Modal Triggered:", data.modalType);
+                setOtpModalVisible(true)
+                setOtpModalData(data.data)
+            }
+        };
+
+        socket.on('openModal', handleOpenModal);
+
+        return () => {
+            socket.off('openModal', handleOpenModal);
+        };
+    }, []);
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
             <OverlayHeaderSbi title={'SBI FASTag Registration'} />
-
+            {<Loader loading={loading} />}
             <View style={styles.detailsContainer}>
                 <Text style={styles.headerText}>Description details</Text>
                 <View style={styles.inputContainer}>
@@ -163,7 +190,7 @@ const SbiFastagRegistration2 = (props) => {
                     )}
 
                 </View>
-                <View style={styles.inputContainer}>
+                <View style={styles.selectContainer}>
                     <Image source={require('../../assets/sbi/rightorange.png')} style={styles.icon} />
                     <SelectFieldSbi
                         dataToRender={tagSerialNumber}
@@ -177,6 +204,16 @@ const SbiFastagRegistration2 = (props) => {
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} onPress={() => handleDetailsSubmit()} disabled={false} />
             </View>
+
+            <OtpModal
+                otpModalVisible={otpModalVisible}
+                setOtpModalVisible={setOtpModalVisible}
+                data={otpModalData}
+            />
+
+            {/* <TouchableOpacity onPress={() => setOtpModalVisible(true)} style={{ margin: 20 }}>
+                <Text style={{ color: '#0A74DA', textAlign: 'center' }}>Open Otp modal</Text>
+            </TouchableOpacity> */}
         </ScrollView>
     );
 };
@@ -196,6 +233,12 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginBottom: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    selectContainer: {
+        marginBottom: 15,
+        marginRight: 30,
         flexDirection: 'row',
         alignItems: 'center',
     },

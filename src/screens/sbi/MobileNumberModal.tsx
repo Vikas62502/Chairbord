@@ -1,16 +1,33 @@
-import { View, Text, Modal, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Modal, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import React, { FC, useState } from 'react'
 import InputTextSbi from './InputTextSbi'
+import { client } from '../../client/Axios'
 
-const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) => {
+interface mobileNoModalInterface {
+    setMobileModalVisible: (visible: boolean) => void,
+    mobileModalVisible: boolean,
+    customerId?: string | number
+}
+
+const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {
     const [mobile, setMobile] = useState('');
     // Handle mobile number submission
-    const handleMobileSubmit = () => {
-        if (mobile) {
-            setMobileModalVisible(false);
-            // Next steps after mobile number submission can be handled here
+    const handleMobileSubmit = async () => {
+        try {
+            const res = await client.post('/sbi/update-customer-mobile', {
+                mobileNumber: mobile,
+                customerId: customerId
+            });
+
+            if (res.data.status === 200) {
+                console.log('Mobile updated successfully');
+            }
+        } catch (error: any) {
+            console.log('Error while updating mobile:', error);
+            Alert.alert(error.response.data.message || 'Error while updating mobile');
         }
     };
+
     return (
         <Modal
             animationType="slide"
@@ -21,18 +38,27 @@ const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) =
             <View style={styles.modalBackground}>
                 <View style={styles.modalView}>
                     <View style={styles.logoContainer}>
-                        <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo} />
-                        <Image source={require('../../assets/sbi/cbpllogo.png')} style={styles.logo} />
+                        <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo1} />
+                        <Image source={require('../../assets/sbi/cbpllogo.png')} style={styles.logo2} />
                     </View>
                     <View style={styles.container}>
-                        <Text style={styles.modalText}>Please change Customer Mobile Number</Text>
-                        <InputTextSbi placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType="numeric" />
+                        <Text style={styles.modalText}>Please change Mobile Number</Text>
+                        <InputTextSbi maxLength={10} placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType='numeric' />
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
+                            onPress={() => setMobileModalVisible(false)}
+                            // disabled={!pan}
+                            style={styles.closeButtonContainer}
+                        >
+                            <Text style={styles.closeButtonText}>Close</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={handleMobileSubmit}
-                            disabled={!mobile}
-                            style={[styles.appButtonContainer, { backgroundColor: mobile ? '#5ECD4C' : '#EFE6F7' }]}
+                            disabled={
+                                mobile.length < 10
+                            }
+                            style={[styles.appButtonContainer, { backgroundColor: mobile.length >= 10 ? '#5ECD4C' : '#EFE6F7' }]}
                         >
                             <Text style={styles.appButtonText}>Submit</Text>
                         </TouchableOpacity>
@@ -44,32 +70,32 @@ const MobileNumberModal = ({ mobileModalVisible, setMobileModalVisible }: any) =
 }
 
 const styles = StyleSheet.create({
-    detailsContainer: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: 'white',
-        elevation: 3,
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    inputContainer: {
-        marginBottom: 15,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    icon: {
-        width: 30,
-        height: 30,
-        marginRight: 10,
-    },
-    buttonContainer: {
-        marginVertical: 20,
-        alignItems: 'center',
-    },
+    // detailsContainer: {
+    //     margin: 10,
+    //     padding: 10,
+    //     borderRadius: 10,
+    //     backgroundColor: 'white',
+    //     elevation: 3,
+    // },
+    // headerText: {
+    //     fontSize: 20,
+    //     fontWeight: 'bold',
+    //     marginBottom: 10,
+    // },
+    // inputContainer: {
+    //     marginBottom: 15,
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    // },
+    // icon: {
+    //     width: 30,
+    //     height: 30,
+    //     marginRight: 10,
+    // },
+    // buttonContainer: {
+    //     marginVertical: 20,
+    //     alignItems: 'center',
+    // },
     modalBackground: {
         flex: 1,
         justifyContent: 'center',
@@ -77,42 +103,78 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
-        width: '80%',
+        width: '90%',
         margin: 20,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
+        backgroundColor: '#5F259E',
         borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
+        padding: 20,
+        // alignItems: 'center',
         elevation: 5,
     },
     logoContainer: {
+        // backgroundColor:"red",
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        justifyContent: "space-between",
+        // marginBottom: 20,
     },
-    logo: {
+    logo1: {
+        width: 120,
+        height: 40,
+        // marginHorizontal: 10,
+    },
+    logo2: {
         width: 50,
         height: 50,
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
     },
     container: {
-        marginBottom: 20,
+        backgroundColor: 'white',
+        borderRadius: 16,
+        marginVertical: 20,
+        paddingVertical: 10,
         alignItems: 'center',
     },
     modalText: {
+        backgroundColor: '#5F259E',
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+        borderRadius: 12,
+        color: 'white',
         marginBottom: 15,
+        fontSize: 16,
         textAlign: 'center',
+    },
+    buttonContainer: {
+        display: 'flex',
+        gap: 22,
+        flexDirection: 'row'
     },
     appButtonContainer: {
         elevation: 8,
         borderRadius: 10,
         paddingVertical: 10,
-        paddingHorizontal: 12,
-        width: '100%',
+        // paddingHorizontal: 20,
+        width: '46%',
         alignItems: 'center',
     },
     appButtonText: {
-        color: 'white',
+        color: 'black',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    closeButtonContainer: {
+        elevation: 8,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        width: '46%',
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: 'black',
         fontSize: 18,
         fontWeight: 'bold',
     },

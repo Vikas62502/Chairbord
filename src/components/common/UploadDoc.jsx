@@ -6,11 +6,18 @@ import {
   StyleSheet,
   ImageBackground
 } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react';
 import pickImage from '../../helper/pickImage'
 import pickdoc from '../../helper/pickdoc'
 
-const UploadDoc = ({
+interface interfaceUploadDocProps {
+  text: string,
+  setUploadFile: (file: any) => void,
+  backgroundType?: string,
+  uploadDoc?: boolean
+}
+
+const UploadDoc: FC<interfaceUploadDocProps> = ({
   text,
   setUploadFile,
   backgroundType,

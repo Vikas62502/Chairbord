@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   overlayText: {
+    color:'black',
     fontSize: 18,
     fontWeight: '700'
   }

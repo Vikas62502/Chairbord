@@ -6,6 +6,7 @@ import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
 import useUserData from '../../hooks/useUserData';
+import Loader from '../../components/ui/Loader';
 
 interface RegistrationFormDataType {
   mobileNumber: string;
@@ -101,11 +102,7 @@ const SbiFastagRegistration = (props: any) => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
       <OverlayHeaderSbi title={'SBI FASTag Registration'} />
-      {loading && (
-        <View >
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
+      <Loader loading={loading} />
       <View style={styles.detailsContainer}>
         <Text style={styles.headerText}>Customer details</Text>
 
@@ -128,7 +125,7 @@ const SbiFastagRegistration = (props: any) => {
         <View style={styles.inputContainer}>
           <Image source={require('../../assets/sbi/user.png')} style={{ width: 40, height: 40 }} />
           <InputTextSbi
-            placeholder="Enter name (Pan Holder)"
+            placeholder="Enter name (Pan)"
             value={RegistrationFormData.customerName}
             onChangeText={(value) => handleInputChange("customerName", value)}
           />
@@ -190,6 +187,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 15,
     borderRadius: 20,
+  },
+  loaderContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    zIndex: 10,
   },
   headerText: {
     color: 'black',

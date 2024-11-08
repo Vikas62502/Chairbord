@@ -24,7 +24,7 @@ const AddBtn = ({ onPress, title = 'Default Title', disabled = false }) => {
 
 const styles = StyleSheet.create({
   appButtonContainer: {
-    elevation: 8,
+    // elevation: 15,
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   disableAppButtonContainer: {
  
-    elevation: 8,
+    // elevation: 8,
     borderRadius: 25,
     height: 50,
     alignItems: 'center',

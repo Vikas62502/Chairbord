@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, FC } from 'react'
 import {
   StyleSheet,
   View,
@@ -13,7 +13,20 @@ const { width } = Dimensions.get('window')
 const isTablet = width > 768
 const isSmallScreen = width <= 420
 
-const InputTextSbi = ({
+interface interfaceInputText {
+  value: string
+  placeholder: string
+  onChangeText: (text: string) => void
+  secure?: boolean
+  inputStyle?: any
+  id?: string
+  maxLength?: number
+  isEditable?: boolean
+  keyboardType?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad'
+  borderColor?: string
+}
+
+const InputTextSbi: FC<interfaceInputText> = ({
   value,
   placeholder,
   onChangeText,
@@ -61,7 +74,7 @@ const InputTextSbi = ({
   }
 
   return (
-    <View style={{ width: '80%', marginVertical: isSmallScreen ? 8 : 10 }}>
+    <View style={{ width: '85%', marginVertical: isSmallScreen ? 8 : 10 }}>
       <View
         style={[
           styles.inputContainer,

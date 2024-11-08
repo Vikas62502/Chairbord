@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,28 +6,35 @@ import {
   TouchableOpacity,
   View,
   Dimensions
-} from 'react-native'
+} from 'react-native';
 
-const { width } = Dimensions.get('window')
-const isTablet = width > 768
+const { width } = Dimensions.get('window');
+const isTablet = width > 768;
 
-const NextButton = ({ onPress, title, disabled }) => {
+interface NextButtonPropInterface {
+  onPress: () => void;
+  title: string;
+  disabled?: boolean;
+}
+
+const NextButton: FC<NextButtonPropInterface> = ({ onPress, title, disabled }) => {
   const buttonContainerStyle = disabled
     ? styles.disableAppButtonContainer
-    : styles.appButtonContainer
+    : styles.appButtonContainer;
 
   return (
     <TouchableOpacity
-      onPress={disabled ? null : onPress}
+      onPress={disabled ? undefined : onPress} // Use undefined instead of null for TypeScript compatibility
       style={buttonContainerStyle}
+      disabled={disabled} // Add this prop to disable touch feedback when disabled
     >
       <View style={styles.innerContainer}>
         <Text style={styles.appButtonText}>{title}</Text>
         <Image source={require('../../assets/next.png')} style={styles.image} />
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   appButtonContainer: {
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: isTablet ? 30 : 15,
     height: isTablet ? 90 : 50,
-    width: '40%', // Adjust width for more space
+    width: '50%', // Adjust width for more space
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden'
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: isTablet ? 30 : 15,
     height: isTablet ? 90 : 50,
-    width: '40%', // Adjust width for more space
+    width: '50%', // Adjust width for more space
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden'
@@ -69,6 +76,6 @@ const styles = StyleSheet.create({
     width: 40,
     marginTop: 10 // Provide space between text and image
   }
-})
+});
 
-export default NextButton
+export default NextButton;
