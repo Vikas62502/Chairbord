@@ -1,13 +1,15 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const Loader = () => {
+const Loader: FC<{ loading: boolean }> = ({ loading }) => {
+    if (!loading) return null; // Renders nothing if loading is false
+
     return (
         <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color="#0000ff" />
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     loaderContainer: {
@@ -15,9 +17,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        zIndex: 10,
+        zIndex: 1000,
     },
-})
+});
 
-
-export default Loader
+export default Loader;

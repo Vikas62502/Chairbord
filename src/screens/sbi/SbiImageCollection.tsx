@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
 import UploadDoc from '../../components/common/UploadDoc';
@@ -6,6 +6,8 @@ import NextButton from './NextButton';
 import { client } from '../../client/Axios';
 import showAlert from '../../utils/showAlert';
 import OtpModal from './OtpModal';
+import { getSocket } from '../../utils/socket';
+import Loader from '../../components/ui/Loader';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width < 400;
@@ -16,13 +18,15 @@ const SbiImageCollection = (props: any) => {
     const vehicledata = props.route.params?.vehicleData;
     const reportPropData = props.route.params?.reportData
 
-    console.log(customerData, serialNo, vehicledata, "<-----params data")
+    console.log(customerData, serialNo, reportPropData.id, "<-----params data")
     const [rcFront, setRcFront] = useState(null);
     const [rcBack, setRcBack] = useState(null);
     const [vehicleFront, setVehicleFront] = useState(null);
     const [vehicleSide, setVehicleSide] = useState(null);
     const [tagImage, setTagImage] = useState(null);
     const [otpModalVisible, setOtpModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [otpModalData, setOtpModalData] = useState({});
 
     const renderImagePreview = (imageData: any, clearImage: any) => (
         imageData ? (
@@ -39,6 +43,11 @@ const SbiImageCollection = (props: any) => {
     const allImagesAreFilled = rcFront && rcBack && vehicleFront && vehicleSide && tagImage;
 
     const handleUploadDoc = async () => {
+        setLoading(true);
+        if (!allImagesAreFilled) {
+            showAlert('Please upload all images');
+            return;
+        }
         // Create a new FormData instance
         const formData = new FormData();
         // Append each image to formData with appropriate keys
@@ -47,10 +56,10 @@ const SbiImageCollection = (props: any) => {
         formData.append('vehicle_front', vehicleFront);
         formData.append('vehicle_back', vehicleSide);
         formData.append('tag_image', tagImage);
-        formData.append('vehicleId', vehicledata.id);
+        formData.append('vehicleId', vehicledata.rc_number);
         formData.append('customerId', customerData.id);
         formData.append('serialNo', serialNo)
-        formData.append('reportId', reportPropData)
+        formData.append('reportId', reportPropData.id)
 
         console.log(formData, "formdata")
         try {
@@ -70,13 +79,33 @@ const SbiImageCollection = (props: any) => {
         } catch (error: any) {
             console.log(error)
             showAlert(error.response.data.message || error.response.data?.error || 'Tag registration failed');
+        } finally {
+            setLoading(false);
         }
     }
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const handleOpenModal = (data: any) => {
+            if (data && data.modalType === "OTP") {
+                console.log("OTP Modal Triggered:", data.modalType);
+                setOtpModalVisible(true)
+                setOtpModalData(data.data)
+            }
+        };
+
+        socket.on('openModal', handleOpenModal);
+
+        return () => {
+            socket.off('openModal', handleOpenModal);
+        };
+    }, []);
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
             <OverlayHeaderSbi title={'SBI FASTag Registration'} />
-
+            {<Loader loading={loading} />}
             <View style={styles.detailsContainer}>
                 <Text style={styles.headerText}>Description details</Text>
 
@@ -124,6 +153,7 @@ const SbiImageCollection = (props: any) => {
             <OtpModal
                 otpModalVisible={otpModalVisible}
                 setOtpModalVisible={setOtpModalVisible}
+                data={otpModalData}
             />
 
             {/* <TouchableOpacity onPress={() => setOtpModalVisible(true)} style={{ margin: 20 }}>

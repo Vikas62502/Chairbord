@@ -9,8 +9,9 @@ import { client } from '../../client/Axios';
 import useUserData from '../../hooks/useUserData';
 import OtpModal from './OtpModal';
 import { getSocket } from '../../utils/socket';
+import Loader from '../../components/ui/Loader';
 
-const SbiFastagRegistration2 = (props) => {
+const SbiFastagRegistration2 = (props: any) => {
     const vehiclePropData = props.route.params?.vehicleDetails?.data
     const reportPropsData = props.route.params?.reportsData
     const customerPropData = props.route.params?.customer
@@ -29,6 +30,7 @@ const SbiFastagRegistration2 = (props) => {
     const [tagSerialNumber, setTagSerialNumber] = useState({})
     const [otpModalVisible, setOtpModalVisible] = useState(false);
     const [otpModalData, setOtpModalData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     // Dropdown data
     const fuelData = [
@@ -72,6 +74,7 @@ const SbiFastagRegistration2 = (props) => {
     }
 
     const handleDetailsSubmit = async () => {
+        setLoading(true);
         try {
             const data = {
                 "pincode": pincode,
@@ -97,6 +100,8 @@ const SbiFastagRegistration2 = (props) => {
             console.log(res, "response")
         } catch (error: any) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -127,7 +132,7 @@ const SbiFastagRegistration2 = (props) => {
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
             <OverlayHeaderSbi title={'SBI FASTag Registration'} />
-
+            {<Loader loading={loading} />}
             <View style={styles.detailsContainer}>
                 <Text style={styles.headerText}>Description details</Text>
                 <View style={styles.inputContainer}>

@@ -1,14 +1,40 @@
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Modal, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import InputTextSbi from './InputTextSbi';
+import { client } from '../../client/Axios';
 
 const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
+    const reportId = data?.id
+    console.log(reportId, "report id")
+    const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState('');
-    console.log(data, "otp modal data")
+    const checkOtpLength = otp.length <= 5;
     // Handle OTP submission
-    const handleOtpSubmit = () => {
-        if (otp) {
-            console.log(otp, "otp")
+    const handleOtpSubmit = async () => {
+        setLoading(true);
+        if (otp.length < 6) {
+            Alert.alert('Invalid OTP', 'Please enter 6 digit OTP', [{ text: 'OK' }], { cancelable: false });
+            return
+        }
+
+        try {
+            const bodyData = {
+                otp,
+                reportId
+            }
+            console.log(bodyData, "otp body data")
+            const res = await client.post('/sbi/submit-otp-to-otp-executive', bodyData);
+            console.log(res, "otp response")
+
+            if (res.status === 200) {
+                Alert.alert('OTP Verified', 'OTP has been verified successfully', [{ text: 'OK' }], { cancelable: false });
+                setOtpModalVisible(false)
+                setOtp('')
+            }
+        } catch (error: any) {
+            Alert.alert('Error', error.response.data.message || 'Something went wrong', [{ text: 'OK' }], { cancelable: false });
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -39,10 +65,12 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={handleOtpSubmit}
-                            disabled={!otp}
-                            style={[styles.appButtonContainer, { backgroundColor: otp ? '#5ECD4C' : '#EFE6F7' }]}
+                            disabled={checkOtpLength || loading}
+                            style={[styles.appButtonContainer, { backgroundColor: !checkOtpLength ? '#5ECD4C' : '#EFE6F7' }]}
                         >
-                            <Text style={styles.appButtonText}>Submit</Text>
+                            <Text style={styles.appButtonText}>
+                                {loading ? 'Loading...' : 'Submit'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
