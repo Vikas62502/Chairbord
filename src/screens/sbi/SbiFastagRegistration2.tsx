@@ -7,6 +7,8 @@ import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
 import useUserData from '../../hooks/useUserData';
+import OtpModal from './OtpModal';
+import { getSocket } from '../../utils/socket';
 
 const SbiFastagRegistration2 = (props) => {
     const vehiclePropData = props.route.params?.vehicleDetails?.data
@@ -26,9 +28,7 @@ const SbiFastagRegistration2 = (props) => {
     // models
     const [tagSerialNumber, setTagSerialNumber] = useState({})
     const [otpModalVisible, setOtpModalVisible] = useState(false);
-    const [panModalVisible, setPanModalVisible] = useState(false);
-    const [mobileModalVisible, setMobileModalVisible] = useState(false);
-    console.log(tagSerialNumber, "<--- tag serial number")
+    const [otpModalData, setOtpModalData] = useState({});
 
     // Dropdown data
     const fuelData = [
@@ -101,8 +101,28 @@ const SbiFastagRegistration2 = (props) => {
     }
 
     useEffect(() => {
-        fetchSerialNumber(userId);
-    }, [])
+        if (userId) {
+            fetchSerialNumber(userId);
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        const socket = getSocket();
+
+        const handleOpenModal = (data: any) => {
+            if (data && data.modalType === "OTP") {
+                console.log("OTP Modal Triggered:", data.modalType);
+                setOtpModalVisible(true)
+                setOtpModalData(data.data)
+            }
+        };
+
+        socket.on('openModal', handleOpenModal);
+
+        return () => {
+            socket.off('openModal', handleOpenModal);
+        };
+    }, []);
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
@@ -179,6 +199,16 @@ const SbiFastagRegistration2 = (props) => {
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} onPress={() => handleDetailsSubmit()} disabled={false} />
             </View>
+
+            <OtpModal
+                otpModalVisible={otpModalVisible}
+                setOtpModalVisible={setOtpModalVisible}
+                data={otpModalData}
+            />
+
+            {/* <TouchableOpacity onPress={() => setOtpModalVisible(true)} style={{ margin: 20 }}>
+                <Text style={{ color: '#0A74DA', textAlign: 'center' }}>Open Otp modal</Text>
+            </TouchableOpacity> */}
         </ScrollView>
     );
 };
@@ -203,7 +233,7 @@ const styles = StyleSheet.create({
     },
     selectContainer: {
         marginBottom: 15,
-        marginRight:30,
+        marginRight: 30,
         flexDirection: 'row',
         alignItems: 'center',
     },

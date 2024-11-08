@@ -6,7 +6,7 @@ import { client } from '../../client/Axios'
 interface mobileNoModalInterface {
     setMobileModalVisible: (visible: boolean) => void,
     mobileModalVisible: boolean,
-    customerId: string | number
+    customerId?: string | number
 }
 
 const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {

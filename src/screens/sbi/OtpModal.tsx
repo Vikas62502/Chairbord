@@ -2,8 +2,9 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, Image } from 'react-na
 import React, { useState } from 'react'
 import InputTextSbi from './InputTextSbi';
 
-const OtpModal = ({ otpModalVisible, setOtpModalVisible }: any) => {
+const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
     const [otp, setOtp] = useState('');
+    console.log(data, "otp modal data")
     // Handle OTP submission
     const handleOtpSubmit = () => {
         if (otp) {

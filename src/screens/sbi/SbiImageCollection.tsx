@@ -5,6 +5,7 @@ import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
 import showAlert from '../../utils/showAlert';
+import OtpModal from './OtpModal';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width < 400;
@@ -21,8 +22,9 @@ const SbiImageCollection = (props: any) => {
     const [vehicleFront, setVehicleFront] = useState(null);
     const [vehicleSide, setVehicleSide] = useState(null);
     const [tagImage, setTagImage] = useState(null);
+    const [otpModalVisible, setOtpModalVisible] = useState(false);
 
-    const renderImagePreview = (imageData, clearImage) => (
+    const renderImagePreview = (imageData: any, clearImage: any) => (
         imageData ? (
             <TouchableOpacity onPress={clearImage}>
                 <Image
@@ -118,6 +120,15 @@ const SbiImageCollection = (props: any) => {
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} disabled={!allImagesAreFilled} onPress={() => handleUploadDoc()} />
             </View>
+
+            <OtpModal
+                otpModalVisible={otpModalVisible}
+                setOtpModalVisible={setOtpModalVisible}
+            />
+
+            {/* <TouchableOpacity onPress={() => setOtpModalVisible(true)} style={{ margin: 20 }}>
+                <Text style={{ color: '#0A74DA', textAlign: 'center' }}>Open Otp modal</Text>
+            </TouchableOpacity> */}
         </ScrollView>
     );
 };

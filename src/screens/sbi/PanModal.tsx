@@ -8,7 +8,7 @@ import { client } from '../../client/Axios';
 interface panModalInterface {
     setPanModalVisible: (visible: boolean) => void,
     panModalVisible: boolean,
-    customerId: string | number
+    customerId?: string | number
 }
 
 const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId }) => {
