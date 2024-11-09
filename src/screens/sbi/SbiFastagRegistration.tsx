@@ -111,6 +111,7 @@ const SbiFastagRegistration = (props: any) => {
           <InputTextSbi
             placeholder="Enter mobile number"
             value={RegistrationFormData.mobileNumber}
+            maxLength={10}
             onChangeText={(value) => handleInputChange("mobileNumber", value)}
           />
         </View>
