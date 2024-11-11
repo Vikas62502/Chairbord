@@ -87,12 +87,12 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setPanModalVisible(false)}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handlePanSubmit}
                             disabled={!allFieldsFilled}
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent:'flex-end',
         flexDirection: 'row',
     },
     appButtonContainer: {

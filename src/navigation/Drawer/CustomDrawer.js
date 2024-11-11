@@ -123,15 +123,15 @@ const data = [
     //     screen: 'permissions'
     // },
     {
-      title: 'SBI 1',
+      title: 'SBI',
       icon: require('../../assets/DrawerNavigation/wallet.png'),
       screen: 'sbi'
   },
-  {
-    title: 'SBI 4',
-    icon: require('../../assets/DrawerNavigation/wallet.png'),
-    screen: 'sbi4'
-  },
+  // {
+  //   title: 'SBI 4',
+  //   icon: require('../../assets/DrawerNavigation/wallet.png'),
+  //   screen: 'sbi4'
+  // },
   {
     title: 'Wallet',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
@@ -226,7 +226,7 @@ const getServerStatus = async () => {
 }
 
 const handleNavigation = async (navigation, screen) => {
-  if (screen === 'sbi' || screen === 'sbi4') {
+  if (screen === 'sbi') {
     const isServerOn = await getServerStatus();
     if (isServerOn) {
       navigation.navigate(screen);

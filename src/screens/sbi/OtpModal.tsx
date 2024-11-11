@@ -55,13 +55,13 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
                         <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} />
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setOtpModalVisible(false)}
                             // disabled={!pan}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handleOtpSubmit}
                             disabled={checkOtpLength || loading}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent:'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {

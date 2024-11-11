@@ -53,13 +53,13 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
                         <InputTextSbi maxLength={10} placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType='numeric' />
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setMobileModalVisible(false)}
                             // disabled={!pan}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handleMobileSubmit}
                             disabled={
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent:'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {
