@@ -69,21 +69,24 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                             value={dob}
                             onChangeText={(value) => setDob(handleDateChange(value))}
                         />
-                        <View style={styles.uploadContainer}>
-                            <UploadDoc
-                                text="Upload Pan Card"
-                                uploadDoc={true}
-                                setUploadFile={(file: any) => setPanImage(file)}
-                            />
-                            {panImage?.uri && (
-                                <TouchableOpacity onPress={() => setPanImage(null)}>
-                                    <Image
-                                        source={{ uri: panImage.uri }}
-                                        style={{ height: 120, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        </View>
+                       <View style={styles.uploadContainer}>
+    {!panImage && (
+        <UploadDoc
+            text="Upload Pan Card"
+            uploadDoc={true}
+            setUploadFile={(file: any) => setPanImage(file)}
+        />
+    )}
+    {panImage?.uri && (
+        <TouchableOpacity onPress={() => setPanImage(null)}>
+            <Image
+                source={{ uri: panImage.uri }}
+                style={{ height: '100%', width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
+            />
+        </TouchableOpacity>
+    )}
+</View>
+
                     </View>
 
                     <View style={styles.buttonContainer}>
@@ -190,8 +193,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         paddingVertical: 10,
         borderRadius: 20,
-        height: 140,
-        width: 240,
+        height: 190,
+        width: 305,
     },
 });
 
