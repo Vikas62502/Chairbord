@@ -29,6 +29,7 @@ const SbiProcessing = (props: any) => {
     const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
     const [otpModal, setOtpModal] = useState(false)
     const [data, setData] = useState<any>(null);
+    console.log(data?.customerDetails, "data")
 
     useEffect(() => {
         const socket = getSocket();
@@ -39,7 +40,6 @@ const SbiProcessing = (props: any) => {
                 setData(data.data);
                 setOtpModal(true)
             } else if (data && data.modalType === "PAN") {
-                console.log("PAN Modal Triggered:", data.modalType);
                 setData(data.data);
                 setPancardModal(true)
             } else if (data && data.modalType === "MOBILE") {
@@ -86,8 +86,8 @@ const SbiProcessing = (props: any) => {
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
 
-            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
-            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} />
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} />
             <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
         </ScrollView>
     );

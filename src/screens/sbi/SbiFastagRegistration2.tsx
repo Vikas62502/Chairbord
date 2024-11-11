@@ -97,7 +97,7 @@ const SbiFastagRegistration2 = (props: any) => {
                 agentId: userId,
                 vehicleData: vehiclePropData,
                 customerData: customerPropData,
-                serialNo: selectedTagsrno,
+                serialNo: selectedTagsrno.serialNumber,
                 reportData: reportPropsData
             })
             console.log(res, "response")

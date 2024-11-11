@@ -5,7 +5,6 @@ import { client } from '../../client/Axios';
 
 const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
     const reportId = data?.id
-    console.log(reportId, "report id")
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState('');
     const checkOtpLength = otp.length <= 5;

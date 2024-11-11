@@ -4,6 +4,7 @@ import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import handleDateChange from '../../utils/handleDobFormat';
 import { client } from '../../client/Axios';
+import Loader from '../../components/ui/Loader';
 
 interface panModalInterface {
     setPanModalVisible: (visible: boolean) => void,
@@ -13,10 +14,12 @@ interface panModalInterface {
 
 const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId }) => {
     const [panImage, setPanImage] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [pan, setPan] = useState('');
     const [dob, setDob] = useState('');
 
     const handlePanSubmit = async () => {
+        setLoading(true);
         if (!pan || !dob || !panImage) {
             Alert.alert('Please fill all the fields');
         }
@@ -28,18 +31,18 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
         formData.append('customerId', customerId);
 
         try {
-            const res = await client.post('/sbi/update-customer-pan', formData, {
+            await client.post('/sbi/update-pan-dob', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            if (res.data.status === 200) {
-                Alert.alert('Pan updated successfully');
-            }
+            Alert.alert('Pan updated successfully');
         } catch (error: any) {
             console.log('Error while updating pan:', error);
             Alert.alert(error.response.data.message || 'Error while updating pan');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -52,6 +55,7 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
             onRequestClose={() => setPanModalVisible(false)}
         >
             <View style={styles.modalBackground}>
+                {loading && <Loader loading={loading} />}
                 <View style={styles.modalView}>
                     <View style={styles.logoContainer}>
                         <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo1} />
@@ -94,7 +98,9 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                             disabled={!allFieldsFilled}
                             style={[styles.appButtonContainer, { backgroundColor: allFieldsFilled ? '#5ECD4C' : '#EFE6F7' }]}
                         >
-                            <Text style={styles.appButtonText}>Submit</Text>
+                            <Text style={styles.appButtonText}>
+                                {loading ? 'Submitting...' : 'Submit'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

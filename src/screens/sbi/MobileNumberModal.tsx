@@ -11,20 +11,27 @@ interface mobileNoModalInterface {
 
 const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {
     const [mobile, setMobile] = useState('');
+    const [loading, setLoading] = useState<boolean>(false);
     // Handle mobile number submission
     const handleMobileSubmit = async () => {
+        setLoading(true);
         try {
-            const res = await client.post('/sbi/update-customer-mobile', {
+            const res = await client.post('/sbi/update-mobileNo', {
                 mobileNumber: mobile,
                 customerId: customerId
             });
+            setMobileModalVisible(false);
+            setMobile('');
 
+            Alert.alert('Mobile Numebr Update Success', 'Mobile Number updated successfully', [{ text: 'OK' }], { cancelable: false });
             if (res.data.status === 200) {
                 console.log('Mobile updated successfully');
             }
         } catch (error: any) {
             console.log('Error while updating mobile:', error);
             Alert.alert(error.response.data.message || 'Error while updating mobile');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,7 +67,9 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
                             }
                             style={[styles.appButtonContainer, { backgroundColor: mobile.length >= 10 ? '#5ECD4C' : '#EFE6F7' }]}
                         >
-                            <Text style={styles.appButtonText}>Submit</Text>
+                            <Text style={styles.appButtonText}>
+                                {loading ? 'Updating...' : 'Submit'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
