@@ -25,7 +25,6 @@ const SbiFastagRegistration2 = (props: any) => {
     const [selectedFuel, setSelectedFuel] = useState(vehiclePropData.fuel_type || null);
     const [selectedState, setSelectedState] = useState(vehiclePropData.registered_at || null);
     const [selectedTagsrno, setSelectedTagsrno] = useState<any>({});
-    console.log(selectedTagsrno, "selected tag serial number")
     const [isDisabled, setIsDisabled] = useState(true);
     // models
     const [tagSerialNumber, setTagSerialNumber] = useState({})

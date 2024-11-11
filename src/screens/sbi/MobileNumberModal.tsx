@@ -6,10 +6,11 @@ import { client } from '../../client/Axios'
 interface mobileNoModalInterface {
     setMobileModalVisible: (visible: boolean) => void,
     mobileModalVisible: boolean,
-    customerId?: string | number
+    customerId?: string | number,
+    regExecutiveId?: string | number
 }
 
-const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {
+const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId, regExecutiveId }) => {
     const [mobile, setMobile] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     // Handle mobile number submission
@@ -18,7 +19,8 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
         try {
             const res = await client.post('/sbi/update-mobileNo', {
                 mobileNumber: mobile,
-                customerId: customerId
+                customerId: customerId,
+                regExecutiveId: regExecutiveId
             });
             setMobileModalVisible(false);
             setMobile('');

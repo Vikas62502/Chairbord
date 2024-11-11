@@ -9,10 +9,11 @@ import Loader from '../../components/ui/Loader';
 interface panModalInterface {
     setPanModalVisible: (visible: boolean) => void,
     panModalVisible: boolean,
-    customerId?: string | number
+    customerId?: string | number,
+    regExecutiveId?: string | number
 }
 
-const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId }) => {
+const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId, regExecutiveId }) => {
     const [panImage, setPanImage] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [pan, setPan] = useState('');
@@ -29,6 +30,7 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
         formData.append('dob', dob);
         formData.append('pan-image', panImage);
         formData.append('customerId', customerId);
+        formData.append('regExecutiveId', regExecutiveId);
 
         try {
             await client.post('/sbi/update-pan-dob', formData, {
@@ -36,6 +38,10 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            setPanModalVisible(false);
+            setPan('');
+            setDob('');
+            setPanImage(null);
 
             Alert.alert('Pan updated successfully');
         } catch (error: any) {

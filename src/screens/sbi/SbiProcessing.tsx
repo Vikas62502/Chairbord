@@ -73,16 +73,9 @@ const SbiProcessing = (props: any) => {
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
 
-            {/* Touchable to open Pan Modal */}
-            {/* <TouchableOpacity onPress={() => setOtpModal(true)}>
-                <Text style={{ textAlign: 'center', color: '#5F259E', fontSize: 16, fontWeight: '600', marginVertical: 20 }}>
-                    Open modal
-                </Text>
-            </TouchableOpacity> */}
-
-            {/* <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} />
-            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} />
-            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} /> */}
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
+            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
         </ScrollView>
     );
 };

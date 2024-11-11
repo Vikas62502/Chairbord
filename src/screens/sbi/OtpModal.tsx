@@ -26,7 +26,7 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
             console.log(res, "otp response")
 
             if (res.status === 200) {
-                Alert.alert('OTP Verified', 'OTP has been verified successfully', [{ text: 'OK' }], { cancelable: false });
+                Alert.alert('OTP Sent', 'OTP has been Sent successfully', [{ text: 'OK' }], { cancelable: false });
                 setOtpModalVisible(false)
                 setOtp('')
             }
