@@ -6,10 +6,10 @@ import MobileNumberModal from './MobileNumberModal';
 import PanModal from './PanModal';
 import OtpModal from './OtpModal';
 import { getSocket } from '../../utils/socket';
-const { width, height } = Dimensions.get('window')
+
+const { width, height } = Dimensions.get('window');
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
-
 
 const SbiProcessing = (props: any) => {
     const customerData = props.route.params?.customerData;
@@ -18,16 +18,9 @@ const SbiProcessing = (props: any) => {
     const reportPropData = props.route.params?.reportPropData;
     const uploadDocRes = props.route.params?.uploadDocRes;
 
-    console.log(customerData, "cusdera")
-    console.log(serialNo, "serial no")
-    console.log(vehicledata, "vehicle data")
-    console.log(reportPropData, "reportdara")
-    console.log(uploadDocRes, "<<-- upload doc res")
-
-    // models
     const [pancardModal, setPancardModal] = useState(false);
-    const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false)
-    const [otpModal, setOtpModal] = useState(false)
+    const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false);
+    const [otpModal, setOtpModal] = useState(false);
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -35,17 +28,14 @@ const SbiProcessing = (props: any) => {
 
         const handleOpenModal = (data: any) => {
             if (data && data.modalType === "OTP") {
-                console.log("OTP Modal Triggered:", data.modalType);
                 setData(data.data);
-                setOtpModal(true)
+                setOtpModal(true);
             } else if (data && data.modalType === "PAN") {
-                console.log("PAN Modal Triggered:", data.modalType);
                 setData(data.data);
-                setPancardModal(true)
+                setPancardModal(true);
             } else if (data && data.modalType === "MOBILE") {
-                console.log("Mobile Modal Triggered:", data.modalType);
                 setData(data.data);
-                setMobileNumberUpdateModal(true)
+                setMobileNumberUpdateModal(true);
             }
         };
 
@@ -56,15 +46,14 @@ const SbiProcessing = (props: any) => {
         };
     }, []);
 
-
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
             <OverlayHeaderSbi title={'SBI FASTag Registration'} />
 
             <View style={styles.detailsContainer}>
                 <View style={styles.logoContainer}>
-                    <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={{ width: 90, height: 30, }} />
-                    <Image source={require('../../assets/sbi/cbpllogo.png')} style={{ width: 40, height: 40, }} />
+                    <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={{ width: 90, height: 30 }} />
+                    <Image source={require('../../assets/sbi/cbpllogo.png')} style={{ width: 40, height: 40 }} />
                 </View>
                 <View style={styles.container1}>
                     <View style={styles.waitmsgTextContainer}>
@@ -77,17 +66,15 @@ const SbiProcessing = (props: any) => {
                 <View style={styles.container2}>
                     <Text style={styles.Textcontainer2}>Usually it takes 5 to 7 minutes!!</Text>
                 </View>
-
             </View>
-            <Text style={{ textAlign: 'center', color: 'black', fontSize: 16, fontWeight: '600', }}>Get...Set...Go...</Text>
+            <Text style={{ textAlign: 'center', color: 'black', fontSize: 16, fontWeight: '600' }}>Get...Set...Go...</Text>
 
-            {/* Updated buttonContainer with a title */}
             <View style={styles.buttonContainer}>
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
 
-            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} />
-            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} />
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
             <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
         </ScrollView>
     );
@@ -103,24 +90,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     logoContainer: {
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        margin: 10
-    },
-    headerText: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: '500',
-    },
-    uploadContainer: {
-        backgroundColor: '#FFFFFF',
-        marginHorizontal: 0,
-        marginVertical: 15,
-        // padding: 10,
-        borderRadius: 20,
-        height: 170,
+        margin: 10,
     },
     container1: {
         backgroundColor: '#ffffff',
@@ -134,7 +107,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 20,
-        marginVertical: 10
+        marginVertical: 10,
     },
     processmsgTextContainer: {
         backgroundColor: '#EFE6F7',
@@ -144,7 +117,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 40,
-        marginVertical: 10
+        marginVertical: 10,
     },
     container2: {
         backgroundColor: '#EFE6F7',
@@ -153,27 +126,25 @@ const styles = StyleSheet.create({
         elevation: 4,
         alignItems: 'center',
         justifyContent: 'center',
-
-        marginVertical: 10
+        marginVertical: 10,
     },
     Textcontainer2: {
         fontSize: 16,
         fontWeight: '600',
         color: 'black',
-        textAlign: 'center'
-
+        textAlign: 'center',
     },
     Textwait: {
         fontSize: 16,
         fontWeight: '600',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     Textprocess: {
         fontSize: 16,
         fontWeight: '600',
         color: 'black',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     buttonContainer: {
         paddingVertical: 10,

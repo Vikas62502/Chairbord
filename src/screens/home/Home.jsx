@@ -246,8 +246,10 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     position: 'relative',
-    width: isSmallScreen ? 170 : 160,
-    height: isSmallScreen ? 80 : 100
+    // width: isSmallScreen ? 170 : 150,
+    width:'auto',
+    // height: isSmallScreen ? 80 : 100
+    height:'auto'
   },
   textOverlay: {
     position: 'absolute',
@@ -279,7 +281,8 @@ const styles = StyleSheet.create({
     marginHorizontal: isTablet ? 30 : 15,
     marginVertical: 20,
     borderRadius: 25,
-    padding: isSmallScreen ? 8 : 10,
+    padding: isSmallScreen ? 8 :  15,
+    paddingBottom:0,
     height: isSmallScreen ? 110 : 'auto',
     width: 'auto',
     backgroundColor: '#E0E0E0',

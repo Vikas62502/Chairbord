@@ -4,19 +4,23 @@ import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import handleDateChange from '../../utils/handleDobFormat';
 import { client } from '../../client/Axios';
+import Loader from '../../components/ui/Loader';
 
 interface panModalInterface {
     setPanModalVisible: (visible: boolean) => void,
     panModalVisible: boolean,
-    customerId?: string | number
+    customerId?: string | number,
+    regExecutiveId?: string | number
 }
 
-const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId }) => {
+const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId, regExecutiveId }) => {
     const [panImage, setPanImage] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [pan, setPan] = useState('');
     const [dob, setDob] = useState('');
 
     const handlePanSubmit = async () => {
+        setLoading(true);
         if (!pan || !dob || !panImage) {
             Alert.alert('Please fill all the fields');
         }
@@ -26,20 +30,25 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
         formData.append('dob', dob);
         formData.append('pan-image', panImage);
         formData.append('customerId', customerId);
+        formData.append('regExecutiveId', regExecutiveId);
 
         try {
-            const res = await client.post('/sbi/update-customer-pan', formData, {
+            await client.post('/sbi/update-pan-dob', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            setPanModalVisible(false);
+            setPan('');
+            setDob('');
+            setPanImage(null);
 
-            if (res.data.status === 200) {
-                Alert.alert('Pan updated successfully');
-            }
+            Alert.alert('Pan updated successfully');
         } catch (error: any) {
             console.log('Error while updating pan:', error);
             Alert.alert(error.response.data.message || 'Error while updating pan');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -52,6 +61,7 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
             onRequestClose={() => setPanModalVisible(false)}
         >
             <View style={styles.modalBackground}>
+                {loading && <Loader loading={loading} />}
                 <View style={styles.modalView}>
                     <View style={styles.logoContainer}>
                         <Image source={require('../../assets/sbi/chairbordgpslogo.png')} style={styles.logo1} />
@@ -65,36 +75,41 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                             value={dob}
                             onChangeText={(value) => setDob(handleDateChange(value))}
                         />
-                        <View style={styles.uploadContainer}>
-                            <UploadDoc
-                                text="Upload Pan Card"
-                                uploadDoc={true}
-                                setUploadFile={(file: any) => setPanImage(file)}
-                            />
-                            {panImage?.uri && (
-                                <TouchableOpacity onPress={() => setPanImage(null)}>
-                                    <Image
-                                        source={{ uri: panImage.uri }}
-                                        style={{ height: 120, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        </View>
+                       <View style={styles.uploadContainer}>
+    {!panImage && (
+        <UploadDoc
+            text="Upload Pan Card"
+            uploadDoc={true}
+            setUploadFile={(file: any) => setPanImage(file)}
+        />
+    )}
+    {panImage?.uri && (
+        <TouchableOpacity onPress={() => setPanImage(null)}>
+            <Image
+                source={{ uri: panImage.uri }}
+                style={{ height: '100%', width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
+            />
+        </TouchableOpacity>
+    )}
+</View>
+
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setPanModalVisible(false)}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handlePanSubmit}
                             disabled={!allFieldsFilled}
                             style={[styles.appButtonContainer, { backgroundColor: allFieldsFilled ? '#5ECD4C' : '#EFE6F7' }]}
                         >
-                            <Text style={styles.appButtonText}>Submit</Text>
+                            <Text style={styles.appButtonText}>
+                                {loading ? 'Submitting...' : 'Submit'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -151,6 +166,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent:'flex-end',
         flexDirection: 'row',
     },
     appButtonContainer: {
@@ -183,8 +199,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         paddingVertical: 10,
         borderRadius: 20,
-        height: 140,
-        width: 240,
+        height: 190,
+        width: 305,
     },
 });
 
