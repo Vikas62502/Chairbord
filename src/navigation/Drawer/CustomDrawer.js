@@ -112,23 +112,23 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
 }
 
 const data = [
-  // {
-  //     title: 'Dashboard',
-  //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
-  //     screen: 'dashboard'
-  // },
-  // {
-  //     title: 'permissions',
-  //     icon: require('../../assets/DrawerNavigation/requests.png'),
-  //     screen: 'permissions'
-  // },
-  {
-    title: 'SBI',
-    icon: require('../../assets/DrawerNavigation/wallet.png'),
-    screen: 'sbi'
+    // {
+    //     title: 'Dashboard',
+    //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
+    //     screen: 'dashboard'
+    // },
+    // {
+    //     title: 'permissions',
+    //     icon: require('../../assets/DrawerNavigation/requests.png'),
+    //     screen: 'permissions'
+    // },
+    {
+      title: 'SBI 1',
+      icon: require('../../assets/DrawerNavigation/wallet.png'),
+      screen: 'sbi'
   },
   {
-    title: 'SBI',
+    title: 'SBI 4',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
     screen: 'sbi4'
   },
@@ -191,26 +191,50 @@ const data = [
 //     screen: 'logoutModal'
 // }
 
+// const getServerStatus = async () => {
+//   try {
+//     const res = await client.get(`/sbi/server-status`);
+//     console.log(res.data.isServerOn, "server status here");
+//     setIsServerOn(res.data.isServerOn);
+//     if (res.data.isServerOn === false) {
+//       Alert.alert('Server is down', 'Please try again later');
+//     }
+//   } catch (error) {
+//     Alert.alert(error.respose.data.message || 'Server is down', 'Please try again later');
+//     console.log(error.respose.data.message)
+//   }
+// }
+
+// const handleNavigation = (navigation, screen) => {
+//   if (screen === 'sbi' || screen === 'sbi4') {
+//     getServerStatus();
+//     navigation.navigate(screen)
+//   } else {
+//     navigation.navigate(screen)
+//   }
+// }
 const getServerStatus = async () => {
   try {
     const res = await client.get(`/sbi/server-status`);
     console.log(res.data.isServerOn, "server status here");
-    setIsServerOn(res.data.isServerOn);
-    if (res.data.isServerOn === false) {
-      Alert.alert('Server is down', 'Please try again later');
-    }
+    return res.data.isServerOn;
   } catch (error) {
-    Alert.alert(error.respose.data.message || 'Server is down', 'Please try again later');
-    console.log(error.respose.data.message)
+    Alert.alert(error.response?.data?.message || 'Server is down', 'Please try again later');
+    console.log(error.response?.data?.message);
+    return false;
   }
 }
 
-const handleNavigation = (navigation, screen) => {
+const handleNavigation = async (navigation, screen) => {
   if (screen === 'sbi' || screen === 'sbi4') {
-    getServerStatus();
-    navigation.navigate(screen)
+    const isServerOn = await getServerStatus();
+    if (isServerOn) {
+      navigation.navigate(screen);
+    } else {
+      Alert.alert('Server is down', 'Please try again later');
+    }
   } else {
-    navigation.navigate(screen)
+    navigation.navigate(screen);
   }
 }
 
