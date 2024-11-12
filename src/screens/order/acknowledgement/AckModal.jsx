@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Modal,
   View,
@@ -11,6 +11,18 @@ import { useNavigation } from '@react-navigation/native'
 
 const AckModal = ({ visible, onClose, title, isSuccess, setAckModalData }) => {
   const navigation = useNavigation()
+
+  useEffect(() => {
+    if (isSuccess && visible) {
+      const timer = setTimeout(() => {
+        setAckModalData({ visible: false, isSuccess: true })
+        navigation.navigate('dashboard') // Navigates to the dashboard after 3 seconds
+      }, 3000)
+
+      return () => clearTimeout(timer) // Clear timeout on unmount or if visible changes
+    }
+  }, [isSuccess, visible, navigation, setAckModalData])
+
   return (
     <Modal
       animationType="fade"
@@ -20,7 +32,7 @@ const AckModal = ({ visible, onClose, title, isSuccess, setAckModalData }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          {isSuccess === true ? (
+          {isSuccess ? (
             <Image
               source={require('../../../assets/screens/success.png')}
               style={styles.icon}
@@ -32,30 +44,23 @@ const AckModal = ({ visible, onClose, title, isSuccess, setAckModalData }) => {
             />
           )}
 
-          {isSuccess === true ? (
-            <Text style={styles.SuccessMessage}>
-              {title || 'Tag assigned successfully'}
-            </Text>
-          ) : (
-            <Text style={styles.failMessage}>
-              Tag not recharged Please try again{' '}
-            </Text>
-          )}
+          <Text style={isSuccess ? styles.SuccessMessage : styles.failMessage}>
+            {isSuccess ? title || 'Tag assigned successfully' : 'Tag not recharged. Please try again.'}
+          </Text>
 
-          {/* <Text style={styles.descriptionText}>
-            {isSuccess === true
-              ? ' For details: ask customer to visit bajaj fastag customer portal or contact 18002100260'
-              : 'Please ask customer to contact NHAI FASTag Toll free no. 1033'}
-          </Text> */}
           <TouchableOpacity
             onPress={() => {
-              setAckModalData({ visible: false, isSuccess: true })
-              navigation.navigate('acknowledgement')
+              if (isSuccess) {
+                setAckModalData({ visible: false, isSuccess: true })
+                navigation.navigate('orders')
+              } else {
+                setAckModalData({ visible: false, isSuccess: false })
+              }
             }}
             style={styles.okButton}
           >
             <Text style={styles.okButtonText}>
-              {isSuccess === true ? 'OK' : 'Cancel'}
+              {isSuccess ? 'OK' : 'Cancel'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -108,16 +113,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold'
-  },
-  descriptionText: {
-    fontSize: 18,
-    lineHeight: 28,
-    fontWeight: '400',
-    textAlign: 'center',
-    fontFamily: 'inter',
-    color: '#000000',
-    marginBottom: '10%',
-    width: '90%'
   }
 })
 

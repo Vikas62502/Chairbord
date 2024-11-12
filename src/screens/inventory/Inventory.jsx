@@ -84,8 +84,10 @@ const Inventory = (props) => {
   }
 
   useEffect(() => {
-    fetchInventory(id)
-  }, [])
+    if (agentId) {
+      fetchInventory(agentId)
+    }
+  }, [agentId])
 
   return (
     <>

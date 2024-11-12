@@ -205,7 +205,7 @@ const Acknowledgement = (props) => {
           ))} */}
             {!dispatchedTags || dispatchedTags.length === 0 ? (
               <View>
-                <Text>No Tags Dispatched</Text>
+                <Text style={{ color:'black' }}>No Tags Dispatched</Text>
               </View>
             ) : (
               <>
