@@ -73,9 +73,9 @@ const SbiProcessing = (props: any) => {
                 <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
             </View>
 
-            {/* <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} /> */}
-            {/* <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} /> */}
-            {/* <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} /> */}
+            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
+            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
+            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
         </ScrollView>
     );
 };
