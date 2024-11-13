@@ -12,13 +12,15 @@ import { getSocket } from '../../utils/socket';
 import Loader from '../../components/ui/Loader';
 
 const SbiFastagRegistration2 = (props: any) => {
+   
     const vehiclePropData = props.route.params?.vehicleDetails?.data
+    console.log(vehiclePropData,"data")
     const reportPropsData = props.route.params?.reportsData
     const customerPropData = props.route.params?.customer
     const { userId } = useUserData();
     // State declarations
     const [pincode, setPincode] = useState('');
-    const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasi_number || '');
+    const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasis_number || '');
     const [ownername, setOwnerName] = useState(vehiclePropData.owner_name || '');
     const [engineNumber, setEngineNumber] = useState(vehiclePropData.vehicle_engine_number || '');
     const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData.rc_number || '');
@@ -133,7 +135,7 @@ const SbiFastagRegistration2 = (props: any) => {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
-            <OverlayHeaderSbi title={'SBI FASTag Registration'} />
+            <OverlayHeaderSbi title={'SBI FASTag Registration 2'} />
             {<Loader loading={loading} />}
             <View style={styles.detailsContainer}>
                 <Text style={styles.headerText}>Description details</Text>
@@ -252,6 +254,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginVertical: 20,
         alignItems: 'center',
+        justifyContent:'flex-end',
+        
     },
     modalBackground: {
         flex: 1,

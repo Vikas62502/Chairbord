@@ -76,6 +76,9 @@ const SignIn = () => {
       let response = await client.post('/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
+      console.log("____________________________________________")
+console.log(response.data.token,'token here')
+console.log("____________________________________________")
 
       // Check permissions before navigating
       // const allPermissionsGranted = await checkAllPermissions();

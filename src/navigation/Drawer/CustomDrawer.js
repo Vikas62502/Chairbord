@@ -216,11 +216,14 @@ const data = [
 const getServerStatus = async () => {
   try {
     const res = await client.get(`/sbi/server-status`);
-    console.log(res.data.isServerOn, "server status here");
+    // console.log(res.data.isServerOn, "server status here");
+    console.log(res.data,'res');
     return res.data.isServerOn;
   } catch (error) {
     Alert.alert(error.response?.data?.message || 'Server is down', 'Please try again later');
-    console.log(error.response?.data?.message);
+    // console.log(error.response?.data?.message);
+    console.log(error,'error');
+
     return false;
   }
 }
