@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 
 let socket;
 export const serverURL = 'https://api.chairbord.in/'
-// export const serverURL = 'http://192.168.183.107:3001/'
+// export const serverURL = 'http://192.168.43.165:3001/'
 
 export const initializeSocket = (serverUrl, userId) => {
     console.log(serverURL, userId)

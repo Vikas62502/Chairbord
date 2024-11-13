@@ -12,15 +12,15 @@ import { getSocket } from '../../utils/socket';
 import Loader from '../../components/ui/Loader';
 
 const SbiFastagRegistration2 = (props: any) => {
-   
+
     const vehiclePropData = props.route.params?.vehicleDetails?.data
-    console.log(vehiclePropData,"data")
+    console.log(vehiclePropData, "data")
     const reportPropsData = props.route.params?.reportsData
     const customerPropData = props.route.params?.customer
     const { userId } = useUserData();
     // State declarations
     const [pincode, setPincode] = useState('');
-    const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasis_number || '');
+    const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasi_number || '');
     const [ownername, setOwnerName] = useState(vehiclePropData.owner_name || '');
     const [engineNumber, setEngineNumber] = useState(vehiclePropData.vehicle_engine_number || '');
     const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData.rc_number || '');
@@ -80,10 +80,10 @@ const SbiFastagRegistration2 = (props: any) => {
         try {
             const data = {
                 "pincode": pincode,
-                "vehicleNo": vehicleNumber,
-                "chassisNo": chasisNumber,
-                "engineNo": engineNumber,
-                "ownerName": ownername,
+                "vehicleNo": vehicleNumber?.toUpperCase(),
+                "chassisNo": chasisNumber?.toUpperCase(),
+                "engineNo": engineNumber?.toUpperCase(),
+                "ownerName": ownername?.toUpperCase(),
                 "fuel_type": selectedFuel,
                 "state_of_registration": selectedState,
                 "tag_serial_number": selectedTagsrno.serialNumber,
@@ -117,6 +117,7 @@ const SbiFastagRegistration2 = (props: any) => {
 
     useEffect(() => {
         const socket = getSocket();
+        console.log(socket, "socket")
 
         const handleOpenModal = (data: any) => {
             if (data && data.modalType === "OTP") {
@@ -254,8 +255,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginVertical: 20,
         alignItems: 'center',
-        justifyContent:'flex-end',
-        
+        justifyContent: 'flex-end',
+
     },
     modalBackground: {
         flex: 1,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
 import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
@@ -61,10 +61,10 @@ const SbiFastagRegistration = (props: any) => {
 
     const formData = new FormData();
     formData.append('mobileNo', RegistrationFormData.mobileNumber);
-    formData.append('panNumber', RegistrationFormData.panNumber);
+    formData.append('panNumber', RegistrationFormData.panNumber?.toUpperCase());
     formData.append('name', RegistrationFormData.customerName);
     formData.append('dob', RegistrationFormData.dob);
-    formData.append('vehicleNumber', RegistrationFormData.vehicleNumber);
+    formData.append('vehicleNumber', RegistrationFormData.vehicleNumber?.toUpperCase());
     formData.append('pan-image', RegistrationFormData.panImage);
     formData.append('agentId', userData.user.id);
 
@@ -81,6 +81,7 @@ const SbiFastagRegistration = (props: any) => {
         reportsData: res.data.reportData,
       });
     } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Something went wrong');
       console.log(error.response);
       console.log(error);
     } finally {

@@ -112,26 +112,26 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
 }
 
 const data = [
-    // {
-    //     title: 'Dashboard',
-    //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
-    //     screen: 'dashboard'
-    // },
-    // {
-    //     title: 'permissions',
-    //     icon: require('../../assets/DrawerNavigation/requests.png'),
-    //     screen: 'permissions'
-    // },
-    {
-      title: 'SBI',
-      icon: require('../../assets/DrawerNavigation/wallet.png'),
-      screen: 'sbi'
-  },
   // {
-  //   title: 'SBI 4',
-  //   icon: require('../../assets/DrawerNavigation/wallet.png'),
-  //   screen: 'sbi4'
+  //     title: 'Dashboard',
+  //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
+  //     screen: 'dashboard'
   // },
+  // {
+  //     title: 'permissions',
+  //     icon: require('../../assets/DrawerNavigation/requests.png'),
+  //     screen: 'permissions'
+  // },
+  {
+    title: 'SBI',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi'
+  },
+  {
+    title: 'SBI Pending Req',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi4'
+  },
   {
     title: 'Wallet',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
@@ -213,16 +213,15 @@ const data = [
 //     navigation.navigate(screen)
 //   }
 // }
+
 const getServerStatus = async () => {
   try {
     const res = await client.get(`/sbi/server-status`);
-    // console.log(res.data.isServerOn, "server status here");
-    console.log(res.data,'res');
+    console.log(res.data, 'res');
     return res.data.isServerOn;
   } catch (error) {
     Alert.alert(error.response?.data?.message || 'Server is down', 'Please try again later');
-    // console.log(error.response?.data?.message);
-    console.log(error,'error');
+    console.log(error, 'error');
 
     return false;
   }
@@ -243,6 +242,7 @@ const handleNavigation = async (navigation, screen) => {
 
 
 const CustomDrawerItems = ({ title, icons, navigateTo }) => {
+
   const navigation = useNavigation();
   return (
     <TouchableOpacity onPress={() => handleNavigation(navigation, navigateTo)}>

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import InputTextSbi from './InputTextSbi';
 import { client } from '../../client/Axios';
 
-const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
+const OtpModal = ({ otpModalVisible, setOtpModalVisible, data, vehicleNumber }: any) => {
     const reportId = data?.id
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState('');
@@ -25,11 +25,9 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
             const res = await client.post('/sbi/submit-otp-to-otp-executive', bodyData);
             console.log(res, "otp response")
 
-            if (res.status === 200) {
-                Alert.alert('OTP Sent', 'OTP has been Sent successfully', [{ text: 'OK' }], { cancelable: false });
-                setOtpModalVisible(false)
-                setOtp('')
-            }
+            Alert.alert('OTP Sent', 'OTP has been Sent successfully', [{ text: 'OK' }], { cancelable: false });
+            setOtpModalVisible(false)
+            setOtp('')
         } catch (error: any) {
             Alert.alert('Error', error.response.data.message || 'Something went wrong', [{ text: 'OK' }], { cancelable: false });
         } finally {
@@ -52,6 +50,7 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
 
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please Insert Customer OTP</Text>
+                        <Text style={styles.modalText}>{vehicleNumber || data?.customerDetail?.vehicleNumber}</Text>
                         <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} />
                     </View>
                     <View style={styles.buttonContainer}>
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {
