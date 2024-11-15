@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
 import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
@@ -14,22 +14,21 @@ interface RegistrationFormDataType {
   customerName: string;
   dob: string;
   vehicleNumber: string;
-  panImage: any
+  panImage: any;
 }
 
 const SbiFastagRegistration = (props: any) => {
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const { userData }: any = useUserData();
   const [RegistrationFormData, setRegistrationFormData] = useState<RegistrationFormDataType>({
-    mobileNumber: "",
-    panNumber: "",
-    customerName: "",
-    dob: "",
-    vehicleNumber: "",
-    panImage: null
+    mobileNumber: '',
+    panNumber: '',
+    customerName: '',
+    dob: '',
+    vehicleNumber: '',
+    panImage: null,
   });
 
-  // Handler to update form data
   const handleInputChange = (name: keyof RegistrationFormDataType, value: string) => {
     setRegistrationFormData((prevData) => ({
       ...prevData,
@@ -51,47 +50,38 @@ const SbiFastagRegistration = (props: any) => {
 
     setRegistrationFormData({
       ...RegistrationFormData,
-      dob: cleaned
-    })
+      dob: cleaned,
+    });
   };
 
-  // validation test
-  const isFormComplete = Object.values(RegistrationFormData).every((field) => field !== "" && field !== null);
+  const isFormComplete = Object.values(RegistrationFormData).every((field) => field !== '' && field !== null);
 
   const handleGetVehcileDetails = async () => {
     setLoading(true);
 
-    // Create a new FormData instance
     const formData = new FormData();
-
-    // Append each field to formData
     formData.append('mobileNo', RegistrationFormData.mobileNumber);
-    formData.append('panNumber', RegistrationFormData.panNumber);
+    formData.append('panNumber', RegistrationFormData.panNumber?.toUpperCase());
     formData.append('name', RegistrationFormData.customerName);
     formData.append('dob', RegistrationFormData.dob);
-    formData.append('vehicleNumber', RegistrationFormData.vehicleNumber);
+    formData.append('vehicleNumber', RegistrationFormData.vehicleNumber?.toUpperCase());
     formData.append('pan-image', RegistrationFormData.panImage);
-    formData.append('agentId', userData.user.id)
-
+    formData.append('agentId', userData.user.id);
 
     try {
-      // Send formData using Axios
       const res: any = await client.post('/sbi/validate-rc-pan', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(res?.data.customer, "customer data");
-      console.log(res.data.vehicleDetails, "vehicle details")
-      console.log(res.data.reportData, "reports data")
-      // Navigate with vehicle and customer details
       props.navigation.navigate('sbi2', {
         vehicleDetails: res?.data?.vehicleDetails,
         customerDetails: RegistrationFormData,
         customer: res?.data.customer,
-        reportsData: res.data.reportData
+        reportsData: res.data.reportData,
       });
     } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Something went wrong');
       console.log(error.response);
       console.log(error);
     } finally {
@@ -112,7 +102,7 @@ const SbiFastagRegistration = (props: any) => {
             placeholder="Enter mobile number"
             value={RegistrationFormData.mobileNumber}
             maxLength={10}
-            onChangeText={(value) => handleInputChange("mobileNumber", value)}
+            onChangeText={(value) => handleInputChange('mobileNumber', value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -120,7 +110,7 @@ const SbiFastagRegistration = (props: any) => {
           <InputTextSbi
             placeholder="Enter pan number"
             value={RegistrationFormData.panNumber}
-            onChangeText={(value) => handleInputChange("panNumber", value)}
+            onChangeText={(value) => handleInputChange('panNumber', value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -128,7 +118,7 @@ const SbiFastagRegistration = (props: any) => {
           <InputTextSbi
             placeholder="Enter name (Pan)"
             value={RegistrationFormData.customerName}
-            onChangeText={(value) => handleInputChange("customerName", value)}
+            onChangeText={(value) => handleInputChange('customerName', value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -139,29 +129,31 @@ const SbiFastagRegistration = (props: any) => {
             onChangeText={handleDateChange}
           />
         </View>
-
       </View>
 
       <View style={styles.detailsContainer}>
         <Text style={styles.headerText}>Vehicle details</Text>
-
         <View style={styles.inputContainer}>
           <Image source={require('../../assets/sbi/vehicle.png')} style={{ width: 40, height: 40 }} />
           <InputTextSbi
             placeholder="Enter vehicle number"
             value={RegistrationFormData.vehicleNumber}
-            onChangeText={(value) => handleInputChange("vehicleNumber", value)}
+            onChangeText={(value) => handleInputChange('vehicleNumber', value)}
           />
         </View>
       </View>
 
       <View style={{ margin: 20 }}>
         <View style={styles.uploadContainer}>
-          <UploadDoc
-            text="Upload Pan Card"
-            uploadDoc={true}
-            setUploadFile={(value: any) => setRegistrationFormData({ ...RegistrationFormData, panImage: value })}
-          />
+          {!RegistrationFormData.panImage && (
+            <UploadDoc
+              text="Upload Pan Card"
+              uploadDoc={true}
+              setUploadFile={(value: any) =>
+                setRegistrationFormData({ ...RegistrationFormData, panImage: value })
+              }
+            />
+          )}
           {RegistrationFormData.panImage && (
             <TouchableOpacity onPress={() => setRegistrationFormData({ ...RegistrationFormData, panImage: null })}>
               <Image
@@ -172,7 +164,6 @@ const SbiFastagRegistration = (props: any) => {
           )}
         </View>
       </View>
-
 
       <View style={styles.buttonContainer}>
         <NextButton title="Next" onPress={handleGetVehcileDetails} disabled={!isFormComplete || loading} />
@@ -203,10 +194,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 5,
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
+    marginRight: 20,
   },
   uploadContainer: {
     backgroundColor: '#FFFFFF',

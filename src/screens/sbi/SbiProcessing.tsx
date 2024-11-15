@@ -12,16 +12,13 @@ const isTablet = width > 768;
 const isSmallScreen = width < 400;
 
 const SbiProcessing = (props: any) => {
-    const customerData = props.route.params?.customerData;
-    const serialNo = props.route.params?.serialNo;
-    const vehicledata = props.route.params?.vehicledata;
-    const reportPropData = props.route.params?.reportPropData;
-    const uploadDocRes = props.route.params?.uploadDocRes;
-
     const [pancardModal, setPancardModal] = useState(false);
     const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false);
     const [otpModal, setOtpModal] = useState(false);
     const [data, setData] = useState<any>(null);
+    const [reportApprovalStatus, setReportApprovalStatus] = useState<boolean>(false);
+
+    const vehicleNumber = data?.customerDetail?.vehicleNumber;
 
     useEffect(() => {
         const socket = getSocket();
@@ -40,9 +37,18 @@ const SbiProcessing = (props: any) => {
         };
 
         socket.on('openModal', handleOpenModal);
+        const handleIsReportApproved = (data: any) => {
+            console.log(data, "report cancelled");
+            props.navigation.navigate('sbi5', {
+                data: data
+            });
+        };
+
+        socket.on('isReportApproved', handleIsReportApproved);
 
         return () => {
             socket.off('openModal', handleOpenModal);
+            socket.off('isReportApproved', handleIsReportApproved)
         };
     }, []);
 
@@ -70,12 +76,29 @@ const SbiProcessing = (props: any) => {
             <Text style={{ textAlign: 'center', color: 'black', fontSize: 16, fontWeight: '600' }}>Get...Set...Go...</Text>
 
             <View style={styles.buttonContainer}>
-                <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} />
+                <NextButton title={"Next"} onPress={() => props.navigation.navigate('sbi5')} disabled={!reportApprovalStatus} />
             </View>
 
-            <MobileNumberModal mobileModalVisible={mobileNumberUpdateModal} setMobileModalVisible={setMobileNumberUpdateModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
-            <PanModal panModalVisible={pancardModal} setPanModalVisible={setPancardModal} customerId={data?.customerDetail?.id} regExecutiveId={data.registrationExecutive} />
-            <OtpModal otpModalVisible={otpModal} setOtpModalVisible={setOtpModal} data={data} />
+            <MobileNumberModal
+                mobileModalVisible={mobileNumberUpdateModal}
+                setMobileModalVisible={setMobileNumberUpdateModal}
+                customerId={data?.customerDetail?.id}
+                regExecutiveId={data?.registrationExecutive}
+                vehicleNumber={vehicleNumber}
+            />
+            <PanModal
+                panModalVisible={pancardModal}
+                setPanModalVisible={setPancardModal}
+                customerId={data?.customerDetail?.id}
+                regExecutiveId={data?.registrationExecutive}
+                vehicleNumber={vehicleNumber}
+            />
+            <OtpModal
+                otpModalVisible={otpModal}
+                setOtpModalVisible={setOtpModal}
+                data={data}
+                vehicleNumber={vehicleNumber}
+            />
         </ScrollView>
     );
 };

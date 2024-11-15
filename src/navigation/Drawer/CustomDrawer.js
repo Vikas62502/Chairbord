@@ -112,26 +112,31 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
 }
 
 const data = [
-    // {
-    //     title: 'Dashboard',
-    //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
-    //     screen: 'dashboard'
-    // },
-    // {
-    //     title: 'permissions',
-    //     icon: require('../../assets/DrawerNavigation/requests.png'),
-    //     screen: 'permissions'
-    // },
-    {
-      title: 'SBI',
-      icon: require('../../assets/DrawerNavigation/wallet.png'),
-      screen: 'sbi'
-  },
   // {
-  //   title: 'SBI 4',
-  //   icon: require('../../assets/DrawerNavigation/wallet.png'),
-  //   screen: 'sbi4'
+  //     title: 'Dashboard',
+  //     icon: require('../../assets/DrawerNavigation/dashboard.png'),
+  //     screen: 'dashboard'
   // },
+  // {
+  //     title: 'permissions',
+  //     icon: require('../../assets/DrawerNavigation/requests.png'),
+  //     screen: 'permissions'
+  // },
+  {
+    title: 'SBI',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi'
+  },
+  {
+    title: 'SBI Pending Req',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi5'
+  },
+  {
+    title: 'SBI 4',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi4'
+  },
   {
     title: 'Wallet',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
@@ -184,54 +189,29 @@ const data = [
   },
 ]
 
-// const logoutData =
-// {
-//     title: 'Logout',
-//     icon: require('../../assets/DrawerNavigation/logout.png'),
-//     screen: 'logoutModal'
-// }
 
-// const getServerStatus = async () => {
-//   try {
-//     const res = await client.get(`/sbi/server-status`);
-//     console.log(res.data.isServerOn, "server status here");
-//     setIsServerOn(res.data.isServerOn);
-//     if (res.data.isServerOn === false) {
-//       Alert.alert('Server is down', 'Please try again later');
-//     }
-//   } catch (error) {
-//     Alert.alert(error.respose.data.message || 'Server is down', 'Please try again later');
-//     console.log(error.respose.data.message)
-//   }
-// }
-
-// const handleNavigation = (navigation, screen) => {
-//   if (screen === 'sbi' || screen === 'sbi4') {
-//     getServerStatus();
-//     navigation.navigate(screen)
-//   } else {
-//     navigation.navigate(screen)
-//   }
-// }
-const getServerStatus = async () => {
+const getServerStatus = async (agentId) => {
+  console.log(agentId,"agent id")
   try {
-    const res = await client.get(`/sbi/server-status`);
-    console.log(res.data.isServerOn, "server status here");
+    const res = await client.post(`/sbi/server-status`,{agentId});
+    console.log(res.data, 'res');
     return res.data.isServerOn;
   } catch (error) {
-    Alert.alert(error.response?.data?.message || 'Server is down', 'Please try again later');
-    console.log(error.response?.data?.message);
-    return false;
+    throw error
   }
 }
 
-const handleNavigation = async (navigation, screen) => {
+const handleNavigation = async (navigation, screen,agentId) => {
   if (screen === 'sbi') {
-    const isServerOn = await getServerStatus();
+    try{
+      const isServerOn = await getServerStatus(agentId);
     if (isServerOn) {
       navigation.navigate(screen);
     } else {
       Alert.alert('Server is down', 'Please try again later');
+    }
+    }catch(error){
+      Alert.alert(error.response?.data?.message || "Something went wrong")
     }
   } else {
     navigation.navigate(screen);
@@ -240,9 +220,11 @@ const handleNavigation = async (navigation, screen) => {
 
 
 const CustomDrawerItems = ({ title, icons, navigateTo }) => {
+const userData=useUserData()
+const agentId = userData?.user?.id
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => handleNavigation(navigation, navigateTo)}>
+    <TouchableOpacity onPress={() => handleNavigation(navigation, navigateTo,agentId)}>
       <View>
         <View style={styles.drawerItemStyle}>
           <Image source={icons} alt={`${title}`} style={{ width: 25, height: 25, marginRight: -2, marginLeft: -2 }} />

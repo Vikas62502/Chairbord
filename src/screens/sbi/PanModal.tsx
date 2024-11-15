@@ -10,10 +10,11 @@ interface panModalInterface {
     setPanModalVisible: (visible: boolean) => void,
     panModalVisible: boolean,
     customerId?: string | number,
-    regExecutiveId?: string | number
+    regExecutiveId?: string | number,
+    vehicleNumber?: string,
 }
 
-const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId, regExecutiveId }) => {
+const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, customerId, regExecutiveId, vehicleNumber }) => {
     const [panImage, setPanImage] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [pan, setPan] = useState('');
@@ -69,29 +70,30 @@ const PanModal: FC<panModalInterface> = ({ setPanModalVisible, panModalVisible, 
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please change Customer PAN</Text>
+                        <Text style={styles.modalText}>{vehicleNumber}</Text>
                         <InputTextSbi placeholder="Enter Pan number" value={pan} onChangeText={setPan} />
                         <InputTextSbi
                             placeholder="DD/MM/YYYY"
                             value={dob}
                             onChangeText={(value) => setDob(handleDateChange(value))}
                         />
-                       <View style={styles.uploadContainer}>
-    {!panImage && (
-        <UploadDoc
-            text="Upload Pan Card"
-            uploadDoc={true}
-            setUploadFile={(file: any) => setPanImage(file)}
-        />
-    )}
-    {panImage?.uri && (
-        <TouchableOpacity onPress={() => setPanImage(null)}>
-            <Image
-                source={{ uri: panImage.uri }}
-                style={{ height: '100%', width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
-            />
-        </TouchableOpacity>
-    )}
-</View>
+                        <View style={styles.uploadContainer}>
+                            {!panImage && (
+                                <UploadDoc
+                                    text="Upload Pan Card"
+                                    uploadDoc={true}
+                                    setUploadFile={(file: any) => setPanImage(file)}
+                                />
+                            )}
+                            {panImage?.uri && (
+                                <TouchableOpacity onPress={() => setPanImage(null)}>
+                                    <Image
+                                        source={{ uri: panImage.uri }}
+                                        style={{ height: '100%', width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                        </View>
 
                     </View>
 
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         flexDirection: 'row',
     },
     appButtonContainer: {

@@ -7,10 +7,11 @@ interface mobileNoModalInterface {
     setMobileModalVisible: (visible: boolean) => void,
     mobileModalVisible: boolean,
     customerId?: string | number,
-    regExecutiveId?: string | number
+    regExecutiveId?: string | number,
+    vehicleNumber?: string,
 }
 
-const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId, regExecutiveId }) => {
+const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId, regExecutiveId, vehicleNumber }) => {
     const [mobile, setMobile] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     // Handle mobile number submission
@@ -52,6 +53,7 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please change Mobile Number</Text>
+                        <Text style={styles.modalText}>{vehicleNumber}</Text>
                         <InputTextSbi maxLength={10} placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType='numeric' />
                     </View>
                     <View style={styles.buttonContainer}>
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {

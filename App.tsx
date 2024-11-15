@@ -24,6 +24,7 @@ function App({ }): React.JSX.Element {
   }, []);
 
   // Initialize socket only when userData is available
+  console.log(socket,'id..........')
   useEffect(() => {
     if (userData?.user?.id) {
       const socket: any = initializeSocket(serverURL, userData.user.id);

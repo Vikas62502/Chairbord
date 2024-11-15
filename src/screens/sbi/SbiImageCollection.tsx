@@ -94,6 +94,14 @@ const SbiImageCollection = (props: any) => {
                 setOtpModalData(data.data)
             }
         };
+        const handleIsReportApproved = (data: any) => {
+            console.log(data, "report cancelled");
+            props.navigation.navigate('sbi5', {
+                data: data
+            });
+        };
+
+        socket.on('isReportApproved', handleIsReportApproved);
 
         socket.on('openModal', handleOpenModal);
 
