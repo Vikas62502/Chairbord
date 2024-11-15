@@ -12,12 +12,6 @@ const isTablet = width > 768;
 const isSmallScreen = width < 400;
 
 const SbiProcessing = (props: any) => {
-    const customerData = props.route.params?.customerData;
-    const serialNo = props.route.params?.serialNo;
-    const vehicledata = props.route.params?.vehicledata;
-    const reportPropData = props.route.params?.reportPropData;
-    const uploadDocRes = props.route.params?.uploadDocRes;
-
     const [pancardModal, setPancardModal] = useState(false);
     const [mobileNumberUpdateModal, setMobileNumberUpdateModal] = useState(false);
     const [otpModal, setOtpModal] = useState(false);
@@ -46,9 +40,9 @@ const SbiProcessing = (props: any) => {
 
         socket.on('openModal', handleOpenModal);
         socket.on('isReportApproved', (data: boolean | string) => {
-            console.log(data);
-            const status = typeof data === 'string' ? true : data;
-            setReportApprovalStatus(status);
+            props.navigation.naviagate('sbi5', {
+                data: data
+            });
         })
 
         return () => {

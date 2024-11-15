@@ -130,6 +130,11 @@ const data = [
   {
     title: 'SBI Pending Req',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
+    screen: 'sbi5'
+  },
+  {
+    title: 'SBI 4',
+    icon: require('../../assets/DrawerNavigation/wallet.png'),
     screen: 'sbi4'
   },
   {
