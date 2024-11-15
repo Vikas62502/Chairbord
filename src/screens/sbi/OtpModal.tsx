@@ -51,7 +51,7 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data, vehicleNumber }: 
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please Insert Customer OTP</Text>
                         <Text style={styles.modalText}>{vehicleNumber || data?.customerDetail?.vehicleNumber}</Text>
-                        <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} />
+                        <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} maxLength={6} />
                     </View>
                     <View style={styles.buttonContainer}>
                         {/* <TouchableOpacity

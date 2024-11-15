@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import OverlayHeaderSbi from '../../components/OverlayHeaderSbi';
 import InputTextSbi from './InputTextSbi';
-import NextButton from './NextButton';
-
 
 const { width } = Dimensions.get('window');
-const SbiResult = (props) => {
-    console.log(props.route.params, 'props sbi 5');
-    const [tagsrno, setTagsrno] = useState('');
-    const [vehicleNumber, setVehicleNumber] = useState('');
-    const [name, setName] = useState('');
-    const [isTagRegistered, setIsTagRegistered] = useState(true);
+const SbiResult = (props: any) => {
+    const data = props.route.params.data;
+    const [isTagRegistered, setIsTagRegistered] = useState(data.success);
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
@@ -59,15 +54,15 @@ const SbiResult = (props) => {
 
                             <View style={styles.inputContainer}>
                                 <Image source={require('../../assets/sbi/user.png')} style={{ width: 40, height: 40 }} />
-                                <InputTextSbi placeholder={"Pan Holder name"} value={name} onChangeText={setName} />
+                                <InputTextSbi placeholder={"Pan Holder name"} value={data?.panName} isEditable={false} />
                             </View>
                             <View style={styles.inputContainer}>
                                 <Image source={require('../../assets/sbi/vehicle.png')} style={{ width: 40, height: 40 }} />
-                                <InputTextSbi placeholder={"Pan number"} value={vehicleNumber} onChangeText={setVehicleNumber} />
+                                <InputTextSbi placeholder={"Pan number"} value={data?.panNumber} isEditable={false} />
                             </View>
                             <View style={styles.inputContainer}>
                                 <Image source={require('../../assets/sbi/rightorange.png')} style={{ width: 40, height: 40 }} />
-                                <InputTextSbi placeholder={"Tag SR No."} value={tagsrno} onChangeText={setTagsrno} />
+                                <InputTextSbi placeholder={"Tag SR No."} value={data?.tagSerialNumber} isEditable={false} />
                             </View>
 
 
@@ -76,7 +71,7 @@ const SbiResult = (props) => {
                         <>
                             <Text style={styles.reasonheader}>Reason</Text>
                             <View style={styles.reasonTextContainer}>
-                                <Text style={styles.Textprocess}>Vehicle Hotlist from ICICI Bank</Text>
+                                <Text style={styles.Textprocess}>{data?.desc || "Invalid document"}</Text>
                             </View>
                         </>
                     )}

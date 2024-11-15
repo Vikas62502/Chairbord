@@ -17,10 +17,8 @@ const SbiProcessing = (props: any) => {
     const [otpModal, setOtpModal] = useState(false);
     const [data, setData] = useState<any>(null);
     const [reportApprovalStatus, setReportApprovalStatus] = useState<boolean>(false);
-    console.log(data, "data")
 
     const vehicleNumber = data?.customerDetail?.vehicleNumber;
-    console.log(vehicleNumber, "vehicleNumber")
 
     useEffect(() => {
         const socket = getSocket();
@@ -39,15 +37,18 @@ const SbiProcessing = (props: any) => {
         };
 
         socket.on('openModal', handleOpenModal);
-        socket.on('isReportApproved', (data: boolean | string) => {
-            props.navigation.naviagate('sbi5', {
+        const handleIsReportApproved = (data: any) => {
+            console.log(data, "report cancelled");
+            props.navigation.navigate('sbi5', {
                 data: data
             });
-        })
+        };
+
+        socket.on('isReportApproved', handleIsReportApproved);
 
         return () => {
             socket.off('openModal', handleOpenModal);
-            socket.off('isReportApproved');
+            socket.off('isReportApproved', handleIsReportApproved)
         };
     }, []);
 

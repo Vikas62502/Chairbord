@@ -127,6 +127,15 @@ const SbiFastagRegistration2 = (props: any) => {
             }
         };
 
+        const handleIsReportApproved = (data: any) => {
+            console.log(data, "report cancelled");
+            props.navigation.navigate('sbi5', {
+                data: data
+            });
+        };
+
+        socket.on('isReportApproved', handleIsReportApproved);
+
         socket.on('openModal', handleOpenModal);
 
         return () => {
