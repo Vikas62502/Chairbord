@@ -191,9 +191,9 @@ const data = [
 
 
 const getServerStatus = async (agentId) => {
-  console.log(agentId,"agent id")
+  console.log(agentId, "agent id")
   try {
-    const res = await client.post(`/sbi/server-status`,{agentId});
+    const res = await client.post(`/sbi/server-status`, { agentId });
     console.log(res.data, 'res');
     return res.data.isServerOn;
   } catch (error) {
@@ -201,16 +201,16 @@ const getServerStatus = async (agentId) => {
   }
 }
 
-const handleNavigation = async (navigation, screen,agentId) => {
+const handleNavigation = async (navigation, screen, agentId) => {
   if (screen === 'sbi') {
-    try{
+    try {
       const isServerOn = await getServerStatus(agentId);
-    if (isServerOn) {
-      navigation.navigate(screen);
-    } else {
-      Alert.alert('Server is down', 'Please try again later');
-    }
-    }catch(error){
+      if (isServerOn) {
+        navigation.navigate(screen);
+      } else {
+        Alert.alert('Server is down', 'Please try again later');
+      }
+    } catch (error) {
       Alert.alert(error.response?.data?.message || "Something went wrong")
     }
   } else {
@@ -220,11 +220,23 @@ const handleNavigation = async (navigation, screen,agentId) => {
 
 
 const CustomDrawerItems = ({ title, icons, navigateTo }) => {
-const userData=useUserData()
-const agentId = userData?.user?.id
+  const userData = useUserData()
+  const agentId = userData?.user?.id
   const navigation = useNavigation();
+
+  const onPressHandler = () => {
+    if (agentId) {
+      handleNavigation(navigation, navigateTo, agentId);
+    } else {
+      console.warn('Agent ID is not available. Navigation is blocked.');
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={() => handleNavigation(navigation, navigateTo,agentId)}>
+    <TouchableOpacity
+      onPress={onPressHandler}
+      disabled={!agentId}
+    >
       <View>
         <View style={styles.drawerItemStyle}>
           <Image source={icons} alt={`${title}`} style={{ width: 25, height: 25, marginRight: -2, marginLeft: -2 }} />
