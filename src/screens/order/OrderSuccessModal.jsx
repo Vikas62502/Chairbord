@@ -16,6 +16,11 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId, orderId, 
     return orders.reduce((total, order) => total + order.amount, 0)
   }
 
+  const handleClose = () => {
+    onClose();
+    navigation.navigate('orders');
+  }
+
   const [amountToBeDisplay, setAmountToBeDisplay] = useState(calculateTotalAmount)
   console.log(amountToBeDisplay, "amint")
   const navigation = useNavigation()
@@ -28,7 +33,7 @@ const OrderSuccessModal = ({ visible, onClose, onApply, transactionId, orderId, 
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContent}>
-          <Pressable onPress={onClose} style={styles.closeButton}>
+          <Pressable onPress={handleClose} style={styles.closeButton}>
             <Image
               source={require('../../assets/DrawerNavigation/closeLogout.png')}
               alt="closeBtn"

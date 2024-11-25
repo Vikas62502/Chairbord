@@ -42,9 +42,9 @@ const OrderCards = ({ data, key }) => {
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.IdText}>{data.orderId}</Text>
+              <Text style={styles.IdText}>{data?.orderId}</Text>
             </View>
-            <Text style={styles.amountText}>₹{data.totalAmount}</Text>
+            <Text style={styles.amountText}>₹{data?.totalAmount}</Text>
           </View>
         </View>
         <View>
@@ -57,14 +57,14 @@ const OrderCards = ({ data, key }) => {
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.dateAndTimeText}>
-                {formatDateTime(data.orderTime).time}
+                {formatDateTime(data?.orderTime).time}
               </Text>
               <VerticalDivider />
               <Text style={styles.dateAndTimeText}>
-                {formatDateTime(data.orderTime).date}
+                {formatDateTime(data?.orderTime).date}
               </Text>
             </View>
-            <Status status={data.status} />
+            <Status status={data?.status} />
           </View>
         </View>
       </View>

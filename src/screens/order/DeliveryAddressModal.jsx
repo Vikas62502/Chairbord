@@ -4,15 +4,7 @@ import InputText from '../../components/common/InputText'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 
-const DeliveryAddressModal = ({ setIsOrderFailed, setTransactionId, setOrderId, setIsOrderSuccess, handleDeleteOrder, visible, onClose, onApply, orders, userId, totalOrderAmount, setTotalValue }) => {
-    console.log(orders, totalOrderAmount)
-
-    function calculateTotalAmount() {
-        return orders.reduce((total, order) => total + order.amount, 0)
-    }
-
-    const [amountToBeDisplay, setAmountToBeDisplay] = useState(calculateTotalAmount)
-    console.log(amountToBeDisplay, "amint")
+const DeliveryAddressModal = ({ visible, onClose, userId }) => {
 
     const [loading, setLoading] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState({
@@ -31,45 +23,28 @@ const DeliveryAddressModal = ({ setIsOrderFailed, setTransactionId, setOrderId, 
 
     const isButtonEnabled = Object.values(deliveryAddress).every(field => field !== '')
 
-    const handleSubmit = async () => {
-        console.log("called")
-        if (!orders || orders.length === 0) {
-            return;
-        }
-        setLoading(true)
-        try {
-
-            const response = await client.post('/order/fastag/request-complete', {
-                fromUserId: userId, // Agent's user ID
-                toUserId: 1, // Admin user ID (default)
-                fromUserType: 'agent', // User type (default is agent)
-                toUserType: 'admin', // User type (default is admin)
-                orders: orders,
-                deliveryAddress: deliveryAddress
-            })
-            console.log(response, "res")
-            onClose()
-
-            if (response.status === 201) {
-                setTransactionId(response.data.transactionId)
-                setOrderId(response.data.completeOrder.orderId)
-                setTotalValue(amountToBeDisplay)
-                setIsOrderSuccess(true)
-            }
-        } catch (error) {
-            console.error(
-                'Error creating order:',
-                error.response ? error.response.data : error.message
-            )
-            setIsOrderFailed(true);
+    const handleSubmit = async() => {
+        setLoading(true);
+        console.log(userId, "<----------------userId")
+        try{
+            const response = await client.post(`/order/fastag/save-address/${userId}`,{
+                address : deliveryAddress.address,
+                state : deliveryAddress.state,
+                pincode : deliveryAddress.pincode,
+                phone : deliveryAddress.phone,
+                alternate_mobile_number : deliveryAddress.alternate_mobile_number
+            });
+            onClose();
+        } catch(error) {
+            console.log(error.message);
         } finally {
-            handleDeleteOrder()
-            setLoading(false)
+            setLoading(false);
         }
     }
 
     return (
         <>
+            {loading && <Loader/>}
             <Modal
                 visible={visible}
                 transparent
