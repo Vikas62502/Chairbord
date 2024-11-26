@@ -245,12 +245,12 @@ const OrderDetails = (props) => {
             }}
           />
 
-          <AddBtn title={'Cancel Order'} onPress={handleDeleteOrder} />
+          <AddBtn title={'Cancel All Orders'} onPress={handleDeleteOrder} />
         </View>
 
         <View style={{ padding: '5%', paddingBottom: 20 }}>
           <LinearButton
-            title={'Select Address'}
+            title={'Select Delivery Address'}
             // onPress={() => setSavedAddressModal(true)}
             disabled={
               totalOrderAmount > walletDetails?.agent?.balance ||

@@ -24,9 +24,10 @@ import { useCallback } from 'react'
 import { useOrders } from '../../orderContext/OrderContext'
 import { getCache } from '../../helper/Storage'
 import DeliveryAddressModal from './DeliveryAddressModal'
+import LinearGradient from 'react-native-linear-gradient'
+import DeleteAddressModal from './deleteAddressModal'
 
 const OrderSavedAddresses = (props) => {
-
   const navigation = useNavigation()
   const { ordersArray, setOrdersArray } = useOrders()
   const [loading, setLoading] = useState(false)
@@ -60,6 +61,9 @@ const OrderSavedAddresses = (props) => {
   const [userId, setUserId] = useState(props?.route?.params?.userId)
 
   const [addressArray, setAddressArray] = useState([])
+  const [addressIndex, setAddressIndex] = useState(-1)
+
+  const [deleteAddressModal, setDeleteAddressModal] = useState(false)
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -72,7 +76,6 @@ const OrderSavedAddresses = (props) => {
       const response = await client.get(
         `/order/fastag/get-saved-addresses/${userId}`
       )
-      console.log(response.data, '<------------response data is here man')
       setAddressArray(response.data.addresses)
     } catch (error) {
       console.log(error.messsage)
@@ -88,10 +91,10 @@ const OrderSavedAddresses = (props) => {
     // { title: 'KOTAK', id: 4 }
   ]
 
-//   const getUserData = async () => {
-//     let userData = await getCache('userData')
-//     setUserId(userData.user.id)
-//   }
+  //   const getUserData = async () => {
+  //     let userData = await getCache('userData')
+  //     setUserId(userData.user.id)
+  //   }
 
   let TransactionID, OrderID
 
@@ -99,14 +102,14 @@ const OrderSavedAddresses = (props) => {
     setDeliveryAddressModal(true)
   }
 
-//   useEffect(() => {
-//     getUserData();
-//   }, [])
+  //   useEffect(() => {
+  //     getUserData();
+  //   }, [])
 
   useFocusEffect(
     useCallback(() => {
-      if (userId!=0) {
-        handleSavedAddressFetching();
+      if (userId != 0) {
+        handleSavedAddressFetching()
       }
     }, [])
   )
@@ -115,25 +118,9 @@ const OrderSavedAddresses = (props) => {
     if (deliveryAddressModal == false) handleSavedAddressFetching()
   }, [deliveryAddressModal])
 
-//   const dummyAddresses = [
-//     {
-//       address: '123 Main Street, Apartment 5B',
-//       state: 'Metropolis',
-//       pincode: '123456',
-//       phone: '9876543210',
-//       alternate_mobile_number: '9876504321'
-//     },
-//     {
-//       address: '456 Another Lane, Suite 8C',
-//       state: 'Hometown',
-//       pincode: '654321',
-//       phone: '8765432109',
-//       alternate_mobile_number: '8765404321'
-//     }
-//   ]
-
-  const handleAddressSelect = (address) => {
+  const handleAddressSelect = (address, index) => {
     setCurrentDeliveryAddress(address)
+    setAddressIndex(index)
   }
 
   const handleOutsideClick = () => {
@@ -145,7 +132,6 @@ const OrderSavedAddresses = (props) => {
       alternate_mobile_number: ''
     })
   }
-
 
   const checkIfAddressIsSame = (address) => {
     return (
@@ -218,15 +204,29 @@ const OrderSavedAddresses = (props) => {
                     ? styles.selectedAddress
                     : styles.addressCard
                 ]}
-                onPress={() => handleAddressSelect(address)}
+                onPress={() => handleAddressSelect(address, index)}
               >
                 <Text style={styles.addressText}>{address.address}</Text>
                 <Text style={styles.detailText}>
-                  State: {address.state}, Pincode: {address.pincode}
+                  <View style={styles.inlineContainer}>
+                    <Text style={styles.inlineText}>
+                      State: {address.state}
+                    </Text>
+                    <Text style={styles.inlineText}>
+                      Pincode: {address.pincode}
+                    </Text>
+                  </View>
                 </Text>
+
                 <Text style={styles.detailText}>
-                  Phone: {address.phone}, Alternate:{' '}
-                  {address.alternate_mobile_number}
+                  <View style={styles.inlineContainer}>
+                    <Text style={styles.inlineText}>
+                      Phone: {address.phone}
+                    </Text>
+                    <Text style={styles.inlineText}>
+                      Alternate: {address.alternate_mobile_number}
+                    </Text>
+                  </View>
                 </Text>
               </TouchableOpacity>
             ))}
@@ -234,10 +234,34 @@ const OrderSavedAddresses = (props) => {
 
           <View style={styles.footer}>
             {checkIfCurrentAddress() ? (
-              <LinearButton title="Proceed" onPress={handleOrderSubmit} />
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.appButtonContainer}
+                  onPress={handleOrderSubmit}
+                >
+                  <LinearGradient
+                    colors={['#02546D', '#142D40']}
+                    style={styles.linearGradient}
+                  >
+                    <Text style={styles.appButtonText}>Proceed</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.appButtonContainer}
+                  onPress={() => setDeleteAddressModal(true)}
+                >
+                  <LinearGradient
+                    colors={['#02546D', '#142D40']}
+                    style={styles.linearGradient}
+                  >
+                    <Text style={styles.appButtonText}>Delete</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             ) : (
               <LinearButton
-                title="Add Delivery Address"
+                title="Add New Delivery Address"
                 onPress={handleSubmit}
               />
             )}
@@ -258,6 +282,18 @@ const OrderSavedAddresses = (props) => {
         visible={deliveryAddressModal}
         onClose={() => setDeliveryAddressModal(false)}
         userId={userId}
+      />
+      <DeleteAddressModal
+        visible={deleteAddressModal}
+        onClose={() => setDeleteAddressModal(false)}
+        address={currentDeliveryAddress}
+        deleteAddressId={
+          addressArray && addressIndex !== -1
+            ? addressArray[addressIndex]?.id
+            : -1
+        }
+        handleSavedAddressFetching={handleSavedAddressFetching}
+        handleOutsideClick={handleOutsideClick}
       />
     </SafeAreaView>
   )
@@ -289,15 +325,55 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginBottom: 5
   },
   detailText: {
     fontSize: 14,
     color: '#555'
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20
+  },
+  appButtonContainer: {
+    flex: 1,
+    borderRadius: 25,
+    height: 68,
+    marginHorizontal: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden'
+  },
+  linearGradient: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: '10%'
+  },
+  appButtonText: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    fontFamily: 'inter'
+  },
   footer: {
     padding: 20
+  },
+  inlineContainer: {
+    flexDirection: 'row', // To arrange the items horizontally
+    justifyContent: 'space-between', // Centering the items horizontally
+    alignItems: 'center', // Align vertically to the center
+    marginBottom: 10 // Optional: adds space below
+  },
+  inlineText: {
+    fontSize: 14,
+    // color: '#333',
+    fontWeight: 'bold',
+    marginHorizontal: 5 // Adds space between State and Pincode
   }
 })
-
 export default OrderSavedAddresses

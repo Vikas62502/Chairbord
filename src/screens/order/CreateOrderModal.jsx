@@ -129,7 +129,7 @@ const CreateOrderModal = ({
       ...orderBodyData,
       amount: orderBodyData?.quantity * orderBodyData?.tagCost
     })
-  }, [orderBodyData?.quantity, orderBodyData?.tagCost]);
+  }, [orderBodyData?.quantity, orderBodyData?.tagCost])
 
   const handleNext = () => {
     if (isButtonEnabled) {
@@ -194,14 +194,32 @@ const CreateOrderModal = ({
 
   const handlePassingDefBank = () => {
     const res = bankNameData.filter((item) => item.id === orderBodyData?.bankId)
-    return res[0];
+    return res[0]
   }
 
   const handlePassingDefVC = () => {
     const res = vehicleClassData.filter(
       (item) => item.id === orderBodyData?.vehicleClass
     )
-    return res[0];
+    return res[0]
+  }
+
+  const handleDelete = () => {
+    // Check if currentOrderIndex is valid
+    if (currentOrderIndex !== undefined && currentOrderIndex >= 0) {
+      // Create a new ordersArray without the item at currentOrderIndex
+      const updatedOrders = ordersArray.filter(
+        (_, index) => index !== currentOrderIndex
+      )
+
+      // Update the ordersArray in context/state
+      setOrdersArray(updatedOrders)
+
+      // Close the modal
+      handleClose()
+    } else {
+      console.log('Invalid order index')
+    }
   }
 
   return (
@@ -223,7 +241,12 @@ const CreateOrderModal = ({
               }}
             >
               <View>
-                <Text style={styles.titleText}>Create Order</Text>
+                {!all_FieldsFilled() && (
+                  <Text style={styles.titleText}>Create Order</Text>
+                )}
+                {all_FieldsFilled() && (
+                  <Text style={styles.titleText}>Modify Order</Text>
+                )}
               </View>
               <View>
                 <Pressable onPress={handleClose}>
@@ -289,9 +312,19 @@ const CreateOrderModal = ({
                 </View>
               </View>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleClose} style={styles.button}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
+                {all_FieldsFilled() && (
+                  <TouchableOpacity
+                    onPress={handleDelete}
+                    style={styles.deletebutton}
+                  >
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                )}
+                {!all_FieldsFilled() && (
+                  <TouchableOpacity onPress={handleClose} style={styles.button}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity
                   onPress={handleNext}
                   style={[
@@ -348,6 +381,14 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#263238'
   },
+  deletebutton: {
+    flex: 1,
+    paddingVertical: '3%',
+    borderRadius: 24,
+    alignItems: 'center',
+    borderWidth: 0.5,
+    backgroundColor: 'red'
+  },
   applyButton: {
     backgroundColor: '#02546D',
     marginLeft: '5%'
@@ -356,6 +397,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '400',
     color: '#263238'
+  },
+  deleteButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: 'white'
   },
   applyButtonText: {
     color: '#fff'
