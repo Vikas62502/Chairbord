@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -11,32 +11,50 @@ import {
 } from 'react-native'
 import InputText from '../../components/common/InputText'
 import SelectField from '../../components/common/SelectFieldBig'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { useOrders } from '../../orderContext/OrderContext'
 
-const CreateOrderModal = ({ visible, onClose, onApply }) => {
-  const navigation = useNavigation()
-
-  // Access the ordersArray and setOrdersArray from context
-  const { ordersArray, setOrdersArray } = useOrders()
-
-  const [orderBodyData, setOrderBodyData] = useState({
+const CreateOrderModal = ({
+  visible,
+  onClose,
+  currentOrder = {
     bankId: 0,
     vehicleClass: 0,
     tagCost: 0,
     quantity: 0,
     amount: 0
-  })
-  const [deliveryAddress, setDeliveryAddress] = useState({
-    address: '',
-    state: '',
-    pincode: '',
-    phone: '',
-    alternate_m: ''
-  })
+  }
+}) => {
+  const navigation = useNavigation()
+
+  // Access the ordersArray and setOrdersArray from context
+  const { ordersArray, setOrdersArray } = useOrders()
+
+  const [orderBodyData, setOrderBodyData] = useState(currentOrder)
+
+  const all_FieldsFilled = () => {
+    if (!currentOrder) {
+      return false
+    }
+    return (
+      currentOrder?.bankId !== 0 &&
+      currentOrder?.vehicleClass !== 0 &&
+      currentOrder?.quantity !== 0 &&
+      currentOrder?.tagCost !== 0 &&
+      currentOrder?.amount !== 0
+    )
+  }
+
+  useEffect(() => {
+    if (visible) {
+      if (all_FieldsFilled()) {
+        setOrderBodyData(currentOrder)
+      }
+    }
+  }, [visible])
 
   const [loading, setLoading] = useState(false)
   const [userData, setUserData] = useState(null)
@@ -76,11 +94,18 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
 
   const handleTagCost = async () => {
     setLoading(true)
+    if (
+      !userData?.user?.id ||
+      !orderBodyData?.bankId ||
+      !orderBodyData?.vehicleClass
+    ) {
+      return
+    }
     try {
       const response = await client.post('/order/fastag/get-tag-cost', {
         agentId: userData?.user?.id,
-        bankId: orderBodyData.bankId,
-        vehicleClass: orderBodyData.vehicleClass
+        bankId: orderBodyData?.bankId,
+        vehicleClass: orderBodyData?.vehicleClass
       })
       setTagCost(JSON.stringify(response.data.cost))
       setOrderBodyData({ ...orderBodyData, tagCost: response.data.cost })
@@ -92,34 +117,58 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
   }
 
   useEffect(() => {
-    if (orderBodyData.bankId !== 0 && orderBodyData.vehicleClass !== 0) {
+    if (orderBodyData?.bankId !== 0 && orderBodyData?.vehicleClass !== 0) {
       handleTagCost()
     }
-  }, [orderBodyData.bankId, orderBodyData.vehicleClass])
+  }, [orderBodyData?.bankId, orderBodyData?.vehicleClass])
 
   useEffect(() => {
     setOrderBodyData({
       ...orderBodyData,
-      amount: orderBodyData.quantity * orderBodyData.tagCost
+      amount: orderBodyData?.quantity * orderBodyData?.tagCost
     })
-  }, [orderBodyData.quantity])
+  }, [orderBodyData?.quantity])
 
   const handleNext = () => {
     if (isButtonEnabled) {
-      setOrdersArray((prevOrdersArray) => {
-        const updatedOrders = [...prevOrdersArray, { ...orderBodyData }]
-        console.log(updatedOrders, 'Updated array with new order')
-        handleClose()
-        navigation.navigate('orderDetails')
-        return updatedOrders
-      })
+      if (all_FieldsFilled()) {
+        const matchingIndex = ordersArray.findIndex(
+          (order) =>
+            order.bankId === orderBodyData.bankId &&
+            order.vehicleClass === orderBodyData.vehicleClass
+        )
+
+        if (matchingIndex !== -1) {
+          // Update the quantity and amount of the matching record
+          setOrdersArray((prevOrdersArray) => {
+            const updatedOrders = [...prevOrdersArray]
+            updatedOrders[matchingIndex] = {
+              ...updatedOrders[matchingIndex],
+              quantity: orderBodyData.quantity,
+              amount: orderBodyData.amount
+            }
+            return updatedOrders
+          })
+          handleClose()
+        }
+      } else {
+        setOrdersArray((prevOrdersArray) => {
+          const updatedOrders = [...prevOrdersArray, { ...orderBodyData }]
+          handleClose()
+          navigation.navigate('orderDetails')
+          return updatedOrders
+        })
+      }
     }
   }
 
   const allFieldsFilled = () => {
     // Combine both objects into one array of values
+    if (!orderBodyData) {
+      return
+    }
     const allValues = [
-      ...Object.values(orderBodyData),
+      ...Object.values(orderBodyData)
       // ...Object.values(deliveryAddress)
     ]
 
@@ -130,7 +179,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
   useEffect(() => {
     // Update button state whenever `orderBodyData` or `deliveryAddress` changes
     setIsButtonEnabled(allFieldsFilled())
-  }, [orderBodyData, deliveryAddress])
+  }, [orderBodyData])
 
   const handleClose = () => {
     setOrderBodyData({
@@ -144,6 +193,18 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
     onClose()
   }
 
+  const handlePassingDefBank = () => {
+    const res = bankNameData.filter((item) => item.id === orderBodyData?.bankId)
+    return res[0]
+  }
+
+  const handlePassingDefVC = () => {
+    const res = vehicleClassData.filter(
+      (item) => item.id === orderBodyData?.vehicleClass
+    )
+    return res[0]
+  }
+
   return (
     <>
       {loading && <Loader />}
@@ -151,7 +212,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
         visible={visible}
         transparent
         animationType="fade"
-        onRequestClose={onClose}
+        onRequestClose={handleClose}
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
@@ -166,7 +227,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 <Text style={styles.titleText}>Create Order</Text>
               </View>
               <View>
-                <Pressable onPress={onClose}>
+                <Pressable onPress={handleClose}>
                   <Image
                     source={require('../../assets/DrawerNavigation/closeLogout.png')}
                     alt="closeBtn"
@@ -180,6 +241,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                 dataToRender={bankNameData}
                 title={'Select bank name'}
                 selectedValue={setBank}
+                defaultValue={handlePassingDefBank()}
               />
               <View style={{ marginTop: '5%' }}>
                 <SelectField
@@ -188,6 +250,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                   selectedValue={(selectedItem, index) => {
                     formDataHandler('vehicleClass', selectedItem.id)
                   }}
+                  defaultValue={handlePassingDefVC()}
                 />
               </View>
 
@@ -212,7 +275,7 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                   <InputText
                     placeholder={'Quantity'}
                     inputStyle={{ width: '100%' }}
-                    value={orderBodyData.quantity}
+                    value={orderBodyData?.quantity}
                     onChangeText={(value) => {
                       formDataHandler('quantity', value)
                     }}
@@ -222,68 +285,10 @@ const CreateOrderModal = ({ visible, onClose, onApply }) => {
                   <InputText
                     placeholder={'Amount'}
                     inputStyle={{ width: '100%' }}
-                    value={JSON.stringify(orderBodyData.amount)}
+                    value={JSON.stringify(orderBodyData?.amount)}
                   />
                 </View>
               </View>
-              {/* <View style={{ width: '100%' }}>
-                <InputText
-                  value={deliveryAddress?.address}
-                  placeholder="Address"
-                  secure={false}
-                  onChangeText={(value) => {
-                    formDataHandler('address', value)
-                  }}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <View style={{ width: '45%' }}>
-                  <InputText
-                    placeholder={'State'}
-                    inputStyle={{ width: '100%' }}
-                    value={deliveryAddress?.state}
-                    onChangeText={(value) => {
-                      formDataHandler('state', value)
-                    }}
-                  />
-                </View>
-                <View style={{ width: '45%' }}>
-                  <InputText
-                    placeholder={'Pincode'}
-                    inputStyle={{ width: '100%' }}
-                    value={deliveryAddress?.pincode}
-                    onChangeText={(value) => {
-                      formDataHandler('pincode', value)
-                    }}
-                  />
-                </View>
-              </View>
-
-              <View style={{ width: '100%' }}>
-                <InputText
-                  value={deliveryAddress?.phone}
-                  placeholder="Mobile number"
-                  secure={false}
-                  onChangeText={(value) => {
-                    formDataHandler('phone', value)
-                  }}
-                />
-              </View>
-              <View style={{ width: '100%' }}>
-                <InputText
-                  value={deliveryAddress?.alternate_m}
-                  placeholder="Alternate mobile number"
-                  secure={false}
-                  onChangeText={(value) => {
-                    formDataHandler('alternate_m', value)
-                  }}
-                />
-              </View> */}
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleClose} style={styles.button}>
                   <Text style={styles.buttonText}>Cancel</Text>
@@ -320,7 +325,7 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '90%',
     maxHeight: '80%',
-    height:'auto',
+    height: 'auto',
     backgroundColor: '#F3F3F3',
     borderRadius: 10,
     padding: 20,

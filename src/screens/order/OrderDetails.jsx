@@ -21,6 +21,7 @@ import { useOrders } from '../../orderContext/OrderContext'
 import Loader from '../../components/ui/Loader'
 import { getCache } from '../../helper/Storage'
 import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const OrderDetails = (props) => {
   const navigation = useNavigation()
@@ -55,6 +56,13 @@ const OrderDetails = (props) => {
   const [createOrderModal, setCreateOrderModal] = useState(false)
   const [deliveryAddressModal, setDeliveryAddressModal] = useState(false)
   const [userId, setUserId] = useState(0)
+  const [currentOrder, setCurrentOrder] = useState({
+    bankId: 0,
+    vehicleClass: 0,
+    tagCost: 0,
+    quantity: 0,
+    amount: 0
+  })
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -88,6 +96,45 @@ const OrderDetails = (props) => {
       userId: userId
     })
   }
+
+  const allFieldsFilled = () => {
+    return (
+      currentOrder?.bankId !== 0 &&
+      currentOrder?.vehicleClass !== 0 &&
+      currentOrder?.quantity !== 0 &&
+      currentOrder?.tagCost !== 0 &&
+      currentOrder?.amount !== 0
+    )
+  }
+
+  const checkIfOrderIsSame = (order) => {
+    return (
+      currentOrder?.bankId === order?.bankId &&
+      currentOrder?.vehicleClass === order?.vehicleClass &&
+      currentOrder?.quantity === order?.quantity &&
+      currentOrder?.tagCost === order?.tagCost &&
+      currentOrder?.amount === order?.amount
+    )
+  }
+
+  useEffect(() => {
+    if (allFieldsFilled(currentOrder)) {
+      // console.log(currentOrder, 'current order is being set here');
+      setCreateOrderModal(true)
+    }
+  }, [currentOrder])
+
+  useEffect(() => {
+    if (!createOrderModal) {
+      setCurrentOrder({
+        bankId: 0,
+        vehicleClass: 0,
+        tagCost: 0,
+        quantity: 0,
+        amount: 0
+      })
+    }
+  }, [createOrderModal])
 
   return (
     <>
@@ -125,7 +172,18 @@ const OrderDetails = (props) => {
           {/* Render each order in the ordersArray dynamically */}
           {ordersArray && ordersArray.length > 0 ? (
             ordersArray.map((order, index) => (
-              <View key={index}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  setCurrentOrder(order)
+                  // console.log(order);
+                  // if (checkIfOrderIsSame(order)) {
+                  //   console.log(currentOrder, 'current order is being set here')
+                  //   setCreateOrderModal(true)
+                  // }
+                }} // Function to handle click
+                activeOpacity={0.7} // Optional: Add a feedback effect
+              >
                 {/* Order content */}
                 <View style={styles.orderContainer}>
                   <View>
@@ -134,9 +192,7 @@ const OrderDetails = (props) => {
                         ?.title || 'Bank Not Found'}
                     </Text>
 
-                    {/* <Image
-                      source={require('../../assets/screens/kotakLogo.png')}
-                    /> */}
+                    {/* <Image source={require('../../assets/screens/kotakLogo.png')} /> */}
                     <View style={styles.costQtyContainer}>
                       <Text style={styles.constAndQtyContainerText}>
                         Cost: {order.tagCost || 'N/A'}
@@ -159,10 +215,12 @@ const OrderDetails = (props) => {
                 </View>
 
                 <HorizontalDivider />
-              </View>
+              </TouchableOpacity>
             ))
           ) : (
-            <Text>No orders Yet</Text>
+            <View style={styles.container}>
+              <Text style={styles.message}>No orders yet</Text>
+            </View>
           )}
         </ScrollView>
 
@@ -174,9 +232,17 @@ const OrderDetails = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <AddBtn title={'Add +'} 
-          disabled={totalOrderAmount>walletDetails?.agent?.balance}
-          onPress={() => setCreateOrderModal(true)} />
+          <AddBtn
+            title={'Add +'}
+            disabled={totalOrderAmount > walletDetails?.agent?.balance}
+            onPress={() => {
+              if (totalOrderAmount <= walletDetails?.agent?.balance) {
+                setCurrentOrder(null)
+                setCreateOrderModal(true)
+              }
+            }}
+          />
+
           <AddBtn title={'Cancel Order'} onPress={handleDeleteOrder} />
         </View>
 
@@ -184,7 +250,10 @@ const OrderDetails = (props) => {
           <LinearButton
             title={'Select Address'}
             // onPress={() => setSavedAddressModal(true)}
-            disabled={totalOrderAmount>walletDetails?.agent?.balance || ordersArray.length == 0}
+            disabled={
+              totalOrderAmount > walletDetails?.agent?.balance ||
+              ordersArray.length == 0
+            }
             onPress={handleNavigation}
           />
         </View>
@@ -192,9 +261,7 @@ const OrderDetails = (props) => {
         <CreateOrderModal
           visible={createOrderModal}
           onClose={() => setCreateOrderModal(false)}
-          transactionId={TransactionID}
-          totalOrderAmount={totalValue}
-          orderId={OrderID}
+          currentOrder={currentOrder}
         />
       </SafeAreaView>
     </>
@@ -304,6 +371,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     marginBottom: 2
+  },
+  container: {
+    flex: 1, // Takes full screen height
+    justifyContent: 'center', // Centers content vertically
+    alignItems: 'center' // Centers content horizontally
+    // backgroundColor: '#f8f9fa', // Light background for better UI
+  },
+  message: {
+    fontSize: 18, // Slightly larger text
+    fontWeight: 'bold', // Bold for emphasis
+    color: '#6c757d' // Neutral gray color
   }
 })
 
