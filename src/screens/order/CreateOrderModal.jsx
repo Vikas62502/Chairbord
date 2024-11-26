@@ -26,7 +26,8 @@ const CreateOrderModal = ({
     tagCost: 0,
     quantity: 0,
     amount: 0
-  }
+  },
+  currentOrderIndex
 }) => {
   const navigation = useNavigation()
 
@@ -52,6 +53,7 @@ const CreateOrderModal = ({
     if (visible) {
       if (all_FieldsFilled()) {
         setOrderBodyData(currentOrder)
+        console.log(currentOrderIndex, 'order index is this')
       }
     }
   }, [visible])
@@ -127,25 +129,22 @@ const CreateOrderModal = ({
       ...orderBodyData,
       amount: orderBodyData?.quantity * orderBodyData?.tagCost
     })
-  }, [orderBodyData?.quantity])
+  }, [orderBodyData?.quantity, orderBodyData?.tagCost]);
 
   const handleNext = () => {
     if (isButtonEnabled) {
       if (all_FieldsFilled()) {
-        const matchingIndex = ordersArray.findIndex(
-          (order) =>
-            order.bankId === orderBodyData.bankId &&
-            order.vehicleClass === orderBodyData.vehicleClass
-        )
-
-        if (matchingIndex !== -1) {
-          // Update the quantity and amount of the matching record
+        // Ensure currentOrderIndex is defined and valid
+        if (
+          currentOrderIndex !== undefined &&
+          currentOrderIndex >= 0 &&
+          currentOrderIndex < ordersArray.length
+        ) {
           setOrdersArray((prevOrdersArray) => {
             const updatedOrders = [...prevOrdersArray]
-            updatedOrders[matchingIndex] = {
-              ...updatedOrders[matchingIndex],
-              quantity: orderBodyData.quantity,
-              amount: orderBodyData.amount
+            updatedOrders[currentOrderIndex] = {
+              ...updatedOrders[currentOrderIndex],
+              ...orderBodyData // Spread the new order data
             }
             return updatedOrders
           })
@@ -195,14 +194,14 @@ const CreateOrderModal = ({
 
   const handlePassingDefBank = () => {
     const res = bankNameData.filter((item) => item.id === orderBodyData?.bankId)
-    return res[0]
+    return res[0];
   }
 
   const handlePassingDefVC = () => {
     const res = vehicleClassData.filter(
       (item) => item.id === orderBodyData?.vehicleClass
     )
-    return res[0]
+    return res[0];
   }
 
   return (

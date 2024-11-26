@@ -62,7 +62,8 @@ const OrderDetails = (props) => {
     tagCost: 0,
     quantity: 0,
     amount: 0
-  })
+  });
+  const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -118,8 +119,7 @@ const OrderDetails = (props) => {
   }
 
   useEffect(() => {
-    if (allFieldsFilled(currentOrder)) {
-      // console.log(currentOrder, 'current order is being set here');
+    if (allFieldsFilled(currentOrder) && currentOrderIndex !== -1) {
       setCreateOrderModal(true)
     }
   }, [currentOrder])
@@ -133,6 +133,7 @@ const OrderDetails = (props) => {
         quantity: 0,
         amount: 0
       })
+      setCurrentOrderIndex(-1);
     }
   }, [createOrderModal])
 
@@ -176,6 +177,7 @@ const OrderDetails = (props) => {
                 key={index}
                 onPress={() => {
                   setCurrentOrder(order)
+                  setCurrentOrderIndex(index);
                   // console.log(order);
                   // if (checkIfOrderIsSame(order)) {
                   //   console.log(currentOrder, 'current order is being set here')
@@ -262,6 +264,7 @@ const OrderDetails = (props) => {
           visible={createOrderModal}
           onClose={() => setCreateOrderModal(false)}
           currentOrder={currentOrder}
+          currentOrderIndex={currentOrderIndex}
         />
       </SafeAreaView>
     </>
