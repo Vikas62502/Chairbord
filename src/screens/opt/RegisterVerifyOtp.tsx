@@ -81,7 +81,7 @@ const RegisterVerifyOtp = ({ data, setShowOtpField }: any) => {
                     marginTop: '5%'
                 }}
             >
-                {loading && <Loader />}
+                {loading && <Loader loading={loading} />}
                 <OtpInputText otp={otp} setOtp={setOtp} />
             </View>
 

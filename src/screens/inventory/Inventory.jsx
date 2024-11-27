@@ -92,7 +92,7 @@ const Inventory = (props) => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader loading={true} />
       ) : (
         <ScrollView
           style={styles.container}

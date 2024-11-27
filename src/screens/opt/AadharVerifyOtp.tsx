@@ -62,7 +62,7 @@ const AadharVerifyOtp: React.FC<adharVerifyInterface> = ({ setShowPanVerificatio
                     marginVertical: 10
                 }}
             >
-                {loading && <Loader />}
+                {loading && <Loader loading={loading} />}
                 <OtpInputText otp={otp} setOtp={setOtp} />
             </View>
 

@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   ScrollView,
-  Image,
   StyleSheet,
   Pressable
 } from 'react-native'
@@ -14,8 +13,6 @@ import HorizontalDivider from '../../components/common/HorizontalDivider'
 import LinearButton from '../../components/common/LinearButton'
 import AddBtn from '../../components/ui/AddBtn'
 import VerticalDivider from '../../components/common/VerticalDivider'
-import OrderSuccessModal from './OrderSuccessModal'
-import OrderFaildModal from './OrderFaildModal'
 import CreateOrderModal from './CreateOrderModal'
 import { client } from '../../client/Axios'
 
@@ -23,9 +20,11 @@ import { client } from '../../client/Axios'
 import { useOrders } from '../../orderContext/OrderContext'
 import Loader from '../../components/ui/Loader'
 import { getCache } from '../../helper/Storage'
-import DeliveryAddressModal from './DeliveryAddressModal'
+import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const OrderDetails = (props) => {
+  const navigation = useNavigation()
   const [walletDetails, setWalletDetails] = useState([])
   const { ordersArray, setOrdersArray } = useOrders()
 
@@ -44,8 +43,7 @@ const OrderDetails = (props) => {
     return ordersArray.reduce((total, order) => total + order.amount, 0)
   }
 
-  const responseAmount = calculateTotalAmount(ordersArray);
-  console.log(responseAmount)
+  const responseAmount = calculateTotalAmount(ordersArray)
 
   const [totalOrderAmount, setTotalAmountCost] = useState(0)
   const [totalValue, setTotalValue] = useState(0)
@@ -57,12 +55,15 @@ const OrderDetails = (props) => {
 
   const [createOrderModal, setCreateOrderModal] = useState(false)
   const [deliveryAddressModal, setDeliveryAddressModal] = useState(false)
-  const [isOrderSuccess, setIsOrderSuccess] = useState(false)
-  const [isOrderFailed, setIsOrderFailed] = useState(false)
-  const [transactionId, setTransactionId] = useState('')
-  const [userData, setUserData] = useState(null)
-  const [orderId, setOrderId] = useState('')
   const [userId, setUserId] = useState(0)
+  const [currentOrder, setCurrentOrder] = useState({
+    bankId: 0,
+    vehicleClass: 0,
+    tagCost: 0,
+    quantity: 0,
+    amount: 0
+  })
+  const [currentOrderIndex, setCurrentOrderIndex] = useState(-1)
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -71,7 +72,7 @@ const OrderDetails = (props) => {
 
   const bankNameData = [
     { title: 'Bajaj', id: 1 },
-    { title: 'SBI', id: 2 },
+    { title: 'SBI', id: 2 }
     // { title: 'PNB', id: 3 },
     // { title: 'KOTAK', id: 4 }
   ]
@@ -91,15 +92,61 @@ const OrderDetails = (props) => {
     setDeliveryAddressModal(true)
   }
 
-  console.log(ordersArray, "orderdara")
+  const handleNavigation = () => {
+    navigation.navigate('OrderSavedAddresses', {
+      userId: userId
+    })
+  }
+
+  const allFieldsFilled = () => {
+    return (
+      currentOrder?.bankId !== 0 &&
+      currentOrder?.vehicleClass !== 0 &&
+      currentOrder?.quantity !== 0 &&
+      currentOrder?.tagCost !== 0 &&
+      currentOrder?.amount !== 0
+    )
+  }
+
+  const checkIfOrderIsSame = (order) => {
+    return (
+      currentOrder?.bankId === order?.bankId &&
+      currentOrder?.vehicleClass === order?.vehicleClass &&
+      currentOrder?.quantity === order?.quantity &&
+      currentOrder?.tagCost === order?.tagCost &&
+      currentOrder?.amount === order?.amount
+    )
+  }
+
+  useEffect(() => {
+    if (allFieldsFilled(currentOrder) && currentOrderIndex !== -1) {
+      setCreateOrderModal(true)
+    }
+  }, [currentOrder])
+
+  useEffect(() => {
+    if (!createOrderModal) {
+      setCurrentOrder({
+        bankId: 0,
+        vehicleClass: 0,
+        tagCost: 0,
+        quantity: 0,
+        amount: 0
+      })
+      setCurrentOrderIndex(-1)
+    }
+  }, [createOrderModal])
+
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <SafeAreaView style={{ flex: 1 }}>
-        <Pressable>
-
-        </Pressable>
-        <OverlayHeader title={'Order Details'} isorderSection={true} handleDeleteOrder={handleDeleteOrder} />
+        <Pressable></Pressable>
+        <OverlayHeader
+          title={'Order Details'}
+          isorderSection={true}
+          handleDeleteOrder={handleDeleteOrder}
+        />
         <ScrollView style={{ flex: 1, padding: '5%' }}>
           <DisplayDetailsCard
             cardData={[
@@ -114,8 +161,9 @@ const OrderDetails = (props) => {
               },
               {
                 title: 'Remaining Balance',
-                value: `: ₹${(walletDetails?.agent?.balance || 0) - (totalOrderAmount || 0)
-                  }`
+                value: `: ₹${
+                  (walletDetails?.agent?.balance || 0) - (totalOrderAmount || 0)
+                }`
                 // value: `: ₹0`
               }
             ]}
@@ -125,17 +173,28 @@ const OrderDetails = (props) => {
           {/* Render each order in the ordersArray dynamically */}
           {ordersArray && ordersArray.length > 0 ? (
             ordersArray.map((order, index) => (
-              <View key={index}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  setCurrentOrder(order)
+                  setCurrentOrderIndex(index)
+                  // console.log(order);
+                  // if (checkIfOrderIsSame(order)) {
+                  //   console.log(currentOrder, 'current order is being set here')
+                  //   setCreateOrderModal(true)
+                  // }
+                }} // Function to handle click
+                activeOpacity={0.7} // Optional: Add a feedback effect
+              >
                 {/* Order content */}
                 <View style={styles.orderContainer}>
                   <View>
                     <Text style={{ fontWeight: 'bold', color: 'black' }}>
-                      {bankNameData.find(item => item.id === order.bankId)?.title || 'Bank Not Found'}
+                      {bankNameData.find((item) => item.id === order.bankId)
+                        ?.title || 'Bank Not Found'}
                     </Text>
 
-                    {/* <Image
-                      source={require('../../assets/screens/kotakLogo.png')}
-                    /> */}
+                    {/* <Image source={require('../../assets/screens/kotakLogo.png')} /> */}
                     <View style={styles.costQtyContainer}>
                       <Text style={styles.constAndQtyContainerText}>
                         Cost: {order.tagCost || 'N/A'}
@@ -158,10 +217,12 @@ const OrderDetails = (props) => {
                 </View>
 
                 <HorizontalDivider />
-              </View>
+              </TouchableOpacity>
             ))
           ) : (
-            <Text>No orders Yet</Text>
+            <View style={styles.container}>
+              <Text style={styles.message}>No orders yet</Text>
+            </View>
           )}
         </ScrollView>
 
@@ -173,47 +234,37 @@ const OrderDetails = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <AddBtn title={'Add +'} onPress={() => setCreateOrderModal(true)} />
-          <AddBtn title={'Cancel Order'} onPress={handleDeleteOrder} />
+          <AddBtn
+            title={'Add +'}
+            disabled={totalOrderAmount > walletDetails?.agent?.balance}
+            onPress={() => {
+              if (totalOrderAmount <= walletDetails?.agent?.balance) {
+                setCurrentOrder(null)
+                setCreateOrderModal(true)
+              }
+            }}
+          />
+
+          <AddBtn title={'Cancel All Orders'} onPress={handleDeleteOrder} />
         </View>
 
         <View style={{ padding: '5%', paddingBottom: 20 }}>
-          <LinearButton title={'Add Devlivery Address'} onPress={handleSubmit} />
+          <LinearButton
+            title={'Select Delivery Address'}
+            // onPress={() => setSavedAddressModal(true)}
+            disabled={
+              totalOrderAmount > walletDetails?.agent?.balance ||
+              ordersArray.length == 0
+            }
+            onPress={handleNavigation}
+          />
         </View>
 
-        <OrderSuccessModal
-          visible={isOrderSuccess}
-          onClose={setIsOrderSuccess}
-          transactionId={transactionId}
-          orderId={orderId}
-          responseAmount={responseAmount}
-          orders={ordersArray}
-          totalOrderAmount={calculateTotalAmount(ordersArray)}
-        />
-        <OrderFaildModal
-          visible={isOrderFailed}
-          onClose={setIsOrderFailed}
-        />
         <CreateOrderModal
           visible={createOrderModal}
           onClose={() => setCreateOrderModal(false)}
-          transactionId={TransactionID}
-          totalOrderAmount={totalValue}
-          orderId={OrderID}
-        />
-
-        <DeliveryAddressModal
-          visible={deliveryAddressModal}
-          onClose={() => setDeliveryAddressModal(false)}
-          orders={ordersArray}
-          userId={userId}
-          handleDeleteOrder={handleDeleteOrder}
-          setTransactionId={setTransactionId}
-          setOrderId={setOrderId}
-          setIsOrderSuccess={setIsOrderSuccess}
-          setIsOrderFailed={setIsOrderFailed}
-          setTotalValue={setTotalValue}
-          totalOrderAmount={totalOrderAmount}
+          currentOrder={currentOrder}
+          currentOrderIndex={currentOrderIndex}
         />
       </SafeAreaView>
     </>
@@ -252,6 +303,88 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: '10%'
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)' // Semi-transparent background
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  closeButton: {
+    alignSelf: 'flex-end',
+    padding: 10,
+    backgroundColor: '#f44336', // Red background for close button
+    borderRadius: 20
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
+    textAlign: 'center'
+  },
+  addressList: {
+    maxHeight: 200, // Limit height for scrolling
+    marginTop: 10
+  },
+  proceedButton: {
+    backgroundColor: '#4CAF50', // Green button
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 20,
+    alignItems: 'center'
+  },
+  proceedButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  addressContainer: {
+    padding: 15,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ddd'
+  },
+  addressTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 5
+  },
+  addressText: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 2
+  },
+  container: {
+    flex: 1, // Takes full screen height
+    justifyContent: 'center', // Centers content vertically
+    alignItems: 'center' // Centers content horizontally
+    // backgroundColor: '#f8f9fa', // Light background for better UI
+  },
+  message: {
+    fontSize: 18, // Slightly larger text
+    fontWeight: 'bold', // Bold for emphasis
+    color: '#6c757d' // Neutral gray color
   }
 })
 

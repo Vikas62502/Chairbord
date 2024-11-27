@@ -124,7 +124,7 @@ const Order = (props) => {
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
 
       <ScrollView
         style={styles.container}

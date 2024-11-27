@@ -80,7 +80,7 @@ const IssuanceTracker = () => {
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

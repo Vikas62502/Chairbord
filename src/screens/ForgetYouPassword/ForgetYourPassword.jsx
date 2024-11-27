@@ -68,7 +68,7 @@ const ForgetYourPassword = () => {
         showBackButton={true}
         navigateTo={() => navigation.goBack()}
       />
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <View style={{
           marginHorizontal: 20,
           marginTop: '5%'

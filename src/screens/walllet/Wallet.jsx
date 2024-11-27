@@ -1,188 +1,216 @@
-import { View, Text, StyleSheet, Image, RefreshControl, SafeAreaView, Pressable, ScrollView, TextInput, Dimensions } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import WalletCards from './WalletCards';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import walletCardData from './WalletCardData';
-import FilterTags from './FilterTags';
-import { client } from '../../client/Axios';
-import getDate from '../../utils/getDate';
-import OverlayHeader from '../../components/OverlayHeader';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  RefreshControl,
+  SafeAreaView,
+  Pressable,
+  ScrollView,
+  TextInput,
+  Dimensions
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import WalletCards from './WalletCards'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import walletCardData from './WalletCardData'
+import FilterTags from './FilterTags'
+import { client } from '../../client/Axios'
+import getDate from '../../utils/getDate'
+import OverlayHeader from '../../components/OverlayHeader'
+import Loader from '../../components/ui/Loader'
 const { width, height } = Dimensions.get('window')
-const isTablet = width > 768;
-const isSmallScreen = width < 400;
+const isTablet = width > 768
+const isSmallScreen = width < 400
 const Wallet = (props) => {
-  const [searchText, setSearchText] = useState('');
-  const [activeTag, setActiveTag] = useState('All');
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [walletDetails, setWalletDetails] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [searchText, setSearchText] = useState('')
+  const [activeTag, setActiveTag] = useState('All')
+  const [showFilterModal, setShowFilterModal] = useState(false)
+  const [walletDetails, setWalletDetails] = useState([])
+  const [refreshing, setRefreshing] = useState(false)
   // const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
-  const tagsData = ['All', 'Credit','Debit'];
-  const route = useRoute(); // Get route object
-  const isPartOfBottomNavigator = route.name === 'Wallet';
+  const tagsData = ['All', 'Credit', 'Debit']
+  const route = useRoute() // Get route object
+  const isPartOfBottomNavigator = route.name === 'Wallet'
+
+  const [loading, setLoading] = useState(false)
 
   const onRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     try {
-      await getWalletDetails();
+      await getWalletDetails()
     } catch (error) {
-      console.log(error, 'error');
+      console.log(error, 'error')
     } finally {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  };
+  }
 
   const getWalletDetails = async () => {
+    setLoading(true)
     try {
-      const response = await client.get(`/wallet/transactions/agent-get`);
-      setWalletDetails(response.data);
+      const response = await client.get(`/wallet/transactions/agent-get`)
+      setWalletDetails(response.data)
     } catch (error) {
-      console.log(error, 'error');
+      console.log(error, 'error')
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    getWalletDetails();
-  }, []);
+    getWalletDetails()
+  }, [])
 
   const sortedTransactions = walletDetails?.transactions?.sort((a, b) => {
-    return new Date(b.updatedAt) - new Date(a.updatedAt);
-  });
+    return new Date(b.updatedAt) - new Date(a.updatedAt)
+  })
 
   // Filter transactions based on searchText
- const filteredTransactions = sortedTransactions?.filter((transaction) => {
-  const searchLower = searchText.toLowerCase();
+  const filteredTransactions = sortedTransactions?.filter((transaction) => {
+    const searchLower = searchText.toLowerCase()
+    return (
+      transaction.type.toLowerCase().includes(searchLower) ||
+      transaction.reason.toLowerCase().includes(searchLower) ||
+      transaction.transactionId.toLowerCase().includes(searchLower) ||
+      transaction.referenceId?.toLowerCase().includes(searchLower) ||
+      'NA'.includes(searchLower) ||
+      transaction.amount.toString().includes(searchLower)
+    )
+  })
+
   return (
-    transaction.type.toLowerCase().includes(searchLower) ||
-    transaction.reason.toLowerCase().includes(searchLower) ||
-    transaction.transactionId.toLowerCase().includes(searchLower) ||
-    (transaction.referenceId?.toLowerCase().includes(searchLower) || 'NA'.includes(searchLower)) ||
-    transaction.amount.toString().includes(searchLower)
-  );
-});
+    <>
+      {loading && <Loader loading={loading} />}
+      <SafeAreaView style={{ flex: 1 }}>
+        {!isPartOfBottomNavigator && (
+          <OverlayHeader title={'Wallet'} showBackButton={true} />
+        )}
+        <ScrollView
+          style={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <View style={{ padding: '5%' }}>
+            <View style={styles.balanceCard}>
+              <Text style={styles.balanceText}>Balance</Text>
+              <Text style={styles.amountText}>
+                &#x20B9;{walletDetails?.agent?.balance || 0}
+              </Text>
 
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 30,
+                  marginTop: '2%',
+                  alignItems: 'center'
+                }}
+              >
+                <Pressable
+                  onPress={() =>
+                    props.navigation.navigate('topupWallet', {
+                      walletBalance: walletDetails?.agent?.balance || 0
+                    })
+                  }
+                >
+                  <Image
+                    source={require('../../assets/screens/wallet/topUp.png')}
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.tagText}>Top up</Text>
+                </Pressable>
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {!isPartOfBottomNavigator && (
-        <OverlayHeader
-          title={'Wallet'}
-          showBackButton={true}
-        />
-      )}
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-
-        <View style={{ padding: '5%' }}>
-          <View style={styles.balanceCard}>
-            <Text style={styles.balanceText}>Balance</Text>
-            <Text style={styles.amountText}>
-              &#x20B9;{walletDetails?.agent?.balance || 0}
-            </Text>
-
-          <View style={{ flexDirection: 'row', gap: 30, marginTop: '2%',alignItems:'center' }}>
-            <Pressable
-              onPress={() =>
-                props.navigation.navigate('topupWallet', {
-                  walletBalance: walletDetails?.agent?.balance || 0
-                })
-              }
-            >
-              <Image
-                source={require('../../assets/screens/wallet/topUp.png')}
-                style={{width:40,height:40}}
-              />
-              <Text style={styles.tagText}>Top up</Text>
-            </Pressable>
-
-              <View style={{alignItems:'center'}}>
-                <Image source={require('../../assets/screens/wallet/download.png')} style={{width:40,height:40}} />
-                <Text style={styles.tagText}>Statement</Text>
+                <View style={{ alignItems: 'center' }}>
+                  <Image
+                    source={require('../../assets/screens/wallet/download.png')}
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.tagText}>Statement</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={styles.searchAndfilter}>
-            <View style={styles.searchField}>
-              <Image
-                source={require('../../assets/screens/wallet/search.png')}
-                style={styles.searchIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Search"
-                placeholderTextColor={'#9A9A9A'}
-                value={searchText}
-                onChangeText={setSearchText}
-              />
-            </View>
-            <Pressable
-              onPress={() => setShowFilterModal(true)}
-              style={styles.filterLogo}
-            >
-              <Image source={require('../../assets/screens/wallet/filterLogo.png')} style={{ height: 25, width: 25 }} />
-            </Pressable>
-          </View>
-        </View>
-
-        <View style={styles.transactionContainer}>
-          <Text style={styles.transactionText}>Transaction</Text>
-
-          <ScrollView horizontal={true}>
-            {tagsData.map((data, index) => (
+            <View style={styles.searchAndfilter}>
+              <View style={styles.searchField}>
+                <Image
+                  source={require('../../assets/screens/wallet/search.png')}
+                  style={styles.searchIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Search"
+                  placeholderTextColor={'#9A9A9A'}
+                  value={searchText}
+                  onChangeText={setSearchText}
+                />
+              </View>
               <Pressable
-                style={[
-                  styles.tags,
-                  activeTag === data ? styles.activeTag : null
-                ]}
-                key={index}
-                onPress={() => setActiveTag(data)}
+                onPress={() => setShowFilterModal(true)}
+                style={styles.filterLogo}
               >
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: activeTag === data ? 'white' : '#263238',
-                    textAlignVertical: 'center'
-                  }}
-                >
-                  {data}
-                </Text>
+                <Image
+                  source={require('../../assets/screens/wallet/filterLogo.png')}
+                  style={{ height: 25, width: 25 }}
+                />
               </Pressable>
-            ))}
-          </ScrollView>
-
-          <View>
-            {filteredTransactions?.map((data, index) => (
-              <WalletCards
-                key={index}
-                logo={data.logo}
-                title={data.reason}
-                reason={data.reason}
-                amountValue={data.amount}
-                type={data.type}
-                transactionId={data.transactionId}
-                referenceId={data.referenceId}
-                date={data.updatedAt}
-                time={data.updatedAt}
-              />
-            ))}
+            </View>
           </View>
-        </View>
 
-        {/* Filter modal */}
-        <FilterTags
-          visible={showFilterModal}
-          onClose={() => setShowFilterModal(false)}
-        />
+          <View style={styles.transactionContainer}>
+            <Text style={styles.transactionText}>Transaction</Text>
 
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+            <ScrollView horizontal={true}>
+              {tagsData.map((data, index) => (
+                <Pressable
+                  style={[
+                    styles.tags,
+                    activeTag === data ? styles.activeTag : null
+                  ]}
+                  key={index}
+                  onPress={() => setActiveTag(data)}
+                >
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: activeTag === data ? 'white' : '#263238',
+                      textAlignVertical: 'center'
+                    }}
+                  >
+                    {data}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+
+            <View>
+              {filteredTransactions?.map((data, index) => (
+                <WalletCards
+                  key={index}
+                  logo={data.logo}
+                  title={data.reason}
+                  reason={data.reason}
+                  amountValue={data.amount}
+                  type={data.type}
+                  transactionId={data.transactionId}
+                  referenceId={data.referenceId}
+                  date={data.updatedAt}
+                  time={data.updatedAt}
+                />
+              ))}
+            </View>
+          </View>
+
+          {/* Filter modal */}
+          <FilterTags
+            visible={showFilterModal}
+            onClose={() => setShowFilterModal(false)}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -210,7 +238,7 @@ const styles = StyleSheet.create({
     lineHeight: 48,
     textAlign: 'center',
     marginBottom: '2%',
-    color: '#000000',
+    color: '#000000'
   },
   tagText: {
     color: '#808080',
@@ -227,7 +255,7 @@ const styles = StyleSheet.create({
     // width: '80%',
     gap: 10,
     marginTop: '5%',
-    paddingVertical:1
+    paddingVertical: 1
   },
   searchField: {
     flexDirection: 'row',
@@ -254,7 +282,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#858585',
     borderRadius: 50,
-    padding: 12,
+    padding: 12
   },
   transactionContainer: {
     elevation: 2,
@@ -262,7 +290,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     width: '100%',
     paddingHorizontal: '5%',
-    paddingBottom: '10%',
+    paddingBottom: '10%'
   },
   transactionText: {
     fontWeight: '600',
@@ -284,6 +312,6 @@ const styles = StyleSheet.create({
   activeTag: {
     backgroundColor: '#02546D'
   }
-});
+})
 
-export default Wallet;
+export default Wallet
