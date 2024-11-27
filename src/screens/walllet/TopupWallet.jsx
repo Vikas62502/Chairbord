@@ -74,13 +74,13 @@ const TopupWallet = (props) => {
     const response = await client.post('/cashfree/create-order', {
       amount: topupAmount
     })
-    console.log(response.data, "response dataaaa");
+    console.log(response.data, 'response dataaaa')
     setOrder({
       payment_session_id: response.data.payment_session_id,
       order_id: response.data.order_id,
       order_expiry_time: response.data.order_expiry_time
     })
-    await savingUserAndOrderInfo(response.data.order_id);
+    await savingUserAndOrderInfo(response.data.order_id)
   }
 
   const topUpApi = async () => {
@@ -132,7 +132,7 @@ const TopupWallet = (props) => {
   const verifyPayment = async () => {
     try {
       const res = await client.post('cashfree/web-hook-confirmPayment', {
-        order_id:''
+        order_id: ''
       })
       console.log('Balance updated:', res)
     } catch (e) {
@@ -142,19 +142,19 @@ const TopupWallet = (props) => {
 
   const savingUserAndOrderInfo = async (orderId) => {
     try {
-      const userData = await getCache('userData');
-      const agentId = userData.user.id;
-      console.log("orderId is ", orderId);
+      const userData = await getCache('userData')
+      const agentId = userData.user.id
+      console.log('orderId is ', orderId)
       const res = await client.post('cashfree/save-user-and-order-info', {
-        order_id : orderId,
-        user_id : agentId
+        order_id: orderId,
+        user_id: agentId
       })
       console.log('Info updated in backend: ', res)
     } catch (e) {
       console.error('Error updating info in backend:', e)
     }
   }
-  
+
   const topupBalanceBackend = async () => {
     try {
       const res = await client.post('/wallet/agent/own-wallet/transactions', {
@@ -181,7 +181,7 @@ const TopupWallet = (props) => {
   return (
     <>
       <OverlayHeader title={'Wallet'} navigateTo={'drawer'} />
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <ScrollView style={styles.container}>
         <View style={{ padding: '5%' }}>
           <View style={styles.balanceCard}>

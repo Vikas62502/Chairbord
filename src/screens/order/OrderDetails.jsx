@@ -62,8 +62,8 @@ const OrderDetails = (props) => {
     tagCost: 0,
     quantity: 0,
     amount: 0
-  });
-  const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
+  })
+  const [currentOrderIndex, setCurrentOrderIndex] = useState(-1)
 
   const handleDeleteOrder = () => {
     setOrdersArray([])
@@ -133,13 +133,13 @@ const OrderDetails = (props) => {
         quantity: 0,
         amount: 0
       })
-      setCurrentOrderIndex(-1);
+      setCurrentOrderIndex(-1)
     }
   }, [createOrderModal])
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <SafeAreaView style={{ flex: 1 }}>
         <Pressable></Pressable>
         <OverlayHeader
@@ -177,7 +177,7 @@ const OrderDetails = (props) => {
                 key={index}
                 onPress={() => {
                   setCurrentOrder(order)
-                  setCurrentOrderIndex(index);
+                  setCurrentOrderIndex(index)
                   // console.log(order);
                   // if (checkIfOrderIsSame(order)) {
                   //   console.log(currentOrder, 'current order is being set here')

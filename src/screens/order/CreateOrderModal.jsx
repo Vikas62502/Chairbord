@@ -224,7 +224,7 @@ const CreateOrderModal = ({
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <Modal
         visible={visible}
         transparent

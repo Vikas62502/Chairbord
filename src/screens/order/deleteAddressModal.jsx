@@ -43,7 +43,7 @@ const DeleteAddressModal = ({
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <Modal
         visible={visible}
         transparent

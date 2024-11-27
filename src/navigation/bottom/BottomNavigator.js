@@ -70,7 +70,7 @@ const BottomNavigator = () => {
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <Bottom.Navigator
         initialRouteName="home"
         screenOptions={{

@@ -30,7 +30,7 @@ const OrderCards = ({ data, key }) => {
   // console.log(data);
   return (
     <>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
 
       <View style={styles.cardContainer} key={key}>
         <View>

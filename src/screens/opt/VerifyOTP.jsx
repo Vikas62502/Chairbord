@@ -79,7 +79,7 @@ const VerifyOTP = ({ data, setShowOtpField }) => {
           marginTop: '5%'
         }}
       >
-        {loading && <Loader />}
+        {loading && <Loader loading={loading} />}
         <OtpInputText otp={otp} setOtp={setOtp} />
       </View>
 

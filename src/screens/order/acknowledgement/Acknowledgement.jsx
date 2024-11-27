@@ -80,8 +80,9 @@ const Acknowledgement = (props) => {
       // Use Object.entries to iterate over the object
       Object.entries(pendingTags).forEach(([key, item]) => {
         if (item.quantity > 0) {
-          refundString += `${bankMap[item.bankId]} ${item.vehicleClass}  (${item.quantity
-            } * ${item.singleCost})  =  ₹${item.quantity * item.singleCost}, `
+          refundString += `${bankMap[item.bankId]} ${item.vehicleClass}  (${
+            item.quantity
+          } * ${item.singleCost})  =  ₹${item.quantity * item.singleCost}, `
         }
       })
 
@@ -138,8 +139,7 @@ const Acknowledgement = (props) => {
 
   return (
     <>
-      {loading && <Loader />}
-
+      {loading && <Loader loading={loading} />}
       <SafeAreaView style={{ flex: 1 }}>
         <OverlayHeader title={'Acknowledgement'} />
         <ScrollView style={{ flex: 1 }}>
@@ -155,7 +155,7 @@ const Acknowledgement = (props) => {
                   placeholder="Search"
                   placeholderTextColor={'#9A9A9A'}
                   value={''}
-                // onChangeText={}
+                  // onChangeText={}
                 />
               </View>
               <Pressable
@@ -205,7 +205,7 @@ const Acknowledgement = (props) => {
           ))} */}
             {!dispatchedTags || dispatchedTags.length === 0 ? (
               <View>
-                <Text style={{ color:'black' }}>No Tags Dispatched</Text>
+                <Text style={{ color: 'black' }}>No Tags Dispatched</Text>
               </View>
             ) : (
               <>

@@ -48,7 +48,12 @@ const replacementReason = [
 ]
 
 const TagReplacementForm = (props: any) => {
-  const { response, customerId, userData, sessionId: _sessionId } = props?.route?.params
+  const {
+    response,
+    customerId,
+    userData,
+    sessionId: _sessionId
+  } = props?.route?.params
   const { mobileNo, walletId } = response.custDetails
 
   const {
@@ -57,12 +62,12 @@ const TagReplacementForm = (props: any) => {
     repTagCost: debitAmt,
     engineNo,
     isNationalPermit: nationalPermit,
-    permitExpiryDate: _permitExpiryDate,
+    permitExpiryDate: _permitExpiryDate
     // stateOfRegistration,
     // vehicleDescriptor
   } = response?.vrnDetails
 
-  console.log(response?.vrnDetails, "response?.vrnDetails");
+  console.log(response?.vrnDetails, 'response?.vrnDetails')
 
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
@@ -72,11 +77,15 @@ const TagReplacementForm = (props: any) => {
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState<any>()
-  const [stateOfRegistration, setStateOfRegistration] = useState(response.vrnDetails.stateOfRegistration)
-  const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
+  const [stateOfRegistration, setStateOfRegistration] = useState(
+    response.vrnDetails.stateOfRegistration
+  )
+  const [vehicleDescriptor, setVehicleDescriptor] = useState(
+    response.vrnDetails.vehicleDescriptor
+  )
   const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
   const [selectNationPermit, setSelectNationPermit] = useState(nationalPermit)
-  const [chassisNumber, setChasisNumber] = useState(chassisNo);
+  const [chassisNumber, setChasisNumber] = useState(chassisNo)
   const [engineNumber, setEngineNumber] = useState(engineNo)
 
   const getUserData = async () => {
@@ -122,14 +131,18 @@ const TagReplacementForm = (props: any) => {
         udf4: '',
         udf5: ''
       }
-      console.log(body, "body data");
-      const res = await client.post(`/bajaj/replaceFastag`, body);
-      setModelIsSuccess(true);
-      setModalShow(true);
+      console.log(body, 'body data')
+      const res = await client.post(`/bajaj/replaceFastag`, body)
+      setModelIsSuccess(true)
+      setModalShow(true)
     } catch (err: any) {
       console.log(err)
-      showAlert(err.response.data.error.msg || err.response.data.error.errorDesc || 'Tag replacement failed',
-        () => setLoading(false));
+      showAlert(
+        err.response.data.error.msg ||
+          err.response.data.error.errorDesc ||
+          'Tag replacement failed',
+        () => setLoading(false)
+      )
     } finally {
       setLoading(false)
     }
@@ -175,21 +188,21 @@ const TagReplacementForm = (props: any) => {
   }, [sessionId])
 
   const handleDateChange = (text: string) => {
-    let cleaned = text.replace(/[^0-9]/g, '');
+    let cleaned = text.replace(/[^0-9]/g, '')
     if (cleaned?.length >= 2) {
-      cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2);
+      cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2)
     }
     if (cleaned?.length >= 5) {
-      cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5);
+      cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5)
     }
-    setPermitExpiryDate(cleaned);
-  };
+    setPermitExpiryDate(cleaned)
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
-        {loading && <Loader />}
+        {loading && <Loader loading={loading} />}
         <View style={styles.container}>
           {loading && (
             <View style={styles.loaderContainer}>
@@ -206,23 +219,45 @@ const TagReplacementForm = (props: any) => {
             <InputText placeholder={''} value={vehicleNo} isEditable={false} />
           </View>
 
-          <View style={{ marginTop: "5%" }}>
-            <CustomLabelText label={"Chasis Number"} />
-            {response?.vrnDetails && response?.vrnDetails?.chassisNo?.length > 2 ?
-              <InputText placeholder={"Enter Chasis number"} value={response?.vrnDetails?.chassisNo}
+          <View style={{ marginTop: '5%' }}>
+            <CustomLabelText label={'Chasis Number'} />
+            {response?.vrnDetails &&
+            response?.vrnDetails?.chassisNo?.length > 2 ? (
+              <InputText
+                placeholder={'Enter Chasis number'}
+                value={response?.vrnDetails?.chassisNo}
                 isEditable={false}
-              /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNumber}
-                onChangeText={(text: string) => setChasisNumber(text?.toUpperCase())} borderColor={chassisNumber?.length < 2 ? "red" : "#263238"}
-              />}
+              />
+            ) : (
+              <CustomInputText
+                placeholder={'Enter Chasis number'}
+                value={chassisNumber}
+                onChangeText={(text: string) =>
+                  setChasisNumber(text?.toUpperCase())
+                }
+                borderColor={chassisNumber?.length < 2 ? 'red' : '#263238'}
+              />
+            )}
           </View>
-          <View style={{ marginTop: "5%" }}>
-            <CustomLabelText label={"Engine Number"} />
-            {response?.vrnDetails && response?.vrnDetails?.engineNo?.length > 2 ?
-              <InputText placeholder={"Enter Engine number"} value={response?.vrnDetails?.engineNo}
+          <View style={{ marginTop: '5%' }}>
+            <CustomLabelText label={'Engine Number'} />
+            {response?.vrnDetails &&
+            response?.vrnDetails?.engineNo?.length > 2 ? (
+              <InputText
+                placeholder={'Enter Engine number'}
+                value={response?.vrnDetails?.engineNo}
                 isEditable={false}
-              /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
-                onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
-              />}
+              />
+            ) : (
+              <CustomInputText
+                placeholder={'Enter Engine number'}
+                value={engineNumber}
+                onChangeText={(text: string) =>
+                  setEngineNumber(text?.toUpperCase())
+                }
+                borderColor={engineNumber?.length < 2 ? 'red' : '#263238'}
+              />
+            )}
           </View>
 
           <CustomerDetailsCard
@@ -251,7 +286,7 @@ const TagReplacementForm = (props: any) => {
             </View>
             <View style={{ flex: 1 }}>
               <InputText
-                borderColor={tagSerialNumber.length < 2 ? "red" : "#263238"}
+                borderColor={tagSerialNumber.length < 2 ? 'red' : '#263238'}
                 placeholder={'xxxxxx'}
                 onChangeText={(text: string) => setTagSerialNumber(text)}
                 value={tagSerialNumber}
@@ -259,48 +294,69 @@ const TagReplacementForm = (props: any) => {
             </View>
           </View>
 
-          {nationalPermit === "0" && <View style={{ marginVertical: "5%" }}>
-            <CustomLabelText label={"National Permit"} />
-            <SelectField
-              dataToRender={[
-                { id: 1, title: 'Yes', code: '1' },
-                { id: 2, title: 'No', code: '2' }
-              ]}
-              title={'Select National Permit'}
-              selectedValue={(value: any) => setSelectNationPermit(value.code)}
-              borderColor={selectNationPermit === '0' ? "red" : "black"}
-            />
-          </View>}
-
-
-          {selectNationPermit === "1" && <View>
-            <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
-            <CustomInputText
-              placeholder='DD-MM-YYYY'
-              placeholderTextColor='#263238'
-              style={styles.dateInput}
-              value={permitExpiryDate}
-              onChangeText={(text: string) => handleDateChange(text)}
-              keyboardType='numeric'
-              maxLength={10}
-              borderColor={!permitExpiryDate ? "red" : "black"}
-            />
-          </View>}
-          {
-            response.vrnDetails && !response.vrnDetails.stateOfRegistration && <View style={{ marginVertical: "5%" }}>
-              <CustomLabelText label={"State of Registration"} />
+          {nationalPermit === '0' && (
+            <View style={{ marginVertical: '5%' }}>
+              <CustomLabelText label={'National Permit'} />
               <SelectField
-                dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
-            </View>
-          }
-          <View style={{ marginVertical: "5%" }}>
-            <CustomLabelText label={"Fuel Type"} />
-            {
-              response?.vrnDetails && response?.vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={response?.vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
-                dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleDescriptor(value.title)}
-                borderColor={!vehicleDescriptor ? "red" : "black"}
+                dataToRender={[
+                  { id: 1, title: 'Yes', code: '1' },
+                  { id: 2, title: 'No', code: '2' }
+                ]}
+                title={'Select National Permit'}
+                selectedValue={(value: any) =>
+                  setSelectNationPermit(value.code)
+                }
+                borderColor={selectNationPermit === '0' ? 'red' : 'black'}
               />
-            }
+            </View>
+          )}
+
+          {selectNationPermit === '1' && (
+            <View>
+              <CustomLabelText label={'Enter Permit Expiry of Vehicle'} />
+              <CustomInputText
+                placeholder="DD-MM-YYYY"
+                placeholderTextColor="#263238"
+                style={styles.dateInput}
+                value={permitExpiryDate}
+                onChangeText={(text: string) => handleDateChange(text)}
+                keyboardType="numeric"
+                maxLength={10}
+                borderColor={!permitExpiryDate ? 'red' : 'black'}
+              />
+            </View>
+          )}
+          {response.vrnDetails && !response.vrnDetails.stateOfRegistration && (
+            <View style={{ marginVertical: '5%' }}>
+              <CustomLabelText label={'State of Registration'} />
+              <SelectField
+                dataToRender={stateData}
+                title={'Select Vehicle State'}
+                selectedValue={(value: any) =>
+                  setStateOfRegistration(value.code)
+                }
+                borderColor={!stateOfRegistration ? 'red' : 'black'}
+              />
+            </View>
+          )}
+          <View style={{ marginVertical: '5%' }}>
+            <CustomLabelText label={'Fuel Type'} />
+            {response?.vrnDetails && response?.vrnDetails?.vehicleDescriptor ? (
+              <CustomInputText
+                placeholder={'Enter fuel type'}
+                value={response?.vrnDetails?.vehicleDescriptor}
+                isEditable={false}
+              />
+            ) : (
+              <SelectField
+                dataToRender={fuelData}
+                title={'Select fuel type'}
+                selectedValue={(value: any) =>
+                  setVehicleDescriptor(value.title)
+                }
+                borderColor={!vehicleDescriptor ? 'red' : 'black'}
+              />
+            )}
           </View>
 
           <Text style={styles.label}>Replacement reason</Text>
@@ -366,7 +422,7 @@ const TagReplacementForm = (props: any) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={{ width: '45%', }}>
+            <View style={{ width: '45%' }}>
               <SecondaryButton
                 title={'Submit'}
                 onPress={() => replaceFastag()}

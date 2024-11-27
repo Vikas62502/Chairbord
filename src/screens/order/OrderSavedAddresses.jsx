@@ -190,7 +190,7 @@ const OrderSavedAddresses = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <TouchableWithoutFeedback onPress={handleOutsideClick}>
         <View style={{ flex: 1 }}>
           <OverlayHeader title="Saved Addresses" isOrderSection={false} />

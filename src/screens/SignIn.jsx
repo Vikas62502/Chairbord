@@ -131,7 +131,7 @@ console.log("____________________________________________")
         showBackButton={true}
         navigateTo={'SignIn'}
       />
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
