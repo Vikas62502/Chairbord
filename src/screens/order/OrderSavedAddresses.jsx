@@ -6,14 +6,11 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Keyboard,
   TouchableWithoutFeedback
 } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import LinearButton from '../../components/common/LinearButton'
-import AddBtn from '../../components/ui/AddBtn'
 import OrderSuccessModal from './OrderSuccessModal'
 import OrderFaildModal from './OrderFaildModal'
 import { client } from '../../client/Axios'
@@ -22,13 +19,12 @@ import { useCallback } from 'react'
 
 // Import the context for orders
 import { useOrders } from '../../orderContext/OrderContext'
-import { getCache } from '../../helper/Storage'
 import DeliveryAddressModal from './DeliveryAddressModal'
 import LinearGradient from 'react-native-linear-gradient'
 import DeleteAddressModal from './deleteAddressModal'
+import CheckBox from '@react-native-community/checkbox'
 
 const OrderSavedAddresses = (props) => {
-  const navigation = useNavigation()
   const { ordersArray, setOrdersArray } = useOrders()
   const [loading, setLoading] = useState(false)
   const [currentDeliveryAddress, setCurrentDeliveryAddress] = useState({
@@ -46,7 +42,6 @@ const OrderSavedAddresses = (props) => {
   const responseAmount = calculateTotalAmount(ordersArray)
 
   const [totalOrderAmount, setTotalAmountCost] = useState(0)
-  const [totalValue, setTotalValue] = useState(0)
 
   useEffect(() => {
     setTotalAmountCost(calculateTotalAmount(ordersArray))
@@ -56,11 +51,27 @@ const OrderSavedAddresses = (props) => {
   const [isOrderSuccess, setIsOrderSuccess] = useState(false)
   const [isOrderFailed, setIsOrderFailed] = useState(false)
   const [transactionId, setTransactionId] = useState('')
-  const [userData, setUserData] = useState(null)
   const [orderId, setOrderId] = useState('')
   const [userId, setUserId] = useState(props?.route?.params?.userId)
 
   const [addressArray, setAddressArray] = useState([])
+  const [checkboxStates, setCheckboxStates] = useState([])
+
+  useEffect(() => {
+    if (addressArray.length > 0) {
+      setCheckboxStates(new Array(addressArray.length).fill(false))
+    }
+  }, [addressArray])
+
+  const handleCheckboxChange = (index) => {
+    setCheckboxStates((prevState) => {
+      const updatedStates = prevState.map((state, i) =>
+        i === index ? !state : false
+      )
+      return updatedStates
+    })
+  }
+
   const [addressIndex, setAddressIndex] = useState(-1)
 
   const [deleteAddressModal, setDeleteAddressModal] = useState(false)
@@ -91,20 +102,9 @@ const OrderSavedAddresses = (props) => {
     // { title: 'KOTAK', id: 4 }
   ]
 
-  //   const getUserData = async () => {
-  //     let userData = await getCache('userData')
-  //     setUserId(userData.user.id)
-  //   }
-
-  let TransactionID, OrderID
-
   const handleSubmit = async () => {
     setDeliveryAddressModal(true)
   }
-
-  //   useEffect(() => {
-  //     getUserData();
-  //   }, [])
 
   useFocusEffect(
     useCallback(() => {
@@ -131,6 +131,8 @@ const OrderSavedAddresses = (props) => {
       phone: '',
       alternate_mobile_number: ''
     })
+
+    setCheckboxStates(new Array(checkboxStates.length).fill(false))
   }
 
   const checkIfAddressIsSame = (address) => {
@@ -173,7 +175,6 @@ const OrderSavedAddresses = (props) => {
       if (response.status === 201) {
         setTransactionId(response.data.transactionId)
         setOrderId(response.data.completeOrder.orderId)
-        // setTotalValue(amountToBeDisplay)
         setIsOrderSuccess(true)
       }
     } catch (error) {
@@ -204,9 +205,33 @@ const OrderSavedAddresses = (props) => {
                     ? styles.selectedAddress
                     : styles.addressCard
                 ]}
-                onPress={() => handleAddressSelect(address, index)}
+                onPress={() => {
+                  handleCheckboxChange(index)
+                  if (!checkboxStates[index]) {
+                    handleAddressSelect(address, index)
+                  } else {
+                    handleOutsideClick()
+                  }
+                }}
               >
-                <Text style={styles.addressText}>{address.address}</Text>
+                <View style={styles.checkboxContainer}>
+                  <CheckBox
+                    key={index}
+                    value={checkboxStates[index]}
+                    onValueChange={() => {
+                      handleCheckboxChange(index)
+                      if (!checkboxStates[index]) {
+                        handleAddressSelect(address, index)
+                      } else {
+                        handleOutsideClick()
+                      }
+                    }}
+                    style={styles.checkbox}
+                    tintColors={{ true: '#0066cc', false: '#999999' }}
+                  />
+                  <Text style={styles.addressText}>{address.address}</Text>
+                </View>
+
                 <Text style={styles.detailText}>
                   <View style={styles.inlineContainer}>
                     <Text style={styles.inlineText}>
@@ -326,7 +351,8 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: 5,
+    marginTop: 3
   },
   detailText: {
     fontSize: 14,
@@ -364,16 +390,34 @@ const styles = StyleSheet.create({
     padding: 20
   },
   inlineContainer: {
-    flexDirection: 'row', // To arrange the items horizontally
-    justifyContent: 'space-between', // Centering the items horizontally
-    alignItems: 'center', // Align vertically to the center
-    marginBottom: 10 // Optional: adds space below
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distribute inline items evenly
+    width: '100%', // Ensure full-width for alignment
+    marginBottom: 5 // Spacing between rows
   },
   inlineText: {
     fontSize: 14,
     // color: '#333',
     fontWeight: 'bold',
     marginHorizontal: 5 // Adds space between State and Pincode
+  },
+  checkbox: {
+    marginRight: 10,
+    transform: [{ scaleX: 1.0 }, { scaleY: 1.0 }]
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    marginBottom: 6,
+    marginTop: 2
+  },
+  checkboxText: {
+    fontSize: 14,
+    color: 'black',
+    flex: 1,
+    flexWrap: 'wrap',
+    textAlign: 'justify'
   }
 })
 export default OrderSavedAddresses
