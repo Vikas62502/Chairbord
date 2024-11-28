@@ -102,14 +102,14 @@ console.log("____________________________________________")
 
   const getOtpByPhoneNumber = async () => {
     setLoading(true);
+    setShowOtpField(true);
     let bodyContent = JSON.stringify({
       phoneNumber: formData.phoneNumber
     });
-
     try {
       let response = await client.post('/login/agent-mobile', bodyContent);
       console.log(response);
-      setShowOtpField(true);
+      
     } catch (error) {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
@@ -119,6 +119,7 @@ console.log("____________________________________________")
         }
       ]);
       console.log(error, 'error');
+      setShowOtpField(false);
     } finally {
       setLoading(false);
     }

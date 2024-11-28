@@ -180,12 +180,12 @@ const CustomerRegistration = (props: any) => {
         </View>
 
         <Text style={styles.label}>Document type</Text>
-        <View style={{ paddingHorizontal: "5%" }}>
+        {/* <View style={{ paddingHorizontal: "5%" }}>
           <SelectField dataToRender={requestTypeDropdownData} title={"Select request type"} selectedValue={(data: any) => setDocumentDetails(data.docType)} />
-        </View>
+        </View> */}
         <View style={{ padding: "5%" }}>
           <CustomInputText
-            placeholder={'Enter document number'}
+            placeholder={'Enter Pan Card number'}
             value={documentType.docNo}
             onChangeText={(text: string) => setDocumentType(prevState => ({
               ...prevState,

@@ -30,14 +30,15 @@ const ForgetYourPassword = () => {
 
   const sendPasswordResetOtp = async () => {
     setLoading(true)
+    setShowOtpField(true)
     try {
       let response = await client.post('/forget/pass-otp', {
         email: formData.email
       })
       console.log(response, 'response with reset password')
-      setShowOtpField(true)
     } catch (error) {
       console.log(error, 'error')
+      setShowOtpField(false)
     } finally {
       setLoading(false)
     }

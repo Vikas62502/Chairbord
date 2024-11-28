@@ -98,6 +98,7 @@ const AadharAndPanVerification = (props) => {
 
   const sendAdharOtp = async () => {
     setLoading(true)
+    setShowOtpField(true)
     try {
       const form = new FormData()
 
@@ -112,12 +113,12 @@ const AadharAndPanVerification = (props) => {
           headers: { 'Content-Type': 'multipart/form-data' }
         }
       )
-      setShowOtpField(true)
       setRefId(response.data.ref_id)
       console.log('Aadhar verification success', response)
     } catch (error) {
       console.error('Aadhar verification failed:', error)
       Alert.alert('Error', 'Failed to verify Aadhar')
+      setShowOtpField(false)
     } finally {
       setLoading(false)
     }

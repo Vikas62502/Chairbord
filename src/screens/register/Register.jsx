@@ -24,7 +24,7 @@ const Register = () => {
 
   const sendOtpRequest = async () => {
     setLoading(true)
-
+    setShowOtpField(true)
     let bodyContent = JSON.stringify({
       email_id: formData.email_id,
       mobile_number: formData.mobile_number
@@ -33,10 +33,10 @@ const Register = () => {
     try {
       let response = await client.post('/register/agent', bodyContent)
       console.log(response, 'response with register')
-      setShowOtpField(true)
     } catch (error) {
       showAlert(error.response.data.error || 'User registration failed')
       console.log(error, 'error')
+      setShowOtpField(false)
     } finally {
       setLoading(false)
     }
