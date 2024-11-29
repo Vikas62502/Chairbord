@@ -3,18 +3,11 @@ import React, { useState } from 'react'
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient';
-import LogoutModal from '../../screens/logout/LogoutModal';
 import useUserData from '../../helper/useUserData';
 import { getCache } from '../../helper/Storage'
 import { client } from '../../client/Axios'
 import profileIcon from '../../assets/DrawerNavigation/profile.png';
-// const profileData = [
-//     {
-//         title: "User",
-//         icon: require('../../assets/DrawerNavigation/avatar.png'),
-//         screen: "profileAndMasterInfo",
-//     }
-// ]
+
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768
 const isSmallScreen = width <= 400
@@ -220,8 +213,9 @@ const handleNavigation = async (navigation, screen, agentId) => {
 
 
 const CustomDrawerItems = ({ title, icons, navigateTo }) => {
-  const userData = useUserData()
-  const agentId = userData?.user?.id
+
+  const { userId } = useUserData();
+  const agentId = userId;
   const navigation = useNavigation();
 
   const onPressHandler = () => {
@@ -273,17 +267,8 @@ const CustomDrawer = () => {
             navigateTo={element.screen}
           />
         ))}
-        {/* <Pressable onPress={() => setModalVisible(true)}
-                >
-                    <CustomDrawerItems
-                        key={logoutData.title}
-                        title={logoutData.title}
-                        icons={logoutData.icon}
-                        navigateTo={logoutData.screen}
-                    />
-                </Pressable> */}
+
       </DrawerContentScrollView>
-      {/* <LogoutModal modalVisible={logoutModal} setModalVisible={setLogoutModal} /> */}
     </LinearGradient>
   )
 }

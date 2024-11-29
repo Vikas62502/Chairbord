@@ -17,7 +17,10 @@ const useUserData = () => {
     fetchUserData();
   }, []);
 
-  return userData;
+  return {
+    userData,
+    userId: userData?.user?.id || null,
+  }
 };
 
 export default useUserData;

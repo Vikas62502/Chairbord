@@ -9,32 +9,53 @@ import {
   Dimensions,
   BackHandler,
   Alert,
-  FlatList,
-  TextInput,
-  Button
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SwipperComponent from './SwipperComponent';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import io from 'socket.io-client';
-import { getCache } from '../../helper/Storage';
-import { disconnectSocket, initializeSocket, serverURL } from '../../utils/socket';
+import { client } from '../../client/Axios';
+import Loader from '../../components/ui/Loader';
+import showAlert from '../../utils/showAlert';
+import useUserData from '../../helper/useUserData';
 
 const { width, height } = Dimensions.get('window');
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
 
-const DashboardCards2 = ({ title, subTitle, icon, router }) => {
+const DashboardCards2 = ({ title, subTitle, icon, router, reqType, setLoading }) => {
   const navigation = useNavigation();
+  const { userId } = useUserData();
+  console.log(userId, 'userId');
+
+  const handleCheckBalance = async (reqType) => {
+    if (!reqType) {
+      navigation.navigate(router);
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await client.post('/bajaj/check-min-balance', {
+        reqType: reqType,
+        userId: userId
+      });
+      console.log(response.data, 'response');
+      navigation.navigate(router);
+    } catch (error) {
+      showAlert(error.response?.data?.message || error.message);
+      console.log(error.respose.data, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Pressable
       style={styles.dashboardCard2}
-      onPress={() => navigation.navigate(router)}
+      onPress={() => handleCheckBalance(reqType)}
     >
       <View style={styles.iconContainer2}>
         <Image style={styles.icon2} source={icon} />
       </View>
-
       <View style={styles.textContainer}>
         <Text style={styles.dashbordCardText2}>{title}</Text>
         <Text style={styles.dashbordCardText2}>{subTitle}</Text>
@@ -47,6 +68,7 @@ const Home = () => {
   const [activeTime, setActiveTime] = useState('Today');
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -102,26 +124,6 @@ const Home = () => {
     }
   };
 
-  // const [socket, setSocket] = useState(null);
-  // const [userData, setUserData] = useState()
-  // console.log(userData, "userData")
-  // console.log(userData?.user?.id, "uid")
-
-  // const getUserData = async () => {
-  //   let userData = await getCache('userData')
-  //   setUserData(userData)
-  // }
-
-  // useEffect(() => {
-  //   getUserData()
-  // }, [])
-
-  // useEffect(() => {
-  //   const socket = initializeSocket(serverURL, userData?.user?.id)
-  //   setSocket(socket);
-  //   return () => disconnectSocket()
-  // }, [userData]);
-
   return (
     <ScrollView
       style={styles.container}
@@ -129,6 +131,7 @@ const Home = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+      {loading && <Loader loading={loading} />}
 
       <View style={styles.swipperContainer}>
         <SwipperComponent />
@@ -163,12 +166,16 @@ const Home = () => {
           subTitle={'Registration'}
           icon={require('../../assets/dashboard/tagRegistration.png')}
           router={'mobileVerification'}
+          reqType={'REG'}
+          setLoading={setLoading}
         />
         <DashboardCards2
           title={'Tag'}
           subTitle={'Replacement'}
           icon={require('../../assets/dashboard/tagReplacement.png')}
           router={'tagReplacement'}
+          reqType={'REP'}
+          setLoading={setLoading}
         />
         <DashboardCards2
           title={'Wallet'}
@@ -247,9 +254,9 @@ const styles = StyleSheet.create({
   imageWrapper: {
     position: 'relative',
     // width: isSmallScreen ? 170 : 150,
-    width:'auto',
+    width: 'auto',
     // height: isSmallScreen ? 80 : 100
-    height:'auto'
+    height: 'auto'
   },
   textOverlay: {
     position: 'absolute',
@@ -281,8 +288,8 @@ const styles = StyleSheet.create({
     marginHorizontal: isTablet ? 30 : 15,
     marginVertical: 20,
     borderRadius: 25,
-    padding: isSmallScreen ? 8 :  15,
-    paddingBottom:0,
+    padding: isSmallScreen ? 8 : 15,
+    paddingBottom: 0,
     height: isSmallScreen ? 110 : 'auto',
     width: 'auto',
     backgroundColor: '#E0E0E0',
