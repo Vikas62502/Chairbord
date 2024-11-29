@@ -163,27 +163,24 @@ const CustomerRegistration = (props: any) => {
             secure={false}
           />
 
-          <>
-            <Text style={styles.label}>Enter date of birth</Text>
-            <View >
-              <CustomInputText
-                placeholder='DD-MM-YYYY'
-                placeholderTextColor='#263238'
-                style={styles.dateInput}
-                value={dateOfBirth}
-                onChangeText={(text) => handleDateChange(text, 'dateOfBirth')}
-                keyboardType='numeric'
-                maxLength={10}
-              />
-            </View>
-          </>
         </View>
+        <>
+          <Text style={styles.label}>Enter date of birth</Text>
+          <View style={{ paddingHorizontal: "5%", paddingBottom: "5%" }}>
+            <CustomInputText
+              placeholder='DD-MM-YYYY'
+              placeholderTextColor='#263238'
+              style={styles.dateInput}
+              value={dateOfBirth}
+              onChangeText={(text) => handleDateChange(text, 'dateOfBirth')}
+              keyboardType='numeric'
+              maxLength={10}
+            />
+          </View>
+        </>
 
-        <Text style={styles.label}>Document type</Text>
-        {/* <View style={{ paddingHorizontal: "5%" }}>
-          <SelectField dataToRender={requestTypeDropdownData} title={"Select request type"} selectedValue={(data: any) => setDocumentDetails(data.docType)} />
-        </View> */}
-        <View style={{ padding: "5%" }}>
+        <Text style={styles.label}>Pan Number</Text>
+        <View style={{ paddingHorizontal: "5%", paddingBottom: "5%" }}>
           <CustomInputText
             placeholder={'Enter Pan Card number'}
             value={documentType.docNo}
