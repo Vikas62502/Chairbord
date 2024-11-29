@@ -6,6 +6,7 @@ import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 import { getCache, setCache } from '../../helper/Storage'
 import { getSocket } from '../../utils/socket'
+import showAlert from '../../utils/showAlert'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
@@ -22,24 +23,6 @@ const Mobileverification = (props: any) => {
   const formHandler = (key: string, value: string) => {
     setVerificationFormData({ ...VerificationFormData, [key]: value })
   }
-
-  const getHomeApi = async () => {
-    setLoading(true)
-
-    try {
-      let response = await client.get('/home')
-      console.log(response.data, 'response with home')
-    } catch (error) {
-      Alert.alert('Something went wrong')
-      console.log(error, 'error')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getHomeApi()
-  }, [])
 
   const sendOTP = async () => {
     setLoading(true)
@@ -69,7 +52,9 @@ const Mobileverification = (props: any) => {
         VerificationFormData: VerificationFormData,
       })
       console.log(res, "otp response")
-    } catch (error) {
+    } catch (error: any) {
+      showAlert(error.response.data.message)
+      console.log(error.response.data.message, "<-----error")
       console.log(JSON.stringify(error), "error")
     } finally {
       setLoading(false)

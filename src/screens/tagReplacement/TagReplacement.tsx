@@ -19,6 +19,7 @@ const isTablet = width > 768
 const isSmallScreen = width < 400
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
+import showAlert from '../../utils/showAlert'
 const TagReplacement = (props: any) => {
   const [userData, setUserData] = React.useState<any>()
   const [loading, setLoading] = React.useState(false)
@@ -66,6 +67,7 @@ const TagReplacement = (props: any) => {
       })
       console.log(res, 'otp response')
     } catch (error) {
+      showAlert(error.response.data.message)
       console.log(JSON.stringify(error), 'error')
     } finally {
       setLoading(false)
@@ -113,6 +115,7 @@ const TagReplacement = (props: any) => {
             onChangeText={(text: string) =>
               formDatahandler('engineNumber', text)
             }
+            maxLength={5}
           />
         </View>
 
