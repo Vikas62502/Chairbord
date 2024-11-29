@@ -12,11 +12,9 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import WalletCards from './WalletCards'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import walletCardData from './WalletCardData'
+import { useRoute } from '@react-navigation/native'
 import FilterTags from './FilterTags'
 import { client } from '../../client/Axios'
-import getDate from '../../utils/getDate'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 const { width, height } = Dimensions.get('window')
@@ -28,9 +26,8 @@ const Wallet = (props) => {
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [walletDetails, setWalletDetails] = useState([])
   const [refreshing, setRefreshing] = useState(false)
-  // const tagsData = ['All', 'Send', 'Received', 'Top Up', 'Withdraw'];
   const tagsData = ['All', 'Credit', 'Debit']
-  const route = useRoute() // Get route object
+  const route = useRoute()
   const isPartOfBottomNavigator = route.name === 'Wallet'
 
   const [loading, setLoading] = useState(false)

@@ -53,7 +53,9 @@ const Mobileverification = (props: any) => {
       })
       console.log(res, "otp response")
     } catch (error: any) {
-      showAlert(error.response.data.message)
+      showAlert(error.response.data.message, () => {
+        props.navigation.navigate("topupWallet")
+      })
       console.log(error.response.data.message, "<-----error")
       console.log(JSON.stringify(error), "error")
     } finally {

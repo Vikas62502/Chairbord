@@ -25,7 +25,8 @@ import { CFPaymentGatewayService } from 'react-native-cashfree-pg-sdk'
 import { getCache } from '../../helper/Storage'
 
 const TopupWallet = (props) => {
-  const walletBalance = props?.route?.params?.walletBalance
+  const [walletBalance, setWalletBalance] = useState(props?.route?.params?.walletBalance)
+  console.log(walletBalance, 'walletBalance')
   const [topupAmount, setTopupAmount] = useState('')
   const [loading, setLoading] = useState(false)
   const [orderStatus, setOrderStatus] = useState()
@@ -35,13 +36,30 @@ const TopupWallet = (props) => {
     order_expiry_time: 'order_expiry_time'
   })
 
+  const getWalletDetails = async () => {
+    setLoading(true)
+    try {
+      const response = await client.get(`/wallet/transactions/agent-get`);
+      setWalletBalance(response?.data?.agent?.balance)
+    } catch (error) {
+      console.log(error, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    if (walletBalance === undefined) {
+      getWalletDetails()
+    }
+  }, [walletBalance])
+
   useEffect(() => {
     const onReceivedEvent = (eventName, map) => {
       console.log(
         'Event received on screen: ' +
-          eventName +
-          ' map: ' +
-          JSON.stringify(map)
+        eventName +
+        ' map: ' +
+        JSON.stringify(map)
       )
     }
 

@@ -66,8 +66,10 @@ const TagReplacement = (props: any) => {
         type: 'tagReplacement'
       })
       console.log(res, 'otp response')
-    } catch (error) {
-      showAlert(error.response.data.message)
+    } catch (error : any) {
+      showAlert(error.response.data.message, () => {
+        props.navigation.navigate("topupWallet")
+      })
       console.log(JSON.stringify(error), 'error')
     } finally {
       setLoading(false)
