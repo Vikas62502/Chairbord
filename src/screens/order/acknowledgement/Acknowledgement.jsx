@@ -39,10 +39,11 @@ const Acknowledgement = (props) => {
   const [totalRefundAmount, setTotalRefundAmount] = useState(0)
   const bankMap = { 1: 'Bajaj', 2: 'SBI' }
 
-  const userData = useUserData()
 
-  const agentId = userData?.user?.id
+  const agentId = useUserData()?.userId
+  console.log(agentId, 'agent id');
   const orderId = props?.route?.params?.orderId
+  console.log(orderId, 'order id');
 
   const fetchDispatchedTags = async () => {
     try {
@@ -53,7 +54,7 @@ const Acknowledgement = (props) => {
           orderId: orderId
         }
       )
-      console.log(response.data, 'response data here')
+      console.log(response.data, '<-------------------------- dispatched tags')
       setDispatchedTags(response?.data?.tags)
       setPendingTags(response?.data?.orderedTags)
     } catch (error) {
@@ -80,9 +81,8 @@ const Acknowledgement = (props) => {
       // Use Object.entries to iterate over the object
       Object.entries(pendingTags).forEach(([key, item]) => {
         if (item.quantity > 0) {
-          refundString += `${bankMap[item.bankId]} ${item.vehicleClass}  (${
-            item.quantity
-          } * ${item.singleCost})  =  ₹${item.quantity * item.singleCost}, `
+          refundString += `${bankMap[item.bankId]} ${item.vehicleClass}  (${item.quantity
+            } * ${item.singleCost})  =  ₹${item.quantity * item.singleCost}, `
         }
       })
 
@@ -155,7 +155,7 @@ const Acknowledgement = (props) => {
                   placeholder="Search"
                   placeholderTextColor={'#9A9A9A'}
                   value={''}
-                  // onChangeText={}
+                // onChangeText={}
                 />
               </View>
               <Pressable

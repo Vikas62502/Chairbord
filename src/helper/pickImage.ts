@@ -1,5 +1,3 @@
-// export default pickImage;
-
 import { Alert } from "react-native";
 import ImageCropPicker from "react-native-image-crop-picker";
 

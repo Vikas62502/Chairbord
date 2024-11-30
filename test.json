@@ -1,113 +1,26 @@
-const data =  {
-    "SbiCustomerDetailsId": 80,
-    "agent": {
-        "CompleteRegistered": false,
-        "EmailPhoneVerified": true,
-        "address": "House no. 314, Gali no. 8, Ganga ram colony, Shri vinayak hospital, Agwanpur, Amarnagar, Faridabad, Amarnagar, Haryana, India, 121003",
-        "address2": null,
-        "cashfreeOrderId": "414c3883b3c1",
-        "city": null,
-        "company_id": "AGE000163",
-        "consent_form": "photos/1728029882274_b125f0de99c88af4fe9b401c0ac015e7",
-        "contact_person_mobile_number": "9811048812",
-        "contact_person_name": "Vikas",
-        "createdAt": "2024-08-26T16:26:56.238Z",
-        "e_sign_photo": "photos/1728029882009_5f1be79aff0217e22abd8d35ef8fbf27",
-        "email_id": "vikasyadav62502@gmail.com",
-        "father_name": "Sabhajit Yadav",
-        "id": 166,
-        "id_proof_back_photo": "photos/1728930182869_7943493a69f377e7ebfef32f642fa7c2",
-        "id_proof_document_number": "",
-        "id_proof_document_type": null,
-        "id_proof_front_photo": "photos/1728930182819_9f639dbc83f1b9b14ccfb7dd634775f5",
-        "isActive": true,
-        "location_data": {
-            "latitude": "undefined",
-            "longitude": "undefined"
+const data = {
+    "RCBACK": {
+        "image": {
+            "name": "1000000038.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_b526816e-a2cd-421d-9edb-da440249a967.jpg"
         },
-        "master_id": 589,
-        "mobile_number": "8178624531",
-        "mother_name": null,
-        "name": "Vikas Yadav",
-        "pan_card_number": "BFNPU9205A",
-        "pan_card_photo": "photos/1728029866390_38926ef1b60c9b1d268e4a5392137ed2",
-        "password": "$2a$10$XJif4v2e8aLYh2HQFxxwxOkPdgtukkQcTKV5cuHbzbk521hnlFS5K",
-        "pincode": "121003",
-        "pos_name": null,
-        "pos_proof_photo": "photos/1728029882200_e7dd0a72f1e44abc1642d0fbf4d927e3",
-        "profile_pic": null,
-        "regionalManager": "RM:2_NEHA",
-        "relationship_status": null,
-        "role": "agent",
-        "services_access": [],
-        "socketId": "B29j80WSDosi2p6PAAAJ",
-        "state": "Haryana",
-        "updatedAt": "2024-11-13T16:01:00.704Z",
-        "verificationStatus": "not-verified",
-        "verifiedByAdmin": false
+        "imageType": "RCBACK"
     },
-    "agentId": 166,
-    "agentName": "Vikas Yadav",
-    "createdAt": "2024-11-13T15:57:07.291Z",
-    "customerDetail": {
-        "agentId": 166,
-        "createdAt": "2024-11-13T15:57:07.212Z",
-        "dob": "30/09/2002",
-        "id": 80,
-        "mobileNo": "8178624533",
-        "name": "5thg",
-        "panImage": "photos/1731513424603_temp\\order\\cf3a7758a88b62156fa67a768e3a7e82",
-        "panNumber": "BFNPY9205A",
-        "updatedAt": "2024-11-13T15:57:07.212Z",
-        "vehicleNumber": "RJ14UH2373"
+    "RCFRONT": {
+        "image": {
+            "name": "1000000042.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_eef6dc5e-e33f-42d9-bd1d-ff03d5607e7a.jpg"
+        },
+        "imageType": "RCFRONT"
     },
-    "customerMobile": "8178624533",
-    "customerName": "5thg",
-    "declinedReasonDescription": null,
-    "fastagCost": 0,
-    "id": 72,
-    "isImageGalleryStepCompleted": true,
-    "isOtpExecutiveProceed": true,
-    "isOtpRequested": true,
-    "isOtpVerified": true,
-    "otp": "110044",
-    "otpExecutiveId": 9,
-    "registrationExecutive": 10,
-    "requestTime": "2024-11-13T15:57:07.291Z",
-    "sbiVehicleDetailsId": 29,
-    "status": "Pending",
-    "stepCompleted": "updateVehicleDetails",
-    "tagSerialNumber": "608268-020-0000044",
-    "tagreferenceCode": "ZAB044",
-    "tagreferenceId": "10044",
-    "typeOfReport": "Registered",
-    "updatedAt": "2024-11-13T16:15:18.291Z",
-    "vehicleDetails": {
-        "chassisNo": "MA1YU2HHUF6K12744",
-        "createdAt": "2024-11-13T15:58:32.093Z",
-        "customerId": 80,
-        "engineNo": "HHF4K21436",
-        "fuel_type": "DIESEL",
-        "id": 29,
-        "ownerName": "ABHINAV JAIN",
-        "pincode": "110044",
-        "state_of_registration": "SDM GURUGRAM, Haryana",
-        "tag_serial_number": "608268-020-0000044",
-        "updatedAt": "2024-11-13T15:58:32.093Z",
-        "vehicleNo": "RJ14UH2373"
-    },
-    "vehicleImage": {
-        "TAGaFixImage": "photos/1731513614801_temp\\order\\da6fb18eec30dfaf024aed20e62fef94",
-        "createdAt": "2024-11-13T16:00:16.028Z",
-        "customerId": 80,
-        "id": 12,
-        "rcImageBack": "photos/1731513610712_temp\\order\\747728aac59f67aa6959cfa31d5a0554",
-        "rcImageFront": "photos/1731513609194_temp\\order\\3fde46ae1c38cc638cd9ac717a3cee4f",
-        "serialNo": "608268-020-0000044",
-        "updatedAt": "2024-11-13T16:00:16.028Z",
-        "vehicleId": "RJ14UH2373",
-        "vehicleImageFront": "photos/1731513612112_temp\\order\\69a009b3cbdb718dffb11a09691b5175",
-        "vehicleImageSide": "photos/1731513613507_temp\\order\\e9a41be36d0fa6068611c133cdd30851"
-    },
-    "vehicleImageId": 12
+    "VEHICLEFRONT": {
+        "image": {
+            "name": "1000000042.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_63ef4aec-3840-420a-9d2e-a3ed78051224.jpg"
+        },
+        "imageType": "VEHICLEFRONT"
+    }
 }
