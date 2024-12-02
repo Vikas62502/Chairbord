@@ -1,10 +1,10 @@
 import io from 'socket.io-client'
 
-let socket;
-export const serverURL = 'https://api.chairbord.in/'
-// export const serverURL = 'http://192.168.183.107:3001/'
+let socket: any;
+// export const serverURL = 'https://api.chairbord.in/'
+export const serverURL = 'https://bajaj.chairbord.in/'
 
-export const initializeSocket = (serverUrl, userId) => {
+export const initializeSocket = (serverUrl: string, userId: number | string) => {
     console.log(serverURL, userId)
     socket = io(serverUrl, {
         query: {
