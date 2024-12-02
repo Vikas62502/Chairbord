@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-let socket: any;
+let socket : any;
 // export const serverURL = 'https://api.chairbord.in/'
 export const serverURL = 'https://bajaj.chairbord.in/'
 
