@@ -182,3 +182,8 @@ export const vehicleTypeDropdown = [
     { id: 1, title: "Passenger Vehicle", value: "LPV" },
     { id: 2, title: "Goods Vehicle", value: "LGV" },
 ]
+
+export const middleTagSerialNumber = [
+    { id: 1, title: "001", value: "001" },
+    { id: 2, title: "002", value: "002" },
+]

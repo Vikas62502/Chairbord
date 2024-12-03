@@ -24,3 +24,49 @@ const data = {
         "imageType": "VEHICLEFRONT"
     }
 }
+
+
+// const dummyProps = {
+//     route: {
+//         params: {
+//             response: {
+//                 custDetails: {
+//                     name: "John Doe",
+//                     mobileNo: "9876543210",
+//                     walletId: "WAL12345"
+//                 },
+//                 vrnDetails: {
+//                     vehicleNo: "MH12AB1234",
+//                     chassisNo: "ABC123456XYZ",
+//                     engineNo: "ENG56789XYZ",
+//                     vehicleManuf: "Toyota",
+//                     model: "Corolla",
+//                     vehicleColour: "White",
+//                     tagCost: 500,
+//                     securityDeposit: 200,
+//                     rechargeAmount: 1000,
+//                     stateOfRegistration: "Maharashtra",
+//                     vehicleType: "Motor Car",
+//                     type: "LMV",
+//                     tagVehicleClassID: "4",
+//                     npciVehicleClassID: "20",
+//                     vehicleDescriptor: "Petrol",
+//                     isNationalPermit: "1",
+//                     permitExpiryDate: "2025/12/31"
+//                 },
+//                 sessionId: "SESSION123456"
+//             },
+//             CustomerRegData: {
+//                 name: "Jane Doe",
+//                 mobileNo: "9876543211"
+//             },
+//             otpData: {
+//                 otp: "123456",
+//                 expiration: "2024/12/31"
+//             },
+//             userOtpData: {
+//                 vehicleNo: "MH12AB5678"
+//             }
+//         }
+//     }
+// };

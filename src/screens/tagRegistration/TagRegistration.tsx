@@ -1,17 +1,18 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button, Vibration } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown, middleTagSerialNumber } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
-import { horizontalScale, verticalScale } from '../../helper/Metrics'
 import CustomInputText from '../../components/common/CustomInputText'
 import SelectField from '../../components/common/SelectFieldBig'
-import { client } from '../../client/Axios'
 import { getCache } from '../../helper/Storage'
 import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 import InputText from '../../components/common/InputText'
 import showAlert from '../../utils/showAlert'
+import styles from './Styles'
+import CustomLabelText from './CustomLabelText'
+import { client } from '../../client/Axios'
 
 
 const TagRegistration = (props: any) => {
@@ -91,11 +92,6 @@ const TagRegistration = (props: any) => {
 
     const successResponse = () => {
         setIsModalSuccess(true);
-        setModalVisible(true);
-    }
-
-    const failureResponse = () => {
-        setIsModalSuccess(false);
         setModalVisible(true);
     }
 
@@ -393,7 +389,7 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} isEditable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <CustomInputText placeholder={''} value='001' onChangeText={(text: string) => setTagSerialNumber2(text)} isEditable={false} />
+                        <SelectField dataToRender={middleTagSerialNumber} title={'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
                     </View>
                     <View style={{ flex: 1 }}>
                         <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
@@ -472,8 +468,6 @@ const TagRegistration = (props: any) => {
                     ))}
                 </View>
 
-
-
                 <View style={{ marginTop: 20, justifyContent: "center" }}>
                     <SecondaryButton
                         title={"Submit"}
@@ -481,11 +475,9 @@ const TagRegistration = (props: any) => {
                             registerFastagApi()
                         }}
                     />
-
                 </View>
-
-
             </View>
+
             <SuccessModal
                 visible={modalVisible}
                 onClose={() => {
@@ -498,110 +490,5 @@ const TagRegistration = (props: any) => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: "5%"
-    },
-    loaderContainer: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        zIndex: 10,
-    },
-    label: {
-        fontWeight: '600',
-        fontSize: 18,
-        lineHeight: 19,
-        color: "#000000",
-        marginVertical: "4%"
-    },
-    dataDetailContainer: {
-        borderWidth: 1,
-        borderColor: "#263238",
-        borderRadius: 20,
-        padding: "5%"
-    },
-    customerDetailsValueText: {
-        color: "#000000",
-        width: "55%",
-        fontWeight: '400',
-        fontSize: 14,
-        lineHeight: 16
-    },
-    customerValueText: {
-        color: "#000000",
-        width: "45%",
-        fontWeight: '400',
-        fontSize: 14,
-        lineHeight: 16
-    },
 
-    dateInput: {
-        borderColor: '#263238',
-        borderWidth: 1,
-        color: '#000000',
-        width: '100%',
-        fontSize: 16,
-        borderRadius: 20,
-        height: 60,
-        paddingHorizontal: '5%',
-        backgroundColor: '#F3F3F3',
-        textAlign: 'center'
-    },
-    customerDetailsTitleText: {
-        color: "grey",
-        fontWeight: '400',
-        fontSize: 14,
-        lineHeight: 16
-    },
-    customerDetailsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: "1%"
-    },
-    uploadDocContainer: {
-        borderWidth: 1,
-        borderColor: "#263238",
-        height: verticalScale(175),
-        width: horizontalScale(163),
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    uploadVehicle: {
-        borderWidth: 1,
-        borderColor: "#263238",
-        height: verticalScale(175),
-        width: horizontalScale(333),
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    uploadText: {
-        textAlign: "center",
-        color: "#263238",
-        fontWeight: "400",
-        fontSize: 16,
-        lineHeight: 19
-    },
-    imagePlaceholder: {
-        width: 150,
-        height: 150,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#e0e0e0',
-        borderRadius: 10,
-    },
-    imagePlaceholderText: {
-        color: '#7f7f7f',
-    },
-})
 export default TagRegistration;
-
-
-const CustomLabelText = ({ label = "label" }) => {
-    return (
-        <Text style={{ color: "#000000", fontSize: 16, fontWeight: "400", marginBottom: "3%" }}>{label}</Text>
-    )
-}
