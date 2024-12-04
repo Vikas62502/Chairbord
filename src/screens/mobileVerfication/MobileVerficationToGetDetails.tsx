@@ -1,9 +1,9 @@
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
 import React from 'react'
-import OverlayHeader from '../../component/OverlayHeader'
 import { useNavigation } from '@react-navigation/native'
-import InputText from '../../component/common/InputText'
-import PrimaryBtn from '../../component/common/PrimaryBtn'
+import OverlayHeader from '../../components/OverlayHeader'
+import InputText from '../../components/common/InputText'
+import PrimaryBtn from '../../components/common/PrimaryBtn'
 
 const MobileVerficationToGetDetails = () => {
     const navigation = useNavigation()

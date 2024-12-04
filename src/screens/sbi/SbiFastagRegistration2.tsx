@@ -12,7 +12,9 @@ import { getSocket } from '../../utils/socket';
 import Loader from '../../components/ui/Loader';
 
 const SbiFastagRegistration2 = (props: any) => {
+
     const vehiclePropData = props.route.params?.vehicleDetails?.data
+    console.log(vehiclePropData, "data")
     const reportPropsData = props.route.params?.reportsData
     const customerPropData = props.route.params?.customer
     const { userId } = useUserData();
@@ -24,7 +26,7 @@ const SbiFastagRegistration2 = (props: any) => {
     const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData.rc_number || '');
     const [selectedFuel, setSelectedFuel] = useState(vehiclePropData.fuel_type || null);
     const [selectedState, setSelectedState] = useState(vehiclePropData.registered_at || null);
-    const [selectedTagsrno, setSelectedTagsrno] = useState(null);
+    const [selectedTagsrno, setSelectedTagsrno] = useState<any>({});
     const [isDisabled, setIsDisabled] = useState(true);
     // models
     const [tagSerialNumber, setTagSerialNumber] = useState({})
@@ -78,15 +80,17 @@ const SbiFastagRegistration2 = (props: any) => {
         try {
             const data = {
                 "pincode": pincode,
-                "vehicleNo": vehicleNumber,
-                "chassisNo": chasisNumber,
-                "engineNo": engineNumber,
-                "ownerName": ownername,
+                "vehicleNo": vehicleNumber?.toUpperCase(),
+                "chassisNo": chasisNumber?.toUpperCase(),
+                "engineNo": engineNumber?.toUpperCase(),
+                "ownerName": ownername?.toUpperCase(),
                 "fuel_type": selectedFuel,
                 "state_of_registration": selectedState,
-                "tag_serial_number": selectedTagsrno,
+                "tag_serial_number": selectedTagsrno.serialNumber,
+                "tagreferenceId": selectedTagsrno.referenceId,
+                "tagreferenceCode": selectedTagsrno.referenceCode,
                 "reportId": reportPropsData.id,
-                "customerId": customerPropData.id
+                "customerId": customerPropData.id,
             }
             console.log(data, "<<-----body data")
             const res = await client.post('/sbi/create_vehicle_details', data)
@@ -94,7 +98,7 @@ const SbiFastagRegistration2 = (props: any) => {
                 agentId: userId,
                 vehicleData: vehiclePropData,
                 customerData: customerPropData,
-                serialNo: selectedTagsrno,
+                serialNo: selectedTagsrno.serialNumber,
                 reportData: reportPropsData
             })
             console.log(res, "response")
@@ -113,6 +117,7 @@ const SbiFastagRegistration2 = (props: any) => {
 
     useEffect(() => {
         const socket = getSocket();
+        console.log(socket, "socket")
 
         const handleOpenModal = (data: any) => {
             if (data && data.modalType === "OTP") {
@@ -121,6 +126,15 @@ const SbiFastagRegistration2 = (props: any) => {
                 setOtpModalData(data.data)
             }
         };
+
+        const handleIsReportApproved = (data: any) => {
+            console.log(data, "report cancelled");
+            props.navigation.navigate('sbi5', {
+                data: data
+            });
+        };
+
+        socket.on('isReportApproved', handleIsReportApproved);
 
         socket.on('openModal', handleOpenModal);
 
@@ -131,7 +145,7 @@ const SbiFastagRegistration2 = (props: any) => {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#EFE6F7' }}>
-            <OverlayHeaderSbi title={'SBI FASTag Registration'} />
+            <OverlayHeaderSbi title={'SBI FASTag Registration 2'} />
             {<Loader loading={loading} />}
             <View style={styles.detailsContainer}>
                 <Text style={styles.headerText}>Description details</Text>
@@ -186,7 +200,7 @@ const SbiFastagRegistration2 = (props: any) => {
                             borderColor={selectedState ? '#0A74DA' : '#D3D3D3'}
                         />
                     ) : (
-                        <InputTextSbi placeholder={"State of registration"} value={vehiclePropData.registered_at} isEditable={!vehiclePropData.registered_at} />
+                        <InputTextSbi placeholder={"State of registration"} value={vehiclePropData.registered_at} isEditable={!vehiclePropData.registered_at} onChangeText={(value: any) => setSelectedState(value)} />
                     )}
 
                 </View>
@@ -250,6 +264,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginVertical: 20,
         alignItems: 'center',
+        justifyContent: 'flex-end',
+
     },
     modalBackground: {
         flex: 1,

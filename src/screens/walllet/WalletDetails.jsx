@@ -10,7 +10,10 @@ import React, { useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
 
+
 const WalletDetails = (props) => {
+  const transactionPropData = props.route.params;
+  console.log(transactionPropData, 'transactionPropData')
   const [showTransactionDetails, setShowTransactionDetails] = useState(false)
 
   const downArrowIcon = require('../../assets/screens/wallet/downArrow.png')
@@ -37,23 +40,23 @@ const WalletDetails = (props) => {
   const transactionDetailsData = [
     {
       title: 'Transaction ID',
-      value: 'T267757854995645955673456885',
-      description: '16-03-2024'
+      value: transactionPropData?.transactionId || 'N/A',
+      description: transactionPropData?.date || 'N/A',
     },
-    {
-      title: 'Credited to',
-      value: 'XXXXXXXX7843',
-      description: 'ID: 09624565',
-      amount: '₹855'
-    },
+    // {
+    //   title: 'Credited to',
+    //   value: 'XXXXXXXX7843',
+    //   description: 'ID: 09624565',
+    //   amount: '₹855'
+    // },
     {
       title: 'Action For',
-      value: 'Tag Activation',
-      description: 'VRN : RK14UH2373',
-      amount: '₹855'
+      value: transactionPropData?.reason?.split('_')[1] || 'N/A',
+      description: transactionPropData?.reason?.split('_')[0] || 'N/A',
+      amount: transactionPropData?.amountValue
     }
   ]
-
+  const amountColor = transactionPropData.type === 'credit' ? '#25B73C' : '#FF0000'
   return (
     <>
       <OverlayHeader title={'Wallet'} navigateTo={'drawer'} />
@@ -93,7 +96,7 @@ const WalletDetails = (props) => {
               </View>
 
               <View>
-                <Text style={styles.amountText}>+₹855</Text>
+                <Text style={[styles.amountText, { color: amountColor }]}>{transactionPropData?.type === 'credit' ? '+' : '-'}₹{Math.abs(transactionPropData?.amountValue)}</Text>
               </View>
             </View>
 
@@ -215,7 +218,7 @@ const WalletDetails = (props) => {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView >
     </>
   )
 }

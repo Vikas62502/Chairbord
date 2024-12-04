@@ -1,31 +1,72 @@
-const data =  {
-    "agentId": 166,
-    "createdAt": "2024-11-08T17:56:16.782Z",
-    "dob": "20/20/2000",
-    "id": 54,
-    "mobileNo": "8178624545",
-    "name": "Raj ",
-    "panImage": "photos/1731088574782_temp\\order\\496e12a6360f8ba48a0d2e8169a7bb9a",
-    "panNumber": "BFNPY9205A",
-    "updatedAt": "2024-11-08T17:56:16.782Z",
-    "vehicleNumber": "MP17G4184"
-} 608268-020-0000044 {
-    "SbiCustomerDetailsId": 54,
-    "agentId": 166,
-    "agentName": "Vikas Yadav",
-    "createdAt": "2024-11-08T17:56:16.833Z",
-    "customerMobile": "8178624545",
-    "customerName": "Raj ",
-    "fastagCost": 0,
-    "id": 47,
-    "otp": null,
-    "otpExecutiveId": 9,
-    "registrationExecutive": null,
-    "requestTime": "2024-11-08T17:56:16.833Z",
-    "sbiVehicleDetailsId": null,
-    "status": "Pending",
-    "stepCompleted": "FetchVehicleDetails",
-    "tagSerialNumber": null,
-    "typeOfReport": "Registered",
-    "updatedAt": "2024-11-08T17:56:16.833Z"
+const data = {
+    "RCBACK": {
+        "image": {
+            "name": "1000000038.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_b526816e-a2cd-421d-9edb-da440249a967.jpg"
+        },
+        "imageType": "RCBACK"
+    },
+    "RCFRONT": {
+        "image": {
+            "name": "1000000042.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_eef6dc5e-e33f-42d9-bd1d-ff03d5607e7a.jpg"
+        },
+        "imageType": "RCFRONT"
+    },
+    "VEHICLEFRONT": {
+        "image": {
+            "name": "1000000042.jpg",
+            "type": "image/jpeg",
+            "uri": "file:///data/user/0/com.chairbord/cache/rn_image_picker_lib_temp_63ef4aec-3840-420a-9d2e-a3ed78051224.jpg"
+        },
+        "imageType": "VEHICLEFRONT"
+    }
 }
+
+
+// const dummyProps = {
+//     route: {
+//         params: {
+//             response: {
+//                 custDetails: {
+//                     name: "John Doe",
+//                     mobileNo: "9876543210",
+//                     walletId: "WAL12345"
+//                 },
+//                 vrnDetails: {
+//                     vehicleNo: "MH12AB1234",
+//                     chassisNo: "ABC123456XYZ",
+//                     engineNo: "ENG56789XYZ",
+//                     vehicleManuf: "Toyota",
+//                     model: "Corolla",
+//                     vehicleColour: "White",
+//                     tagCost: 500,
+//                     securityDeposit: 200,
+//                     rechargeAmount: 1000,
+//                     stateOfRegistration: "Maharashtra",
+//                     vehicleType: "Motor Car",
+//                     type: "LMV",
+//                     tagVehicleClassID: "4",
+//                     npciVehicleClassID: "20",
+//                     vehicleDescriptor: "Petrol",
+//                     isNationalPermit: "1",
+//                     permitExpiryDate: "2025/12/31"
+//                 },
+//                 sessionId: "SESSION123456"
+//             },
+//             CustomerRegData: {
+//                 name: "Jane Doe",
+//                 mobileNo: "9876543211"
+//             },
+//             otpData: {
+//                 otp: "123456",
+//                 expiration: "2024/12/31"
+//             },
+//             userOtpData: {
+//                 vehicleNo: "MH12AB5678"
+//             }
+//         }
+//     }
+// };

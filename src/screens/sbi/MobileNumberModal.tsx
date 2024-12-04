@@ -6,25 +6,35 @@ import { client } from '../../client/Axios'
 interface mobileNoModalInterface {
     setMobileModalVisible: (visible: boolean) => void,
     mobileModalVisible: boolean,
-    customerId?: string | number
+    customerId?: string | number,
+    regExecutiveId?: string | number,
+    vehicleNumber?: string,
 }
 
-const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId }) => {
+const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, setMobileModalVisible, customerId, regExecutiveId, vehicleNumber }) => {
     const [mobile, setMobile] = useState('');
+    const [loading, setLoading] = useState<boolean>(false);
     // Handle mobile number submission
     const handleMobileSubmit = async () => {
+        setLoading(true);
         try {
-            const res = await client.post('/sbi/update-customer-mobile', {
+            const res = await client.post('/sbi/update-mobileNo', {
                 mobileNumber: mobile,
-                customerId: customerId
+                customerId: customerId,
+                regExecutiveId: regExecutiveId
             });
+            setMobileModalVisible(false);
+            setMobile('');
 
+            Alert.alert('Mobile Numebr Update Success', 'Mobile Number updated successfully', [{ text: 'OK' }], { cancelable: false });
             if (res.data.status === 200) {
                 console.log('Mobile updated successfully');
             }
         } catch (error: any) {
             console.log('Error while updating mobile:', error);
             Alert.alert(error.response.data.message || 'Error while updating mobile');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -43,16 +53,17 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please change Mobile Number</Text>
+                        <Text style={styles.modalText}>{vehicleNumber}</Text>
                         <InputTextSbi maxLength={10} placeholder="Enter mobile number" value={mobile} onChangeText={setMobile} keyboardType='numeric' />
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setMobileModalVisible(false)}
                             // disabled={!pan}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handleMobileSubmit}
                             disabled={
@@ -60,7 +71,9 @@ const MobileNumberModal: FC<mobileNoModalInterface> = ({ mobileModalVisible, set
                             }
                             style={[styles.appButtonContainer, { backgroundColor: mobile.length >= 10 ? '#5ECD4C' : '#EFE6F7' }]}
                         >
-                            <Text style={styles.appButtonText}>Submit</Text>
+                            <Text style={styles.appButtonText}>
+                                {loading ? 'Updating...' : 'Submit'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -149,6 +162,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent: 'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {

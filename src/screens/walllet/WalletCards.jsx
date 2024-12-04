@@ -1,34 +1,19 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-
-// Utility function to format the date and time from ISO string
-const formatDateAndTime = (isoString) => {
-  const dateObj = new Date(isoString)
-  // Extract day, month, and year
-  const day = dateObj.getDate().toString().padStart(2, '0'); // Pad single digit day with leading zero
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Pad single digit month with leading zero
-  const year = dateObj.getFullYear();
-
-  // Format date as DD-MM-YYYY
-  const date = `${day}-${month}-${year}`;
-
-  const time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) // Formats time in "HH:MM" format
-  return { date, time }
-}
+import formatDateAndTime from '../../utils/formattedDataTime'
 
 const WalletCards = ({
   amountValue,
-  logo,
   title,
   reason,
   type,
-  date, // Assuming this is in ISO 8601 format
+  date,
   transactionId,
   referenceId
 }) => {
   const navigation = useNavigation()
-  const amountColor = type=== 'credit' ? '#25B73C' : '#FF0000'
+  const amountColor = type === 'credit' ? '#25B73C' : '#FF0000'
   const { date: formattedDate, time: formattedTime } = formatDateAndTime(date)
 
   return (
@@ -42,7 +27,8 @@ const WalletCards = ({
           type,
           time: formattedTime,
           transactionId,
-          referenceId
+          referenceId,
+          amountValue
         })
       }
     >
@@ -65,7 +51,7 @@ const WalletCards = ({
           </View>
           <View>
             <Text style={[styles.amount, { color: amountColor }]}>
-              {type=== 'credit'? '+' : '-'}₹{Math.abs(amountValue)}
+              {type === 'credit' ? '+' : '-'}₹{Math.abs(amountValue)}
             </Text>
             <View style={styles.amountAndDate}>
               <Text style={styles.dataAndTimeText}>{formattedDate}</Text>
@@ -123,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#000000',
-    width:150,
+    width: 150,
   },
   ImageStyles: {
     backgroundColor: 'white',

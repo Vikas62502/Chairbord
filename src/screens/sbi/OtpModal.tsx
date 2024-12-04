@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import InputTextSbi from './InputTextSbi';
 import { client } from '../../client/Axios';
 
-const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
+const OtpModal = ({ otpModalVisible, setOtpModalVisible, data, vehicleNumber }: any) => {
     const reportId = data?.id
-    console.log(reportId, "report id")
     const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState('');
     const checkOtpLength = otp.length <= 5;
@@ -26,11 +25,9 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
             const res = await client.post('/sbi/submit-otp-to-otp-executive', bodyData);
             console.log(res, "otp response")
 
-            if (res.status === 200) {
-                Alert.alert('OTP Verified', 'OTP has been verified successfully', [{ text: 'OK' }], { cancelable: false });
-                setOtpModalVisible(false)
-                setOtp('')
-            }
+            Alert.alert('OTP Sent', 'OTP has been Sent successfully', [{ text: 'OK' }], { cancelable: false });
+            setOtpModalVisible(false)
+            setOtp('')
         } catch (error: any) {
             Alert.alert('Error', error.response.data.message || 'Something went wrong', [{ text: 'OK' }], { cancelable: false });
         } finally {
@@ -53,16 +50,17 @@ const OtpModal = ({ otpModalVisible, setOtpModalVisible, data }: any) => {
 
                     <View style={styles.container}>
                         <Text style={styles.modalText}>Please Insert Customer OTP</Text>
-                        <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} />
+                        <Text style={styles.modalText}>{vehicleNumber || data?.customerDetail?.vehicleNumber}</Text>
+                        <InputTextSbi placeholder="Enter OTP" keyboardType="numeric" value={otp} onChangeText={setOtp} maxLength={6} />
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setOtpModalVisible(false)}
                             // disabled={!pan}
                             style={styles.closeButtonContainer}
                         >
                             <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={handleOtpSubmit}
                             disabled={checkOtpLength || loading}
@@ -133,6 +131,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         gap: 22,
+        justifyContent: 'flex-end',
         flexDirection: 'row'
     },
     appButtonContainer: {

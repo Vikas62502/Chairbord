@@ -24,7 +24,7 @@ const Register = () => {
 
   const sendOtpRequest = async () => {
     setLoading(true)
-
+    setShowOtpField(true)
     let bodyContent = JSON.stringify({
       email_id: formData.email_id,
       mobile_number: formData.mobile_number
@@ -33,10 +33,10 @@ const Register = () => {
     try {
       let response = await client.post('/register/agent', bodyContent)
       console.log(response, 'response with register')
-      setShowOtpField(true)
     } catch (error) {
       showAlert(error.response.data.error || 'User registration failed')
       console.log(error, 'error')
+      setShowOtpField(false)
     } finally {
       setLoading(false)
     }
@@ -68,17 +68,17 @@ const Register = () => {
         showBackButton={true}
         navigateTo={'SignIn'}
       />
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <View style={styles.container}>
         <InputText
-                                value={formData.email_id}
+          value={formData.email_id}
           id={'email_id'}
           placeholder={'Enter email id'}
           onChangeText={(value) => formDataHandler('email_id', value)}
           editable={!showOtpField}
         />
         <InputText
-                                value={formData.mobile_number}
+          value={formData.mobile_number}
           id={'mobile_number'}
           placeholder={'Enter mobile number'}
           onChangeText={(value) => formDataHandler('mobile_number', value)}
@@ -102,10 +102,10 @@ const Register = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: "5%",
-},
+    padding: '5%'
+  },
   getOtpButton: {
-    marginTop: '10%',
+    marginTop: '10%'
   }
 })
 

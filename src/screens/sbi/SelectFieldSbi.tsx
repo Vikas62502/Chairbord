@@ -23,7 +23,7 @@ const SelectFieldSbi = ({ dataToRender, title, selectedValue, borderColor }) => 
         data={dataToRender}
         onSelect={(selectedItem, index) => {
           console.log(selectedItem, "drop down selection <----")
-          selectedValue(selectedItem.serialNumber, index)
+          selectedValue(selectedItem, index)
         }}
         renderButton={(selectedItem, isOpened) => {
           return (

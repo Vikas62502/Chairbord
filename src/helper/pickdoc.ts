@@ -2,7 +2,7 @@ import { launchImageLibrary } from 'react-native-image-picker'
 
 const pickdoc = async () => {
     const options = {
-        mediaType: 'photo', // Set this to 'mixed' if you want to pick both docs and images
+        mediaType: 'photo',
     }
 
     return new Promise((resolve, reject) => {

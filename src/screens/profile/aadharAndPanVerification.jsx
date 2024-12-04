@@ -98,6 +98,7 @@ const AadharAndPanVerification = (props) => {
 
   const sendAdharOtp = async () => {
     setLoading(true)
+    setShowOtpField(true)
     try {
       const form = new FormData()
 
@@ -112,14 +113,12 @@ const AadharAndPanVerification = (props) => {
           headers: { 'Content-Type': 'multipart/form-data' }
         }
       )
-      setShowOtpField(true)
       setRefId(response.data.ref_id)
       console.log('Aadhar verification success', response)
-      
-      
     } catch (error) {
       console.error('Aadhar verification failed:', error)
       Alert.alert('Error', 'Failed to verify Aadhar')
+      setShowOtpField(false)
     } finally {
       setLoading(false)
     }
@@ -135,124 +134,140 @@ const AadharAndPanVerification = (props) => {
   }, [userData?.user?.id])
 
   return (
-    <SafeAreaView style={{ flex: 1,  }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader title={'Verification'} />
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContent}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {loading && <Loader />}
-          {/* <TagOfInput text="Personal Information" /> */}
-          <View style={styles.aadharVerificationBorder}>
-            <Text style={styles.borderText}>Aadhar Verification</Text>
-            <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-              {files.aadharFront ? (
-                <Pressable
-                  onPress={() => setFiles({ ...files, aadharFront: null })}
-                >
-                  <Image
-                    source={{ uri: files.aadharFront.uri }}
-                    style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
-                  />
-                </Pressable>
-              ) : (
-                <UploadDoc
-                  text={'Upload Aadhar Card Front'}
-                  setUploadFile={(source: any) =>
-                    handleFileUpload('aadharFront', source)
-                  }
-                  backgroundType={'Aadhar-Card'}
-                  uploadDoc={true}
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {loading && <Loader loading={loading} />}
+        {/* <TagOfInput text="Personal Information" /> */}
+        <View style={styles.aadharVerificationBorder}>
+          <Text style={styles.borderText}>Aadhar Verification</Text>
+          <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+            {files.aadharFront ? (
+              <Pressable
+                onPress={() => setFiles({ ...files, aadharFront: null })}
+              >
+                <Image
+                  source={{ uri: files.aadharFront.uri }}
+                  style={{
+                    height: 200,
+                    width: '100%',
+                    borderRadius: 20,
+                    borderColor: 'black',
+                    borderWidth: 1
+                  }}
                 />
-              )}
-              {/* </View> */}
+              </Pressable>
+            ) : (
+              <UploadDoc
+                text={'Upload Aadhar Card Front'}
+                setUploadFile={(source: any) =>
+                  handleFileUpload('aadharFront', source)
+                }
+                backgroundType={'Aadhar-Card'}
+                uploadDoc={true}
+              />
+            )}
+            {/* </View> */}
+          </View>
+          <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
+            {files.aadharBack ? (
+              <Pressable
+                onPress={() => setFiles({ ...files, aadharBack: null })}
+              >
+                <Image
+                  source={{ uri: files.aadharBack.uri }}
+                  style={{
+                    height: 200,
+                    width: '100%',
+                    borderRadius: 20,
+                    borderColor: 'black',
+                    borderWidth: 1
+                  }}
+                />
+              </Pressable>
+            ) : (
+              <UploadDoc
+                text={'Upload Aadhar Card Back'}
+                setUploadFile={(source: any) =>
+                  handleFileUpload('aadharBack', source)
+                }
+                backgroundType={'Aadhar-Card'}
+                uploadDoc={true}
+              />
+            )}
+          </View>
+          <InputText
+            placeholder={'Enter Aadhar Number'}
+            maxLength={12}
+            keyboardType="numeric"
+            value={formData.aadharNumber}
+            onChangeText={(value) => formDataHandler('aadharNumber', value)}
+            // editable={showOtpField}
+          />
+
+          {showOtpField ? (
+            <View>
+              <AadharVerifyOtp
+                data={formData}
+                setShowOtpField={setShowOtpField}
+                setShowPanVerification={setShowPanVerification}
+                setAdharResData={setAdharResData}
+                ref_id={ref_id}
+                sendAdharOtp={sendAdharOtp}
+              />
             </View>
+          ) : !showPanVerification ? (
+            <View style={styles.getOtpButton}>
+              <SecondaryButton title={'Get OTP'} onPress={sendAdharOtp} />
+            </View>
+          ) : null}
+        </View>
+
+        {showPanVerification && (
+          <View style={styles.panVerificationBorder}>
+            <Text style={styles.borderText}>Pan Verification</Text>
             <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-              {files.aadharBack ? (
+              {files.panCardPhoto ? (
                 <Pressable
-                  onPress={() => setFiles({ ...files, aadharBack: null })}
+                  onPress={() => setFiles({ ...files, panCardPhoto: null })}
                 >
                   <Image
-                    source={{ uri: files.aadharBack.uri }}
-                    style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
+                    source={{ uri: files.panCardPhoto.uri }}
+                    style={{
+                      height: 200,
+                      width: '100%',
+                      borderRadius: 20,
+                      borderColor: 'black',
+                      borderWidth: 1
+                    }}
                   />
                 </Pressable>
               ) : (
                 <UploadDoc
-                  text={'Upload Aadhar Card Back'}
+                  text={'Upload Pan Card Image'}
                   setUploadFile={(source: any) =>
-                    handleFileUpload('aadharBack', source)
+                    handleFileUpload('panCardPhoto', source)
                   }
-                  backgroundType={'Aadhar-Card'}
+                  backgroundType={'Pan-Card'}
                   uploadDoc={true}
                 />
               )}
             </View>
             <InputText
-              placeholder={'Enter Aadhar Number'}
-              maxLength={12}
-              keyboardType='numeric'
-              value={formData.aadharNumber}
-              onChangeText={(value) => formDataHandler('aadharNumber', value)}
-              // editable={showOtpField}
+              placeholder={'Enter PAN Number'}
+              maxLength={10}
+              value={formData.panCardNumber}
+              onChangeText={(value) => formDataHandler('panCardNumber', value)}
             />
-
-            {showOtpField ? (
-              <View>
-                <AadharVerifyOtp
-                  data={formData}
-                  setShowOtpField={setShowOtpField}
-                  setShowPanVerification={setShowPanVerification}
-                  setAdharResData={setAdharResData}
-                  ref_id={ref_id}
-                  sendAdharOtp={sendAdharOtp}
-                />
-              </View>
-            ) : !showPanVerification ? (
-              <View style={styles.getOtpButton}>
-                <SecondaryButton title={'Get OTP'} onPress={sendAdharOtp} />
-              </View>
-            ) : null}
+            <SecondaryButton title={'Verify'} onPress={verifyPan} />
           </View>
-
-          {showPanVerification && (
-            <View style={styles.panVerificationBorder}>
-              <Text style={styles.borderText}>Pan Verification</Text>
-              <View style={{ height: 200, width: '100%', marginVertical: 5 }}>
-                {files.panCardPhoto ? (
-                  <Pressable
-                    onPress={() => setFiles({ ...files, panCardPhoto: null })}
-                  >
-                    <Image
-                      source={{ uri: files.panCardPhoto.uri }}
-                      style={{ height: 200, width: '100%',borderRadius:20,borderColor: 'black',borderWidth: 1 }}
-                    />
-                  </Pressable>
-                ) : (
-                  <UploadDoc
-                    text={'Upload Pan Card Image'}
-                    setUploadFile={(source: any) =>
-                      handleFileUpload('panCardPhoto', source)
-                    }
-                    backgroundType={'Pan-Card'}
-                    uploadDoc={true}
-                  />
-                )}
-              </View>
-              <InputText
-                placeholder={'Enter PAN Number'}
-                maxLength={10}
-                value={formData.panCardNumber}
-                onChangeText={(value) =>
-                  formDataHandler('panCardNumber', value)
-                }
-              />
-              <SecondaryButton title={'Verify'} onPress={verifyPan} />
-            </View>
-          )}
-          {/* <View style={styles.nextButton}>
+        )}
+        {/* <View style={styles.nextButton}>
             <PrimaryBtn
               title={'Next'}
               onPress={() =>
@@ -267,7 +282,7 @@ const AadharAndPanVerification = (props) => {
               }
             />
           </View> */}
-        </ScrollView>
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -345,8 +360,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20
   },
   nextButton: {
-    marginTop: 50,
-  },
+    marginTop: 50
+  }
   // nextButton: {
   //   justifyContent: 'flex-end',
   //   marginTop: 40

@@ -1,37 +1,64 @@
-import { View, Text, Image, StyleSheet, Pressable,Dimensions } from 'react-native'
-import React, { useRef, useState } from 'react'
-import SelectDropdown from 'react-native-select-dropdown'
-const { width, height } = Dimensions.get('window')
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Dimensions
+} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import SelectDropdown from 'react-native-select-dropdown';
+
+const { width } = Dimensions.get('window');
 const isTablet = width > 768;
-const isSmallScreen =width<=420;
-const SelectFieldBig = ({ dataToRender, title, selectedValue,borderColor }) => {
-  const dropdownRef = useRef(null)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+const SelectFieldBig = ({
+  dataToRender,
+  title,
+  selectedValue,
+  borderColor,
+  defaultValue = null
+}) => {
+  const dropdownRef = useRef(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(defaultValue);
+
+  useEffect(() => {
+    if (defaultValue) {
+      const matchedItem = dataToRender.find(item => item.id === defaultValue.id);
+      if (matchedItem) {
+        setSelectedItem(matchedItem);
+      }
+    }
+  }, [defaultValue, dataToRender]);
+
   const toggleDropdown = () => {
     if (dropdownOpen) {
-      dropdownRef.current.closeDropdown()
+      dropdownRef.current.closeDropdown();
     } else {
-      dropdownRef.current.openDropdown()
+      dropdownRef.current.openDropdown();
     }
-    setDropdownOpen(!dropdownOpen)
-  }
+    setDropdownOpen(!dropdownOpen);
+  };
 
   return (
     <View style={[styles.dropdownStyle, { borderColor: borderColor }]}>
       <SelectDropdown
         ref={dropdownRef}
         data={dataToRender}
-        onSelect={(selectedItem, index) => {
-          selectedValue(selectedItem, index)
+        defaultValue={selectedItem} // Set default value here
+        onSelect={(item, index) => {
+          setSelectedItem(item);
+          selectedValue(item, index);
         }}
-        renderButton={(selectedItem, isOpened) => {
+        renderButton={(item, isOpened) => {
           return (
             <View style={styles.dropdownButtonStyle}>
               <Text style={styles.dropdownButtonTxtStyle}>
-                {(selectedItem && selectedItem.title) || title}
+                {(item && item.title) || title}
               </Text>
             </View>
-          )
+          );
         }}
         renderItem={(item, index, isSelected) => {
           return (
@@ -44,7 +71,7 @@ const SelectFieldBig = ({ dataToRender, title, selectedValue,borderColor }) => {
             >
               <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
             </View>
-          )
+          );
         }}
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
@@ -53,38 +80,24 @@ const SelectFieldBig = ({ dataToRender, title, selectedValue,borderColor }) => {
         <Image source={require('../../assets/arrowBottom.png')} />
       </Pressable>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  dropdownLabel: {
-    fontWeight: '400',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#000000',
-    marginBottom: '3%'
-  },
   dropdownButtonStyle: {
     width: '90%',
-    height: isTablet?80:60,
+    height: isTablet ? 80 : 60,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: isTablet?10:20,
+    paddingHorizontal: isTablet ? 10 : 20
   },
   dropdownButtonTxtStyle: {
     flex: 1,
-    fontSize: isTablet?20:16,
+    fontSize: isTablet ? 20 : 16,
     fontWeight: '400',
     color: '#263238'
-  },
-  dropdownButtonArrowStyle: {
-    fontSize: 28
-  },
-  dropdownButtonIconStyle: {
-    fontSize: 28,
-    marginRight: 10
   },
   dropdownMenuStyle: {
     backgroundColor: '#E9ECEF',
@@ -105,12 +118,12 @@ const styles = StyleSheet.create({
     color: '#151E26'
   },
   dropdownStyle: {
-    borderWidth: isTablet?2:1,
-    borderRadius: isTablet?25:20,
+    borderWidth: isTablet ? 2 : 1,
+    borderRadius: isTablet ? 25 : 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   }
-})
+});
 
-export default SelectFieldBig
+export default SelectFieldBig;

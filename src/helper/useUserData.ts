@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getCache } from './Storage';
 
 const useUserData = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<any>(null);
 
   const fetchUserData = async () => {
     try {
@@ -17,7 +17,10 @@ const useUserData = () => {
     fetchUserData();
   }, []);
 
-  return userData;
+  return {
+    userData,
+    userId: userData?.user?.id || null,
+  }
 };
 
 export default useUserData;

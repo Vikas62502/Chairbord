@@ -76,6 +76,9 @@ const SignIn = () => {
       let response = await client.post('/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
+      console.log("____________________________________________")
+console.log(response.data.token,'token here')
+console.log("____________________________________________")
 
       // Check permissions before navigating
       // const allPermissionsGranted = await checkAllPermissions();
@@ -99,14 +102,14 @@ const SignIn = () => {
 
   const getOtpByPhoneNumber = async () => {
     setLoading(true);
+    setShowOtpField(true);
     let bodyContent = JSON.stringify({
       phoneNumber: formData.phoneNumber
     });
-
     try {
       let response = await client.post('/login/agent-mobile', bodyContent);
       console.log(response);
-      setShowOtpField(true);
+      
     } catch (error) {
       Alert.alert('Something went wrong', 'Please try again later', [
         {
@@ -116,6 +119,7 @@ const SignIn = () => {
         }
       ]);
       console.log(error, 'error');
+      setShowOtpField(false);
     } finally {
       setLoading(false);
     }
@@ -128,7 +132,7 @@ const SignIn = () => {
         showBackButton={true}
         navigateTo={'SignIn'}
       />
-      {loading && <Loader />}
+      {loading && <Loader loading={loading} />}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

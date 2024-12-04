@@ -84,13 +84,15 @@ const Inventory = (props) => {
   }
 
   useEffect(() => {
-    fetchInventory(id)
-  }, [])
+    if (agentId) {
+      fetchInventory(agentId)
+    }
+  }, [agentId])
 
   return (
     <>
       {loading ? (
-        <Loader />
+        <Loader loading={true} />
       ) : (
         <ScrollView
           style={styles.container}

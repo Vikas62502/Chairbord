@@ -39,10 +39,11 @@ const Acknowledgement = (props) => {
   const [totalRefundAmount, setTotalRefundAmount] = useState(0)
   const bankMap = { 1: 'Bajaj', 2: 'SBI' }
 
-  const userData = useUserData()
 
-  const agentId = userData?.user?.id
+  const agentId = useUserData()?.userId
+  console.log(agentId, 'agent id');
   const orderId = props?.route?.params?.orderId
+  console.log(orderId, 'order id');
 
   const fetchDispatchedTags = async () => {
     try {
@@ -53,7 +54,7 @@ const Acknowledgement = (props) => {
           orderId: orderId
         }
       )
-      console.log(response.data, 'response data here')
+      console.log(response.data, '<-------------------------- dispatched tags')
       setDispatchedTags(response?.data?.tags)
       setPendingTags(response?.data?.orderedTags)
     } catch (error) {
@@ -138,8 +139,7 @@ const Acknowledgement = (props) => {
 
   return (
     <>
-      {loading && <Loader />}
-
+      {loading && <Loader loading={loading} />}
       <SafeAreaView style={{ flex: 1 }}>
         <OverlayHeader title={'Acknowledgement'} />
         <ScrollView style={{ flex: 1 }}>
@@ -204,8 +204,8 @@ const Acknowledgement = (props) => {
             <AcknowlegementCard key={index} />
           ))} */}
             {!dispatchedTags || dispatchedTags.length === 0 ? (
-              <View>
-                <Text>No Tags Dispatched</Text>
+              <View style={styles.container}>
+                <Text style={styles.messageText}>No Tags Dispatched</Text>
               </View>
             ) : (
               <>
@@ -350,6 +350,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap',
     textAlign: 'justify'
+  },
+  container: {
+    flex: 1, // Make sure the container takes up available space
+    justifyContent: 'center', // Vertically center the content
+    alignItems: 'center', // Horizontally center the content
+    padding: 20, // Add some padding around the text
+    // backgroundColor: '#f9f9f9' // Light background color for the container
+  },
+  messageText: {
+    fontSize: 20, // Increase font size for readability
+    fontWeight: 'bold', // Bold text for emphasis
+    color: '#333', // Darker text color for better contrast
+    textAlign: 'center', // Center align the text
+    marginTop: 10, // Add some spacing above the text
+    marginBottom: 10, // Add some spacing below the text
+    paddingHorizontal: 15, // Add padding to the left and right
+    borderRadius: 8, // Add rounded corners for the text container
+    backgroundColor: '#e0e0e0', // Light grey background to highlight the message
+    elevation: 2 // Add subtle shadow effect for a raised look
   }
 })
 
