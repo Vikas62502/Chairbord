@@ -9,12 +9,13 @@ import {
 import React, { FC } from 'react';
 import pickImage from '../../helper/pickImage'
 import pickdoc from '../../helper/pickdoc'
+import pickImageFromCamera from '../../helper/pickImageFromCamera';
 
 interface interfaceUploadDocProps {
   text: string,
   setUploadFile: (file: any) => void,
   backgroundType?: string,
-  uploadDoc?: boolean
+  uploadDoc?: boolean | string
 }
 
 const UploadDoc: FC<interfaceUploadDocProps> = ({
@@ -23,8 +24,15 @@ const UploadDoc: FC<interfaceUploadDocProps> = ({
   backgroundType,
   uploadDoc = false
 }) => {
-  const pickData = async (uploadDocType) => {
-    if (uploadDocType) {
+  const pickData = async (uploadDocType: any) => {
+    console.log('uploadDocType: ---- > ', uploadDocType);
+    if (uploadDocType === 'camera') {
+      const file = await pickImageFromCamera()
+      if (file) {
+        console.log('Image selected:', file)
+        setUploadFile(file)
+      }
+    } else if (uploadDocType) {
       const file = await pickdoc()
       if (file) {
         console.log('Document selected:', file)
