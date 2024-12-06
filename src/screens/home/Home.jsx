@@ -25,7 +25,6 @@ const isSmallScreen = width < 400;
 const DashboardCards2 = ({ title, subTitle, icon, router, reqType, setLoading }) => {
   const navigation = useNavigation();
   const { userId } = useUserData();
-  console.log(userId, 'userId');
 
   const handleCheckBalance = async (reqType) => {
     if (!reqType) {
@@ -177,11 +176,7 @@ const Home = () => {
           reqType={'REP'}
           setLoading={setLoading}
         />
-        <DashboardCards2
-          title={'Wallet'}
-          icon={require('../../assets/dashboard/wallet.png')}
-          router={'wallet'}
-        />
+
         <DashboardCards2
           title={'Issuance'}
           subTitle={'Tracker'}
@@ -191,6 +186,26 @@ const Home = () => {
       </View>
       <View style={styles.dividerContainer}>
         <View style={styles.divider}></View>
+      </View>
+      <View style={styles.cardsContainer}>
+        <DashboardCards2
+          title={'SBI'}
+          subTitle={'Portal'}
+          icon={require('../../assets/dashboard/tagRegistration.png')}
+          router={'sbi'}
+          setLoading={setLoading}
+        />
+        <DashboardCards2
+          title={'Wallet'}
+          icon={require('../../assets/dashboard/wallet.png')}
+          router={'wallet'}
+        />
+        <DashboardCards2
+          title={'SBI Pending'}
+          subTitle={' Request'}
+          icon={require('../../assets/dashboard/issuance.png')}
+          router={'sbi4'}
+        />
       </View>
     </ScrollView>
   );

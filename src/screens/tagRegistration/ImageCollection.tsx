@@ -9,48 +9,48 @@ import showAlert from '../../utils/showAlert'
 const { width, height } = Dimensions.get('window')
 const isSmallScreen = width < 400;
 
-const dummyProps = {
-  route: {
-    params: {
-      sessionId: '123456789',
-      customerId: '987654321',
-      CusRegData: {
-        data: {
-          custDetails: {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            phone: '1234567890',
-          },
-        },
-      },
-      otpData: {
-        otp: '123456',
-        expiryTime: '2024-12-31T23:59:59Z',
-      },
-      userData: {
-        userId: '1122334455',
-        name: 'Agent Smith',
-        vehicleNo: 'DL1CAB1234',
-      },
-      response: {
-        vrnDetails: {
-          vehicleNo: 'DL1CAB1234',
-          make: 'Toyota',
-          model: 'Innova',
-          year: '2022',
-        },
-      },
-    },
-  },
-  // navigation: {
-  //   navigate: (screenName, params) => {
-  //     console.log(`Navigating to ${screenName} with params:`, params);
-  //   },
-  //   goBack: () => {
-  //     console.log('Going back');
-  //   },
-  // },
-};
+// const dummyProps = {
+//   route: {
+//     params: {
+//       sessionId: '123456789',
+//       customerId: '987654321',
+//       CusRegData: {
+//         data: {
+//           custDetails: {
+//             name: 'John Doe',
+//             email: 'johndoe@example.com',
+//             phone: '1234567890',
+//           },
+//         },
+//       },
+//       otpData: {
+//         otp: '123456',
+//         expiryTime: '2024-12-31T23:59:59Z',
+//       },
+//       userData: {
+//         userId: '1122334455',
+//         name: 'Agent Smith',
+//         vehicleNo: 'DL1CAB1234',
+//       },
+//       response: {
+//         vrnDetails: {
+//           vehicleNo: 'DL1CAB1234',
+//           make: 'Toyota',
+//           model: 'Innova',
+//           year: '2022',
+//         },
+//       },
+//     },
+//   },
+//   // navigation: {
+//   //   navigate: (screenName, params) => {
+//   //     console.log(`Navigating to ${screenName} with params:`, params);
+//   //   },
+//   //   goBack: () => {
+//   //     console.log('Going back');
+//   //   },
+//   // },
+// };
 
 const ImageCollection = (props: any) => {
   const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
@@ -87,8 +87,6 @@ const ImageCollection = (props: any) => {
       setLoading(false);
     }
   };
-
-
 
   const allImagesSet = imageGallaryData?.RCFRONT && imageGallaryData?.RCBACK &&
     imageGallaryData?.VEHICLEFRONT && imageGallaryData?.VEHICLESIDE &&
@@ -135,7 +133,8 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} uploadDoc={"camera"} />}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} showAlert={false}
+                defaultUploadType="camera" />}
             </View>
 
             <View style={{ height: 200, width: "100%", borderRadius: 20 }}>
@@ -145,7 +144,8 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLESIDE?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} uploadDoc={"camera"} />}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} showAlert={false}
+                defaultUploadType="camera" />}
             </View>
             {/* </View> */}
           </View>
@@ -160,7 +160,8 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.TAGAFFIX?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} uploadDoc={"camera"} />}
+              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} showAlert={false}
+                defaultUploadType="camera" />}
             </View>
           </View>
         </View>
