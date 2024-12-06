@@ -120,13 +120,13 @@ const data = [
     icon: require('../../assets/DrawerNavigation/wallet.png'),
     screen: 'sbi'
   },
+  // {
+  //   title: 'SBI Pending Req',
+  //   icon: require('../../assets/DrawerNavigation/wallet.png'),
+  //   screen: 'sbi5'
+  // },
   {
     title: 'SBI Pending Req',
-    icon: require('../../assets/DrawerNavigation/wallet.png'),
-    screen: 'sbi5'
-  },
-  {
-    title: 'SBI 4',
     icon: require('../../assets/DrawerNavigation/wallet.png'),
     screen: 'sbi4'
   },
@@ -150,6 +150,11 @@ const data = [
     icon: require('../../assets/DrawerNavigation/issuance.png'),
     screen: 'issuanceTracker'
   },
+  // {
+  //   title: 'Image collection',
+  //   icon: require('../../assets/DrawerNavigation/issuance.png'),
+  //   screen: 'imageGallary'
+  // },
   // {
   //     title: 'Vehicle Tracking',
   //     icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),

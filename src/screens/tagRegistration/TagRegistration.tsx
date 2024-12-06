@@ -21,7 +21,7 @@ const TagRegistration = (props: any) => {
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
-    const [modalVisible, setModalVisible] = useState<null | boolean>(false)
+    const [modalVisible, setModalVisible] = useState<null | boolean>(null)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
@@ -234,12 +234,14 @@ const TagRegistration = (props: any) => {
                 bodyData
             )
             successResponse()
-            console.log(res, "response")
+            console.log(bodyData, "response")
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
-            // failureResponse()
+
             showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
-                () => setLoading(false));
+                () => {
+                    props?.navigation?.navigate('drawer');
+                });
             console.log(error)
         } finally {
             setLoading(false)
@@ -389,7 +391,7 @@ const TagRegistration = (props: any) => {
                         <CustomInputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} isEditable={false} />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <SelectField dataToRender={middleTagSerialNumber} title={'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
+                        <SelectField dataToRender={middleTagSerialNumber} title={tagSerialNumber2 || 'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
                     </View>
                     <View style={{ flex: 1 }}>
                         <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
