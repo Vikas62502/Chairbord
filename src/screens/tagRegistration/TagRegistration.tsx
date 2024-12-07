@@ -439,7 +439,7 @@ const TagRegistration = (props: any) => {
                     <CustomLabelText label={"Fuel Type"} />
                     {
                         vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
-                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value) => setVehicleFuelType(value.title)}
+                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleFuelType(value.title)}
                             borderColor={!vehicleFuelType ? "red" : "black"}
                         />
                     }

@@ -1,11 +1,11 @@
 import { launchImageLibrary } from "react-native-image-picker"
 
-const pickImage = (key) => {
-    const options = {
+const pickImage = (key: any) => {
+    const options: any = {
         mediaType: 'photo'
     }
 
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, (response: any) => {
         if (response.didCancel) {
             console.log('User cancelled image picker')
         } else if (response.error) {

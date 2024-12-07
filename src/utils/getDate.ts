@@ -1,4 +1,4 @@
-const getDate = (date) => {
+const getDate = (date: Date) => {
     return date.toLocaleDateString();
 };
 

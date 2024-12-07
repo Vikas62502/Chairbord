@@ -1,16 +1,25 @@
-import React from 'react'
+import React from 'react';
 import {
   Modal,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image
-} from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const SuccessModal = ({ visible, onClose, title, isSuccess }) => {
-  const navigation = useNavigation()
+interface SuccessModalProps {
+  visible: boolean;
+  onClose: () => void;
+  title?: string;
+  isSuccess: null | boolean;
+}
+
+const SuccessModal: React.FC<SuccessModalProps> = ({ visible, onClose, title, isSuccess }) => {
+  const navigation = useNavigation();
+
   return (
     <Modal
       animationType="fade"
@@ -20,53 +29,53 @@ const SuccessModal = ({ visible, onClose, title, isSuccess }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          {isSuccess === true ? (
+          {isSuccess ? (
             <Image
-              source={require('../assets/tagRegistration/success.png')}
+              source={require('../assets/tagRegistration/success.png') as ImageSourcePropType}
               style={styles.icon}
             />
           ) : (
             <Image
-              source={require('../assets/tagRegistration/fail.png')}
+              source={require('../assets/tagRegistration/fail.png') as ImageSourcePropType}
               style={styles.icon}
             />
           )}
 
-          {isSuccess === true ? (
+          {isSuccess ? (
             <Text style={styles.SuccessMessage}>
               {title || 'Tag assigned successfully'}
             </Text>
           ) : (
             <Text style={styles.failMessage}>
-              Tag not recharged Please try again{' '}
+              Tag not recharged. Please try again.
             </Text>
           )}
 
           <Text style={styles.descriptionText}>
-            {isSuccess === true
-              ? ' For details: ask customer to visit bajaj fastag customer portal or contact 18002100260'
-              : 'Please ask customer to contact NHAI FASTag Toll free no. 1033'}
+            {isSuccess
+              ? 'For details: ask customer to visit Bajaj FASTag customer portal or contact 18002100260.'
+              : 'Please ask customer to contact NHAI FASTag Toll free no. 1033.'}
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('drawer')}
+            onPress={() => navigation.navigate('drawer' as never)}
             style={styles.okButton}
           >
             <Text style={styles.okButtonText}>
-              {isSuccess === true ? 'OK' : 'Cancel'}
+              {isSuccess ? 'OK' : 'Cancel'}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#fff',
@@ -74,7 +83,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     paddingVertical: '10%',
-    width: '80%'
+    width: '80%',
   },
   SuccessMessage: {
     fontSize: 18,
@@ -83,7 +92,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'inter',
     color: '#32BA7C',
-    marginVertical: '5%'
+    marginVertical: '5%',
   },
   failMessage: {
     fontSize: 18,
@@ -93,18 +102,18 @@ const styles = StyleSheet.create({
     fontFamily: 'inter',
     color: '#BA3232',
     marginVertical: '5%',
-    width: '50%'
+    width: '50%',
   },
   okButton: {
     backgroundColor: '#02546D',
     borderRadius: 12,
     paddingVertical: '4%',
-    paddingHorizontal: '15%'
+    paddingHorizontal: '15%',
   },
   okButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   descriptionText: {
     fontSize: 18,
@@ -114,8 +123,8 @@ const styles = StyleSheet.create({
     fontFamily: 'inter',
     color: '#000000',
     marginBottom: '10%',
-    width: '90%'
-  }
-})
+    width: '90%',
+  },
+});
 
-export default SuccessModal
+export default SuccessModal;

@@ -1,12 +1,10 @@
-/**
- * @format
- */
-
-import { AppRegistry } from 'react-native';
-import App from './App';
-import { name as appName } from './app.json';
-
 import * as Sentry from "@sentry/react-native";
+
+// Placeholder for error logging
+const logErrorToSentry = (error: any, stackTrace: any) => {
+    console.error('Error logged:', error, stackTrace);
+    // Integrate Sentry or other error tracking services here
+};
 
 Sentry.init({
     dsn: "",
@@ -18,4 +16,4 @@ Sentry.init({
     profilesSampleRate: 1.0,
 });
 
-AppRegistry.registerComponent(appName, () => Sentry.wrap(App));
+export default logErrorToSentry;

@@ -23,8 +23,6 @@ import VerifyOTP from './opt/VerifyOTP';
 import Loader from '../components/ui/Loader';
 import { client } from '../client/Axios';
 import { setCache } from '../helper/Storage';
-// import { request, PERMISSIONS, check } from 'react-native-permissions';
-// Import the custom icons from the access folder
 import EyeIcon from '../assets/eye.png'; // Path to eye icon
 import EyeOffIcon from '../assets/eye-off.png'; // Path to eye-off icon
 
@@ -48,23 +46,7 @@ const SignIn = () => {
   };
 
   const navigation = useNavigation();
-  // const checkAllPermissions = async () => {
-  //   const permissionsToCheck = [
-  //     PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  //     PERMISSIONS.ANDROID.CAMERA,
-  //     PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-  //     PERMISSIONS.ANDROID.READ_CONTACTS,
-  //     PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
-  //   ];
 
-  //   for (const permission of permissionsToCheck) {
-  //     const result = await check(permission);
-  //     if (result !== 'granted') {
-  //       return false; // If any permission is not granted, return false
-  //     }
-  //   }
-  //   return true; // All permissions are granted
-  // };
   const loginApi = async () => {
     setLoading(true);
     let bodyContent = JSON.stringify({
@@ -76,17 +58,7 @@ const SignIn = () => {
       let response = await client.post('/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
-      console.log("____________________________________________")
-console.log(response.data.token,'token here')
-console.log("____________________________________________")
 
-      // Check permissions before navigating
-      // const allPermissionsGranted = await checkAllPermissions();
-      // if (allPermissionsGranted) {
-      //   navigation.navigate('drawer'); // Navigate directly to the drawer if permissions are granted
-      // } else {
-      //   navigation.navigate('permissions'); // Otherwise, navigate to permissions
-      // }
       navigation.navigate('drawer');
     } catch (error) {
       Alert.alert('Either Id or password is Wrong !!', 'Please try again later', [
@@ -109,9 +81,9 @@ console.log("____________________________________________")
     try {
       let response = await client.post('/login/agent-mobile', bodyContent);
       console.log(response);
-      
+
     } catch (error) {
-      Alert.alert('Something went wrong', 'Please try again later', [
+      Alert.alert(error?.response?.error?.message || 'Something went wrong', 'Please try again later', [
         {
           text: 'OK',
           onPress: () => navigation?.navigate('SignIn'),
@@ -253,7 +225,8 @@ console.log("____________________________________________")
                     setFormData({ ...formData, phoneNumber: value })
                   }
                   keyboardType="numeric"
-                  editable={!showOtpField}
+                  isEditable={!showOtpField}
+                  maxLength={10}
                 />
                 {!showOtpField && (
                   <View
