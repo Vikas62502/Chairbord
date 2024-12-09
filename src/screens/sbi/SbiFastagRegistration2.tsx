@@ -20,12 +20,12 @@ const SbiFastagRegistration2 = (props: any) => {
     const { userId } = useUserData();
     // State declarations
     const [pincode, setPincode] = useState('');
-    const [chasisNumber, setChasisNumber] = useState(vehiclePropData.vehicle_chasi_number || '');
-    const [ownername, setOwnerName] = useState(vehiclePropData.owner_name || '');
-    const [engineNumber, setEngineNumber] = useState(vehiclePropData.vehicle_engine_number || '');
-    const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData.rc_number || '');
-    const [selectedFuel, setSelectedFuel] = useState(vehiclePropData.fuel_type || null);
-    const [selectedState, setSelectedState] = useState(vehiclePropData.registered_at || null);
+    const [chasisNumber, setChasisNumber] = useState(vehiclePropData?.vehicle_chasi_number || '');
+    const [ownername, setOwnerName] = useState(vehiclePropData?.owner_name || '');
+    const [engineNumber, setEngineNumber] = useState(vehiclePropData?.vehicle_engine_number || '');
+    const [vehicleNumber, setVehicleNumber] = useState(vehiclePropData?.rc_number || '');
+    const [selectedFuel, setSelectedFuel] = useState(vehiclePropData?.fuel_type || null);
+    const [selectedState, setSelectedState] = useState(vehiclePropData?.registered_at || null);
     const [selectedTagsrno, setSelectedTagsrno] = useState<any>({});
     const [isDisabled, setIsDisabled] = useState(true);
     // models
@@ -159,24 +159,24 @@ const SbiFastagRegistration2 = (props: any) => {
                         placeholder={"Enter vehicle number"}
                         value={vehicleNumber}
                         onChangeText={setVehicleNumber}
-                        isEditable={!vehiclePropData.rc_number.toUpperCase()}
+                        isEditable={!vehiclePropData?.rc_number?.toUpperCase()}
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightblue.png')} style={styles.icon} />
-                    <InputTextSbi placeholder={"Enter chasis number"} value={chasisNumber} onChangeText={setChasisNumber} isEditable={!vehiclePropData.vehicle_chasi_number} />
+                    <InputTextSbi placeholder={"Enter chasis number"} value={chasisNumber} onChangeText={setChasisNumber} isEditable={!vehiclePropData?.vehicle_chasi_number} />
                 </View>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightorange.png')} style={styles.icon} />
-                    <InputTextSbi placeholder={"Enter engine number"} value={engineNumber} onChangeText={setEngineNumber} isEditable={!vehiclePropData.vehicle_engine_number} />
+                    <InputTextSbi placeholder={"Enter engine number"} value={engineNumber} onChangeText={setEngineNumber} isEditable={!vehiclePropData?.vehicle_engine_number} />
                 </View>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightblue.png')} style={styles.icon} />
-                    <InputTextSbi placeholder={"Enter owner name"} value={ownername} onChangeText={setOwnerName} isEditable={!vehiclePropData.owner_name} />
+                    <InputTextSbi placeholder={"Enter owner name"} value={ownername} onChangeText={setOwnerName} isEditable={!vehiclePropData?.owner_name} />
                 </View>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightorange.png')} style={styles.icon} />
-                    {!vehiclePropData.fuel_type ? (
+                    {!vehiclePropData?.fuel_type ? (
                         <SelectFieldSbi
                             dataToRender={fuelData}
                             title={'Fuel Type'}
@@ -185,14 +185,14 @@ const SbiFastagRegistration2 = (props: any) => {
                             initialValue={selectedFuel} // Set initial value
                         />
                     ) : (
-                        <InputTextSbi placeholder={"Fuel Type"} value={vehiclePropData.fuel_type} isEditable={!vehiclePropData.fuel_type} />
+                        <InputTextSbi placeholder={"Fuel Type"} value={vehiclePropData?.fuel_type} isEditable={!vehiclePropData?.fuel_type} />
                     )}
 
 
                 </View>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/sbi/rightblue.png')} style={styles.icon} />
-                    {!vehiclePropData.registered_at ? (
+                    {!vehiclePropData?.registered_at ? (
                         <SelectFieldSbi
                             dataToRender={stateData}
                             title={'State of Registration'}
@@ -200,7 +200,7 @@ const SbiFastagRegistration2 = (props: any) => {
                             borderColor={selectedState ? '#0A74DA' : '#D3D3D3'}
                         />
                     ) : (
-                        <InputTextSbi placeholder={"State of registration"} value={vehiclePropData.registered_at} isEditable={!vehiclePropData.registered_at} onChangeText={(value: any) => setSelectedState(value)} />
+                        <InputTextSbi placeholder={"State of registration"} value={vehiclePropData?.registered_at} isEditable={!vehiclePropData?.registered_at} onChangeText={(value: any) => setSelectedState(value)} />
                     )}
 
                 </View>
