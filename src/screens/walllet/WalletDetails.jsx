@@ -4,19 +4,20 @@ import {
   ScrollView,
   StyleSheet,
   Image,
-  Pressable
+  Pressable,
+  ToastAndroid
 } from 'react-native'
 import React, { useState } from 'react'
+import Clipboard from '@react-native-clipboard/clipboard';
 import OverlayHeader from '../../components/OverlayHeader'
 import HorizontalDivider from '../../components/common/HorizontalDivider'
+const downArrowIcon = require('../../assets/screens/wallet/downArrow.png')
 
 
 const WalletDetails = (props) => {
   const transactionPropData = props.route.params;
-  console.log(transactionPropData, 'transactionPropData')
   const [showTransactionDetails, setShowTransactionDetails] = useState(false)
-
-  const downArrowIcon = require('../../assets/screens/wallet/downArrow.png')
+  console.log(transactionPropData, 'transactionPropData')
 
   const data = [
     {
@@ -51,11 +52,18 @@ const WalletDetails = (props) => {
     // },
     {
       title: 'Action For',
-      value: transactionPropData?.reason?.split('_')[1] || 'N/A',
-      description: transactionPropData?.reason?.split('_')[0] || 'N/A',
+      value: transactionPropData?.reason?.split('_')[0] || 'N/A',
+      description: transactionPropData?.reason?.split('_')[1] || 'N/A',
       amount: transactionPropData?.amountValue
     }
   ]
+
+  const copyToClipboard = (text) => {
+    console.log(text, ">--- text")
+    Clipboard.setString(text);
+    ToastAndroid.show('Copied to Clipboard', ToastAndroid.SHORT);
+  };
+
   const amountColor = transactionPropData.type === 'credit' ? '#25B73C' : '#FF0000'
   return (
     <>
@@ -148,17 +156,18 @@ const WalletDetails = (props) => {
                       </Text>
                     </View>
 
-                    <View
+                    <Pressable
+                      onPress={() => copyToClipboard(data.value)}
                       style={{
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
                       }}
                     >
                       <Text
                         style={[
                           styles.subAccountNoText,
-                          { marginBottom: '5%' }
+                          { marginBottom: '5%' },
                         ]}
                       >
                         {data.amount || ''}
@@ -166,7 +175,7 @@ const WalletDetails = (props) => {
                       <Image
                         source={require('../../assets/screens/copyIcon.png')}
                       />
-                    </View>
+                    </Pressable>
                   </View>
                 ))}
               </>
