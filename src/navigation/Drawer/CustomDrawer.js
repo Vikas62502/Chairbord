@@ -14,6 +14,8 @@ const isSmallScreen = width <= 400
 
 const ProfileDraweritem = ({ title, icons, navigateTo }) => {
   const userData = useUserData();
+  const userId = userData?.userId;
+  console.log(userId, "user id")
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -21,7 +23,7 @@ const ProfileDraweritem = ({ title, icons, navigateTo }) => {
 
   const handleVerificationClick = async () => {
     const userData = await getCache('userData');
-    const agentId = userData.user.id;
+    const agentId = userId || userData?.user?.id;
     console.log(userData, "user data");
     console.log(agentId, "agent id");
     setLoading(true)

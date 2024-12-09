@@ -63,7 +63,7 @@ const WalletDetails = (props) => {
       <ScrollView style={styles.container}>
         <View style={{ padding: '5%' }}>
           <View style={styles.WalletDetailsCard}>
-            <Text style={styles.headingText}>Received from</Text>
+            <Text style={styles.headingText}>Transaction Type</Text>
 
             <View
               style={{
@@ -72,6 +72,7 @@ const WalletDetails = (props) => {
                 justifyContent: 'space-between'
               }}
             >
+
               <View
                 style={{
                   flexDirection: 'row',
@@ -80,6 +81,8 @@ const WalletDetails = (props) => {
                   marginTop: '5%'
                 }}
               >
+                {<Text style={[styles.transactionType, { color: amountColor }]}>{transactionPropData.type}</Text>}
+                {/*
                 <Image
                   source={require('../../assets/screens/wallet/walletIcon.png')}
                 />
@@ -92,7 +95,7 @@ const WalletDetails = (props) => {
                 >
                   <Text style={styles.accountNoText}>******6679</Text>
                   <Text style={styles.subAccountNoText}> XXXXX6679</Text>
-                </View>
+                </View> */}
               </View>
 
               <View>
@@ -265,6 +268,12 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 10,
     fontWeight: '500'
+  },
+  transactionType: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000000',
+    textTransform: 'uppercase',
   }
 })
 

@@ -60,11 +60,11 @@ const WalletCards = ({
             </View>
           </View>
         </View>
-        <View style={{ alignItems: 'center', marginVertical: '5%' }}>
+        {/* <View style={{ alignItems: 'center', marginVertical: '5%' }}>
           <View style={styles.horizontalDivider}></View>
-        </View>
+        </View> */}
 
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -88,7 +88,7 @@ const WalletCards = ({
               <Text style={styles.value}>{referenceId ? referenceId : 'N/A'}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </View>
     </Pressable>
   )

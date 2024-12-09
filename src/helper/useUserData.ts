@@ -14,8 +14,10 @@ const useUserData = () => {
   };
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    if (!userData?.user?.id) {
+      fetchUserData();
+    }
+  }, [userData?.user?.id]);
 
   return {
     userData,

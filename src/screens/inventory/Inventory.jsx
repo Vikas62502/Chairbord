@@ -26,7 +26,6 @@ const isSmallScreen = width < 400
 const Inventory = (props) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false)
   const [inventoryCardData, setInventoryCardData] = useState([])
-  // const [userData, setUserData] = useState()
   const [refreshing, setRefreshing] = useState(false)
   const navigation = useNavigation() // Get navigation object
   const route = useRoute() // Get route object
@@ -35,8 +34,8 @@ const Inventory = (props) => {
   const [tag_cost, setTag_Cost] = useState(null);
 
   const userData = useUserData()
-  // console.log(userData?.user?.id, "user data")
-  const agentId = userData?.user?.id
+  console.log(userData.userId, "user data")
+  const agentId = userData.userId || userData?.user?.id
 
   const isPartOfBottomNavigator = route.name === 'Inventory'
   // console.log(inventoryCardData, 'inventoryCardData')
@@ -73,9 +72,9 @@ const Inventory = (props) => {
       const response = await client.get(
         `/inventory/fastag/agent/acknowledged-tags/${id}`
       )
+      console.log(response.data, "<----- inventiry res data")
       setInventoryCardData(response.data.tags)
       setTag_Cost(response.data.tagCost);
-      // console.log(response.data, 'inventory here')
     } catch (error) {
       console.log(error.message)
     } finally {

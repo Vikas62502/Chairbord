@@ -106,6 +106,7 @@ const DeliveryAddressModal = ({ visible, onClose, userId }) => {
                 placeholder="Pincode"
                 keyboardType="numeric"
                 onChangeText={(value) => formDataHandler('pincode', value)}
+                maxLength={6}
               />
 
               {/* Phone Field */}
@@ -114,6 +115,7 @@ const DeliveryAddressModal = ({ visible, onClose, userId }) => {
                 placeholder="Phone"
                 keyboardType="numeric"
                 onChangeText={(value) => formDataHandler('phone', value)}
+                maxLength={10}
               />
 
               {/* Alternate Mobile Field */}
@@ -124,6 +126,7 @@ const DeliveryAddressModal = ({ visible, onClose, userId }) => {
                 onChangeText={(value) =>
                   formDataHandler('alternate_mobile_number', value)
                 }
+                maxLength={10}
               />
 
               {/* Action Buttons */}

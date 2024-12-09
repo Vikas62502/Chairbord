@@ -14,14 +14,8 @@ import DrawerNavigation from './src/navigation/Drawer/DrawerNavigation'
 import ErrorBoundary from 'react-native-error-boundary'
 import ErrorFallback from './src/components/ErrorFallback/ErrorFallback'
 import logErrorToSentry from './src/components/ErrorFallback/LogErrorToSentry'
-import * as Sentry from '@sentry/react-native'
-// import { API_URL, APP_ENV } from '@env';
 
-// console.log('API URL:', API_URL);
-// console.log('Environment:', APP_ENV);
-
-
-function App({ }): React.JSX.Element {
+function App({}): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
   const [userData, setUserData] = useState<any>()
 

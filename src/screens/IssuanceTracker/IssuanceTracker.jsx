@@ -46,10 +46,9 @@ const IssuanceTracker = () => {
     try {
       const res = await client.get(`/reports/reports/agent/${id}`);
       // console.log(res.data.reports[0].customerDetail.vehicles[0].fastTags[0].TAGaFixImage, 'Response data');
-      console.log(res, "data res");
+      console.log(JSON.stringify(res.data), "<---- data res");
       setIssuanceData(res && res.data.reports);
     } catch (error) {
-      // Check if the error response exists and has a message
       const errorMessage = error.response?.data?.error || 'Reports not found';
       console.error('Error fetching reports:', errorMessage);
       alert(errorMessage); // Display the error message from the backend
@@ -87,7 +86,7 @@ const IssuanceTracker = () => {
         }
       >
         <OverlayHeader title={'Issuance Tracker'} showBackButton={true} />
-        <View style={{ paddingHorizontal: '5%', paddingVertical: '1%' }}>
+        <View style={{ paddingHorizontal: '5%', paddingBottom: '50%' }}>
           <View style={styles.searchAndfilter}>
             <View style={styles.searchField}>
               <Image
