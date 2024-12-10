@@ -17,11 +17,12 @@ import { client } from '../../client/Axios'
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params.response;
+    console.log(JSON.stringify(props.route.params.response), "props")
     const { CustomerRegData, otpData, userOtpData } = props.route.params;
     const [chassisNo, setChasisNo] = React.useState<any>("")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
     const [userData, setUserData] = useState<any>()
-    const [modalVisible, setModalVisible] = useState<null | boolean>(null)
+    const [modalVisible, setModalVisible] = useState<null | boolean>(false)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
     const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
@@ -33,7 +34,7 @@ const TagRegistration = (props: any) => {
     const [nationalpermit, setNationalPermit] = useState("")
     const [vehicleFuelType, setVehicleFuelType] = useState("")
     const [listOfMakers, setListOfMakers] = useState(["Toyota", "Honda", "Ford"])
-    const [vehicleModelValue, setVehicleModelValue] = useState("")
+    const [vehicleModelValue, setVehicleModelValue] = useState(vrnDetails?.model)
     const [npciIdData, setNpciIdData] = useState(vrnDetails?.npciVehicleClassID || "")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
@@ -42,6 +43,7 @@ const TagRegistration = (props: any) => {
     const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType)
     const [errors, setErrors] = useState<any>({})
     const [stateCode, setStateCode] = useState("")
+    console.log(vehicleModelValue, "value")
 
     const updatevehicleType = (value: string) => {
         if (value === 'LMV' && vrnDetails?.tagVehicleClassID === '4' && vehicleIscommercial === 'false') {
@@ -160,6 +162,9 @@ const TagRegistration = (props: any) => {
         if (!vrnDetails?.commercial && vehicleIscommercial === "") {
             newErrors.vehicleIscommercial = 'Is Commercial is required';
         }
+        if (!typeOfVehicle) {
+            newErrors.typeOfVehicle = 'Type of Vehicle is required';
+        }
 
         setErrors(newErrors);
 
@@ -197,7 +202,7 @@ const TagRegistration = (props: any) => {
                     "chassis": vrnDetails?.chassisNo || chassisNo,
                     "engine": engineNumber || vrnDetails?.engineNo || "",
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
-                    "model": vrnDetails?.model || vehicleModelValue,
+                    "model": vehicleModelValue,
                     "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
                     "type": typeOfVehicle,
                     "status": "Active",
@@ -230,11 +235,11 @@ const TagRegistration = (props: any) => {
                     "udf5": ""
                 }
             })
+            console.log(bodyData, "<----------------------- response")
             const res = await client.post("/bajaj/registerFastag",
                 bodyData
             )
             successResponse()
-            console.log(bodyData, "response")
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
 
@@ -353,7 +358,7 @@ const TagRegistration = (props: any) => {
                             value={vrnDetails?.model}
                             onChangeText={(text: string) => setVehicleModelValue(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} borderColor={!vehicleModelValue ? "red" : "black"} />}
+                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>

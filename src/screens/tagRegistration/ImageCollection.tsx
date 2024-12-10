@@ -68,7 +68,7 @@ const ImageCollection = (props: any) => {
       formData.append('customerId', customerId);
       formData.append('vehicleId', props?.route?.params?.response?.vrnDetails?.vehicleNo || userData?.vehicleNo?.toUpperCase());
 
-      console.log(formData, "formData");
+      console.log("formData ----> ", JSON.stringify(formData));
       const res = await client.post('/bajaj/uploadImages', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -81,6 +81,7 @@ const ImageCollection = (props: any) => {
         },
       }));
     } catch (error: any) {
+      console.log(error, "<--- error")
       showAlert(error.response?.data?.error?.errorDesc || error.response?.data?.error?.msg);
       console.log(error.response?.data?.error?.errorDesc || error.response?.data?.error?.msg, "error");
     } finally {
@@ -133,7 +134,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} showAlert={false}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} 
                 defaultUploadType="camera" />}
             </View>
 
@@ -144,7 +145,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLESIDE?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} showAlert={false}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} 
                 defaultUploadType="camera" />}
             </View>
             {/* </View> */}
@@ -160,7 +161,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.TAGAFFIX?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} showAlert={false}
+              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} 
                 defaultUploadType="camera" />}
             </View>
           </View>
