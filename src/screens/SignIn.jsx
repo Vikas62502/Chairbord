@@ -264,7 +264,7 @@ const SignIn = () => {
                     <TouchableOpacity
                       onPress={() =>
                         handleLinkPress(
-                          'https://chairbord.com/terms-conditions.html'
+                          'https://www.chairbord.in/termsandconditions'
                         )
                       }
                     >
@@ -274,7 +274,7 @@ const SignIn = () => {
                     <TouchableOpacity
                       onPress={() =>
                         handleLinkPress(
-                          'https://chairbord.com/terms-conditions.html'
+                          'https://www.chairbord.in/privacypolicy'
                         )
                       }
                     >
