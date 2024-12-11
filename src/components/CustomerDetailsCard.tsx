@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
-const CustomerDetailsCard = ({ customerDetailsData, errorMessage, title }) => {
+const CustomerDetailsCard = ({ customerDetailsData, errorMessage, title }: any) => {
   return (
     <>
       <Text style={styles.label}>{title || 'Customer details'}</Text>
       <View style={styles.dataDetailContainer}>
-        {customerDetailsData.map((data, index) => (
+        {customerDetailsData.map((data: any, index: number) => (
           <View style={styles.customerDetailsContainer} key={index}>
             <Text style={styles.customerDetailsTitleText}>{data.title}</Text>
             <Text style={styles.customerDetailsValueText}>{data.value}</Text>

@@ -153,9 +153,9 @@ const data = [
     screen: 'issuanceTracker'
   },
   // {
-  //   title: 'Image collection',
+  //   title: 'tag replacement',
   //   icon: require('../../assets/DrawerNavigation/issuance.png'),
-  //   screen: 'imageGallary'
+  //   screen: 'tagReplacementForm'
   // },
   // {
   //     title: 'Vehicle Tracking',

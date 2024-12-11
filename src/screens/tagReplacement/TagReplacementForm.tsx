@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   TextInput,
   ActivityIndicator
 } from 'react-native'
@@ -20,32 +19,10 @@ import SuccessModal from '../../components/SuccessModal'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import showAlert from '../../utils/showAlert'
-import { fuelData, stateData } from '../tagRegistration/staticData'
+import { fuelData, middleTagSerialNumber, stateData } from '../tagRegistration/staticData'
 import CustomLabelText from '../../components/ui/CustomLabelText'
 import CustomInputText from '../../components/common/CustomInputText'
-
-const replacementReason = [
-  {
-    id: 1,
-    reasonId: '1',
-    title: 'Tag Damaged'
-  },
-  {
-    id: 2,
-    reasonId: '2',
-    title: 'Lost Tag'
-  },
-  {
-    id: 3,
-    reasonId: '3',
-    title: 'Tag Not Working'
-  },
-  {
-    id: 4,
-    reasonId: '99',
-    title: 'Others'
-  }
-]
+import { dummyParams, replacementReason } from './staticData'
 
 const TagReplacementForm = (props: any) => {
   const {
@@ -72,6 +49,7 @@ const TagReplacementForm = (props: any) => {
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
   const [tagSerialNumber, setTagSerialNumber] = useState('')
+  const [tagSerialNumber2, setTagSerialNumber2] = useState("001")
   const [sessionId, setSessionId] = React.useState()
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
@@ -116,7 +94,7 @@ const TagReplacementForm = (props: any) => {
         debitAmt: debitAmt,
         requestId: response?.requestId,
         sessionId: _sessionId,
-        serialNo: '608268-001-' + tagSerialNumber,
+        serialNo: `608268-${tagSerialNumber2}-${tagSerialNumber}`,
         reason: reasonOfReplacement,
         reasonDesc: description || '',
         chassisNo: chassisNumber,
@@ -139,44 +117,14 @@ const TagReplacementForm = (props: any) => {
       console.log(err)
       showAlert(
         err.response.data.error.msg ||
-          err.response.data.error.errorDesc ||
-          'Tag replacement failed',
+        err.response.data.error.errorDesc ||
+        'Tag replacement failed',
         () => setLoading(false)
       )
     } finally {
       setLoading(false)
     }
   }
-
-  const customerDetailsData = [
-    {
-      title: 'Name',
-      value: `:  ${response.custDetails.name}`
-    },
-    {
-      title: 'Mobile Number',
-      value: `:  ${response.custDetails.mobileNo}`
-    }
-  ]
-
-  const existingTagDetailData = [
-    {
-      title: 'Chassis No.',
-      value: `:  ${response.vrnDetails.chassisNo}`
-    },
-    {
-      title: 'Engine No.',
-      value: `:  ${response.vrnDetails.engineNo}`
-    },
-    {
-      title: 'Commercial Status',
-      value: `:  ${response.vrnDetails.commercial}`
-    },
-    {
-      title: 'Vehicle Type',
-      value: `:  ${response.vrnDetails.vehicleType}`
-    }
-  ]
 
   const getSessionId = async () => {
     const session = await getCache('session')
@@ -210,7 +158,10 @@ const TagReplacementForm = (props: any) => {
             </View>
           )}
           <CustomerDetailsCard
-            customerDetailsData={customerDetailsData}
+            customerDetailsData={[
+              { title: 'Name', value: `: ${response.custDetails.name}` },
+              { title: 'Mobile Number', value: `: ${response.custDetails.mobileNo}` }
+            ]}
             errorMessage={'*Minimum balance should be 250 in customer FASTag'}
           />
 
@@ -222,7 +173,7 @@ const TagReplacementForm = (props: any) => {
           <View style={{ marginTop: '5%' }}>
             <CustomLabelText label={'Chasis Number'} />
             {response?.vrnDetails &&
-            response?.vrnDetails?.chassisNo?.length > 2 ? (
+              response?.vrnDetails?.chassisNo?.length > 2 ? (
               <InputText
                 placeholder={'Enter Chasis number'}
                 value={response?.vrnDetails?.chassisNo}
@@ -242,7 +193,7 @@ const TagReplacementForm = (props: any) => {
           <View style={{ marginTop: '5%' }}>
             <CustomLabelText label={'Engine Number'} />
             {response?.vrnDetails &&
-            response?.vrnDetails?.engineNo?.length > 2 ? (
+              response?.vrnDetails?.engineNo?.length > 2 ? (
               <InputText
                 placeholder={'Enter Engine number'}
                 value={response?.vrnDetails?.engineNo}
@@ -261,7 +212,23 @@ const TagReplacementForm = (props: any) => {
           </View>
 
           <CustomerDetailsCard
-            customerDetailsData={existingTagDetailData}
+            customerDetailsData={[{
+              title: 'Chassis No.',
+              value: `:  ${response.vrnDetails.chassisNo}`
+            },
+            {
+              title: 'Engine No.',
+              value: `:  ${response.vrnDetails.engineNo}`
+            },
+            {
+              title: 'Commercial Status',
+              value: `:  ${response.vrnDetails.commercial}`
+            },
+            {
+              title: 'Vehicle Type',
+              value: `:  ${response.vrnDetails.vehicleType}`
+            }
+            ]}
             title="Existing tag details"
           />
           <Text style={styles.subDescription}>
@@ -282,14 +249,15 @@ const TagReplacementForm = (props: any) => {
               <InputText placeholder={''} value="608268" isEditable={false} />
             </View>
             <View style={{ flex: 1, marginHorizontal: '5%' }}>
-              <InputText placeholder={''} value="001" isEditable={false} />
+              <SelectField dataToRender={middleTagSerialNumber} title={tagSerialNumber2 || 'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
             </View>
             <View style={{ flex: 1 }}>
-              <InputText
+              <CustomInputText
                 borderColor={tagSerialNumber.length < 2 ? 'red' : '#263238'}
                 placeholder={'xxxxxx'}
                 onChangeText={(text: string) => setTagSerialNumber(text)}
                 value={tagSerialNumber}
+                keyboardType='numeric'
               />
             </View>
           </View>
@@ -433,7 +401,7 @@ const TagReplacementForm = (props: any) => {
 
         <SuccessModal
           isSuccess={modelIsSuccess}
-          visible={modalShow}
+          visible={modalShow!}
           title={'Tag replaced successfully'}
         />
       </ScrollView>

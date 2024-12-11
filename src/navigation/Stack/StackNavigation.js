@@ -10,7 +10,7 @@ import HistoricalData from '../../components/HistoricalData';
 import SmsAlert from '../../components/SmsAlert';
 import SaveFuelAndTime from '../../components/SaveFuelAndTime';
 import Permissions from '../../components/permissions';
-import SignIn from '../../screens/SignIn';
+import SignIn from '../../screens/signin/SignIn';
 import OTP from '../../screens/opt/OTP';
 import Register from '../../screens/register/Register';
 import ForgetYourPassword from '../../screens/ForgetYouPassword/ForgetYourPassword';

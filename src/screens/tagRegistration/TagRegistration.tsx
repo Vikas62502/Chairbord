@@ -410,7 +410,7 @@ const TagRegistration = (props: any) => {
                     </View> :
                         <View style={{ marginTop: "5%" }}>
                             <CustomLabelText label={"Vehicle Type"} />
-                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value) => onVechileTypeSelect(value.value)} borderColor={!vehicleFuelType ? "red" : "black"} />
+                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value: any) => onVechileTypeSelect(value.value)} borderColor={!vehicleFuelType ? "red" : "black"} />
                         </View>
                     }
                 </View>
@@ -418,12 +418,12 @@ const TagRegistration = (props: any) => {
                 <View style={{ marginBottom: "5%" }}>
                     <CustomLabelText label={"Is Commercial"} />
                     <SelectField
-                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value) => setVehicleIscommercial(value.value)} borderColor={!vehicleIscommercial ? "red" : "black"} />
+                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value: any) => setVehicleIscommercial(value.value)} borderColor={!vehicleIscommercial ? "red" : "black"} />
                 </View>
                 {vehicleIscommercial === "true" && <View style={{ marginBottom: "5%" }}>
                     <CustomLabelText label={"Is National Permit"} />
                     <SelectField
-                        dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
+                        dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value: any) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
                 </View>}
 
                 {vehicleIscommercial === "true" && nationalpermit === "1" && <View>
@@ -486,7 +486,7 @@ const TagRegistration = (props: any) => {
             </View>
 
             <SuccessModal
-                visible={modalVisible}
+                visible={modalVisible!}
                 onClose={() => {
                     setModalVisible(false)
                     setIsModalSuccess(null)

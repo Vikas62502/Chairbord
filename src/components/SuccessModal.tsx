@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 
 interface SuccessModalProps {
   visible: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   title?: string;
   isSuccess: null | boolean;
 }
