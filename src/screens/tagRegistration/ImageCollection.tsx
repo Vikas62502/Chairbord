@@ -134,7 +134,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} 
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} showAlert={false}
                 defaultUploadType="camera" />}
             </View>
 
@@ -145,7 +145,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLESIDE?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} 
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"} showAlert={false}
                 defaultUploadType="camera" />}
             </View>
             {/* </View> */}
@@ -161,7 +161,7 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.TAGAFFIX?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} 
+              </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"} showAlert={false}
                 defaultUploadType="camera" />}
             </View>
           </View>
