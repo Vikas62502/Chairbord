@@ -1,4 +1,4 @@
-import { View, SafeAreaView, StyleSheet } from 'react-native'
+import { View, SafeAreaView, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import InputText from '../../components/common/InputText'
 import SecondaryButton from '../../components/common/SecondaryButton'
@@ -7,6 +7,7 @@ import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import { client } from '../../client/Axios'
 import OtpInputText from '../opt/OtpInputText'
+import showAlert from '../../utils/showAlert'
 
 const ForgetYourPassword = () => {
   const [loading, setLoading] = useState(false)
@@ -53,7 +54,12 @@ const ForgetYourPassword = () => {
         otp: otp.join(''),
         newPassword: formData.newPassword
       })
-      navigation.navigate('SignIn')
+      Alert.alert('Password reset successfully', 'Please login with new password', [
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('SignIn')
+        }
+      ])
       setShowOtpField(true)
     } catch (error) {
       console.log(error, 'error')
@@ -71,11 +77,11 @@ const ForgetYourPassword = () => {
       />
       {loading && <Loader loading={loading} />}
       <View style={{
-          marginHorizontal: 20,
-          marginTop: '5%'
-        }}>
+        marginHorizontal: 20,
+        marginTop: '5%'
+      }}>
         <InputText
-         
+
           placeholder={'Enter Email / Phone Number'}
           onChangeText={(value) => formDataHandler('email', value)}
         />
@@ -114,7 +120,7 @@ const ForgetYourPassword = () => {
                 </View>
               </>
             ) : (
-              <View style={{ marginVertical: '4%',  }}>
+              <View style={{ marginVertical: '4%', }}>
                 <SecondaryButton
                   title={'Get OTP'}
                   onPress={sendPasswordResetOtp}

@@ -89,7 +89,7 @@ const WalletDetails = (props) => {
                   marginTop: '5%'
                 }}
               >
-                {<Text style={[styles.transactionType, { color: amountColor }]}>{transactionPropData.type}</Text>}
+                {/* {<Text style={[styles.transactionType, { color: amountColor }]}>{transactionPropData.type}</Text>} */}
                 {/*
                 <Image
                   source={require('../../assets/screens/wallet/walletIcon.png')}

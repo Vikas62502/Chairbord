@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -8,28 +8,30 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 const LogoutModal = (props) => {
-  const [modalVisible, setModalVisible] = useState(true)
+  const [modalVisible, setModalVisible] = useState(false) // Initial state to false
+
+  // This will trigger every time the screen is focused (or reloaded)
+  useFocusEffect(
+    React.useCallback(() => {
+      setModalVisible(true); // Show the modal every time this screen is focused
+    }, [])
+  )
 
   const handleClearCache = async () => {
     console.log('called logout')
-    await AsyncStorage.clear()
-    props.navigation.navigate('SignIn')
-    setModalVisible(false)
+    await AsyncStorage.clear() // Clear AsyncStorage
+    setModalVisible(false) // Close modal before navigating
+    props.navigation.navigate('SignIn') // Navigate to SignIn screen
   }
 
   const handleCancel = () => {
     setModalVisible(false) // Close the modal
     props.navigation.navigate('drawer') // Navigate back to dashboard
   }
-
-  // white screen bug solved
-  useEffect(() => {
-    setModalVisible(true)
-  }, [])
 
   return (
     <View style={styles.centeredView}>

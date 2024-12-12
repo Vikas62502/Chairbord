@@ -9,26 +9,27 @@ import {
   StyleSheet,
   Dimensions
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import SearchBar from '../../components/common/SearchBar'
+import React, { useState } from 'react'
 import SelectFieldSmall from '../../components/common/SelectFieldSmall'
-import { IssuanceTrackerData, bankName } from './IssuanceTrackerData'
+import { bankName } from './IssuanceTrackerData'
 import ExcelButton from '../../components/ui/ExcelButton'
 import IssuanceCards from './IssuanceCards'
 import OverlayHeader from '../../components/OverlayHeader'
-import { getCache } from '../../helper/Storage'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
+import { useFocusEffect } from '@react-navigation/native'
+import useUserData from '../../helper/useUserData'
+
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
 const IssuanceTracker = () => {
   const [showIssuanceModal, setShowIssuanceModal] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
-  const [agentId, setAgentId] = useState(null)
   const [loading, setLoading] = useState(false)
   const [issuanceData, setIssuanceData] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const { userId } = useUserData();
 
   const onRefresh = async () => {
     setRefreshing(true)
@@ -42,40 +43,26 @@ const IssuanceTracker = () => {
   }
 
   const fetchReports = async (id) => {
+    console.log('fetching reports', id)
     setLoading(true);
     try {
-      const res = await client.get(`/reports/reports/agent/${id}`);
-      // console.log(res.data.reports[0].customerDetail.vehicles[0].fastTags[0].TAGaFixImage, 'Response data');
-      console.log(JSON.stringify(res.data), "<---- data res");
+      const res = await client.get(`reports/issuence-report/agent/${id}`);
       setIssuanceData(res && res.data.reports);
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Reports not found';
       console.error('Error fetching reports:', errorMessage);
-      alert(errorMessage); // Display the error message from the backend
     } finally {
       setLoading(false);
     }
   };
 
-
-  useEffect(() => {
-    const getUserDataFromCache = async () => {
-      const userData = await getCache('userData')
-      if (userData?.user?.id) {
-        setAgentId(userData.user.id)
-      } else {
-        console.log('User data not found')
+  useFocusEffect(
+    React.useCallback(() => {
+      if (userId) {
+        fetchReports(userId);
       }
-    }
-
-    getUserDataFromCache()
-  }, [])
-
-  useEffect(() => {
-    if (agentId) {
-      fetchReports(agentId)
-    }
-  }, [agentId])
+    }, [userId])
+  )
 
   return (
     <>

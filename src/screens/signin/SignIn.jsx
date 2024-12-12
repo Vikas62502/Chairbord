@@ -3,15 +3,12 @@ import {
   Alert,
   KeyboardAvoidingView,
   Linking,
-  Pressable,
   SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
   Platform,
-  Dimensions,
-  Image
 } from 'react-native';
 import InputText from '../../components/common/InputText';
 import SecondaryButton from '../../components/common/SecondaryButton';
@@ -57,7 +54,7 @@ const SignIn = () => {
 
       navigation.navigate('drawer');
     } catch (error) {
-      Alert.alert(error?.response?.data?.message || 'Password is not correct !!', 'Please try again later', [
+      Alert.alert(error?.response?.data?.message || 'Password is not correct !!', 'Please try again', [
         {
           text: 'OK',
           style: 'cancel',
@@ -168,6 +165,7 @@ const SignIn = () => {
                 loginApi={loginApi}
                 isPasswordVisible={isPasswordVisible}
                 setIsPasswordVisible={setIsPasswordVisible}
+                navigation={navigation}
               />
             ) : (
               <View>

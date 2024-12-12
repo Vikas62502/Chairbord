@@ -35,30 +35,12 @@ const Register = () => {
       console.log(response, 'response with register')
     } catch (error) {
       showAlert(error.response.data.error || 'User registration failed')
-      console.log(error, 'error')
+      console.log(error.response.data, 'error')
       setShowOtpField(false)
     } finally {
       setLoading(false)
     }
   }
-
-  const getHomeApi = async () => {
-    setLoading(true)
-
-    try {
-      let response = await client.get('/home')
-      console.log(response.data, 'response with home')
-    } catch (error) {
-      Alert.alert('Something went wrong')
-      console.log(error, 'error')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getHomeApi()
-  }, [])
 
   const navigation = useNavigation()
   return (

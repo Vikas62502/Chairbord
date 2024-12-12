@@ -236,10 +236,10 @@ const TagRegistration = (props: any) => {
                 }
             })
             console.log(bodyData, "<----------------------- response")
-            const res = await client.post("/bajaj/registerFastag",
-                bodyData
-            )
-            successResponse()
+            // const res = await client.post("/bajaj/registerFastag",
+            //     bodyData
+            // )
+            // successResponse()
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
 

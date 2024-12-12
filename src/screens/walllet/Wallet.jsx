@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import WalletCards from './WalletCards'
-import { useRoute } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import FilterTags from './FilterTags'
 import { client } from '../../client/Axios'
 import OverlayHeader from '../../components/OverlayHeader'
@@ -28,6 +28,7 @@ const Wallet = (props) => {
   const [refreshing, setRefreshing] = useState(false)
   const tagsData = ['All', 'Credit', 'Debit']
   const route = useRoute()
+  const navigation = useNavigation();
   const isPartOfBottomNavigator = route.name === 'Wallet'
 
   const [loading, setLoading] = useState(false)
@@ -75,6 +76,19 @@ const Wallet = (props) => {
       transaction.amount.toString().includes(searchLower)
     )
   })
+
+
+  // explicity navigate to home screen when back button is pressed
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+        e.preventDefault();
+        navigation.navigate('home');
+      });
+
+      return () => unsubscribe();
+    }, [navigation])
+  );
 
   return (
     <>
