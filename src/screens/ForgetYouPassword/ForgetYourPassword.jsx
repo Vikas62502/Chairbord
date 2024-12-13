@@ -81,7 +81,7 @@ const ForgetYourPassword = () => {
         marginTop: '5%'
       }}>
         <InputText
-
+          value={formData.email}
           placeholder={'Enter Email / Phone Number'}
           onChangeText={(value) => formDataHandler('email', value)}
         />
@@ -95,7 +95,7 @@ const ForgetYourPassword = () => {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: '5%'
+                    marginVertical: '4%'
                   }}
                 >
                   <OtpInputText otp={otp} setOtp={setOtp} />
@@ -105,12 +105,14 @@ const ForgetYourPassword = () => {
                   onChangeText={(value) =>
                     formDataHandler('newPassword', value)
                   }
+                  value={formData.newPassword}
                 />
                 <InputText
                   placeholder={'Enter confirm password'}
                   onChangeText={(value) =>
                     formDataHandler('confirmPassword', value)
                   }
+                  value={formData.confirmPassword}
                 />
                 <View style={{ marginVertical: '4%', alignItems: 'center' }}>
                   <SecondaryButton

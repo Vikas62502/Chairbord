@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 'auto',
-    marginHorizontal:10,
+    marginHorizontal:0,
     
   },
   input: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: isSmallScreen?18:20,
     textAlign: 'center',
     fontSize: isSmallScreen?22:26,
-    marginHorizontal: 5,
+    marginHorizontal: 12,
     justifyContent: 'center',
     alignContent: 'center',
     fontWeight: '400',
