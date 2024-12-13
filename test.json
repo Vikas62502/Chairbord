@@ -1,34 +1,45 @@
-[
-    {
-        "title": "Customer Name",
-        "value": "VIKAS YADAV"
+{
+    "regDetails": {
+        "sessionId": "6f1db18155554eb5b1b4c2d4ee700930"
     },
-    {
-        "title": "Customer ID",
-        "value": 93
+    "agentId": 166,
+    "masterId": 589,
+    "agentName": "Vikas Yadav",
+    "vrnDetails": {
+        "vrn": "PB79A5248",
+        "chassis": "MALBG512LRM320251",
+        "engine": "G4LFRV438745",
+        "vehicleManuf": "HYUNDAI",
+        "model": "i 20",
+        "vehicleColour": "White",
+        "type": "LMV",
+        "status": "Active",
+        "npciStatus": "Active",
+        "isCommercial": "false",
+        "tagVehicleClassID": "4",
+        "npciVehicleClassID": "4",
+        "vehicleType": "Motor Car",
+        "rechargeAmount": "100.0",
+        "securityDeposit": "200.0",
+        "tagCost": "100.0",
+        "debitAmt": "400",
+        "vehicleDescriptor": "Petrol",
+        "isNationalPermit": "2",
+        "permitExpiryDate": "",
+        "stateOfRegistration": "PB"
     },
-    {
-        "title": "Vehicle Number",
-        "value": "RJ14UH2354"
+    "custDetails": {
+        "name": "JASVIR SINGH",
+        "mobileNo": "9888779842",
+        "walletId": ""
     },
-    {
-        "title": "Tag Serial Number",
-        "value": "608268-001-0426680"
-    },
-    {
-        "title": "Vehicle Class",
-        "value": "4"
-    },
-    {
-        "title": "Engine Number",
-        "value": "K15BN9181336"
-    },
-    {
-        "title": "Commercial Status",
-        "value": "false"
-    },
-    {
-        "title": "Chassis Number",
-        "value": "MA1XK2XKXM5G51177"
+    "fasTagDetails": {
+        "serialNo": "608268-001-0036877",
+        "tid": "",
+        "udf1": 166,
+        "udf2": "",
+        "udf3": "",
+        "udf4": "",
+        "udf5": ""
     }
-]
+}

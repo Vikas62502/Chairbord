@@ -49,20 +49,21 @@ const ForgetYourPassword = () => {
     setLoading(true)
 
     try {
-      await client.post('/forget/pass-reset', {
+      const res = await client.post('/forget/pass-reset', {
         email: formData.email,
         otp: otp.join(''),
         newPassword: formData.newPassword
       })
-      Alert.alert('Password reset successfully', 'Please login with new password', [
-        {
-          text: 'OK',
-          onPress: () => navigation.navigate('SignIn')
-        }
-      ])
+      console.log(res, 'reset password response')
       setShowOtpField(true)
     } catch (error) {
-      console.log(error, 'error')
+      console.log(error?.response?.data?.message, 'error')
+      showAlert(error?.response?.data?.message,
+        () => {
+          setShowOtpField(false)
+          setShowGeneratePassword(false)
+        }
+      )
     } finally {
       setLoading(false)
     }

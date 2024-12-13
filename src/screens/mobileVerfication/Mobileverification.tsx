@@ -95,6 +95,7 @@ const Mobileverification = (props: any) => {
           value={VerificationFormData.mobile}
           onChangeText={(txt: string) => formHandler('mobile', txt)}
           keyboardType={'numeric'}
+          maxLength={10}
         />
         <InputText
           placeholder={'Enter Vehicle Number'}

@@ -6,33 +6,32 @@ import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
 import CustomInputText from '../../components/common/CustomInputText'
 import SelectField from '../../components/common/SelectFieldBig'
-import { getCache } from '../../helper/Storage'
-import { getVehicleMakerList, getVehicleModelList } from '../../utils/vechileModalAndMaker'
 import InputText from '../../components/common/InputText'
 import showAlert from '../../utils/showAlert'
 import styles from './Styles'
 import CustomLabelText from './CustomLabelText'
 import { client } from '../../client/Axios'
+import { getMakerIfVahanFails, getTheVehicleModel, handleDateChange, onVechileTypeSelect, successResponse, updatevehicleType, validateFields } from './utils'
+import useUserData from '../../helper/useUserData'
 
 
 const TagRegistration = (props: any) => {
     const { custDetails, vrnDetails, sessionId } = props.route.params.response;
-    console.log(JSON.stringify(props.route.params.response), "props")
-    const { CustomerRegData, otpData, userOtpData } = props.route.params;
-    const [chassisNo, setChasisNo] = React.useState<any>("")
+    const { CustomerRegData, userOtpData } = props.route.params;
+    const [chassisNo, setChasisNo] = React.useState<any>(vrnDetails?.chassisNo || "")
     const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
-    const [userData, setUserData] = useState<any>()
+    const { userData } = useUserData()
     const [modalVisible, setModalVisible] = useState<null | boolean>(false)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
-    const [vehicleManufacturer, setVehicleManufacturer] = useState("")
+    const [vehicleManufacturer, setVehicleManufacturer] = useState(vrnDetails?.vehicleManuf || "")
     const [vehicleModel, setVehicleModel] = useState([])
     const [vehicleColor, setVehicleColor] = useState(vrnDetails?.vehicleColour || "")
     const [tagSerialNumber1, setTagSerialNumber1] = useState("608268")
     const [tagSerialNumber2, setTagSerialNumber2] = useState("001")
     const [tagSerialNumber3, setTagSerialNumber3] = useState("")
-    const [vehicleIscommercial, setVehicleIscommercial] = useState("")
+    const [vehicleIscommercial, setVehicleIscommercial] = useState(vrnDetails?.commercial || "")
     const [nationalpermit, setNationalPermit] = useState("")
-    const [vehicleFuelType, setVehicleFuelType] = useState("")
+    const [vehicleFuelType, setVehicleFuelType] = useState(vrnDetails?.vehicleDescriptor || "")
     const [listOfMakers, setListOfMakers] = useState(["Toyota", "Honda", "Ford"])
     const [vehicleModelValue, setVehicleModelValue] = useState(vrnDetails?.model)
     const [npciIdData, setNpciIdData] = useState(vrnDetails?.npciVehicleClassID || "")
@@ -40,35 +39,10 @@ const TagRegistration = (props: any) => {
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
     const [typeOfVehicle, setTypeOfVehicle] = useState(vrnDetails?.type)
-    const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType)
-    const [errors, setErrors] = useState<any>({})
+    const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType || "")
+    const [errors, setErrors] = useState<any>()
     const [stateCode, setStateCode] = useState("")
-    console.log(vehicleModelValue, "value")
-
-    const updatevehicleType = (value: string) => {
-        if (value === 'LMV' && vrnDetails?.tagVehicleClassID === '4' && vehicleIscommercial === 'false') {
-            setVehicleType('Motor Car')
-
-        } else if (value === 'LMV' && vrnDetails?.tagVehicleClassID === '4' && vehicleIscommercial === 'true') {
-            setVehicleType('Maxi Cab')
-        }
-    }
-
-    const onVechileTypeSelect = (type: string) => {
-
-        setTypeOfVehicle(type)
-        if (vehicleIscommercial === "false" && type === "LPV") {
-            setVehicleType("Maxi Cab")
-        } if (vehicleIscommercial === "false" && type === "LGV") {
-            setVehicleType("Goods Carrier")
-        }
-        if (vehicleIscommercial === "true" && type === "LPV") {
-            setVehicleType("Maxi Cab")
-        }
-        if (vehicleIscommercial === "true" && type === "LGV") {
-            setVehicleType("Goods Carrier")
-        }
-    }
+    console.log(errors, "<---- errors")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -80,113 +54,29 @@ const TagRegistration = (props: any) => {
         title: model
     }));
 
-    const setValueOfVehcileModal = async (model: any) => {
-        setVehicleModelValue(model?.title)
-    }
-
-    const setNpciIdDataDropdown = async (npciId: any) => {
-        setNpciIdData(npciId?.value)
-    }
-
-    const setColorData = async (color: any) => {
-        setVehicleColor(color?.title)
-    }
-
-    const successResponse = () => {
-        setIsModalSuccess(true);
-        setModalVisible(true);
-    }
 
     const customerData = [
-        {
-            title: "Tag cost",
-            value: `: ₹${vrnDetails?.tagCost}`
-        },
-        {
-            title: "Security deposit",
-            value: `: ₹${vrnDetails?.securityDeposit}`
-        },
-        {
-            title: "Wallet balance",
-            value: `: ₹${vrnDetails?.rechargeAmount}`
-        },
-        // {
-        //     title: "First time load balance",
-        //     value: `: ₹${vrnDetails?.rechargeAmount}`
-        // },
-        // {
-        //     title: "Total cost",
-        //     value: `: ₹${vrnDetails?.rechargeAmount}`
-        // }
+        { title: "Tag cost", value: `: ₹${vrnDetails?.tagCost}` },
+        { title: "Security deposit", value: `: ₹${vrnDetails?.securityDeposit}` },
+        { title: "Wallet balance", value: `: ₹${vrnDetails?.rechargeAmount}` },
     ]
 
     const customerDetailsData = [
-        {
-            title: "Name",
-            value: `: ${custDetails?.name || CustomerRegData?.name}`
-        },
-        {
-            title: "Mobile Number",
-            value: `: ${custDetails?.mobileNo || CustomerRegData?.mobileNo}`
-        },
+        { title: "Name", value: `: ${custDetails?.name || CustomerRegData?.name}` },
+        { title: "Mobile Number", value: `: ${custDetails?.mobileNo || CustomerRegData?.mobileNo}` },
     ]
 
-    // error validation
-    const validateFields = () => {
-        let newErrors: any = {};
-
-        if (!vrnDetails?.chassisNo && !chassisNo) {
-            newErrors.chassisNo = 'Chassis number is required';
-        }
-
-        if (!vrnDetails?.vehicleManuf && !vehicleManufacturer) {
-            newErrors.vehicleManufacturer = 'Vehicle Manufacturer is required';
-        }
-
-        if (!vrnDetails?.model && !vehicleModelValue) {
-            newErrors.vehicleModel = 'Vehicle Model is required';
-        }
-
-        if (!vrnDetails?.vehicleColour && !vehicleColor) {
-            newErrors.vehicleColor = 'Vehicle Color is required';
-        }
-
-        if (!vrnDetails?.npciVehicleClassID && !npciIdData) {
-            newErrors.npciIdData = 'NPCI Class is required';
-        }
-
-        if (!vrnDetails?.vehicleDescriptor && !vehicleFuelType) {
-            newErrors.vehicleFuelType = 'Fuel Type is required';
-        }
-
-        if (!vrnDetails?.commercial && vehicleIscommercial === "") {
-            newErrors.vehicleIscommercial = 'Is Commercial is required';
-        }
-        if (!typeOfVehicle) {
-            newErrors.typeOfVehicle = 'Type of Vehicle is required';
-        }
-
-        setErrors(newErrors);
-
-        // Show alert if there are errors
-        if (Object.keys(newErrors)?.length > 0) {
-            showAlert('Please fill in all required fields');
-            return false;
-        }
-        return true;
-    }
-
     const registerFastagApi = async () => {
-        if (!validateFields()) {
+        if (!validateFields(chassisNo, vehicleManufacturer, vehicleModelValue, vehicleColor, npciIdData, vehicleFuelType, vehicleIscommercial, typeOfVehicle, vehicleType, setErrors,)) {
             return;
         }
         setLoading(true)
         if (vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4') {
-            updatevehicleType(vrnDetails?.type)
+            updatevehicleType(vrnDetails?.type, vrnDetails?.tagVehicleClassID, vehicleIscommercial, setVehicleType)
         }
 
         if (vrnDetails?.type && vrnDetails?.npciVehicleClassID === '20' && !vehicleType) {
-            onVechileTypeSelect(vrnDetails?.type)
+            onVechileTypeSelect(vrnDetails?.type, setTypeOfVehicle, setVehicleType, vehicleIscommercial)
         }
         const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
         try {
@@ -236,16 +126,15 @@ const TagRegistration = (props: any) => {
                 }
             })
             console.log(bodyData, "<----------------------- response")
-            // const res = await client.post("/bajaj/registerFastag",
-            //     bodyData
-            // )
-            // successResponse()
+            const res = await client.post("/bajaj/registerFastag",
+                bodyData
+            )
+            successResponse(setIsModalSuccess, setModalVisible)
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
-
             showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
                 () => {
-                    props?.navigation?.navigate('drawer');
+                    props?.navigation?.navigate('imageGallary');
                 });
             console.log(error)
         } finally {
@@ -253,44 +142,12 @@ const TagRegistration = (props: any) => {
         }
     }
 
-    const getUserData = async () => {
-        const userData = await getCache('userData')
-        setUserData(userData)
-    }
-    const getMakerIfVahanFails = async () => {
-        const response: any = await getVehicleMakerList(props.route.params?.sessionId)
-        setListOfMakers(response?.vehicleMakerList)
-    }
-
-    const getTheVehicleModel = async (manufacturer: any) => {
-        setVehicleManufacturer(manufacturer?.title)
-        const response: any = await getVehicleModelList(props?.route?.params?.sessionId, manufacturer?.title)
-        setVehicleModel(response?.vehicleModelList)
-    }
 
     useEffect(() => {
-        console.log("vahan failed", props.route.params?.sessionId)
-        getMakerIfVahanFails();
+        if (props.route.params?.sessionId) {
+            getMakerIfVahanFails(props.route.params?.sessionId, setListOfMakers);
+        }
     }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
-
-    useEffect(() => {
-        getUserData()
-    }, [])
-
-    const handleDateChange = (text: string) => {
-        let cleaned = text.replace(/[^0-9]/g, '');
-        if (cleaned?.length > 2) {
-            cleaned = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
-        }
-        if (cleaned?.length > 5) {
-            cleaned = cleaned.slice(0, 5) + '/' + cleaned.slice(5);
-        }
-        if (cleaned?.length > 10) {
-            cleaned = cleaned.slice(0, 10);
-        }
-
-        setPermitExpiryDate(cleaned);
-    };
 
 
     return (
@@ -348,7 +205,7 @@ const TagRegistration = (props: any) => {
                                 onChangeText={(text: string) => setVehicleManufacturer(text)}
                                 isEditable={false}
                             />
-                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={getTheVehicleModel} borderColor={!vehicleManufacturer ? "red" : "black"} />}
+                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={(manufacturer: any) => getTheVehicleModel(manufacturer, props?.route?.params?.sessionId, setVehicleManufacturer, setVehicleModel)} borderColor={!vehicleManufacturer ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -420,25 +277,29 @@ const TagRegistration = (props: any) => {
                     <SelectField
                         dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value: any) => setVehicleIscommercial(value.value)} borderColor={!vehicleIscommercial ? "red" : "black"} />
                 </View>
-                {vehicleIscommercial === "true" && <View style={{ marginBottom: "5%" }}>
-                    <CustomLabelText label={"Is National Permit"} />
-                    <SelectField
-                        dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value: any) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
-                </View>}
+                {vehicleIscommercial === "true" &&
+                    <View style={{ marginBottom: "5%" }}>
+                        <CustomLabelText label={"Is National Permit"} />
+                        <SelectField
+                            dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value: any) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
+                    </View>}
 
-                {vehicleIscommercial === "true" && nationalpermit === "1" && <View>
-                    <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
-                    <CustomInputText
-                        placeholder='DD-MM-YYYY'
-                        placeholderTextColor='#263238'
-                        style={styles.dateInput}
-                        value={permitExpiryDate}
-                        onChangeText={(text: string) => handleDateChange(text)}
-                        keyboardType='numeric'
-                        maxLength={10}
-                        borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
-                    />
-                </View>}
+                {vehicleIscommercial === "true" && nationalpermit === "1" &&
+                    <View>
+                        <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
+                        <CustomInputText
+                            placeholder='DD-MM-YYYY'
+                            placeholderTextColor='#263238'
+                            style={styles.dateInput}
+                            value={permitExpiryDate}
+                            onChangeText={(text: string) => handleDateChange(text, setPermitExpiryDate)}
+                            keyboardType='numeric'
+                            maxLength={10}
+                            borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
+                        />
+                    </View>
+                }
+
 
                 <View style={{ marginVertical: "5%" }}>
                     <CustomLabelText label={"Fuel Type"} />
@@ -478,19 +339,15 @@ const TagRegistration = (props: any) => {
                 <View style={{ marginTop: 20, justifyContent: "center" }}>
                     <SecondaryButton
                         title={"Submit"}
-                        onPress={() => {
-                            registerFastagApi()
-                        }}
+                        onPress={registerFastagApi}
                     />
                 </View>
             </View>
 
-            <SuccessModal
-                visible={modalVisible!}
-                onClose={() => {
-                    setModalVisible(false)
-                    setIsModalSuccess(null)
-                }}
+            <SuccessModal visible={modalVisible!} onClose={() => {
+                setModalVisible(false)
+                setIsModalSuccess(null)
+            }}
                 isSuccess={isModalSuccess}
             />
         </ScrollView >

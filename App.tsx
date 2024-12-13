@@ -14,16 +14,13 @@ import DrawerNavigation from './src/navigation/Drawer/DrawerNavigation'
 import ErrorBoundary from 'react-native-error-boundary'
 import ErrorFallback from './src/components/ErrorFallback/ErrorFallback'
 import logErrorToSentry from './src/components/ErrorFallback/LogErrorToSentry'
+import useUserData from './src/helper/useUserData'
 
-function App({}): React.JSX.Element {
+function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
-  const [userData, setUserData] = useState<any>()
-
-  // Fetch user data and set it to state
-  const getUserData = async () => {
-    const userData = await getCache('userData')
-    setUserData(userData)
-  }
+  console.log(socket, "<--- socket")
+  const { userData } = useUserData()
+  console.log(userData, "<--- userData")
 
   // Request multiple permissions
   const requestPermissions = async () => {
@@ -50,7 +47,6 @@ function App({}): React.JSX.Element {
 
   // Fetch user data on component mount
   useEffect(() => {
-    getUserData()
     requestPermissions() // Request permissions on mount
   }, [])
 

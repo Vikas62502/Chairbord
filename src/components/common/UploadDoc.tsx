@@ -7,10 +7,12 @@ import {
   ImageBackground,
   Alert,
 } from 'react-native';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import pickImage from '../../helper/pickImage';
 import pickdoc from '../../helper/pickdoc';
 import pickImageFromCamera from '../../helper/pickImageFromCamera';
+import { permissionCheck, requestPermissions } from '../../utils/permissionCheck';
+import { PERMISSIONS } from 'react-native-permissions';
 
 interface interfaceUploadDocProps {
   text: string;
@@ -29,6 +31,9 @@ const UploadDoc: FC<interfaceUploadDocProps> = ({
   showAlert = true, // Default to showing the alert
   defaultUploadType = 'doc', // Default to using the document picker
 }) => {
+
+
+
   const pickData = async (uploadDocType: 'camera' | 'gallery' | 'doc') => {
     try {
       let file;
@@ -91,6 +96,17 @@ const UploadDoc: FC<interfaceUploadDocProps> = ({
         return require('../../assets/uploadLogo.png');
     }
   };
+
+  useEffect(() => {
+    const checkPermissionStatus = async () => {
+      const result = await permissionCheck(PERMISSIONS.ANDROID.CAMERA);
+      if (result === 'denied') {
+        await requestPermissions(PERMISSIONS.ANDROID.CAMERA);
+      }
+    };
+
+    checkPermissionStatus();
+  }, []);
 
   return (
     <View style={styles.container}>
