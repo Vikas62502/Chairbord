@@ -134,7 +134,7 @@ const TagRegistration = (props: any) => {
             console.log(error || 'Tag registration failed')
             showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
                 () => {
-                    props?.navigation?.navigate('imageGallary');
+                    props?.navigation?.goBack()
                 });
             console.log(error)
         } finally {
@@ -148,6 +148,12 @@ const TagRegistration = (props: any) => {
             getMakerIfVahanFails(props.route.params?.sessionId, setListOfMakers);
         }
     }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
+
+    useEffect(() => {
+        if (!vehicleType) {
+            updatevehicleType(vrnDetails?.type, vrnDetails?.tagVehicleClassID, vehicleIscommercial, setVehicleType)
+        }
+    }, [vehicleType])
 
 
     return (

@@ -54,6 +54,7 @@ const isSmallScreen = width < 400;
 
 const ImageCollection = (props: any) => {
   const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
+  console.log("ImageCollection", sessionId, customerId, CusRegData, otpData, userData);
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 

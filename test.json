@@ -1,45 +1,22 @@
 {
-    "regDetails": {
-        "sessionId": "6f1db18155554eb5b1b4c2d4ee700930"
-    },
-    "agentId": 166,
-    "masterId": 589,
-    "agentName": "Vikas Yadav",
-    "vrnDetails": {
-        "vrn": "PB79A5248",
-        "chassis": "MALBG512LRM320251",
-        "engine": "G4LFRV438745",
-        "vehicleManuf": "HYUNDAI",
-        "model": "i 20",
-        "vehicleColour": "White",
-        "type": "LMV",
-        "status": "Active",
-        "npciStatus": "Active",
-        "isCommercial": "false",
-        "tagVehicleClassID": "4",
-        "npciVehicleClassID": "4",
-        "vehicleType": "Motor Car",
-        "rechargeAmount": "100.0",
-        "securityDeposit": "200.0",
-        "tagCost": "100.0",
-        "debitAmt": "400",
-        "vehicleDescriptor": "Petrol",
-        "isNationalPermit": "2",
-        "permitExpiryDate": "",
-        "stateOfRegistration": "PB"
-    },
-    "custDetails": {
-        "name": "JASVIR SINGH",
-        "mobileNo": "9888779842",
-        "walletId": ""
-    },
-    "fasTagDetails": {
-        "serialNo": "608268-001-0036877",
-        "tid": "",
-        "udf1": 166,
-        "udf2": "",
-        "udf3": "",
-        "udf4": "",
-        "udf5": ""
-    }
+    "chassisNo": "MA1NM2ET1K2H53319",
+    "commercial": false,
+    "engineNo": "ETKZH68529",
+    "isNationalPermit": null,
+    "model": "XUV300 DIESEL W6",
+    "npciVehicleClassID": "4",
+    "permitExpiryDate": null,
+    "rechargeAmount": "100.0",
+    "repTagCost": "0.00",
+    "rtoStatus": "Active",
+    "securityDeposit": "200.0",
+    "stateOfRegistration": null,
+    "tagCost": "100.0",
+    "tagVehicleClassID": "4",
+    "type": "LMV",
+    "vehicleColour": "DESAT SILVER",
+    "vehicleDescriptor": null,
+    "vehicleManuf": "MAHINDRA & MAHINDRA LIMITED",
+    "vehicleNo": "GJ01KX3619",
+    "vehicleType": "Motor Car"
 }
