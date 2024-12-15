@@ -11,38 +11,63 @@ import showAlert from '../../utils/showAlert'
 import styles from './Styles'
 import CustomLabelText from './CustomLabelText'
 import { client } from '../../client/Axios'
-import { getMakerIfVahanFails, getTheVehicleModel, handleDateChange, onVechileTypeSelect, successResponse, updatevehicleType, validateFields } from './utils'
+import { getMakerIfVahanFails, getTheVehicleModel, handleDateChange, onVechileTypeSelect, setColorData, setNpciIdDataDropdown, setValueOfVehcileModal, successResponse, updatevehicleType, validateFields } from './utils'
 import useUserData from '../../helper/useUserData'
+
+const dummyProps = {
+    route: {
+        params: {
+            response: {
+                custDetails: {
+                    name: 'John Doe',
+                    mobileNo: '1234567890',
+                    walletId: '987654321',
+                },
+                vrnDetails: null,
+                sessionId: '123456789',
+            },
+        },
+    },
+    // navigation: {
+    //   navigate: (screenName, params) => {
+    //     console.log(`Navigating to ${screenName} with params:`, params);
+    //   },
+    //   goBack: () => {
+    //     console.log('Going back');
+    //   },
+    // },
+}
 
 
 const TagRegistration = (props: any) => {
-    const { custDetails, vrnDetails, sessionId } = props.route.params.response;
+    const { custDetails, vrnDetails, sessionId } = props.route.params.response as any;
     const { CustomerRegData, userOtpData } = props.route.params;
-    const [chassisNo, setChasisNo] = React.useState<any>(vrnDetails?.chassisNo || "")
-    const [engineNumber, setEngineNumber] = React.useState<any>(vrnDetails?.engineNo || "")
+    const [chassisNo, setChasisNo] = React.useState<any>("")
+    const [engineNumber, setEngineNumber] = React.useState<any>("")
     const { userData } = useUserData()
     const [modalVisible, setModalVisible] = useState<null | boolean>(false)
     const [isModalSuccess, setIsModalSuccess] = useState<null | boolean>(null)
-    const [vehicleManufacturer, setVehicleManufacturer] = useState(vrnDetails?.vehicleManuf || "")
+    const [vehicleManufacturer, setVehicleManufacturer] = useState("")
     const [vehicleModel, setVehicleModel] = useState([])
-    const [vehicleColor, setVehicleColor] = useState(vrnDetails?.vehicleColour || "")
+    const [vehicleColor, setVehicleColor] = useState("")
     const [tagSerialNumber1, setTagSerialNumber1] = useState("608268")
     const [tagSerialNumber2, setTagSerialNumber2] = useState("001")
     const [tagSerialNumber3, setTagSerialNumber3] = useState("")
-    const [vehicleIscommercial, setVehicleIscommercial] = useState(vrnDetails?.commercial || "")
+    const [vehicleIscommercial, setVehicleIscommercial] = useState("")
     const [nationalpermit, setNationalPermit] = useState("")
-    const [vehicleFuelType, setVehicleFuelType] = useState(vrnDetails?.vehicleDescriptor || "")
+    const [vehicleFuelType, setVehicleFuelType] = useState("")
     const [listOfMakers, setListOfMakers] = useState(["Toyota", "Honda", "Ford"])
-    const [vehicleModelValue, setVehicleModelValue] = useState(vrnDetails?.model)
+    const [vehicleModelValue, setVehicleModelValue] = useState("")
     const [npciIdData, setNpciIdData] = useState(vrnDetails?.npciVehicleClassID || "")
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
-    const [stateOfRegistration, setStateOfRegistration] = useState(vrnDetails?.stateOfRegistration)
-    const [typeOfVehicle, setTypeOfVehicle] = useState(vrnDetails?.type)
-    const [vehicleType, setVehicleType] = useState(vrnDetails?.vehicleType || "")
+    const [stateOfRegistration, setStateOfRegistration] = useState("")
+    const [typeOfVehicle, setTypeOfVehicle] = useState("")
+    const [vehicleType, setVehicleType] = useState("")
     const [errors, setErrors] = useState<any>()
     const [stateCode, setStateCode] = useState("")
     console.log(errors, "<---- errors")
+    console.log(vehicleColor, "<---- vehicleColor")
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -76,6 +101,7 @@ const TagRegistration = (props: any) => {
         }
 
         if (vrnDetails?.type && vrnDetails?.npciVehicleClassID === '20' && !vehicleType) {
+            console.log("called", vrnDetails?.type, vrnDetails?.npciVehicleClassID, vehicleIscommercial, typeof setTypeOfVehicle)
             onVechileTypeSelect(vrnDetails?.type, setTypeOfVehicle, setVehicleType, vehicleIscommercial)
         }
         const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
@@ -90,17 +116,17 @@ const TagRegistration = (props: any) => {
                 "vrnDetails": {
                     "vrn": vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase(),
                     "chassis": vrnDetails?.chassisNo || chassisNo,
-                    "engine": engineNumber || vrnDetails?.engineNo || "",
+                    "engine": vrnDetails?.engineNo || "",
                     "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
-                    "model": vehicleModelValue,
+                    "model": vrnDetails?.model || vehicleModelValue,
                     "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
-                    "type": typeOfVehicle,
+                    "type": vrnDetails?.type || typeOfVehicle,
                     "status": "Active",
                     "npciStatus": "Active",
-                    "isCommercial": vehicleIscommercial,
+                    "isCommercial": vrnDetails?.commercial || vehicleIscommercial,
                     "tagVehicleClassID": "4",
                     "npciVehicleClassID": npciIdData || "4",
-                    "vehicleType": vehicleType,
+                    "vehicleType": vrnDetails?.vehicleType || vehicleType,
                     "rechargeAmount": vrnDetails?.rechargeAmount,
                     "securityDeposit": vrnDetails?.securityDeposit,
                     "tagCost": vrnDetails?.tagCost,
@@ -126,10 +152,10 @@ const TagRegistration = (props: any) => {
                 }
             })
             console.log(bodyData, "<----------------------- response")
-            const res = await client.post("/bajaj/registerFastag",
-                bodyData
-            )
-            successResponse(setIsModalSuccess, setModalVisible)
+            // const res = await client.post("/bajaj/registerFastag",
+            //     bodyData
+            // )
+            // successResponse(setIsModalSuccess, setModalVisible)
         } catch (error: any) {
             console.log(error || 'Tag registration failed')
             showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
@@ -221,7 +247,7 @@ const TagRegistration = (props: any) => {
                             value={vrnDetails?.model}
                             onChangeText={(text: string) => setVehicleModelValue(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={setValueOfVehcileModal} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
+                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={(model: string) => setValueOfVehcileModal(model, setVehicleModelValue)} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
                     </View>
 
                     <View style={{ marginTop: "5%" }}>
@@ -231,7 +257,7 @@ const TagRegistration = (props: any) => {
                             value={vrnDetails?.vehicleColour}
                             onChangeText={(text: string) => setVehicleColor(text)}
                             isEditable={false}
-                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={setColorData} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
+                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={(color: string) => setColorData(color, setVehicleColor)} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
                     </View>
 
                     {vrnDetails && vrnDetails?.npciVehicleClassID ? <View style={{ marginTop: "5%" }}>
@@ -240,7 +266,7 @@ const TagRegistration = (props: any) => {
                     </View> :
                         <View style={{ marginTop: "5%" }}>
                             <CustomLabelText label={"NPCI Class"} />
-                            <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={setNpciIdDataDropdown} borderColor={!npciIdData ? "red" : "black"} />
+                            <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={(npciId: string) => setNpciIdDataDropdown(npciId, setNpciIdData)} borderColor={!npciIdData ? "red" : "black"} />
                         </View>
                     }
 
@@ -273,7 +299,8 @@ const TagRegistration = (props: any) => {
                     </View> :
                         <View style={{ marginTop: "5%" }}>
                             <CustomLabelText label={"Vehicle Type"} />
-                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value: any) => onVechileTypeSelect(value.value)} borderColor={!vehicleFuelType ? "red" : "black"} />
+                            <SelectField dataToRender={vehicleTypeDropdown} title={'Select Vehicle Type'} selectedValue={(value: any) => onVechileTypeSelect(value.value,
+                                setTypeOfVehicle, setVehicleType, vehicleIscommercial)} borderColor={!typeOfVehicle ? "red" : "black"} />
                         </View>
                     }
                 </View>

@@ -54,7 +54,6 @@ const isSmallScreen = width < 400;
 
 const ImageCollection = (props: any) => {
   const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
-  console.log("ImageCollection", sessionId, customerId, CusRegData, otpData, userData);
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -82,7 +81,7 @@ const ImageCollection = (props: any) => {
         },
       }));
     } catch (error: any) {
-      console.log(error, "<--- error")
+      console.log(JSON.stringify(error.response?.data), "<--- error")
       showAlert(error.response?.data?.error?.errorDesc || error.response?.data?.error?.msg);
       console.log(error.response?.data?.error?.errorDesc || error.response?.data?.error?.msg, "error");
     } finally {
@@ -135,7 +134,8 @@ const ImageCollection = (props: any) => {
                   source={{ uri: imageGallaryData?.VEHICLEFRONT?.image?.uri }}
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
-              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"} />}
+              </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"}
+                defaultUploadType="camera" showAlert={false} />}
             </View>
 
             <View style={{ height: 200, width: "100%", borderRadius: 20 }}>
@@ -146,7 +146,7 @@ const ImageCollection = (props: any) => {
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"}
-              />}
+                defaultUploadType="camera" showAlert={false} />}
             </View>
             {/* </View> */}
           </View>
@@ -162,7 +162,7 @@ const ImageCollection = (props: any) => {
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"}
-              />}
+                defaultUploadType="camera" showAlert={false} />}
             </View>
           </View>
         </View>
