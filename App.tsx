@@ -15,6 +15,7 @@ import ErrorBoundary from 'react-native-error-boundary'
 import ErrorFallback from './src/components/ErrorFallback/ErrorFallback'
 import logErrorToSentry from './src/components/ErrorFallback/LogErrorToSentry'
 import useUserData from './src/helper/useUserData'
+import { checkForUpdate } from './src/utils/updateUtils'
 
 function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
@@ -66,6 +67,11 @@ function App({ }): React.JSX.Element {
       }
     }
   }, [userData])
+
+  useEffect(() => {
+    // Check for updates when app starts
+    checkForUpdate()
+  }, [])
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={logErrorToSentry}>
