@@ -165,8 +165,8 @@ const TagReplacementForm = (props: any) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
       <ScrollView>
-        <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
         {loading && <Loader loading={loading} />}
         <View style={styles.container}>
           {loading && (

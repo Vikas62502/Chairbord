@@ -26,14 +26,14 @@ const dummyProps = {
                 vrnDetails: null,
                 sessionId: '123456789',
             },
-            // CustomerRegData: {
-            //     name: 'John Doe',
-            //     mobileNo: '1234567890',
-            //     walletId: '987654321',
-            // },
-            // userOtpData: {
-            //     vehicleNo: 'DL1CAB1234',
-            // },
+            CustomerRegData: {
+                name: 'John Doe',
+                mobileNo: '1234567890',
+                walletId: '987654321',
+            },
+            userOtpData: {
+                vehicleNo: 'DL1CAB1234',
+            },
         },
     },
     // navigation: {
@@ -186,110 +186,111 @@ const TagRegistration = (props: any) => {
 
     console.log(vrnDetails?.vehicleDescriptor, "vrnDetails?.vehicleDescriptor")
     return (
-        <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Registration"} />
-            <View style={styles.container}>
-                {loading && (
-                    <View style={styles.loaderContainer}>
-                        <ActivityIndicator size="large" color="#0000ff" />
-                    </View>
-                )}
-                <Text style={styles.label}>Customer details</Text>
-
-                <View style={styles.dataDetailContainer}>
-                    {customerDetailsData && customerDetailsData.map((data, index) => (
-                        <View style={styles.customerDetailsContainer} key={index}>
-                            <Text style={styles.customerDetailsTitleText}>{data.title}</Text>
-                            <Text style={styles.customerDetailsValueText}>{data.value}</Text>
+            <ScrollView>
+                <View style={styles.container}>
+                    {loading && (
+                        <View style={styles.loaderContainer}>
+                            <ActivityIndicator size="large" color="#0000ff" />
                         </View>
-                    ))}
-                </View>
+                    )}
+                    <Text style={styles.label}>Customer details</Text>
 
-                <Text style={styles.label}>Vehicle Details</Text>
+                    <View style={styles.dataDetailContainer}>
+                        {customerDetailsData && customerDetailsData.map((data, index) => (
+                            <View style={styles.customerDetailsContainer} key={index}>
+                                <Text style={styles.customerDetailsTitleText}>{data.title}</Text>
+                                <Text style={styles.customerDetailsValueText}>{data.value}</Text>
+                            </View>
+                        ))}
+                    </View>
 
-                <CustomLabelText label={"Vehicle Number"} />
-                <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
-                    onChangeText={{}} isEditable={false}
-                />
+                    <Text style={styles.label}>Vehicle Details</Text>
 
-                <View style={{ marginTop: "5%" }}>
-                    <CustomLabelText label={"Chasis Number"} />
-                    {vrnDetails && vrnDetails?.chassisNo?.length > 2 ?
-                        <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
-                            isEditable={false}
-                        /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
-                            onChangeText={(text: string) => setChasisNo(text?.toUpperCase())} borderColor={chassisNo?.length < 2 ? "red" : "#263238"}
-                        />}
-                </View>
-                <View style={{ marginTop: "5%" }}>
-                    <CustomLabelText label={"Enter Engine number"} />
-                    {vrnDetails && vrnDetails?.engineNo?.length > 2 ?
-                        <InputText placeholder={"Engine number"} value={vrnDetails?.engineNo}
-                            isEditable={false}
-                        /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
-                            onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
-                        />}
-                </View>
-                <>
+                    <CustomLabelText label={"Vehicle Number"} />
+                    <InputText placeholder={"Enter vehicle number"} value={vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()}
+                        onChangeText={{}} isEditable={false}
+                    />
+
                     <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"Vehicle Manufacturer"} />
-                        {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 && vrnDetails?.model?.length > 2 ?
-                            <CustomInputText
-                                placeholder={"Vehicle Manufacturer"}
-                                value={vrnDetails?.vehicleManuf}
-                                onChangeText={(text: string) => setVehicleManufacturer(text)}
+                        <CustomLabelText label={"Chasis Number"} />
+                        {vrnDetails && vrnDetails?.chassisNo?.length > 2 ?
+                            <InputText placeholder={"Enter Chasis number"} value={vrnDetails?.chassisNo}
                                 isEditable={false}
-                            />
-                            : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={(manufacturer: any) => getTheVehicleModel(manufacturer, props?.route?.params?.sessionId, setVehicleManufacturer, setVehicleModel)} borderColor={!vehicleManufacturer ? "red" : "black"} />}
+                            /> : <CustomInputText placeholder={"Enter Chasis number"} value={chassisNo}
+                                onChangeText={(text: string) => setChasisNo(text?.toUpperCase())} borderColor={chassisNo?.length < 2 ? "red" : "#263238"}
+                            />}
                     </View>
-
                     <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"Vehicle Model"} />
-                        {vrnDetails && vrnDetails?.model?.length > 2 ? <CustomInputText
-                            placeholder={"Vehicle Model"}
-                            value={vrnDetails?.model}
-                            onChangeText={(text: string) => setVehicleModelValue(text)}
-                            isEditable={false}
-                        /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={(model: string) => setValueOfVehcileModal(model, setVehicleModelValue)} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
+                        <CustomLabelText label={"Enter Engine number"} />
+                        {vrnDetails && vrnDetails?.engineNo?.length > 2 ?
+                            <InputText placeholder={"Engine number"} value={vrnDetails?.engineNo}
+                                isEditable={false}
+                            /> : <CustomInputText placeholder={"Enter Engine number"} value={engineNumber}
+                                onChangeText={(text: string) => setEngineNumber(text?.toUpperCase())} borderColor={engineNumber?.length < 2 ? "red" : "#263238"}
+                            />}
                     </View>
-
-                    {vrnDetails && vrnDetails?.model === "NA" || !vrnDetails?.model &&
+                    <>
                         <View style={{ marginTop: "5%" }}>
-                            <CustomLabelText label={"Vehicle Color"} />
-                            <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={(color: string) => setColorData(color, setVehicleColor)} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />
+                            <CustomLabelText label={"Vehicle Manufacturer"} />
+                            {vrnDetails && vrnDetails?.vehicleManuf?.length > 2 && vrnDetails?.model?.length > 2 ?
+                                <CustomInputText
+                                    placeholder={"Vehicle Manufacturer"}
+                                    value={vrnDetails?.vehicleManuf}
+                                    onChangeText={(text: string) => setVehicleManufacturer(text)}
+                                    isEditable={false}
+                                />
+                                : <SelectField dataToRender={dropdownOptions} title={'Select Vehicle Manufacturer'} selectedValue={(manufacturer: any) => getTheVehicleModel(manufacturer, props?.route?.params?.sessionId, setVehicleManufacturer, setVehicleModel)} borderColor={!vehicleManufacturer ? "red" : "black"} />}
                         </View>
-                    }
 
-                    {/* {vrnDetails && !vrnDetails?.npciVehicleClassID && */}
-                    <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"NPCI Class"} />
-                        <SelectField dataToRender={npciVehicleClassIDData} title={vrnDetails?.npciVehicleClassID || 'NPCI vehicle class'} selectedValue={(npciId: string) => setNpciIdDataDropdown(npciId, setNpciIdData)} borderColor={!npciIdData ? "red" : "black"} />
-                    </View>
-                    {/* } */}
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"Vehicle Model"} />
+                            {vrnDetails && vrnDetails?.model?.length > 2 ? <CustomInputText
+                                placeholder={"Vehicle Model"}
+                                value={vrnDetails?.model}
+                                onChangeText={(text: string) => setVehicleModelValue(text)}
+                                isEditable={false}
+                            /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={(model: string) => setValueOfVehcileModal(model, setVehicleModelValue)} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
+                        </View>
 
-                </>
+                        {vrnDetails && vrnDetails?.model === "NA" || !vrnDetails?.model &&
+                            <View style={{ marginTop: "5%" }}>
+                                <CustomLabelText label={"Vehicle Color"} />
+                                <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={(color: string) => setColorData(color, setVehicleColor)} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />
+                            </View>
+                        }
 
-                <Text style={styles.label}>Tag serial number</Text>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: 10
-                    }}
-                >
-                    <View style={{ flex: 1, marginVertical: "5%" }}>
-                        <CustomInputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} isEditable={false} />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <SelectField dataToRender={middleTagSerialNumber} title={tagSerialNumber2 || 'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
-                    </View>
-                </View>
+                        {/* {vrnDetails && !vrnDetails?.npciVehicleClassID && */}
+                        <View style={{ marginTop: "5%" }}>
+                            <CustomLabelText label={"NPCI Class"} />
+                            <SelectField dataToRender={npciVehicleClassIDData} title={vrnDetails?.npciVehicleClassID || 'NPCI vehicle class'} selectedValue={(npciId: string) => setNpciIdDataDropdown(npciId, setNpciIdData)} borderColor={!npciIdData ? "red" : "black"} />
+                        </View>
+                        {/* } */}
 
-                {/* <View style={{ marginBottom: "5%" }}>
+                    </>
+
+                    <Text style={styles.label}>Tag serial number</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: 10
+                        }}
+                    >
+                        <View style={{ flex: 1, marginVertical: "5%" }}>
+                            <CustomInputText placeholder={''} value='608268' onChangeText={(text: string) => setTagSerialNumber1(text)} isEditable={false} />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <SelectField dataToRender={middleTagSerialNumber} title={tagSerialNumber2 || 'select'} selectedValue={(value: any) => setTagSerialNumber2(value.value)} borderColor={!tagSerialNumber2 ? "red" : "black"} />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <CustomInputText placeholder={''} value={tagSerialNumber3} onChangeText={(text: string) => setTagSerialNumber3(text)} borderColor={tagSerialNumber3?.length < 2 ? "red" : "#263238"} keyboardType={"numeric"} />
+                        </View>
+                    </View>
+
+                    {/* <View style={{ marginBottom: "5%" }}>
                     {vrnDetails && vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4' ? <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Type"} />
                         <CustomInputText placeholder={"Vehicle Type"} value={vrnDetails?.type} isEditable={false} />
@@ -302,85 +303,86 @@ const TagRegistration = (props: any) => {
                     }
                 </View> */}
 
-                <View style={{ marginBottom: "5%" }}>
-                    <CustomLabelText label={"Is Commercial"} />
-                    <SelectField
-                        dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value: any) => setVehicleIscommercial(value.value)} borderColor={!vehicleIscommercial ? "red" : "black"} />
-                </View>
-                {vehicleIscommercial === "true" &&
                     <View style={{ marginBottom: "5%" }}>
-                        <CustomLabelText label={"Is National Permit"} />
+                        <CustomLabelText label={"Is Commercial"} />
                         <SelectField
-                            dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value: any) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
-                    </View>}
-
-                {vehicleIscommercial === "true" && nationalpermit === "1" &&
-                    <View style={{ marginBottom: "5%" }}>
-                        <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
-                        <CustomInputText
-                            placeholder='DD-MM-YYYY'
-                            placeholderTextColor='#263238'
-                            style={styles.dateInput}
-                            value={permitExpiryDate}
-                            onChangeText={(text: string) => handleDateChange(text, setPermitExpiryDate)}
-                            keyboardType='numeric'
-                            maxLength={10}
-                            borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
-                        />
+                            dataToRender={commercialOptions} title={'Select isCommercial'} selectedValue={(value: any) => setVehicleIscommercial(value.value)} borderColor={!vehicleIscommercial ? "red" : "black"} />
                     </View>
-                }
+                    {vehicleIscommercial === "true" &&
+                        <View style={{ marginBottom: "5%" }}>
+                            <CustomLabelText label={"Is National Permit"} />
+                            <SelectField
+                                dataToRender={isNationalPermitOptions} title={'Select National Permit'} selectedValue={(value: any) => setNationalPermit(value.value)} borderColor={!nationalpermit ? "red" : "black"} />
+                        </View>}
 
-
-                {!vrnDetails?.vehicleDescriptor &&
-                    <View style={{ marginVertical: "5%" }}>
-                        <CustomLabelText label={"Fuel Type"} />
-                        <SelectField
-                            dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleFuelType(value.title)}
-                            borderColor={!vehicleFuelType ? "red" : "black"}
-                        />
-                    </View>
-                }
-
-                {!vrnDetails?.stateOfRegistration &&
-                    <View style={{ marginVertical: "5%" }}>
-                        <CustomLabelText label={"State of Registration"} />
-                        <SelectField
-                            dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
-                    </View>
-
-                }
-                {
-                    stateOfRegistration === 'TELANGANA' && <View style={{ marginVertical: "5%" }}>
-                        <CustomLabelText label={"Select State Code"} />
-                        <SelectField
-                            dataToRender={telanganaStateCode} title={'Select Vehicle State'} selectedValue={(value: any) => setStateCode(value.code)} borderColor={!stateCode ? "red" : "black"} />
-                    </View>
-                }
-
-                <View style={styles.dataDetailContainer}>
-                    {customerData && customerData.map((data, index) => (
-                        <View style={styles.customerDetailsContainer} key={index}>
-                            <Text style={styles.customerDetailsTitleText}>{data.title}</Text>
-                            <Text style={styles.customerDetailsValueText}>{data.value}</Text>
+                    {vehicleIscommercial === "true" && nationalpermit === "1" &&
+                        <View style={{ marginBottom: "5%" }}>
+                            <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
+                            <CustomInputText
+                                placeholder='DD-MM-YYYY'
+                                placeholderTextColor='#263238'
+                                style={styles.dateInput}
+                                value={permitExpiryDate}
+                                onChangeText={(text: string) => handleDateChange(text, setPermitExpiryDate)}
+                                keyboardType='numeric'
+                                maxLength={10}
+                                borderColor={permitExpiryDate?.length < 2 ? "red" : "#263238"}
+                            />
                         </View>
-                    ))}
+                    }
+
+
+                    {!vrnDetails?.vehicleDescriptor &&
+                        <View style={{ marginVertical: "5%" }}>
+                            <CustomLabelText label={"Fuel Type"} />
+                            <SelectField
+                                dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleFuelType(value.title)}
+                                borderColor={!vehicleFuelType ? "red" : "black"}
+                            />
+                        </View>
+                    }
+
+                    {!vrnDetails?.stateOfRegistration &&
+                        <View style={{ marginVertical: "5%" }}>
+                            <CustomLabelText label={"State of Registration"} />
+                            <SelectField
+                                dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
+                        </View>
+
+                    }
+                    {
+                        stateOfRegistration === 'TELANGANA' && <View style={{ marginVertical: "5%" }}>
+                            <CustomLabelText label={"Select State Code"} />
+                            <SelectField
+                                dataToRender={telanganaStateCode} title={'Select Vehicle State'} selectedValue={(value: any) => setStateCode(value.code)} borderColor={!stateCode ? "red" : "black"} />
+                        </View>
+                    }
+
+                    <View style={styles.dataDetailContainer}>
+                        {customerData && customerData.map((data, index) => (
+                            <View style={styles.customerDetailsContainer} key={index}>
+                                <Text style={styles.customerDetailsTitleText}>{data.title}</Text>
+                                <Text style={styles.customerDetailsValueText}>{data.value}</Text>
+                            </View>
+                        ))}
+                    </View>
+
+                    <View style={{ marginTop: 20, justifyContent: "center" }}>
+                        <SecondaryButton
+                            title={"Submit"}
+                            onPress={registerFastagApi}
+                        />
+                    </View>
                 </View>
 
-                <View style={{ marginTop: 20, justifyContent: "center" }}>
-                    <SecondaryButton
-                        title={"Submit"}
-                        onPress={registerFastagApi}
-                    />
-                </View>
-            </View>
-
-            <SuccessModal visible={modalVisible!} onClose={() => {
-                setModalVisible(false)
-                setIsModalSuccess(null)
-            }}
-                isSuccess={isModalSuccess}
-            />
-        </ScrollView >
+                <SuccessModal visible={modalVisible!} onClose={() => {
+                    setModalVisible(false)
+                    setIsModalSuccess(null)
+                }}
+                    isSuccess={isModalSuccess}
+                />
+            </ScrollView >
+        </View>
     )
 }
 

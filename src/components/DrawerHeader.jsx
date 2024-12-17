@@ -14,11 +14,11 @@ const DrawerHeader = () => {
       <LinearGradient colors={['#02546D', '#142D40']} style={styles.container}>
 
         <View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
             <Image source={require('../assets/ham_menu.png')} style={{ width: 25, height: 20, }} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View>
           <TouchableOpacity
