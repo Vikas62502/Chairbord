@@ -54,7 +54,11 @@ const ForgetYourPassword = () => {
         otp: otp.join(''),
         newPassword: formData.newPassword
       })
-      console.log(res, 'reset password response')
+
+      console.log(res.data, 'reset password response')
+      showAlert(res.data.message, () => {
+        navigation.navigate('SignIn')
+      })
       setShowOtpField(true)
     } catch (error) {
       console.log(error?.response?.data?.message, 'error')
@@ -85,6 +89,7 @@ const ForgetYourPassword = () => {
           value={formData.email}
           placeholder={'Enter Email / Phone Number'}
           onChangeText={(value) => formDataHandler('email', value)}
+          isEditable={!showOtpField}
         />
         {showGeneratePassword ? (
           <></>

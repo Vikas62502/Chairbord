@@ -28,7 +28,7 @@ export const getTheVehicleModel = async (manufacturer: any, sessionId: string, s
 }
 
 export // error validation
-    const validateFields = (chassisNo: string, vehicleManufacturer: string, vehicleModelValue: string, vehicleColor: string, npciIdData: string, vehicleFuelType: string, vehicleIscommercial: string, typeOfVehicle: string, vehicleType: string, setErrors: any) => {
+    const validateFields = (chassisNo: string, vehicleManufacturer: string, vehicleModelValue: string, vehicleColor: string, npciIdData: string, vehicleFuelType: string, vehicleIscommercial: string, setErrors: any) => {
         let newErrors: any = {};
 
         if (!chassisNo) {
@@ -58,14 +58,9 @@ export // error validation
         if (!vehicleIscommercial) {
             newErrors.vehicleIscommercial = 'Is Commercial is required';
         }
-        if (!typeOfVehicle) {
-            newErrors.typeOfVehicle = 'Type of Vehicle is required';
-        }
-
-        if (!vehicleType) {
-            console.log("callend")
-            newErrors.vehicleType = 'Vehicle Type is required';
-        }
+        // if (!typeOfVehicle) {
+        //     newErrors.typeOfVehicle = 'Type of Vehicle is required';
+        // }
         setErrors(newErrors);
         // Show alert if there are errors
         if (Object.keys(newErrors)?.length > 0) {

@@ -22,6 +22,7 @@ const pickImageFromCamera = async () => {
                     type: response.assets[0].type,
                 };
                 console.log('Captured Image Source:', source);
+                console.log(JSON.stringify(response), "<-- response data")
                 resolve(source); // Resolve the source as the captured image
             }
         });

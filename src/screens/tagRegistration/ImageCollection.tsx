@@ -1,58 +1,17 @@
 import { View, Text, SafeAreaView, ScrollView, Image, Pressable, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OverlayHeader from '../../components/OverlayHeader'
 import Loader from '../../components/ui/Loader'
 import UploadDoc from '../../components/common/UploadDoc'
 import PrimaryBtn from '../../components/common/PrimaryBtn'
 import { client } from '../../client/Axios'
 import showAlert from '../../utils/showAlert'
+import { dummyProps } from './dummyData'
 const { width, height } = Dimensions.get('window')
 const isSmallScreen = width < 400;
 
-// const dummyProps = {
-//   route: {
-//     params: {
-//       sessionId: '123456789',
-//       customerId: '987654321',
-//       CusRegData: {
-//         data: {
-//           custDetails: {
-//             name: 'John Doe',
-//             email: 'johndoe@example.com',
-//             phone: '1234567890',
-//           },
-//         },
-//       },
-//       otpData: {
-//         otp: '123456',
-//         expiryTime: '2024-12-31T23:59:59Z',
-//       },
-//       userData: {
-//         userId: '1122334455',
-//         name: 'Agent Smith',
-//         vehicleNo: 'DL1CAB1234',
-//       },
-//       response: {
-//         vrnDetails: {
-//           vehicleNo: 'DL1CAB1234',
-//           make: 'Toyota',
-//           model: 'Innova',
-//           year: '2022',
-//         },
-//       },
-//     },
-//   },
-//   // navigation: {
-//   //   navigate: (screenName, params) => {
-//   //     console.log(`Navigating to ${screenName} with params:`, params);
-//   //   },
-//   //   goBack: () => {
-//   //     console.log('Going back');
-//   //   },
-//   // },
-// };
-
 const ImageCollection = (props: any) => {
+  // const { sessionId, customerId, CusRegData, otpData, userData } = dummyProps?.route?.params;
   const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
@@ -92,6 +51,19 @@ const ImageCollection = (props: any) => {
   const allImagesSet = imageGallaryData?.RCFRONT && imageGallaryData?.RCBACK &&
     imageGallaryData?.VEHICLEFRONT && imageGallaryData?.VEHICLESIDE &&
     imageGallaryData?.TAGAFFIX;
+
+
+  // Reset VEHICLEFRONT image when navigating back with reset flag
+  // useEffect(() => {
+  //   if (props.route?.params?.resetVehilceImages) {
+  //     console.log("Resetting VEHICLEFRONT image...");
+  //     setImageGallaryData((prevState: any) => ({
+  //       ...prevState,
+  //       VEHICLEFRONT: null,
+  //       VEHICLESIDE: null,
+  //     }));
+  //   }
+  // }, [props.route?.params]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader
@@ -162,7 +134,7 @@ const ImageCollection = (props: any) => {
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload Tag Image'} setUploadFile={(value: any) => handleImageSelected('TAGAFFIX', value)} backgroundType={"FASTAG"}
-                defaultUploadType="camera" showAlert={false} />}
+                defaultUploadType="camera" showAlert={true} />}
             </View>
           </View>
         </View>

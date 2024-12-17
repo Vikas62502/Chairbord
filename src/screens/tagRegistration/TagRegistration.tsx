@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown, middleTagSerialNumber } from './staticData'
+import { colorData, npciVehicleClassIDData, commercialOptions, fuelData, stateData, isNationalPermitOptions, telanganaStateCode, vehicleTypeDropdown, middleTagSerialNumber, manufacturerData } from './staticData'
 import OverlayHeader from '../../components/OverlayHeader'
 import SecondaryButton from '../../components/common/SecondaryButton'
 import SuccessModal from '../../components/SuccessModal'
@@ -26,6 +26,14 @@ const dummyProps = {
                 vrnDetails: null,
                 sessionId: '123456789',
             },
+            // CustomerRegData: {
+            //     name: 'John Doe',
+            //     mobileNo: '1234567890',
+            //     walletId: '987654321',
+            // },
+            // userOtpData: {
+            //     vehicleNo: 'DL1CAB1234',
+            // },
         },
     },
     // navigation: {
@@ -62,12 +70,10 @@ const TagRegistration = (props: any) => {
     const [permitExpiryDate, setPermitExpiryDate] = useState("")
     const [loading, setLoading] = useState(false)
     const [stateOfRegistration, setStateOfRegistration] = useState("")
-    const [typeOfVehicle, setTypeOfVehicle] = useState("")
-    const [vehicleType, setVehicleType] = useState("")
     const [errors, setErrors] = useState<any>()
     const [stateCode, setStateCode] = useState("")
-    console.log(errors, "<---- errors")
-    console.log(vehicleColor, "<---- vehicleColor")
+    console.log(errors, "<---- errors");
+
 
     const dropdownOptions = listOfMakers?.map((manufacturer, index) => ({
         id: index + 1,
@@ -92,19 +98,22 @@ const TagRegistration = (props: any) => {
     ]
 
     const registerFastagApi = async () => {
-        if (!validateFields(chassisNo, vehicleManufacturer, vehicleModelValue, vehicleColor, npciIdData, vehicleFuelType, vehicleIscommercial, typeOfVehicle, vehicleType, setErrors,)) {
+        // setNpciIdData(vrnDetails?.npciVehicleClassID)
+        const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
+        const typeOfVehicleData = vrnDetails?.type || npciIdData === "4" ? "LMV" : npciIdData === "20" ? "LGV" : null
+        const vehicleTypeData = vrnDetails?.vehicleType || npciIdData === "4" ? "Motor Car" : npciIdData === "20" ? "Goods Carrier" : null
+        const agentNameData = userData?.user?.name || CustomerRegData?.name || ""
+        const vrnNumberData = vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase()
+        const chassisData = vrnDetails?.chassisNo || chassisNo
+        const engineData = vrnDetails?.engineNo || engineNumber
+        const vehicleManufacturerData = vrnDetails?.vehicleManuf || vehicleManufacturer
+        const vehicleModelData = vrnDetails?.model === "NA" ? vehicleModelValue : vrnDetails?.model || vehicleModelValue
+        const vehicleColorData = vrnDetails?.vehicleColour || vehicleColor
+        const vehicleFuelTypeData = vrnDetails?.vehicleDescriptor || vehicleFuelType
+        if (!validateFields(chassisData, vehicleManufacturerData, vehicleModelData, vehicleColorData, npciIdData, vehicleFuelTypeData, vehicleIscommercial, setErrors,)) {
             return;
         }
         setLoading(true)
-        if (vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4') {
-            updatevehicleType(vrnDetails?.type, vrnDetails?.tagVehicleClassID, vehicleIscommercial, setVehicleType)
-        }
-
-        if (vrnDetails?.type && vrnDetails?.npciVehicleClassID === '20' && !vehicleType) {
-            console.log("called", vrnDetails?.type, vrnDetails?.npciVehicleClassID, vehicleIscommercial, typeof setTypeOfVehicle)
-            onVechileTypeSelect(vrnDetails?.type, setTypeOfVehicle, setVehicleType, vehicleIscommercial)
-        }
-        const dynamicDebitAmount = Number(vrnDetails?.rechargeAmount || 0) + Number(vrnDetails?.repTagCost) + Number(vrnDetails?.securityDeposit) + Number(vrnDetails?.tagCost)
         try {
             const bodyData = JSON.stringify({
                 "regDetails": {
@@ -112,26 +121,26 @@ const TagRegistration = (props: any) => {
                 },
                 "agentId": Number(userData?.user?.id),
                 "masterId": Number(userData?.user?.master_id) || "",
-                "agentName": userData?.user?.name || CustomerRegData?.name || "",
+                "agentName": agentNameData,
                 "vrnDetails": {
-                    "vrn": vrnDetails?.vehicleNo || userOtpData?.vehicleNo?.toUpperCase(),
-                    "chassis": vrnDetails?.chassisNo || chassisNo,
-                    "engine": vrnDetails?.engineNo || "",
-                    "vehicleManuf": vrnDetails?.vehicleManuf || vehicleManufacturer,
-                    "model": vrnDetails?.model || vehicleModelValue,
-                    "vehicleColour": vrnDetails?.vehicleColour || vehicleColor,
-                    "type": vrnDetails?.type || typeOfVehicle,
+                    "vrn": vrnNumberData,
+                    "chassis": chassisData,
+                    "engine": engineData,
+                    "vehicleManuf": vehicleManufacturerData,
+                    "model": vehicleModelData,
+                    "vehicleColour": vehicleColorData,
+                    "type": typeOfVehicleData,
                     "status": "Active",
                     "npciStatus": "Active",
-                    "isCommercial": vrnDetails?.commercial || vehicleIscommercial,
+                    "isCommercial": vehicleIscommercial,
                     "tagVehicleClassID": "4",
-                    "npciVehicleClassID": npciIdData || "4",
-                    "vehicleType": vrnDetails?.vehicleType || vehicleType,
+                    "npciVehicleClassID": npciIdData,
+                    "vehicleType": vehicleTypeData,
                     "rechargeAmount": vrnDetails?.rechargeAmount,
                     "securityDeposit": vrnDetails?.securityDeposit,
                     "tagCost": vrnDetails?.tagCost,
                     "debitAmt": dynamicDebitAmount.toString(),
-                    "vehicleDescriptor": vrnDetails?.vehicleDescriptor || vehicleFuelType,
+                    "vehicleDescriptor": vehicleFuelTypeData,
                     "isNationalPermit": nationalpermit || vrnDetails?.isNationalPermit || "2",
                     "permitExpiryDate": permitExpiryDate || vrnDetails?.permitExpiryDate || "",
                     "stateOfRegistration": stateCode || vrnDetails?.stateOfRegistration || stateOfRegistration,
@@ -152,15 +161,16 @@ const TagRegistration = (props: any) => {
                 }
             })
             console.log(bodyData, "<----------------------- response")
-            // const res = await client.post("/bajaj/registerFastag",
-            //     bodyData
-            // )
-            // successResponse(setIsModalSuccess, setModalVisible)
+            const res = await client.post("/bajaj/registerFastag",
+                bodyData
+            )
+            successResponse(setIsModalSuccess, setModalVisible)
         } catch (error: any) {
+            const errorMessage = error.response.data.error.msg || error.response.data.error.errorDesc
             console.log(error || 'Tag registration failed')
             showAlert(error.response.data.error.msg || error.response.data.error.errorDesc || 'Tag registration failed',
                 () => {
-                    props?.navigation?.goBack()
+                    errorMessage === "Please upload correct car front image" ? props?.navigation?.goBack() : ""
                 });
             console.log(error)
         } finally {
@@ -170,18 +180,11 @@ const TagRegistration = (props: any) => {
 
 
     useEffect(() => {
-        if (props.route.params?.sessionId) {
-            getMakerIfVahanFails(props.route.params?.sessionId, setListOfMakers);
-        }
+        getMakerIfVahanFails(props.route.params?.sessionId, setListOfMakers);
     }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
 
-    useEffect(() => {
-        if (!vehicleType) {
-            updatevehicleType(vrnDetails?.type, vrnDetails?.tagVehicleClassID, vehicleIscommercial, setVehicleType)
-        }
-    }, [vehicleType])
 
-
+    console.log(vrnDetails?.vehicleDescriptor, "vrnDetails?.vehicleDescriptor")
     return (
         <ScrollView style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Registration"} />
@@ -250,25 +253,19 @@ const TagRegistration = (props: any) => {
                         /> : <SelectField dataToRender={vehicleModalDropdown} title={'Select Vehicle Model'} selectedValue={(model: string) => setValueOfVehcileModal(model, setVehicleModelValue)} borderColor={!vehicleModelValue || vehicleModelValue === "NA" ? "red" : "black"} />}
                     </View>
 
-                    <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"Vehicle Color"} />
-                        {vrnDetails && vrnDetails?.vehicleColour?.length > 2 ? <CustomInputText
-                            placeholder={"Vehicle Color"}
-                            value={vrnDetails?.vehicleColour}
-                            onChangeText={(text: string) => setVehicleColor(text)}
-                            isEditable={false}
-                        /> : <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={(color: string) => setColorData(color, setVehicleColor)} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />}
-                    </View>
-
-                    {vrnDetails && vrnDetails?.npciVehicleClassID ? <View style={{ marginTop: "5%" }}>
-                        <CustomLabelText label={"NPCI Vehicle Class ID"} />
-                        <CustomInputText placeholder={"NPCI Vehicle Class ID"} value={vrnDetails?.npciVehicleClassID} isEditable={false} />
-                    </View> :
+                    {vrnDetails && vrnDetails?.model === "NA" || !vrnDetails?.model &&
                         <View style={{ marginTop: "5%" }}>
-                            <CustomLabelText label={"NPCI Class"} />
-                            <SelectField dataToRender={npciVehicleClassIDData} title={'NPCI vehicle class'} selectedValue={(npciId: string) => setNpciIdDataDropdown(npciId, setNpciIdData)} borderColor={!npciIdData ? "red" : "black"} />
+                            <CustomLabelText label={"Vehicle Color"} />
+                            <SelectField dataToRender={colorData} title={'Select Vehicle Color'} selectedValue={(color: string) => setColorData(color, setVehicleColor)} borderColor={!vrnDetails?.vehicleColour && !vehicleColor ? "red" : "black"} />
                         </View>
                     }
+
+                    {/* {vrnDetails && !vrnDetails?.npciVehicleClassID && */}
+                    <View style={{ marginTop: "5%" }}>
+                        <CustomLabelText label={"NPCI Class"} />
+                        <SelectField dataToRender={npciVehicleClassIDData} title={vrnDetails?.npciVehicleClassID || 'NPCI vehicle class'} selectedValue={(npciId: string) => setNpciIdDataDropdown(npciId, setNpciIdData)} borderColor={!npciIdData ? "red" : "black"} />
+                    </View>
+                    {/* } */}
 
                 </>
 
@@ -292,7 +289,7 @@ const TagRegistration = (props: any) => {
                     </View>
                 </View>
 
-                <View style={{ marginBottom: "5%" }}>
+                {/* <View style={{ marginBottom: "5%" }}>
                     {vrnDetails && vrnDetails?.type && vrnDetails?.tagVehicleClassID === '4' ? <View style={{ marginTop: "5%" }}>
                         <CustomLabelText label={"Vehicle Type"} />
                         <CustomInputText placeholder={"Vehicle Type"} value={vrnDetails?.type} isEditable={false} />
@@ -303,7 +300,7 @@ const TagRegistration = (props: any) => {
                                 setTypeOfVehicle, setVehicleType, vehicleIscommercial)} borderColor={!typeOfVehicle ? "red" : "black"} />
                         </View>
                     }
-                </View>
+                </View> */}
 
                 <View style={{ marginBottom: "5%" }}>
                     <CustomLabelText label={"Is Commercial"} />
@@ -318,7 +315,7 @@ const TagRegistration = (props: any) => {
                     </View>}
 
                 {vehicleIscommercial === "true" && nationalpermit === "1" &&
-                    <View>
+                    <View style={{ marginBottom: "5%" }}>
                         <CustomLabelText label={"Enter Permit Expiry of Vehicle"} />
                         <CustomInputText
                             placeholder='DD-MM-YYYY'
@@ -334,18 +331,18 @@ const TagRegistration = (props: any) => {
                 }
 
 
-                <View style={{ marginVertical: "5%" }}>
-                    <CustomLabelText label={"Fuel Type"} />
-                    {
-                        vrnDetails && vrnDetails?.vehicleDescriptor ? <CustomInputText placeholder={'Enter fuel type'} value={vrnDetails?.vehicleDescriptor} isEditable={false} /> : <SelectField
+                {!vrnDetails?.vehicleDescriptor &&
+                    <View style={{ marginVertical: "5%" }}>
+                        <CustomLabelText label={"Fuel Type"} />
+                        <SelectField
                             dataToRender={fuelData} title={'Select fuel type'} selectedValue={(value: any) => setVehicleFuelType(value.title)}
                             borderColor={!vehicleFuelType ? "red" : "black"}
                         />
-                    }
-                </View>
+                    </View>
+                }
 
-                {
-                    vrnDetails && !vrnDetails?.stateOfRegistration && <View style={{ marginVertical: "5%" }}>
+                {!vrnDetails?.stateOfRegistration &&
+                    <View style={{ marginVertical: "5%" }}>
                         <CustomLabelText label={"State of Registration"} />
                         <SelectField
                             dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
