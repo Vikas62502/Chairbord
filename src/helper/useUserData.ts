@@ -1,28 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getCache } from './Storage';
+
 
 const useUserData = () => {
   const [userData, setUserData] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const data = await getCache('userData');
       setUserData(data);
-    } catch (error) {
-      console.error('Failed to fetch user data:', error);
+    } catch (err) {
+      console.error('Failed to fetch user data:', err);
+      setError('Failed to fetch user data');
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!userData?.user?.id) {
       fetchUserData();
     }
-  }, [userData?.user?.id]);
+  }, [fetchUserData, userData?.user?.id]);
 
   return {
     userData,
     userId: userData?.user?.id || null,
-  }
+    error,
+  };
 };
 
 export default useUserData;

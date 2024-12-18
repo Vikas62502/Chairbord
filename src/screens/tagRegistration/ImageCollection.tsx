@@ -53,17 +53,6 @@ const ImageCollection = (props: any) => {
     imageGallaryData?.TAGAFFIX;
 
 
-  // Reset VEHICLEFRONT image when navigating back with reset flag
-  // useEffect(() => {
-  //   if (props.route?.params?.resetVehilceImages) {
-  //     console.log("Resetting VEHICLEFRONT image...");
-  //     setImageGallaryData((prevState: any) => ({
-  //       ...prevState,
-  //       VEHICLEFRONT: null,
-  //       VEHICLESIDE: null,
-  //     }));
-  //   }
-  // }, [props.route?.params]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <OverlayHeader
@@ -107,7 +96,7 @@ const ImageCollection = (props: any) => {
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload vehicle image (Front)'} setUploadFile={(value: any) => handleImageSelected('VEHICLEFRONT', value)} backgroundType={"Vehicle-Front"}
-                defaultUploadType="camera" showAlert={false} />}
+                defaultUploadType="camera" showAlert={true} />}
             </View>
 
             <View style={{ height: 200, width: "100%", borderRadius: 20 }}>
@@ -118,7 +107,7 @@ const ImageCollection = (props: any) => {
                   style={{ height: 200, width: '100%', borderRadius: 20, borderColor: 'black', borderWidth: 1 }}
                 />
               </Pressable> : <UploadDoc text={'Upload vehicle image (Side)'} setUploadFile={(value: any) => handleImageSelected('VEHICLESIDE', value)} backgroundType={"Vehicle-Side"}
-                defaultUploadType="camera" showAlert={false} />}
+                defaultUploadType="camera" showAlert={true} />}
             </View>
             {/* </View> */}
           </View>
