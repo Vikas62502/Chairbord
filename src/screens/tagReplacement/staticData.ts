@@ -33,12 +33,12 @@ export const dummyParams = {
             vehicleNo: "MH12AB1234",
             chassisNo: "CH123456789",
             engineNo: "EN987654321",
-            commercial: "Yes",
+            commercial: "",
             vehicleType: "Truck",
             stateOfRegistration: "MH",
             vehicleDescriptor: "Diesel",
             repTagCost: 500,
-            isNationalPermit: "1",
+            isNationalPermit: "0",
             permitExpiryDate: "15-12-2025"
         },
         requestId: "REQ12345"

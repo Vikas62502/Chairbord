@@ -44,11 +44,11 @@ export const data = [
         icon: require('../../assets/DrawerNavigation/issuance.png'),
         screen: 'issuanceTracker'
     },
-    // {
-    //   title: 'tag replacement',
-    //   icon: require('../../assets/DrawerNavigation/issuance.png'),
-    //   screen: 'tagReplacementForm'
-    // },
+    {
+        title: 'Tag Registration',
+        icon: require('../../assets/DrawerNavigation/issuance.png'),
+        screen: 'tagRegistration'
+    },
     // {
     //     title: 'Vehicle Tracking',
     //     icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),

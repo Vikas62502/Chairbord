@@ -10,29 +10,32 @@ const DrawerHeader = () => {
 
   const navigation = useNavigation()
   return (
-    <LinearGradient colors={['#02546D', '#142D40']} style={styles.container}>
-      <View>
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image source={require('../assets/ham_menu.png')} style={{width:25 ,height:20,}} />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={styles.userProfile}
-          onPress={() => navigation.navigate('screen1')}
-        >
-          {/* <Image source={require('../assets/avatar.png')} /> */}
-          <Text style={styles.profileText}>{userData?.user?.name || 'User'}</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity onPress={() => navigation.navigate('Main')}>
-          <Image source={require('../assets/notification.png')} style={{width:25 ,height:25,}}  />
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
+    <>
+      <LinearGradient colors={['#02546D', '#142D40']} style={styles.container}>
+
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          >
+            <Image source={require('../assets/ham_menu.png')} style={{ width: 25, height: 20, }} />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.userProfile}
+            onPress={() => navigation.navigate('screen1')}
+          >
+            <Text style={{ textAlign: "center",marginLeft:15, marginBottom:-10,marginTop:-20 }}>{"17122024"}</Text>
+            <Text style={styles.profileText}>{userData?.user?.name || 'User'}</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('logoutModal')}>
+            <Image source={require('../assets/DrawerNavigation/logout.png')} style={{ width: 22, height: 22, }} />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    </>
   )
 }
 
@@ -46,14 +49,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: '3%'
   },
   userProfile: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 15
   },
   profileText: {
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 22,
+    marginLeft:15,
     lineHeight: 20,
     color: '#FFFFFF'
   }

@@ -27,6 +27,7 @@ const OverlayHeader: React.FC<OverlayHeaderProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#02546D', '#142D40']} style={styles.gradient}>
+        <Text style={{ textAlign: "center",marginBottom:-20 }}>{"17122024"}</Text>
         <View style={styles.overlayContainer}>
           <View style={styles.overlay}></View>
           <View style={styles.overlayTextContainer}>
@@ -35,7 +36,7 @@ const OverlayHeader: React.FC<OverlayHeaderProps> = ({
                 <TouchableOpacity
                   onPress={() => {
                     if (isorderSection && handleDeleteOrder) {
-                      handleDeleteOrder(); // Call handleDeleteOrder if it exists
+                      handleDeleteOrder();
                       navigation.goBack();
                     } else {
                       navigation.goBack();
@@ -54,7 +55,7 @@ const OverlayHeader: React.FC<OverlayHeaderProps> = ({
           </View>
         </View>
         <View style={styles.chairBordLogo}>
-          <Image source={require('../assets/chairBordLogoWithoutName.png')} style={{ width: 120, height: 120 }} />
+          <Image source={require('../assets/chairbordLogoWithoutName.png')} style={{ width: 120, height: 120 }} />
         </View>
       </LinearGradient>
     </View>

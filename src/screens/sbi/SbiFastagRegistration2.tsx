@@ -6,10 +6,10 @@ import SelectFieldSbi from './SelectFieldSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
-import useUserData from '../../hooks/useUserData';
 import OtpModal from './OtpModal';
 import { getSocket } from '../../utils/socket';
 import Loader from '../../components/ui/Loader';
+import useUserData from '../../helper/useUserData';
 
 const SbiFastagRegistration2 = (props: any) => {
 
