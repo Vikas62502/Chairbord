@@ -27,7 +27,7 @@ const OverlayHeader: React.FC<OverlayHeaderProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#02546D', '#142D40']} style={styles.gradient}>
-        <Text style={{ textAlign: "center" }}>{"17122024"}</Text>
+        <Text style={{ textAlign: "center",marginBottom:-20 }}>{"17122024"}</Text>
         <View style={styles.overlayContainer}>
           <View style={styles.overlay}></View>
           <View style={styles.overlayTextContainer}>

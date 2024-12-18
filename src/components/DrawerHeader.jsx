@@ -25,13 +25,13 @@ const DrawerHeader = () => {
             style={styles.userProfile}
             onPress={() => navigation.navigate('screen1')}
           >
-            <Text style={{ textAlign: "center" }}>{"17122024"}</Text>
+            <Text style={{ textAlign: "center",marginLeft:15, marginBottom:-10,marginTop:-20 }}>{"17122024"}</Text>
             <Text style={styles.profileText}>{userData?.user?.name || 'User'}</Text>
           </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity onPress={() => navigation.navigate('logoutModal')}>
-            <Image source={require('../assets/DrawerNavigation/logout.png')} style={{ width: 25, height: 25, }} />
+            <Image source={require('../assets/DrawerNavigation/logout.png')} style={{ width: 22, height: 22, }} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
   },
   profileText: {
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 22,
+    marginLeft:15,
     lineHeight: 20,
     color: '#FFFFFF'
   }
