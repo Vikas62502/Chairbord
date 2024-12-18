@@ -1,12 +1,12 @@
 import { launchImageLibrary } from 'react-native-image-picker'
 
 const pickdoc = async () => {
-    const options = {
+    const options: any = {
         mediaType: 'photo',
     }
 
     return new Promise((resolve, reject) => {
-        launchImageLibrary(options, (response) => {
+        launchImageLibrary(options, (response: any) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker')
                 resolve(null) // Return null if the user cancels

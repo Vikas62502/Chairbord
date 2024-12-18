@@ -28,7 +28,7 @@ export const getTheVehicleModel = async (manufacturer: any, sessionId: string, s
 }
 
 export // error validation
-    const validateFields = (chassisNo: string, vehicleManufacturer: string, vehicleModelValue: string, vehicleColor: string, npciIdData: string, vehicleFuelType: string, vehicleIscommercial: string, typeOfVehicle: string, vehicleType: string, setErrors: any) => {
+    const validateFields = (chassisNo: string, vehicleManufacturer: string, vehicleModelValue: string, vehicleColor: string, npciIdData: string, vehicleFuelType: string, vehicleIscommercial: string, setErrors: any) => {
         let newErrors: any = {};
 
         if (!chassisNo) {
@@ -58,14 +58,9 @@ export // error validation
         if (!vehicleIscommercial) {
             newErrors.vehicleIscommercial = 'Is Commercial is required';
         }
-        if (!typeOfVehicle) {
-            newErrors.typeOfVehicle = 'Type of Vehicle is required';
-        }
-
-        if (!vehicleType) {
-            console.log("callend")
-            newErrors.vehicleType = 'Vehicle Type is required';
-        }
+        // if (!typeOfVehicle) {
+        //     newErrors.typeOfVehicle = 'Type of Vehicle is required';
+        // }
         setErrors(newErrors);
         // Show alert if there are errors
         if (Object.keys(newErrors)?.length > 0) {
@@ -76,20 +71,30 @@ export // error validation
     }
 
 export const onVechileTypeSelect = (type: string, setTypeOfVehicle: any, setVehicleType: any, vehicleIscommercial: string) => {
+    console.log("setTypeOfVehicle:", setTypeOfVehicle); // Check if it's undefined or a function
+    console.log("Type of:", typeof setTypeOfVehicle);   // Should log "function"
 
-    setTypeOfVehicle(type)
+    if (typeof setTypeOfVehicle !== 'function') {
+        throw new Error('setTypeOfVehicle is not a function or is undefined');
+    }
+
+    setTypeOfVehicle(type);
+
     if (vehicleIscommercial === "false" && type === "LPV") {
-        setVehicleType("Maxi Cab")
-    } if (vehicleIscommercial === "false" && type === "LGV") {
-        setVehicleType("Goods Carrier")
+        setVehicleType("Maxi Cab");
+    }
+    if (vehicleIscommercial === "false" && type === "LGV") {
+        setVehicleType("Goods Carrier");
     }
     if (vehicleIscommercial === "true" && type === "LPV") {
-        setVehicleType("Maxi Cab")
+        setVehicleType("Maxi Cab");
     }
     if (vehicleIscommercial === "true" && type === "LGV") {
-        setVehicleType("Goods Carrier")
+        setVehicleType("Goods Carrier");
     }
-}
+};
+
+
 
 export const updatevehicleType = (value: string, tagVehicleClassID: string, vehicleIscommercial: string, setVehicleType: any) => {
     if (value === 'LMV' && tagVehicleClassID === '4' && vehicleIscommercial === 'false') {
@@ -106,6 +111,7 @@ export const successResponse = (setIsModalSuccess: any, setModalVisible: any) =>
 }
 
 export const setValueOfVehcileModal = async (model: any, setVehicleModelValue: any) => {
+    console.log("model", model, "setVehicleModelValue", setVehicleModelValue)
     setVehicleModelValue(model?.title)
 }
 

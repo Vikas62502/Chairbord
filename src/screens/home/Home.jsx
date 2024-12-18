@@ -63,28 +63,11 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState({});
+  console.log(dashboardData, "<--- dashboard data")
 
   useFocusEffect(
     React.useCallback(() => {
-      // const checkToken = async () => {
-      //   try {
-      //     const response = await client.get('/user/token-expired-check'); // Replace with your actual API endpoint
-      //     if (response.status === 200) {
-      //       console.log('Token is valid:', response.data);
-      //     }
-      //   } catch (error) {
-      //     console.error(
-      //       'Token verification failed:',
-      //       error.response?.data || error.message
-      //     );
-      //     // Handle logout logic here
-      //     await AsyncStorage.clear();
-      //     navigation.navigate('SignIn');
-      //   }
-      // };
-
-      // checkToken();
-
       const onBackPress = () => {
         Alert.alert('Confirm exit', 'Do you want to exit the app?', [
           {
@@ -107,16 +90,32 @@ const Home = () => {
     }, [navigation]) // Include navigation in the dependency array
   );
 
+  const fetchDashboardData = async () => {
+    try {
+      const response = await client.get('/user/agent/dashboard');
+      setDashboardData(response.data);
+      console.log(response.data, '<-- dashboard data');
+    } catch (error) {
+      console.log(error.response, 'error');
+    }
+  }
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      // Refresh logic here
+      fetchDashboardData();
     } catch (error) {
       console.log(error, 'error');
     } finally {
       setRefreshing(false);
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchDashboardData();
+    }, [])
+  );
 
   return (
     <ScrollView
@@ -138,7 +137,7 @@ const Home = () => {
             style={styles.image}
           />
           <View style={styles.textOverlay}>
-            <Text style={styles.numberText}>55</Text>
+            <Text style={styles.numberText}>{dashboardData?.totalTagActivated || "NA"}</Text>
             <Text style={styles.descriptionText}>Registered Tag</Text>
           </View>
         </View>
@@ -149,7 +148,7 @@ const Home = () => {
             style={styles.image}
           />
           <View style={styles.textOverlay}>
-            <Text style={styles.numberText}>12</Text>
+            <Text style={styles.numberText}>{dashboardData?.totaltagInStock || "NA"}</Text>
             <Text style={styles.descriptionText}>Tag in Stock</Text>
           </View>
         </View>

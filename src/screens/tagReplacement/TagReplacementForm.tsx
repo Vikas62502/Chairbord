@@ -19,10 +19,12 @@ import SuccessModal from '../../components/SuccessModal'
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import showAlert from '../../utils/showAlert'
-import { fuelData, middleTagSerialNumber, stateData } from '../tagRegistration/staticData'
+import { fuelData, middleTagSerialNumber, stateData, telanganaStateCode } from '../tagRegistration/staticData'
 import CustomLabelText from '../../components/ui/CustomLabelText'
 import CustomInputText from '../../components/common/CustomInputText'
 import { dummyParams, replacementReason } from './staticData'
+import { styles } from './styles'
+import { handleDateChange } from './utils'
 
 const TagReplacementForm = (props: any) => {
   const {
@@ -40,31 +42,23 @@ const TagReplacementForm = (props: any) => {
     engineNo,
     isNationalPermit: nationalPermit,
     permitExpiryDate: _permitExpiryDate
-    // stateOfRegistration,
-    // vehicleDescriptor
   } = response?.vrnDetails
-
-  console.log(response?.vrnDetails, 'response?.vrnDetails')
 
   const [modalShow, setModalShow] = useState<null | boolean>(null)
   const [modelIsSuccess, setModelIsSuccess] = useState<null | boolean>(null)
   const [tagSerialNumber, setTagSerialNumber] = useState('')
   const [tagSerialNumber2, setTagSerialNumber2] = useState("001")
-  const [sessionId, setSessionId] = React.useState()
   const [reasonOfReplacement, setReasonOfReplacement] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState<any>()
-  const [stateOfRegistration, setStateOfRegistration] = useState(
-    response.vrnDetails.stateOfRegistration
-  )
-  const [vehicleDescriptor, setVehicleDescriptor] = useState(
-    response.vrnDetails.vehicleDescriptor
-  )
+  const [stateOfRegistration, setStateOfRegistration] = useState(response.vrnDetails.stateOfRegistration)
+  const [vehicleDescriptor, setVehicleDescriptor] = useState(response.vrnDetails.vehicleDescriptor)
   const [permitExpiryDate, setPermitExpiryDate] = useState(_permitExpiryDate)
   const [selectNationPermit, setSelectNationPermit] = useState(nationalPermit)
   const [chassisNumber, setChasisNumber] = useState(chassisNo)
   const [engineNumber, setEngineNumber] = useState(engineNo)
+  const [stateCode, setStateCode] = useState('')
 
   const getUserData = async () => {
     try {
@@ -82,8 +76,54 @@ const TagReplacementForm = (props: any) => {
     getUserData()
   }, [])
 
+  const validateForm = () => {
+    if (!tagSerialNumber || tagSerialNumber?.length < 2) {
+      showAlert('Please enter a valid tag serial number.');
+      return false;
+    }
+    if (!tagSerialNumber2) {
+      showAlert('Please select a middle tag serial number.');
+      return false;
+    }
+    if (!reasonOfReplacement) {
+      showAlert('Please select a reason for replacement.');
+      return false;
+    }
+    if (reasonOfReplacement === '99' && !description) {
+      showAlert('Please provide a description for the replacement reason.');
+      return false;
+    }
+    if (!stateOfRegistration) {
+      showAlert('Please select the state of registration.');
+      return false;
+    }
+    if (stateOfRegistration === 'TELANGANA' && !stateCode) {
+      showAlert('Please select a state code for Telangana.');
+      return false;
+    }
+    if (!vehicleDescriptor) {
+      showAlert('Please select a fuel type.');
+      return false;
+    }
+    if (selectNationPermit === '1' && !permitExpiryDate) {
+      showAlert('Please enter the permit expiry date in DD-MM-YYYY format.');
+      return false;
+    }
+    if (!chassisNumber || chassisNumber?.length < 2) {
+      showAlert('Please enter a valid chassis number.');
+      return false;
+    }
+    if (!engineNumber || engineNumber?.length < 2) {
+      showAlert('Please enter a valid engine number.');
+      return false;
+    }
+    return true;
+  };
+
   const replaceFastag = async () => {
-    setLoading(true)
+    if (!validateForm()) return;
+
+    setLoading(true);
     try {
       const body = {
         mobileNo: mobileNo,
@@ -101,55 +141,32 @@ const TagReplacementForm = (props: any) => {
         engineNo: engineNumber,
         isNationalPermit: selectNationPermit || '2',
         permitExpiryDate: permitExpiryDate || '',
-        stateOfRegistration: stateOfRegistration || '',
+        stateOfRegistration: stateCode || stateOfRegistration || '',
         vehicleDescriptor: vehicleDescriptor || '',
         udf1: '',
         udf2: '',
         udf3: '',
         udf4: '',
-        udf5: ''
-      }
-      console.log(body, 'body data')
-      const res = await client.post(`/bajaj/replaceFastag`, body)
-      setModelIsSuccess(true)
-      setModalShow(true)
+        udf5: '',
+      };
+      console.log(body, 'body data');
+      const res = await client.post(`/bajaj/replaceFastag`, body);
+      setModelIsSuccess(true);
+      setModalShow(true);
     } catch (err: any) {
-      console.log(err)
-      showAlert(
-        err.response.data.error.msg ||
-        err.response.data.error.errorDesc ||
-        'Tag replacement failed',
-        () => setLoading(false)
-      )
+      console.log(err);
+      const errorMessage = err?.response?.data?.error?.msg || err?.response?.data?.error?.errorDesc || 'Tag replacement failed';
+      showAlert(errorMessage, () => setLoading(false));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const getSessionId = async () => {
-    const session = await getCache('session')
-    setSessionId(session)
-  }
-
-  useEffect(() => {
-    getSessionId()
-  }, [sessionId])
-
-  const handleDateChange = (text: string) => {
-    let cleaned = text.replace(/[^0-9]/g, '')
-    if (cleaned?.length >= 2) {
-      cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2)
-    }
-    if (cleaned?.length >= 5) {
-      cleaned = cleaned.slice(0, 5) + '-' + cleaned.slice(5)
-    }
-    setPermitExpiryDate(cleaned)
-  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
       <ScrollView>
-        <OverlayHeader title={'Tag Replacement'} showBackButton={true} />
         {loading && <Loader loading={loading} />}
         <View style={styles.container}>
           {loading && (
@@ -212,10 +229,7 @@ const TagReplacementForm = (props: any) => {
           </View>
 
           <CustomerDetailsCard
-            customerDetailsData={[{
-              title: 'Chassis No.',
-              value: `:  ${response.vrnDetails.chassisNo}`
-            },
+            customerDetailsData={[{ title: 'Chassis No.', value: `:  ${response.vrnDetails.chassisNo}` },
             {
               title: 'Engine No.',
               value: `:  ${response.vrnDetails.engineNo}`
@@ -287,7 +301,7 @@ const TagReplacementForm = (props: any) => {
                 placeholderTextColor="#263238"
                 style={styles.dateInput}
                 value={permitExpiryDate}
-                onChangeText={(text: string) => handleDateChange(text)}
+                onChangeText={(text: string) => handleDateChange(text, setPermitExpiryDate)}
                 keyboardType="numeric"
                 maxLength={10}
                 borderColor={!permitExpiryDate ? 'red' : 'black'}
@@ -307,6 +321,20 @@ const TagReplacementForm = (props: any) => {
               />
             </View>
           )}
+          {!stateOfRegistration &&
+            <View style={{ marginVertical: "5%" }}>
+              <CustomLabelText label={"State of Registration"} />
+              <SelectField
+                dataToRender={stateData} title={'Select Vehicle State'} selectedValue={(value: any) => setStateOfRegistration(value.code)} borderColor={!stateOfRegistration ? "red" : "black"} />
+            </View>
+          }
+          {
+            stateOfRegistration === 'TELANGANA' && <View style={{ marginVertical: "5%" }}>
+              <CustomLabelText label={"Select State Code"} />
+              <SelectField
+                dataToRender={telanganaStateCode} title={'Select Vehicle State'} selectedValue={(value: any) => setStateCode(value.code)} borderColor={!stateCode ? "red" : "black"} />
+            </View>
+          }
           <View style={{ marginVertical: '5%' }}>
             <CustomLabelText label={'Fuel Type'} />
             {response?.vrnDetails && response?.vrnDetails?.vehicleDescriptor ? (
@@ -409,50 +437,5 @@ const TagReplacementForm = (props: any) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: '5%'
-  },
-  label: {
-    fontWeight: '400',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#000000',
-    marginTop: '5%',
-    marginBottom: '3%'
-  },
-  errorText: {
-    padding: '2%',
-    paddingHorizontal: '4%',
-    color: '#FF0000'
-  },
-  subDescription: {
-    color: '#000000',
-    fontSize: 12,
-    lineHeight: 14,
-    fontWeight: '400',
-    marginTop: '3%',
-    width: '80%'
-  },
-  dateInput: {
-    borderColor: '#263238',
-    borderWidth: 1,
-    color: '#000000',
-    width: '100%',
-    fontSize: 16,
-    borderRadius: 20,
-    height: 60,
-    paddingHorizontal: '5%',
-    backgroundColor: '#F3F3F3',
-    textAlign: 'center'
-  },
-  loaderContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    zIndex: 10
-  }
-})
 
 export default TagReplacementForm
