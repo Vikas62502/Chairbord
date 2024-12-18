@@ -5,8 +5,8 @@ import InputTextSbi from './InputTextSbi';
 import UploadDoc from '../../components/common/UploadDoc';
 import NextButton from './NextButton';
 import { client } from '../../client/Axios';
-import useUserData from '../../hooks/useUserData';
 import Loader from '../../components/ui/Loader';
+import useUserData from '../../helper/useUserData';
 
 interface RegistrationFormDataType {
   mobileNumber: string;

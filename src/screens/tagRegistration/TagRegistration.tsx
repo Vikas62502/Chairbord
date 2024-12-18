@@ -184,7 +184,6 @@ const TagRegistration = (props: any) => {
     }, [sessionId, vrnDetails?.vehicleManuf, vrnDetails?.model])
 
 
-    console.log(vrnDetails?.vehicleDescriptor, "vrnDetails?.vehicleDescriptor")
     return (
         <View style={{ flex: 1 }}>
             <OverlayHeader title={"Tag Registration"} />

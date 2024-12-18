@@ -22,6 +22,7 @@ import { setCache } from '../../helper/Storage';
 
 import { styles } from './styles';
 import LoginWithEmailAndPass from './LoginWithEmailAndPass';
+import axios from 'axios';
 
 const SignIn = () => {
   const [active, setActive] = useState('password');
@@ -42,18 +43,21 @@ const SignIn = () => {
 
   const loginApi = async () => {
     setLoading(true);
-    let bodyContent = JSON.stringify({
+    let bodyContent = {
       email: formData.email,
       password: formData.password,
-    });
+    };
+
+    console.log(bodyContent, '<--- bodyContent');
 
     try {
-      let response = await client.post('/login/agent', bodyContent);
+      let response = await axios.post('http://43.204.133.228:3001/v1/api/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
 
       navigation.navigate('drawer');
     } catch (error) {
+      console.log(JSON.stringify(error?.response?.data), '<--- error');
       Alert.alert(error?.response?.data?.message || 'Password is not correct !!', 'Please try again', [
         {
           text: 'OK',
