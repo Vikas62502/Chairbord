@@ -23,11 +23,14 @@ import { setCache } from '../../helper/Storage';
 import { styles } from './styles';
 import LoginWithEmailAndPass from './LoginWithEmailAndPass';
 import axios from 'axios';
+import { useAppDispatch } from '../../store/hooks';
+import { loginFailed, loginSucess } from '../../store/slice/login';
 
 const SignIn = () => {
   const [active, setActive] = useState('password');
   const [showOtpField, setShowOtpField] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -54,11 +57,14 @@ const SignIn = () => {
       let response = await axios.post('http://43.204.133.228:3001/v1/api/login/agent', bodyContent);
       await setCache('userData', response?.data);
       await setCache('token', response?.data?.token);
+      dispatch(loginSucess(response?.data));
 
       navigation.navigate('drawer');
     } catch (error) {
+      const errorMessage = error?.response?.data?.message
+      dispatch(loginFailed(errorMessage));
       console.log(JSON.stringify(error?.response?.data), '<--- error');
-      Alert.alert(error?.response?.data?.message || 'Password is not correct !!', 'Please try again', [
+      Alert.alert(errorMessage || 'Password is not correct !!', 'Please try again', [
         {
           text: 'OK',
           style: 'cancel',
