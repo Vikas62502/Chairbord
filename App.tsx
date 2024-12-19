@@ -16,6 +16,14 @@ import ErrorFallback from './src/components/ErrorFallback/ErrorFallback'
 import logErrorToSentry from './src/components/ErrorFallback/LogErrorToSentry'
 import useUserData from './src/helper/useUserData'
 import { checkForUpdate } from './src/utils/updateUtils'
+import messaging from '@react-native-firebase/messaging';
+
+import {
+  createNotificationChannel,
+  requestNotificationPermission,
+  getFCMToken,
+  setupNotificationListeners,
+} from './src/utils/notificationhelper';
 
 function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
@@ -46,12 +54,45 @@ function App({ }): React.JSX.Element {
     }
   }
 
-  // Fetch user data on component mount
   useEffect(() => {
     requestPermissions() // Request permissions on mount
   }, [])
 
-  // Initialize socket only when userData is available
+  useEffect(() => {
+    const initNotifications = async () => {
+      try {
+        // First create the notification channel
+        await createNotificationChannel();
+
+        // Then request permissions
+        const hasPermission = await requestNotificationPermission();
+        if (!hasPermission) {
+          console.log('Notification permissions not granted');
+          return;
+        }
+
+        // Get the token with a slight delay to ensure everything is initialized
+        setTimeout(async () => {
+          const token = await getFCMToken();
+          if (token) {
+            console.log('FCM Token:', token);
+            // Send token to your backend here
+          }
+        }, 2000);
+      } catch (error) {
+        console.error('Notification initialization failed:', error);
+      }
+    };
+
+    initNotifications();
+    const unsubscribe = setupNotificationListeners();
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+
   useEffect(() => {
     if (userData?.user?.id) {
       const socket: any = initializeSocket(serverURL, userData.user.id)
@@ -69,7 +110,6 @@ function App({ }): React.JSX.Element {
   }, [userData])
 
   useEffect(() => {
-    // Check for updates when app starts
     checkForUpdate()
   }, [])
 
