@@ -10,9 +10,12 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
+import { useAppDispatch } from '../../store/hooks'
+import { logout } from '../../store/slice/login'
 
 const LogoutModal = (props) => {
-  const [modalVisible, setModalVisible] = useState(false) // Initial state to false
+  const [modalVisible, setModalVisible] = useState(false)
+  const dispatch = useAppDispatch()
 
   // This will trigger every time the screen is focused (or reloaded)
   useFocusEffect(
@@ -22,10 +25,11 @@ const LogoutModal = (props) => {
   )
 
   const handleClearCache = async () => {
-    console.log('called logout')
     await AsyncStorage.clear() // Clear AsyncStorage
     setModalVisible(false) // Close modal before navigating
     props.navigation.navigate('SignIn') // Navigate to SignIn screen
+    dispatch(logout())
+
   }
 
   const handleCancel = () => {

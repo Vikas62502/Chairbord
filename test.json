@@ -1,24 +1,53 @@
 {
-    "agentId": 2,
-    "chassisNo": "MA1TA2XM2M2J33753",
-    "debitAmt": "100.0",
-    "engineNo": "XMM4J12034",
-    "isNationalPermit": "2",
-    "masterId": 652,
-    "mobileNo": "9269666646",
-    "permitExpiryDate": "",
-    "reason": "",
-    "reasonDesc": "",
-    "requestId": "3500831699a4",
-    "serialNo": "608268-001-",
-    "sessionId": "abe179542589497d9de0d2ad701083db",
-    "stateOfRegistration": "RJ",
-    "udf1": "",
-    "udf2": "",
-    "udf3": "",
-    "udf4": "",
-    "udf5": "",
-    "vehicleDescriptor": "Diesel/Hybrid",
-    "vehicleNo": "RJ14UH2373",
-    "walletId": ""
+    "CustomerRegData": {
+        "mobileNo": "9876543210",
+        "name": "John Doe"
+    },
+    "agentId": 166,
+    "agentName": "Vikas Yadav",
+    "custDetails": {
+        "mobileNo": "9876543210",
+        "name": "John Doe",
+        "walletId": "WALLET123"
+    },
+    "fasTagDetails": {
+        "serialNo": "undefined-002-433154",
+        "tid": "",
+        "udf1": 166,
+        "udf2": "",
+        "udf3": "",
+        "udf4": "",
+        "udf5": ""
+    },
+    "masterId": 589,
+    "regDetails": {
+        "sessionId": "123456789"
+    },
+    "sessionId": "123456789",
+    "userOtpData": {
+        "vehicleNo": "MH12AB1234"
+    },
+    "vrnDetails": {
+        "chassis": "USIAIIIW",
+        "debitAmt": "NaN",
+        "engine": "UWUW882",
+        "isCommercial": "false",
+        "isNationalPermit": "2",
+        "model": "nano",
+        "npciStatus": "Active",
+        "npciVehicleClassID": "20",
+        "permitExpiryDate": "",
+        "rechargeAmount": 200,
+        "securityDeposit": 300,
+        "stateOfRegistration": "AP",
+        "status": "Active",
+        "tagCost": 500,
+        "tagVehicleClassID": "4",
+        "type": "LMV",
+        "vehicleColour": "Pink",
+        "vehicleDescriptor": "Petrol/Ethanol",
+        "vehicleManuf": "Honda",
+        "vehicleType": "Motor Car",
+        "vrn": "MH12AB1234"
+    }
 }

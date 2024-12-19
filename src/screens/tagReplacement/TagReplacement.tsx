@@ -20,8 +20,11 @@ const isSmallScreen = width < 400
 import { client } from '../../client/Axios'
 import Loader from '../../components/ui/Loader'
 import showAlert from '../../utils/showAlert'
+import { useAppDispatch } from '../../store/hooks'
+import { resetTagRegistrationData } from '../../store/slice/tagRegistration'
 const TagReplacement = (props: any) => {
   const [userData, setUserData] = React.useState<any>()
+  const dispatch = useAppDispatch()
   const [loading, setLoading] = React.useState(false)
   const [replacementOtpData, setReplacementOtpData] = React.useState<any>({
     mobileNumber: '',
@@ -57,6 +60,8 @@ const TagReplacement = (props: any) => {
         udf5: ''
       })
       console.log(JSON.stringify(res), 'otp response')
+      dispatch(resetTagRegistrationData())
+
 
       await setCache('session', res?.data?.validateCustResp?.sessionId)
       props.navigation.navigate('OTP', {
@@ -66,7 +71,7 @@ const TagReplacement = (props: any) => {
         type: 'tagReplacement'
       })
       console.log(res, 'otp response')
-    } catch (error : any) {
+    } catch (error: any) {
       showAlert(error.response.data.message, () => {
         props.navigation.navigate("topupWallet")
       })
