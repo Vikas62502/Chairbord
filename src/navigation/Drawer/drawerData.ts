@@ -49,11 +49,11 @@ export const data = [
         icon: require('../../assets/DrawerNavigation/issuance.png'),
         screen: 'tagRegistration'
     },
-    // {
-    //     title: 'Vehicle Tracking',
-    //     icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),
-    //     screen: 'vehicleTracking'
-    // },
+    {
+        title: 'Image gallery',
+        icon: require('../../assets/DrawerNavigation/vehicleTracking.png'),
+        screen: 'imageGallary'
+    },
     // {
     //     title: 'Requests',
     //     icon: require('../../assets/DrawerNavigation/requests.png'),

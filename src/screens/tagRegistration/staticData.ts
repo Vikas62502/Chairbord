@@ -196,42 +196,39 @@ export const _vehicleTypeDropdown = [
 export const dummyProps = {
     route: {
         params: {
-            sessionId: '123456789',
-            customerId: '987654321',
-            CusRegData: {
-                data: {
-                    custDetails: {
-                        name: 'John Doe',
-                        email: 'johndoe@example.com',
-                        phone: '1234567890',
-                    },
-                },
-            },
-            otpData: {
-                otp: '123456',
-                expiryTime: '2024-12-31T23:59:59Z',
-            },
-            userData: {
-                userId: '1122334455',
-                name: 'Agent Smith',
-                vehicleNo: 'DL1CAB1234',
-            },
+            sessionId: "12345",
             response: {
                 vrnDetails: {
-                    vehicleNo: 'DL1CAB1234',
-                    make: 'Toyota',
-                    model: 'Innova',
-                    year: '2022',
+                    npciVehicleClassID: "",
+                    tagCost: 500,
+                    securityDeposit: 300,
+                    rechargeAmount: 200,
+                    vehicleNo: "",
+                    chassisNo: "",
+                    engineNo: "",
+                    vehicleManuf: "",
+                    model: "",
+                    vehicleColour: "",
+                    type: "",
+                    vehicleType: "",
+                    isCommercial: "",
+                    isNationalPermit: "",
+                    permitExpiryDate: "",
+                    stateOfRegistration: "",
                 },
+                custDetails: {
+                    name: "John Doe",
+                    mobileNo: "9876543210",
+                    walletId: "WALLET123",
+                },
+            },
+            CustomerRegData: {
+                name: "John Doe",
+                mobileNo: "9876543210",
+            },
+            userOtpData: {
+                vehicleNo: "MH12AB1234",
             },
         },
     },
-    // navigation: {
-    //   navigate: (screenName, params) => {
-    //     console.log(`Navigating to ${screenName} with params:`, params);
-    //   },
-    //   goBack: () => {
-    //     console.log('Going back');
-    //   },
-    // },
 };

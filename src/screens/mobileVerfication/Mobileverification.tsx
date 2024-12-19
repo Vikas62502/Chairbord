@@ -7,12 +7,15 @@ import { client } from '../../client/Axios'
 import { getCache, setCache } from '../../helper/Storage'
 import { getSocket } from '../../utils/socket'
 import showAlert from '../../utils/showAlert'
+import { useAppDispatch } from '../../store/hooks'
+import { resetTagRegistrationData } from '../../store/slice/tagRegistration'
 const { width, height } = Dimensions.get('window')
 const isTablet = width > 768;
 const isSmallScreen = width < 400;
 
 const Mobileverification = (props: any) => {
   const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
   const [userData, setUserData] = useState<any>()
   const [VerificationFormData, setVerificationFormData] = useState({
     mobile: '',
@@ -44,6 +47,8 @@ const Mobileverification = (props: any) => {
         udf4: '',
         udf5: '',
       })
+
+      dispatch(resetTagRegistrationData())
 
       await setCache('session', res?.data?.validateCustResp?.sessionId)
       props.navigation.navigate("OTP", {

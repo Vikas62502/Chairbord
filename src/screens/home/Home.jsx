@@ -7,6 +7,7 @@ import {
   ScrollView,
   BackHandler,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
 import SwipperComponent from './SwipperComponent';
@@ -64,7 +65,6 @@ const Home = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState({});
-  console.log(dashboardData, "<--- dashboard data")
 
   useFocusEffect(
     React.useCallback(() => {
@@ -94,7 +94,6 @@ const Home = () => {
     try {
       const response = await client.get('/user/agent/dashboard');
       setDashboardData(response.data);
-      console.log(response.data, '<-- dashboard data');
     } catch (error) {
       console.log(error.response, 'error');
     }
@@ -129,6 +128,7 @@ const Home = () => {
       <View style={styles.swipperContainer}>
         <SwipperComponent />
       </View>
+
       <View style={styles.imageRow}>
         {/* First image with text overlay */}
         <View style={styles.imageWrapper}>

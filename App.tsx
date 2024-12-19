@@ -16,12 +16,12 @@ import ErrorFallback from './src/components/ErrorFallback/ErrorFallback'
 import logErrorToSentry from './src/components/ErrorFallback/LogErrorToSentry'
 import useUserData from './src/helper/useUserData'
 import { checkForUpdate } from './src/utils/updateUtils'
+import { Provider } from 'react-redux'
+import { store } from './src/store/store'
 
 function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
-  console.log(socket, "<--- socket")
   const { userData } = useUserData()
-  console.log(userData, "<--- userData")
 
   // Request multiple permissions
   const requestPermissions = async () => {
@@ -74,13 +74,15 @@ function App({ }): React.JSX.Element {
   }, [])
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onError={logErrorToSentry}>
-      <OrdersProvider>
-        <NavigationContainer>
-          <DrawerNavigation />
-        </NavigationContainer>
-      </OrdersProvider>
-    </ErrorBoundary>
+    <Provider store={store}>
+      <ErrorBoundary FallbackComponent={ErrorFallback} onError={logErrorToSentry}>
+        <OrdersProvider>
+          <NavigationContainer>
+            <DrawerNavigation />
+          </NavigationContainer>
+        </OrdersProvider>
+      </ErrorBoundary>
+    </Provider>
   )
 }
 
