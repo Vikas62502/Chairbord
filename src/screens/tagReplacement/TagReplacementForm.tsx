@@ -143,7 +143,7 @@ const TagReplacementForm = (props: any) => {
         permitExpiryDate: permitExpiryDate || '',
         stateOfRegistration: stateCode || stateOfRegistration || '',
         vehicleDescriptor: vehicleDescriptor || '',
-        udf1: '',
+        udf1: Number(userInfo?.user?.id),
         udf2: '',
         udf3: '',
         udf4: '',
