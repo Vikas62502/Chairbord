@@ -8,7 +8,7 @@ const showAlert = (message: string, onPress = () => { }) => {
         [
             {
                 text: 'OK',
-                onPress: onPress,
+                onPress: onPress, 
             },
         ],
         { cancelable: false }

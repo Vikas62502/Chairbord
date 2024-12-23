@@ -11,8 +11,8 @@ const { width, height } = Dimensions.get('window')
 const isSmallScreen = width < 400;
 
 const ImageCollection = (props: any) => {
-  // const { sessionId, customerId, CusRegData, otpData, userData } = dummyProps?.route?.params;
-  const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
+  const { sessionId, customerId, CusRegData, otpData, userData } = dummyProps?.route?.params;
+  // const { sessionId, customerId, CusRegData, otpData, userData } = props?.route?.params;
   const [loading, setLoading] = useState(false)
   const [imageGallaryData, setImageGallaryData] = useState<any>();
 
@@ -25,7 +25,7 @@ const ImageCollection = (props: any) => {
       formData.append('file', file);
       formData.append('sessionId', sessionId);
       formData.append('customerId', customerId);
-      formData.append('vehicleId', props?.route?.params?.response?.vrnDetails?.vehicleNo || userData?.vehicleNo?.toUpperCase());
+      formData.append('vehicleId', dummyProps?.route?.params?.response?.vrnDetails?.vehicleNo || userData?.vehicleNo?.toUpperCase());
 
       console.log("formData ----> ", JSON.stringify(formData));
       const res = await client.post('/bajaj/uploadImages', formData, {

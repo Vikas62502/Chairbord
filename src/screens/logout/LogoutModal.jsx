@@ -28,8 +28,12 @@ const LogoutModal = (props) => {
     await AsyncStorage.clear() // Clear AsyncStorage
     setModalVisible(false) // Close modal before navigating
     props.navigation.navigate('SignIn') // Navigate to SignIn screen
-    dispatch(logout())
+    dispatch(logout());
 
+    // Remove tokens from secure storage
+    await EncryptedStorage.removeItem('accessToken');
+    await EncryptedStorage.removeItem('refreshToken');
+    await EncryptedStorage.removeItem('userData');
   }
 
   const handleCancel = () => {

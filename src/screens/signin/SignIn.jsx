@@ -46,7 +46,8 @@ const SignIn = () => {
 
   const loginApi = async () => {
     setLoading(true);
-    let bodyContent = {
+
+    const bodyContent = {
       email: formData.email,
       password: formData.password,
     };
@@ -54,17 +55,26 @@ const SignIn = () => {
     console.log(bodyContent, '<--- bodyContent');
 
     try {
-      let response = await axios.post('http://43.204.133.228:3001/v1/api/login/agent', bodyContent);
-      await setCache('userData', response?.data);
-      await setCache('token', response?.data?.token);
+      // Make the login API request
+      const response = await axios.post('http://192.168.0.171:3001/v1/api/login/agent', bodyContent);
+
+      // Store user data and tokens securely in EncryptedStorage
+      await EncryptedStorage.setItem('userData', JSON.stringify(response?.data));
+      await EncryptedStorage.setItem('accessToken', response?.data?.accessToken);
+      await EncryptedStorage.setItem('refreshToken', response?.data?.refreshToken);
+
+      // Dispatch the login success action to Redux
       dispatch(loginSucess(response?.data));
 
+      // Navigate to the drawer screen after successful login
       navigation.navigate('drawer');
     } catch (error) {
-      const errorMessage = error?.response?.data?.message
+      const errorMessage = error?.response?.data?.message;
       dispatch(loginFailed(errorMessage));
-      console.log(JSON.stringify(error?.response?.data), '<--- error');
-      Alert.alert(errorMessage || 'Password is not correct !!', 'Please try again', [
+
+      console.log(JSON.stringify(error), '<--- error');
+
+      Alert.alert(errorMessage || 'Login Failed !!', 'Please try again', [
         {
           text: 'OK',
           style: 'cancel',

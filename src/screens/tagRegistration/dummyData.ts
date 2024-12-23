@@ -23,7 +23,7 @@ export const dummyProps = {
             },
             response: {
                 vrnDetails: {
-                    vehicleNo: 'DL1CAB1234',
+                    vehicleNo: 'RJ14CU6635',
                     make: 'Toyota',
                     model: 'Innova',
                     year: '2022',

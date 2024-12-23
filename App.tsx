@@ -7,7 +7,6 @@ import {
   serverURL
 } from './src/utils/socket'
 import { useEffect, useState } from 'react'
-import { getCache } from './src/helper/Storage'
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions'
 import { OrdersProvider } from './src/orderContext/OrderContext'
 import DrawerNavigation from './src/navigation/Drawer/DrawerNavigation'
@@ -26,6 +25,7 @@ import {
 } from './src/utils/notificationhelper';
 import { Provider } from 'react-redux'
 import { store } from './src/store/store'
+import { useAppSelector } from './src/store/hooks'
 
 function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
