@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { useAppDispatch } from '../../store/hooks'
 import { logout } from '../../store/slice/login'
+import EncryptedStorage from 'react-native-encrypted-storage'
 
 const LogoutModal = (props) => {
   const [modalVisible, setModalVisible] = useState(false)

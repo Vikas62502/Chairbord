@@ -25,6 +25,7 @@ import LoginWithEmailAndPass from './LoginWithEmailAndPass';
 import axios from 'axios';
 import { useAppDispatch } from '../../store/hooks';
 import { loginFailed, loginSucess } from '../../store/slice/login';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const SignIn = () => {
   const [active, setActive] = useState('password');
@@ -56,25 +57,23 @@ const SignIn = () => {
 
     try {
       // Make the login API request
-      const response = await axios.post('http://192.168.0.171:3001/v1/api/login/agent', bodyContent);
-
+      const response = await client.post('/login/agent', bodyContent);
       // Store user data and tokens securely in EncryptedStorage
       await EncryptedStorage.setItem('userData', JSON.stringify(response?.data));
       await EncryptedStorage.setItem('accessToken', response?.data?.accessToken);
       await EncryptedStorage.setItem('refreshToken', response?.data?.refreshToken);
 
       // Dispatch the login success action to Redux
-      dispatch(loginSucess(response?.data));
-
+      // dispatch(loginSucess(response?.data));
+      console.log('<--- Send to draer screen');
       // Navigate to the drawer screen after successful login
       navigation.navigate('drawer');
     } catch (error) {
       const errorMessage = error?.response?.data?.message;
+      const description = error?.response?.data?.description;
+      console.log(JSON.stringify(error.response.data), '<--- errorMessage');
       dispatch(loginFailed(errorMessage));
-
-      console.log(JSON.stringify(error), '<--- error');
-
-      Alert.alert(errorMessage || 'Login Failed !!', 'Please try again', [
+      Alert.alert(errorMessage || 'Login Failed !!', description || 'Please try again', [
         {
           text: 'OK',
           style: 'cancel',

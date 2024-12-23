@@ -13,6 +13,7 @@ export const loginSlice = createSlice({
     initialState,
     reducers: {
         loginSucess: (state, action: PayloadAction<any>) => {
+            console.log('action.payload', action.payload)
             state.userData = action.payload;
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
