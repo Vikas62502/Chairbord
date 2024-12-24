@@ -26,20 +26,19 @@ const LogoutModal = (props) => {
   )
 
   const handleClearCache = async () => {
-    await AsyncStorage.clear() // Clear AsyncStorage
-    setModalVisible(false) // Close modal before navigating
-    props.navigation.navigate('SignIn') // Navigate to SignIn screen
-    dispatch(logout());
-
-    // Remove tokens from secure storage
+    await AsyncStorage.clear()
+    setModalVisible(false)
+    await EncryptedStorage.clear()
     await EncryptedStorage.removeItem('accessToken');
     await EncryptedStorage.removeItem('refreshToken');
     await EncryptedStorage.removeItem('userData');
+    props.navigation.navigate('SignIn')
+    dispatch(logout());
   }
 
   const handleCancel = () => {
-    setModalVisible(false) // Close the modal
-    props.navigation.navigate('drawer') // Navigate back to dashboard
+    setModalVisible(false)
+    props.navigation.navigate('drawer')
   }
 
   return (

@@ -5,6 +5,7 @@ import { useAppSelector } from '../store/hooks';
 
 const useUserData = () => {
   const [userData, setUserData] = useState<any>(null);
+  console.log(userData, 'userData')
   const [error, setError] = useState<string | null>(null);
 
   const fetchUserData = useCallback(async () => {

@@ -22,7 +22,6 @@ import { setCache } from '../../helper/Storage';
 
 import { styles } from './styles';
 import LoginWithEmailAndPass from './LoginWithEmailAndPass';
-import axios from 'axios';
 import { useAppDispatch } from '../../store/hooks';
 import { loginFailed, loginSucess } from '../../store/slice/login';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -58,14 +57,15 @@ const SignIn = () => {
     try {
       // Make the login API request
       const response = await client.post('/login/agent', bodyContent);
+      console.log(response.data, '<--- response.data');
       // Store user data and tokens securely in EncryptedStorage
-      await EncryptedStorage.setItem('userData', JSON.stringify(response?.data));
-      await EncryptedStorage.setItem('accessToken', response?.data?.accessToken);
+      await EncryptedStorage.setItem('userData', JSON.stringify(response?.data?.user));
+      await EncryptedStorage.setItem('accessToken', response?.data?.token);
       await EncryptedStorage.setItem('refreshToken', response?.data?.refreshToken);
 
       // Dispatch the login success action to Redux
-      // dispatch(loginSucess(response?.data));
-      console.log('<--- Send to draer screen');
+      dispatch(loginSucess(response?.data));
+      console.log('<--- Send to drawer screen');
       // Navigate to the drawer screen after successful login
       navigation.navigate('drawer');
     } catch (error) {

@@ -26,6 +26,7 @@ import {
 import { Provider } from 'react-redux'
 import { store } from './src/store/store'
 import { useAppSelector } from './src/store/hooks'
+import { getCache } from './src/helper/Storage'
 
 function App({ }): React.JSX.Element {
   const [socket, setSocket] = useState<any>(null)
@@ -112,6 +113,19 @@ function App({ }): React.JSX.Element {
   useEffect(() => {
     checkForUpdate()
   }, [])
+
+  const getUserData = async () => {
+    const data = await getCache('userData');
+    console.log('data ---> ', data)
+    const userToken = await getCache('userToken');
+    console.log('userToken ---- > ', userToken)
+    const refreshToken = await getCache('refreshToken');
+    console.log('refreshToken ---- > 0', refreshToken)
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, []);
 
   return (
     <Provider store={store}>
